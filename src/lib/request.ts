@@ -2,7 +2,6 @@ export const makeRequest = <T>(
   request: RequestInfo,
   tags: string[]
 ): Promise<T> => {
-  console.log(tags);
   return fetch(request, {
     cache: "no-store",
     next: {
