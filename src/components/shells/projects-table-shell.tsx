@@ -153,12 +153,6 @@ export function ProjectsTableShell({
       data={data as ProjectType[]}
       pageCount={pageCount as number}
       filterableColumns={[]}
-      searchableColumns={[
-        {
-          id: "name",
-          title: "names",
-        },
-      ]}
       newRowLink={`/projects/new`}
       deleteRowsAction={() => {}}
     />

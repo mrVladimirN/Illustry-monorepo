@@ -17,19 +17,18 @@ interface ProjectsProps {
 }
 const Projects = async ({ searchParams }: ProjectsProps) => {
   const { page, text, per_page, sort } = searchParams;
-  
+
   const projects = await browseProjects({
     page: page ? Number(page) : 1,
     text: text,
     per_page: per_page ? Number(per_page) : 10,
     sort: sort
       ? {
-          sortOrder: (sort as string).split(".")[1] === "asc" ? 1 : 0,
+          sortOrder: (sort as string).split(".")[1] === "asc" ? 1 : -1,
           element: (sort as string).split(".")[0],
         }
       : undefined,
   } as ProjectFilter);
-  console.log(projects.pagination)
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-gray-50 rounded-3xl dark:bg-gray-800">
       <div className="space-y-2.5">

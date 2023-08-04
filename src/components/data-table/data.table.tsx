@@ -1,9 +1,8 @@
-import * as React from "react"
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import * as React from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import type {
   DataTableFilterableColumn,
-  DataTableSearchableColumn,
-} from "@/types"
+} from "@/types";
 import {
   flexRender,
   getCoreRowModel,
@@ -18,9 +17,8 @@ import {
   type PaginationState,
   type SortingState,
   type VisibilityState,
-} from "@tanstack/react-table"
+} from "@tanstack/react-table";
 
-import { useDebounce } from "@/hooks/use-debounce"
 import {
   Table,
   TableBody,
@@ -28,18 +26,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
-import { DataTablePagination } from "@/components/data-table/data-table-pagination"
-import { DataTableToolbar } from "@/components/data-table/data-table-toolbar"
+} from "@/components/ui/table";
+import { DataTablePagination } from "@/components/data-table/data-table-pagination";
+import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-  pageCount: number
-  filterableColumns?: DataTableFilterableColumn<TData>[]
-  searchableColumns?: DataTableSearchableColumn<TData>[]
-  newRowLink?: string
-  deleteRowsAction?: React.MouseEventHandler<HTMLButtonElement>
+  columns: ColumnDef<TData, TValue>[];
+  data: TData[];
+  pageCount: number;
+  filterableColumns?: DataTableFilterableColumn<TData>[];
+  // searchableColumns?: DataTableSearchableColumn<TData>[]
+  newRowLink?: string;
+  deleteRowsAction?: React.MouseEventHandler<HTMLButtonElement>;
 }
 
 export function DataTable<TData, TValue>({
@@ -47,52 +45,52 @@ export function DataTable<TData, TValue>({
   data,
   pageCount,
   filterableColumns = [],
-  searchableColumns = [],
+  // searchableColumns = [],
   newRowLink,
   deleteRowsAction,
 }: DataTableProps<TData, TValue>) {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   // Search params
-  const page = searchParams?.get("page") ?? "1"
-  const per_page = searchParams?.get("per_page") ?? "10"
-  const sort = searchParams?.get("sort")
-  const [column, order] = sort?.split(".") ?? []
-  const text = searchParams?.get("text")
+  const page = searchParams?.get("page") ?? "1";
+  const per_page = searchParams?.get("per_page") ?? "10";
+  const sort = searchParams?.get("sort");
+  const [column, order] = sort?.split(".") ?? [];
+  
   // Create query string
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
-      const newSearchParams = new URLSearchParams(searchParams?.toString())
+      const newSearchParams = new URLSearchParams(searchParams?.toString());
 
       for (const [key, value] of Object.entries(params)) {
         if (value === null) {
-          newSearchParams.delete(key)
+          newSearchParams.delete(key);
         } else {
-          newSearchParams.set(key, String(value))
+          newSearchParams.set(key, String(value));
         }
       }
 
-      return newSearchParams.toString()
+      return newSearchParams.toString();
     },
     [searchParams]
-  )
+  );
 
   // Table states
-  const [rowSelection, setRowSelection] = React.useState({})
+  const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
+    React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
-  )
+  );
 
   // Handle server-side pagination
   const [{ pageIndex, pageSize }, setPagination] =
     React.useState<PaginationState>({
       pageIndex: Number(page) - 1,
       pageSize: Number(per_page),
-    })
+    });
 
   const pagination = React.useMemo(
     () => ({
@@ -100,14 +98,14 @@ export function DataTable<TData, TValue>({
       pageSize,
     }),
     [pageIndex, pageSize]
-  )
+  );
 
   React.useEffect(() => {
     setPagination({
       pageIndex: Number(page) - 1,
       pageSize: Number(per_page),
-    })
-  }, [page, per_page])
+    });
+  }, [page, per_page]);
 
   React.useEffect(() => {
     router.push(
@@ -118,10 +116,10 @@ export function DataTable<TData, TValue>({
       {
         scroll: false,
       }
-    )
-      
+    );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageIndex, pageSize])
+  }, [pageIndex, pageSize]);
 
   // Handle server-side sorting
   const [sorting, setSorting] = React.useState<SortingState>([
@@ -129,7 +127,7 @@ export function DataTable<TData, TValue>({
       id: column ?? "",
       desc: order === "desc",
     },
-  ])
+  ]);
 
   React.useEffect(() => {
     router.push(
@@ -142,60 +140,17 @@ export function DataTable<TData, TValue>({
       {
         scroll: false,
       }
-    )
+    );
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sorting])
+  }, [sorting]);
 
   // Handle server-side filtering
-  const debouncedSearchableColumnFilters = JSON.parse(
-    useDebounce(
-      JSON.stringify(
-        columnFilters.filter((filter) => {
-          return searchableColumns.find((column) => column.id === filter.id)
-        })
-      ),
-      500
-    )
-  ) as ColumnFiltersState
-console.log(debouncedSearchableColumnFilters)
+
   const filterableColumnFilters = columnFilters.filter((filter) => {
-    return filterableColumns.find((column) => column.id === filter.id)
-  })
+    return filterableColumns.find((column) => column.id === filter.id);
+  });
 
-  React.useEffect(() => {
-    for (const column of debouncedSearchableColumnFilters) {
-      if (typeof column.value === "string") {
-        router.push(
-          `${pathname}?${createQueryString({
-            page: 1,
-            text: typeof column.value === "string" ? column.value : null,
-          })}`,
-          {
-            scroll: false,
-          }
-        )
-      }
-    }
-
-    for (const key of searchParams.keys()) {
-      if (
-        searchableColumns.find((column) => column.id === key) &&
-        !debouncedSearchableColumnFilters.find((column) => column.id === key)
-      ) {
-        router.push(
-          `${pathname}?${createQueryString({
-            page: 1,
-            text: null,
-          })}`,
-          {
-            scroll: false,
-          }
-        )
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedSearchableColumnFilters])
 
   React.useEffect(() => {
     for (const column of filterableColumnFilters) {
@@ -208,7 +163,7 @@ console.log(debouncedSearchableColumnFilters)
           {
             scroll: false,
           }
-        )
+        );
       }
     }
 
@@ -225,11 +180,11 @@ console.log(debouncedSearchableColumnFilters)
           {
             scroll: false,
           }
-        )
+        );
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filterableColumnFilters])
+  }, [filterableColumnFilters]);
 
   const table = useReactTable({
     data,
@@ -257,14 +212,13 @@ console.log(debouncedSearchableColumnFilters)
     manualPagination: true,
     manualSorting: true,
     manualFiltering: true,
-  })
+  });
 
   return (
     <div className="w-full space-y-3 overflow-auto">
       <DataTableToolbar
         table={table}
         filterableColumns={filterableColumns}
-        searchableColumns={searchableColumns}
         newRowLink={newRowLink}
         deleteRowsAction={deleteRowsAction}
       />
@@ -283,7 +237,7 @@ console.log(debouncedSearchableColumnFilters)
                             header.getContext()
                           )}
                     </TableHead>
-                  )
+                  );
                 })}
               </TableRow>
             ))}
@@ -320,5 +274,5 @@ console.log(debouncedSearchableColumnFilters)
       </div>
       <DataTablePagination table={table} />
     </div>
-  )
+  );
 }
