@@ -7,11 +7,11 @@ import {
   ProjectType,
   ProjectCreate,
 } from "@/types";
-import { revalidateTag } from "next/cache"
+import { revalidateTag } from "next/cache";
 export const browseProjects = async (filter?: ProjectFilter) => {
-  revalidateTag('projects')
+  revalidateTag("projects");
   let newFilter: ProjectFilter = {};
-  
+
   if (filter) {
     newFilter = filter;
   }
@@ -26,7 +26,7 @@ export const browseProjects = async (filter?: ProjectFilter) => {
 };
 
 export const deleteProject = async (projectName: string) => {
-  revalidateTag('projects')
+  revalidateTag("projects");
   const request = new Request(`http://localhost:7000/api/project`, {
     method: "DELETE",
     headers: {
@@ -40,7 +40,7 @@ export const deleteProject = async (projectName: string) => {
 };
 
 export const updateProject = async (project: ProjectType) => {
-  revalidateTag('projects')
+  revalidateTag("projects");
   const request = new Request("http://localhost:7000/api/project", {
     method: "PUT",
     headers: {
@@ -53,10 +53,10 @@ export const updateProject = async (project: ProjectType) => {
 };
 
 export const createProject = async (project: ProjectCreate) => {
-  revalidateTag('projects')
   const newProject = {
     projectName: project.name,
     projectDescription: project.description,
+    isActive: project.isActive,
   };
   const request = new Request(`http://localhost:7000/api/project`, {
     method: "POST",
@@ -65,5 +65,19 @@ export const createProject = async (project: ProjectCreate) => {
     },
     body: JSON.stringify(newProject),
   });
+  return await makeRequest<ProjectType>(request, ["projects"]);
+};
+
+export const findOneProject = async (projectName: string) => {
+  const request = new Request(
+    `http://localhost:7000/api/project/${projectName}`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ name: projectName }),
+    }
+  );
   return await makeRequest<ProjectType>(request, ["projects"]);
 };

@@ -1,8 +1,6 @@
 import * as React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import type {
-  DataTableFilterableColumn,
-} from "@/types";
+import type { DataTableFilterableColumn } from "@/types";
 import {
   flexRender,
   getCoreRowModel,
@@ -29,7 +27,6 @@ import {
 } from "@/components/ui/table";
 import { DataTablePagination } from "@/components/data-table/data-table-pagination";
 import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
-
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -38,7 +35,6 @@ interface DataTableProps<TData, TValue> {
   newRowLink?: string;
   deleteRowsAction?: React.MouseEventHandler<HTMLButtonElement>;
 }
-
 export function DataTable<TData, TValue>({
   columns,
   data,
@@ -56,7 +52,7 @@ export function DataTable<TData, TValue>({
   const per_page = searchParams?.get("per_page") ?? "10";
   const sort = searchParams?.get("sort");
   const [column, order] = sort?.split(".") ?? [];
-  
+
   // Create query string
   const createQueryString = React.useCallback(
     (params: Record<string, string | number | null>) => {
@@ -149,7 +145,6 @@ export function DataTable<TData, TValue>({
     return filterableColumns.find((column) => column.id === filter.id);
   });
 
-
   React.useEffect(() => {
     for (const column of filterableColumnFilters) {
       if (typeof column.value === "object" && Array.isArray(column.value)) {
@@ -211,14 +206,13 @@ export function DataTable<TData, TValue>({
     manualSorting: true,
     manualFiltering: true,
   });
-
   return (
     <div className="w-full space-y-3 overflow-auto">
       <DataTableToolbar
         table={table}
         filterableColumns={filterableColumns}
         deleteRowsAction={deleteRowsAction}
-        newRowLink= {newRowLink}
+        newRowLink={newRowLink}
       />
       <div className="rounded-md border">
         <Table>

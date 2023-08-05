@@ -79,7 +79,6 @@ function MobileLink({
   pathname,
   setIsOpen,
 }: MobileLinkProps) {
-  console.log(href);
   return (
     <Link
       href={href}

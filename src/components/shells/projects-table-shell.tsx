@@ -5,7 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
 import { DataTableColumnHeader } from "../data-table/data-table-column-header";
 import { catchError, formatDate } from "@/lib/utils";
-import { DataTable } from "../data-table/data.table";
+import { DataTable } from "../data-table/data-table";
 import { Checkbox } from "../ui/checkbox";
 import {
   DropdownMenu,
@@ -20,7 +20,6 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { toast } from "sonner";
 import { deleteProject } from "@/app/_actions/project";
-
 interface ProjectsTableShellProps {
   data?: ProjectType[];
   pageCount?: number;
@@ -31,7 +30,6 @@ export function ProjectsTableShell({
 }: ProjectsTableShellProps) {
   const [isPending, startTransition] = React.useTransition();
   const [selectedRowNames, setSelectedRowNames] = React.useState<string[]>([]);
-  const [deleteModal, setDeleteModal ] = React.useState<boolean>(false)
   const columns = React.useMemo<ColumnDef<ProjectType, unknown>[]>(
     () => [
       {
@@ -176,6 +174,7 @@ export function ProjectsTableShell({
       data={data as ProjectType[]}
       pageCount={pageCount as number}
       filterableColumns={[]}
+      newRowLink="/projects/new"
       deleteRowsAction={deleteSelectedRows}
     />
   

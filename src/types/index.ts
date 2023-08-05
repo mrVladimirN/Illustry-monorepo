@@ -47,9 +47,11 @@ export interface ProjectType {
 export interface ProjectCreate {
   name: string;
   description?: string;
+  isActive: boolean;
 }
 export interface ProjectUpdate {
   description: string;
+  isActive: boolean;
 }
 export interface ProjectFilter {
   name?: string;
