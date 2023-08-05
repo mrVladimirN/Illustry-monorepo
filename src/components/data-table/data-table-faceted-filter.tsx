@@ -39,6 +39,7 @@ export function DataTableFacetedFilter<TData, TValue>({
     <Popover>
       <PopoverTrigger asChild>
         <Button
+        suppressHydrationWarning
           aria-label="Filter rows"
           variant="outline"
           size="sm"

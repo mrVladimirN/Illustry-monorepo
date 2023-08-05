@@ -35,7 +35,6 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   pageCount: number;
   filterableColumns?: DataTableFilterableColumn<TData>[];
-  // searchableColumns?: DataTableSearchableColumn<TData>[]
   newRowLink?: string;
   deleteRowsAction?: React.MouseEventHandler<HTMLButtonElement>;
 }
@@ -45,7 +44,6 @@ export function DataTable<TData, TValue>({
   data,
   pageCount,
   filterableColumns = [],
-  // searchableColumns = [],
   newRowLink,
   deleteRowsAction,
 }: DataTableProps<TData, TValue>) {
@@ -219,8 +217,8 @@ export function DataTable<TData, TValue>({
       <DataTableToolbar
         table={table}
         filterableColumns={filterableColumns}
-        newRowLink={newRowLink}
         deleteRowsAction={deleteRowsAction}
+        newRowLink= {newRowLink}
       />
       <div className="rounded-md border">
         <Table>

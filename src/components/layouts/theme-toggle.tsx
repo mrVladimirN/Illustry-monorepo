@@ -1,14 +1,15 @@
-"use client"
+"use client";
 
-import { useTheme } from "next-themes"
+import { useTheme } from "next-themes";
 
-import { Button } from "@/components/ui/button"
-import { Icons } from "@/components/icons"
+import { Button } from "@/components/ui/button";
+import { Icons } from "@/components/icons";
 
 export function ThemeToggle() {
-  const { setTheme, theme } = useTheme()
+  const { setTheme, theme } = useTheme();
   return (
     <Button
+      suppressHydrationWarning
       variant="ghost"
       size="icon"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
@@ -23,5 +24,5 @@ export function ThemeToggle() {
       />
       <span className="sr-only">Toggle theme</span>
     </Button>
-  )
+  );
 }

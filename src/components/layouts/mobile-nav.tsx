@@ -3,7 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import type { MainNavItem } from "@/types";
-import { usePathname } from "next/navigation"
+import { usePathname } from "next/navigation";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 
@@ -18,12 +18,13 @@ interface MobileNavProps {
 }
 
 export function MobileNav({ items }: MobileNavProps) {
-  const [isOpen, setIsOpen] =  useState(false);
-  const pathname = usePathname()
+  const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger asChild   suppressHydrationWarning>
+      <SheetTrigger asChild suppressHydrationWarning>
         <Button
+          suppressHydrationWarning
           variant="ghost"
           className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 lg:hidden"
         >
@@ -53,7 +54,7 @@ export function MobileNav({ items }: MobileNavProps) {
                 setIsOpen={setIsOpen}
                 disabled={item.disabled}
               >
-                  {item.title}  
+                {item.title}
               </MobileLink>
             ))}
           </div>
@@ -63,34 +64,33 @@ export function MobileNav({ items }: MobileNavProps) {
   );
 }
 
-
 interface MobileLinkProps {
-    children?: React.ReactNode
-    href: string
-    disabled?: boolean
-    pathname: string
-    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
-  }
-  
-  function MobileLink({
-    children,
-    href,
-    disabled,
-    pathname,
-    setIsOpen,
-  }: MobileLinkProps) {
-    console.log(href);
-    return (
-      <Link
-        href={href}
-        className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-          pathname === href  ,
-          disabled && "pointer-events-none opacity-60"
-        )}
-        onClick={() => setIsOpen(false)}
-      >
-        {children}
-      </Link>
-    );
-  }
+  children?: React.ReactNode;
+  href: string;
+  disabled?: boolean;
+  pathname: string;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+function MobileLink({
+  children,
+  href,
+  disabled,
+  pathname,
+  setIsOpen,
+}: MobileLinkProps) {
+  console.log(href);
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+        pathname === href,
+        disabled && "pointer-events-none opacity-60"
+      )}
+      onClick={() => setIsOpen(false)}
+    >
+      {children}
+    </Link>
+  );
+}

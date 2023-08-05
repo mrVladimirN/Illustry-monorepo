@@ -26,6 +26,7 @@ export const browseProjects = async (filter?: ProjectFilter) => {
 };
 
 export const deleteProject = async (projectName: string) => {
+  revalidateTag('projects')
   const request = new Request(`http://localhost:7000/api/project`, {
     method: "DELETE",
     headers: {
@@ -39,6 +40,7 @@ export const deleteProject = async (projectName: string) => {
 };
 
 export const updateProject = async (project: ProjectType) => {
+  revalidateTag('projects')
   const request = new Request("http://localhost:7000/api/project", {
     method: "PUT",
     headers: {
@@ -51,6 +53,7 @@ export const updateProject = async (project: ProjectType) => {
 };
 
 export const createProject = async (project: ProjectCreate) => {
+  revalidateTag('projects')
   const newProject = {
     projectName: project.name,
     projectDescription: project.description,

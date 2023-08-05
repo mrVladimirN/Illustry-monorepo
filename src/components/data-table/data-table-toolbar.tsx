@@ -24,7 +24,7 @@ const SearchButton = ({ containerStyles }: SearchButtonProps) => (
       alt="magnifying glass"
       width={40}
       height={40}
-      className="object-contain"
+      className="object-contain "
     />
   </button>
 );

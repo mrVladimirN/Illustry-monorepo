@@ -4,9 +4,22 @@ import { ProjectType } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
 import { DataTableColumnHeader } from "../data-table/data-table-column-header";
-import { formatDate } from "@/lib/utils";
+import { catchError, formatDate } from "@/lib/utils";
 import { DataTable } from "../data-table/data.table";
 import { Checkbox } from "../ui/checkbox";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "../ui/dropdown-menu";
+import { Button } from "../ui/button";
+import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
+import { toast } from "sonner";
+import { deleteProject } from "@/app/_actions/project";
 
 interface ProjectsTableShellProps {
   data?: ProjectType[];
@@ -18,7 +31,7 @@ export function ProjectsTableShell({
 }: ProjectsTableShellProps) {
   const [isPending, startTransition] = React.useTransition();
   const [selectedRowNames, setSelectedRowNames] = React.useState<string[]>([]);
-
+  const [deleteModal, setDeleteModal ] = React.useState<boolean>(false)
   const columns = React.useMemo<ColumnDef<ProjectType, unknown>[]>(
     () => [
       {
@@ -92,69 +105,79 @@ export function ProjectsTableShell({
         cell: ({ cell }) => (cell.getValue() ? "active" : "not active"),
         enableColumnFilter: false,
       },
-      //   {
-      //     id: "actions",
-      //     cell: ({ row }) => (
-      //       <DropdownMenu>
-      //         <DropdownMenuTrigger asChild>
-      //           <Button
-      //             aria-label="Open menu"
-      //             variant="ghost"
-      //             className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
-      //           >
-      //             <DotsHorizontalIcon className="h-4 w-4" aria-hidden="true" />
-      //           </Button>
-      //         </DropdownMenuTrigger>
-      //         <DropdownMenuContent align="end" className="w-[160px]">
-      //           <DropdownMenuItem asChild>
-      //             <Link
-      //               href={`/dashboard/stores/${storeId}/products/${row.original.id}`}
-      //             >
-      //               Edit
-      //             </Link>
-      //           </DropdownMenuItem>
-      //           <DropdownMenuItem asChild>
-      //             <Link href={`/product/${row.original.id}`}>View</Link>
-      //           </DropdownMenuItem>
-      //           <DropdownMenuSeparator />
-      //           <DropdownMenuItem
-      //             onClick={() => {
-      //               startTransition(() => {
-      //                 row.toggleSelected(false)
+      {
+        id: "actions",
+        cell: ({ row }) => (
+          
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                aria-label="Open menu"
+                variant="ghost"
+                className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+              >
+                <DotsHorizontalIcon className="h-4 w-4" aria-hidden="true" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-[160px]">
+              <DropdownMenuItem asChild>
+                <Link href={`/projects/${row.original.name}`}>Edit</Link>
+              </DropdownMenuItem>
 
-      //                 toast.promise(
-      //                   deleteProductAction({
-      //                     id: row.original.id,
-      //                     storeId,
-      //                   }),
-      //                   {
-      //                     loading: "Deleting...",
-      //                     success: () => "Product deleted successfully.",
-      //                     error: (err: unknown) => catchError(err),
-      //                   }
-      //                 )
-      //               })
-      //             }}
-      //             disabled={isPending}
-      //           >
-      //             Delete
-      //             <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
-      //           </DropdownMenuItem>
-      //         </DropdownMenuContent>
-      //       </DropdownMenu>
-      //     ),
-      //   },
+              <DropdownMenuSeparator />
+              
+              <DropdownMenuItem
+                onClick={() => {
+                  startTransition(() => {
+                    row.toggleSelected(false);
+
+                    toast.promise(deleteProject(row.original.name), {
+                      loading: "Deleting...",
+                      success: () => "Project deleted successfully.",
+                      error: (err: unknown) => catchError(err),
+                    });
+                  });
+                }}
+                disabled={isPending}
+              >
+                Delete
+                <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ),
+      },
     ],
     [data, isPending]
   );
+  function deleteSelectedRows() {
+    toast.promise(
+      Promise.all(
+        selectedRowNames.map((name) =>
+          deleteProject(name)
+        )
+      ),
+      {
+        loading: "Deleting...",
+        success: () => {
+          setSelectedRowNames([])
+          return "Products deleted successfully."
+        },
+        error: (err: unknown) => {
+          setSelectedRowNames([])
+          return catchError(err)
+        },
+      }
+    )
+  }
   return (
     <DataTable
       columns={columns}
       data={data as ProjectType[]}
       pageCount={pageCount as number}
       filterableColumns={[]}
-      newRowLink={`/projects/new`}
-      deleteRowsAction={() => {}}
+      deleteRowsAction={deleteSelectedRows}
     />
+  
   );
 }

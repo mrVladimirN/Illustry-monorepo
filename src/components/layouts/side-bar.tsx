@@ -7,7 +7,7 @@ import Image from "next/image";
 import { ContextValue, useStateContext } from "../theme-provider";
 import { siteConfig } from "@/config/site";
 const Sidebar = () => {
-  const {  activeMenu, setActiveMenu, screenSize } =
+  const { activeMenu, setActiveMenu, screenSize } =
     useStateContext() as ContextValue;
   const handleCloseSideBar = () => {
     if (activeMenu !== undefined && screenSize && screenSize <= 900) {
@@ -46,9 +46,10 @@ const Sidebar = () => {
             </Link>
             <Link href="/projects"></Link>
             <button
+              suppressHydrationWarning
               type="button"
               onClick={() =>
-                setActiveMenu((prevActiveMenu:boolean) => {
+                setActiveMenu((prevActiveMenu: boolean) => {
                   return !prevActiveMenu;
                 })
               }
@@ -64,22 +65,20 @@ const Sidebar = () => {
                 <p className="text-gray-400 dark:text-gray-400 m-3 mt-4 uppercase">
                   {item.title}
                 </p>
-                  <Link
-                    href={`/${item.href}`}
-                    key={item.title}
-                    passHref
-                    onClick={handleCloseSideBar}
-                    className={
-                      isLinkActive(item.title) ? activeLink : normalLink
-                    }
-                    style={{
-                      ...(isLinkActive(item.title)
-                        ? { backgroundColor:  "red" }
-                        : ""),
-                    }}
-                  >
-                    <span className="capitalize ">{item.title}</span>
-                  </Link>
+                <Link
+                  href={`/${item.href}`}
+                  key={item.title}
+                  passHref
+                  onClick={handleCloseSideBar}
+                  className={isLinkActive(item.title) ? activeLink : normalLink}
+                  style={{
+                    ...(isLinkActive(item.title)
+                      ? { backgroundColor: "red" }
+                      : ""),
+                  }}
+                >
+                  <span className="capitalize ">{item.title}</span>
+                </Link>
               </div>
             ))}
           </div>
