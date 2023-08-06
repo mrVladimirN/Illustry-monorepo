@@ -71,3 +71,115 @@ export interface ExtendedProjectType {
     pageCount: number;
   };
 }
+
+
+
+export enum VisualizationTypesEnum {
+  CHART = "chart",
+  WORLD_CLOUD = "word-cloud",
+  PLOTLY = "plotly",
+  TIMELINE = "timeline",
+  FORCE_DIRECTED_GRAPH = "force-directed-graph",
+  TREEMAP = "treemap",
+  SANKEY = "sankey",
+  CALENDAR = "calendar",
+  MATRIX = "matrix",
+  GRAPHVIZ = "graphviz",
+  HIERARCHICAL_EDGE_BUNDLING = "hierarchical-edge-bundling",
+}
+
+interface TimelineEventTag {
+  name: string;
+  style: any;
+}
+
+export interface TimelineEvent {
+  summary: string;
+  date: string;
+  type: string;
+  author: string;
+  tags?: TimelineEventTag[];
+  description?: string;
+  style: any;
+}
+
+export interface Timeline {
+  [date: string]: {
+    summary?: {
+      title?: string;
+      style?: any;
+    };
+    events: TimelineEvent[];
+  };
+}
+
+export interface CalendarHeatmap {
+  calendar: CalendarData[];
+  categories: any;
+  tooltip?: any;
+}
+export interface NodeLink {
+  nodes: Node[];
+  links: Link[];
+  colorMapping?: any[];
+}
+
+export interface CalendarMatrix {
+  calendarData: CalendarData[];
+}
+
+//Details for FLG HEB Sankey And Dot
+interface Node {
+  group: string;
+  id?: string;
+  properties?: any | any[];
+}
+
+export interface Link {
+  source: string;
+  target: string;
+  value: number;
+  properties?: object | object[]| string;
+  style?: any;
+}
+
+interface CalendarData {
+  date: string;
+  value: number;
+  year: number;
+  category: string;
+}
+
+export interface VisualizationType {
+  _id?:string
+  __v?:number
+  projectName?: string;
+  type?: VisualizationTypesEnum | VisualizationTypesEnum[];
+  description?: string;
+  name?: string;
+  tags?: string[];
+  data?: NodeLink | CalendarHeatmap | Timeline | any;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+
+export interface ExtendedVisualizationType {
+  visualizations?: VisualizationType[]
+  pagination?: {
+    count:number,
+    pageCount:number
+  }
+}
+
+export interface VisualizationFilter {
+  projectName?: string;
+  type?: string | string[];
+  name?: string;
+  tags?: string;
+  text?: string;
+  page?: number;
+  sort?: {
+    element:string,
+    sortOrder: string | number;
+  }
+}

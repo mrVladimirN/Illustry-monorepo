@@ -55,6 +55,8 @@ export function AddProjectForm() {
   }
 
   return (
+    <div>
+    <h2 className="text-2xl font-bold mb-4">Add a new Project</h2>
     <Form {...form}>
       <form
         className="grid w-full max-w-xl gap-5"
@@ -121,5 +123,6 @@ export function AddProjectForm() {
         </Button>
       </form>
     </Form>
+    </div>
   );
 }

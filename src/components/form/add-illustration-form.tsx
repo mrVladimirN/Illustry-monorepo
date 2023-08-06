@@ -1,0 +1,144 @@
+"use client";
+
+import * as React from "react";
+import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { toast } from "sonner";
+import type { z } from "zod";
+import { catchError } from "@/lib/utils";
+import { visualizationSchema } from "@/lib/validation/project";
+import { Button } from "@/components/ui/button";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  UncontrolledFormMessage,
+} from "@/components/ui/form";
+
+import { Icons } from "@/components/icons";
+
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+
+import { createOrUpdateVisualizations } from "@/app/_actions/visualization";
+import { ExtFile } from "@files-ui/react";
+import { FileUpload } from "../ui/file-upload";
+type Inputs = z.infer<typeof visualizationSchema>;
+
+export function AddVisualizationForm() {
+  const router = useRouter();
+  const [files, setFiles] = React.useState<ExtFile[]>([]);
+  const [isPending, startTransition] = React.useTransition();
+  const updateFiles = (incomingFiles: ExtFile[]) => {
+    setFiles(incomingFiles);
+  };
+
+  const removeFile = (id: string) => {
+    setFiles(files.filter((x) => x.id !== id));
+  };
+  // react-hook-form
+  const form = useForm<Inputs>({
+    resolver: zodResolver(visualizationSchema),
+    defaultValues: {
+      fileType: "JSON",
+    },
+  });
+
+  function onSubmit(data: Inputs) {
+    startTransition(async () => {
+      try {
+        if (files) {
+          const formData = new FormData();
+          (files as any[]).forEach((f) => {
+            formData.append("File", f.file);
+          });
+          await createOrUpdateVisualizations(formData);
+        }
+        form.reset();
+        toast.success("Visualizations added successfully.");
+        router.push("/visualizations");
+        router.refresh();
+      } catch (err) {
+        toast.error("Something went wrong.");
+        catchError(err);
+      }
+    });
+  }
+
+  return (
+    <div>
+      <h2 className="text-2xl font-bold mb-4">Add a new Visualization</h2>
+      <Form {...form}>
+        <form
+          className="grid w-full max-w-xl gap-5"
+          onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
+        >
+          <div className="flex flex-col items-start gap-6 sm:flex-row">
+            <FormField
+              control={form.control}
+              name="fileType"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>File Type</FormLabel>
+                  <FormControl>
+                    <Select
+                      value={field.value?.toString()}
+                      onValueChange={field.onChange}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a File Type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {["CSV", "JSON"].map((option) => (
+                            <SelectItem key={option} value={option}>
+                              {option}
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <FormItem className="flex w-full flex-col gap-1.5">
+            <FormLabel>Files</FormLabel>
+            <FormControl>
+              <FileUpload
+                acceptedFiles={files}
+                updateFiles={updateFiles}
+                removeFile={removeFile}
+              />
+            </FormControl>
+            <UncontrolledFormMessage
+              message={form.formState.errors.fileType?.message}
+            />
+          </FormItem>
+          <Button className="w-fit" disabled={isPending}>
+            {isPending && (
+              <Icons.spinner
+                className="mr-2 h-4 w-4 animate-spin"
+                aria-hidden="true"
+              />
+            )}
+            Add Visualizations
+            <span className="sr-only">Add Visualizations</span>
+          </Button>
+        </form>
+      </Form>
+    </div>
+  );
+}

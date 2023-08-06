@@ -1,6 +1,10 @@
 "use client";
 
-import { ProjectType } from "@/types";
+import {
+  ProjectType,
+  VisualizationType,
+  VisualizationTypesEnum,
+} from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
 import { DataTableColumnHeader } from "../data-table/data-table-column-header";
@@ -20,17 +24,21 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { toast } from "sonner";
 import { deleteProject } from "@/app/_actions/project";
-interface ProjectsTableShellProps {
-  data?: ProjectType[];
+import { deleteVisualization } from "@/app/_actions/visualization";
+import { Badge } from "../ui/badge";
+interface visualizationsTableShellProps {
+  data?: VisualizationType[];
   pageCount?: number;
 }
-export function ProjectsTableShell({
+export function VisualizationsTableShell({
   data,
   pageCount,
-}: ProjectsTableShellProps) {
+}: visualizationsTableShellProps) {
   const [isPending, startTransition] = React.useTransition();
-  const [selectedRowNames, setSelectedRowNames] = React.useState<string[]>([]);
-  const columns = React.useMemo<ColumnDef<ProjectType, unknown>[]>(
+  const [selectedRowProperties, setSelectedRowProperties] = React.useState<
+    { name: string; type: VisualizationTypesEnum }[]
+  >([]);
+  const columns = React.useMemo<ColumnDef<VisualizationType, unknown>[]>(
     () => [
       {
         id: "select",
@@ -40,8 +48,16 @@ export function ProjectsTableShell({
             onCheckedChange={(value) => {
               table.toggleAllPageRowsSelected(!!value);
               if (data) {
-                setSelectedRowNames((prev) =>
-                  prev.length === data.length ? [] : data.map((row) => row.name)
+                setSelectedRowProperties(
+                  (prev: { name: string; type: VisualizationTypesEnum }[]) =>
+                    prev.length === data.length
+                      ? []
+                      : data.map((row) => {
+                          return { name: row.name, type: row.type } as {
+                            name: string;
+                            type: VisualizationTypesEnum;
+                          };
+                        })
                 );
               }
             }}
@@ -54,12 +70,22 @@ export function ProjectsTableShell({
             checked={row.getIsSelected()}
             onCheckedChange={(value) => {
               row.toggleSelected(!!value);
-              setSelectedRowNames((prev) =>
-                value
-                  ? [...prev, row.original.name]
-                  : prev.filter((id) => {
-                      return id !== row.original.name;
-                    })
+              setSelectedRowProperties(
+                (prev: { name: string; type: VisualizationTypesEnum }[]) =>
+                  value
+                    ? [
+                        ...prev,
+                        {
+                          name: row.original.name,
+                          type: row.original.type,
+                        } as { name: string; type: VisualizationTypesEnum },
+                      ]
+                    : prev.filter((id) => {
+                        return (
+                          id.name !== row.original.name &&
+                          id.type !== row.original.type
+                        );
+                      })
               );
             }}
             aria-label="Select row"
@@ -75,12 +101,34 @@ export function ProjectsTableShell({
           <DataTableColumnHeader column={column} title="Name" />
         ),
       },
-
       {
         accessorKey: "description",
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title="Description" />
         ),
+      },
+      {
+        accessorKey: "tags",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Tags" />
+        ),
+        cell: ({ cell }) => {
+          const tags = cell.getValue();
+          if (typeof tags === "string") {
+            return (
+              <Badge variant="outline" className="capitalize">
+                {tags}
+              </Badge>
+            );
+          }
+          if (Array.isArray(tags)) {
+            return tags.map((tag) => {
+              <Badge key={tag} variant="outline" className="capitalize">
+                {tag}
+              </Badge>;
+            });
+          }
+        },
       },
       {
         accessorKey: "createdAt",
@@ -98,14 +146,7 @@ export function ProjectsTableShell({
         cell: ({ cell }) => formatDate(cell.getValue() as Date),
         enableColumnFilter: false,
       },
-      {
-        accessorKey: "isActive",
-        header: ({ column }) => (
-          <DataTableColumnHeader column={column} title="Is Active" />
-        ),
-        cell: ({ cell }) => (cell.getValue() ? "active" : "not active"),
-        enableColumnFilter: false,
-      },
+
       {
         id: "actions",
         cell: ({ row }) => (
@@ -121,7 +162,7 @@ export function ProjectsTableShell({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
               <DropdownMenuItem asChild>
-                <Link href={`/projects/${row.original.name}`}>Edit</Link>
+                <Link href={`/visualizations/${row.original.name}`}>Edit</Link>
               </DropdownMenuItem>
 
               <DropdownMenuSeparator />
@@ -131,11 +172,17 @@ export function ProjectsTableShell({
                   startTransition(() => {
                     row.toggleSelected(false);
 
-                    toast.promise(deleteProject(row.original.name), {
-                      loading: "Deleting...",
-                      success: () => "Project deleted successfully.",
-                      error: (err: unknown) => catchError(err),
-                    });
+                    toast.promise(
+                      deleteVisualization({
+                        name: row.original.name,
+                        type: row.original.type,
+                      }),
+                      {
+                        loading: "Deleting...",
+                        success: () => "Visualization deleted successfully.",
+                        error: (err: unknown) => catchError(err),
+                      }
+                    );
                   });
                 }}
                 disabled={isPending}
@@ -152,15 +199,22 @@ export function ProjectsTableShell({
   );
   function deleteSelectedRows() {
     toast.promise(
-      Promise.all(selectedRowNames.map((name) => deleteProject(name))),
+      Promise.all(
+        selectedRowProperties.map(({ name, type }) =>
+          deleteVisualization({
+            name: name,
+            type: type,
+          })
+        )
+      ),
       {
         loading: "Deleting...",
         success: () => {
-          setSelectedRowNames([]);
-          return "Projects deleted successfully.";
+          setSelectedRowProperties([]);
+          return "Visualizations deleted successfully.";
         },
         error: (err: unknown) => {
-          setSelectedRowNames([]);
+          setSelectedRowProperties([]);
           return catchError(err);
         },
       }
@@ -169,10 +223,10 @@ export function ProjectsTableShell({
   return (
     <DataTable
       columns={columns}
-      data={data as ProjectType[]}
+      data={data as VisualizationType[]}
       pageCount={pageCount as number}
       filterableColumns={[]}
-      newRowLink="/projects/new"
+      newRowLink="/visualizations/new"
       deleteRowsAction={deleteSelectedRows}
     />
   );

@@ -59,6 +59,8 @@ export function UpdateProjectForm({ project }: UpdateProjectFormProps) {
   }
 
   return (
+    <div>
+    <h2 className="text-2xl font-bold mb-4">Update Project {project?.name}</h2>
     <Form {...form}>
       <form
         className="grid w-full max-w-xl gap-5"
@@ -109,5 +111,6 @@ export function UpdateProjectForm({ project }: UpdateProjectFormProps) {
         </Button>
       </form>
     </Form>
+    </div>
   );
 }
