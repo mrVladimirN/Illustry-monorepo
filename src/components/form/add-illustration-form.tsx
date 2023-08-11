@@ -54,20 +54,32 @@ export function AddVisualizationForm() {
     },
   });
 
-  function onSubmit(data: Inputs) {
+  async function onSubmit(data: Inputs) {
     startTransition(async () => {
       try {
-        if (files) {
+        if (files.length > 0) {
+          // Check if there are files
           const formData = new FormData();
-          (files as any[]).forEach((f) => {
-            formData.append("File", f.file);
+          files.forEach((f) => {
+            formData.append("File", f.file as File);
           });
-          await createOrUpdateVisualizations(formData);
+
+
+          const res = await fetch("http://localhost:7000/api/visualization", {
+            method: "POST",
+            body: formData,
+          });
+          if (!res.ok) {
+            throw new Error("Request failed");
+          }
+          await res.json();
+          form.reset();
+          toast.success("Visualizations added successfully.");
+          router.push("/visualizations");
+          router.refresh();
+        } else {
+          toast.error("No files selected."); // Show an error message if no files
         }
-        form.reset();
-        toast.success("Visualizations added successfully.");
-        router.push("/visualizations");
-        router.refresh();
       } catch (err) {
         toast.error("Something went wrong.");
         catchError(err);

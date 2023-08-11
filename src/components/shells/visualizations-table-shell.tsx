@@ -108,6 +108,12 @@ export function VisualizationsTableShell({
         ),
       },
       {
+        accessorKey: "type",
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Type" />
+        ),
+      },
+      {
         accessorKey: "tags",
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title="Tags" />
@@ -122,6 +128,7 @@ export function VisualizationsTableShell({
             );
           }
           if (Array.isArray(tags)) {
+
             return tags.map((tag) => {
               <Badge key={tag} variant="outline" className="capitalize">
                 {tag}
