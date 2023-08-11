@@ -30,7 +30,6 @@ import {
   SelectValue,
 } from "../ui/select";
 
-import { createOrUpdateVisualizations } from "@/app/_actions/visualization";
 import { ExtFile } from "@files-ui/react";
 import { FileUpload } from "../ui/file-upload";
 type Inputs = z.infer<typeof visualizationSchema>;
@@ -39,6 +38,9 @@ export function AddVisualizationForm() {
   const router = useRouter();
   const [files, setFiles] = React.useState<ExtFile[]>([]);
   const [isPending, startTransition] = React.useTransition();
+  const [selectedFileType, setSelectedFileType] =
+    React.useState<string>("JSON");
+
   const updateFiles = (incomingFiles: ExtFile[]) => {
     setFiles(incomingFiles);
   };
@@ -46,7 +48,7 @@ export function AddVisualizationForm() {
   const removeFile = (id: string) => {
     setFiles(files.filter((x) => x.id !== id));
   };
-  // react-hook-form
+
   const form = useForm<Inputs>({
     resolver: zodResolver(visualizationSchema),
     defaultValues: {
@@ -58,12 +60,10 @@ export function AddVisualizationForm() {
     startTransition(async () => {
       try {
         if (files.length > 0) {
-          // Check if there are files
           const formData = new FormData();
           files.forEach((f) => {
             formData.append("File", f.file as File);
           });
-
 
           const res = await fetch("http://localhost:7000/api/visualization", {
             method: "POST",
@@ -78,7 +78,7 @@ export function AddVisualizationForm() {
           router.push("/visualizations");
           router.refresh();
         } else {
-          toast.error("No files selected."); // Show an error message if no files
+          toast.error("No files selected.");
         }
       } catch (err) {
         toast.error("Something went wrong.");
@@ -105,7 +105,10 @@ export function AddVisualizationForm() {
                   <FormControl>
                     <Select
                       value={field.value?.toString()}
-                      onValueChange={field.onChange}
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        setSelectedFileType(value);
+                      }}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select a File Type" />
@@ -126,29 +129,38 @@ export function AddVisualizationForm() {
               )}
             />
           </div>
-          <FormItem className="flex w-full flex-col gap-1.5">
-            <FormLabel>Files</FormLabel>
-            <FormControl>
-              <FileUpload
-                acceptedFiles={files}
-                updateFiles={updateFiles}
-                removeFile={removeFile}
-              />
-            </FormControl>
-            <UncontrolledFormMessage
-              message={form.formState.errors.fileType?.message}
-            />
-          </FormItem>
-          <Button className="w-fit" disabled={isPending}>
-            {isPending && (
-              <Icons.spinner
-                className="mr-2 h-4 w-4 animate-spin"
-                aria-hidden="true"
-              />
-            )}
-            Add Visualizations
-            <span className="sr-only">Add Visualizations</span>
-          </Button>
+
+          {selectedFileType === "CSV" ? (
+            <p className="text-red-500">
+              CSV visualization is not yet implemented.
+            </p>
+          ) : (
+            <>
+              <FormItem className="flex w-full flex-col gap-1.5">
+                <FormLabel>Files</FormLabel>
+                <FormControl>
+                  <FileUpload
+                    acceptedFiles={files}
+                    updateFiles={updateFiles}
+                    removeFile={removeFile}
+                  />
+                </FormControl>
+                <UncontrolledFormMessage
+                  message={form.formState.errors.fileType?.message}
+                />
+              </FormItem>
+              <Button className="w-fit" disabled={isPending}>
+                {isPending && (
+                  <Icons.spinner
+                    className="mr-2 h-4 w-4 animate-spin"
+                    aria-hidden="true"
+                  />
+                )}
+                Add Visualizations
+                <span className="sr-only">Add Visualizations</span>
+              </Button>
+            </>
+          )}
         </form>
       </Form>
     </div>

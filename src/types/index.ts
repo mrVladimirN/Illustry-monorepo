@@ -130,8 +130,8 @@ export interface CalendarMatrix {
 
 //Details for FLG HEB Sankey And Dot
 interface Node {
-  group: string;
-  id?: string;
+  category: string;
+  name?: string;
   properties?: any | any[];
 }
 

@@ -23,17 +23,16 @@ import { Button } from "../ui/button";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { toast } from "sonner";
-import { deleteProject } from "@/app/_actions/project";
 import { deleteVisualization } from "@/app/_actions/visualization";
 import { Badge } from "../ui/badge";
-interface visualizationsTableShellProps {
+interface VisualizationsTableShellProps {
   data?: VisualizationType[];
   pageCount?: number;
 }
 export function VisualizationsTableShell({
   data,
   pageCount,
-}: visualizationsTableShellProps) {
+}: VisualizationsTableShellProps) {
   const [isPending, startTransition] = React.useTransition();
   const [selectedRowProperties, setSelectedRowProperties] = React.useState<
     { name: string; type: VisualizationTypesEnum }[]
@@ -120,6 +119,7 @@ export function VisualizationsTableShell({
         ),
         cell: ({ cell }) => {
           const tags = cell.getValue();
+
           if (typeof tags === "string") {
             return (
               <Badge variant="outline" className="capitalize">
@@ -127,14 +127,20 @@ export function VisualizationsTableShell({
               </Badge>
             );
           }
-          if (Array.isArray(tags)) {
 
-            return tags.map((tag) => {
-              <Badge key={tag} variant="outline" className="capitalize">
-                {tag}
-              </Badge>;
-            });
+          if (Array.isArray(tags)) {
+            return tags.map(
+              (
+                tag // Add the return statement here
+              ) => (
+                <Badge key={tag} variant="outline" className="capitalize">
+                  {tag}
+                </Badge>
+              )
+            );
           }
+
+          return null; 
         },
       },
       {
@@ -169,7 +175,7 @@ export function VisualizationsTableShell({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
               <DropdownMenuItem asChild>
-                <Link href={`/visualizations/${row.original.name}`}>Edit</Link>
+                <Link href={`/visualizationhub?name=${row.original.name}&type=${row.original.type}`}>View</Link>
               </DropdownMenuItem>
 
               <DropdownMenuSeparator />
