@@ -7,7 +7,6 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import type { z } from "zod";
 import { catchError } from "@/lib/utils";
-import { visualizationSchema } from "@/lib/validation/project";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -32,6 +31,7 @@ import {
 
 import { ExtFile } from "@files-ui/react";
 import { FileUpload } from "../ui/file-upload";
+import { visualizationSchema } from "@/lib/validation/visualizations";
 type Inputs = z.infer<typeof visualizationSchema>;
 
 export function AddVisualizationForm() {

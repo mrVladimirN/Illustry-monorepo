@@ -72,8 +72,6 @@ export interface ExtendedProjectType {
   };
 }
 
-
-
 export enum VisualizationTypesEnum {
   CHART = "chart",
   WORLD_CLOUD = "word-cloud",
@@ -129,17 +127,17 @@ export interface CalendarMatrix {
 }
 
 //Details for FLG HEB Sankey And Dot
-interface Node {
+export interface Node {
   category: string;
   name?: string;
-  properties?: any | any[];
+  properties?: object | object[] | string;
 }
 
 export interface Link {
   source: string;
   target: string;
   value: number;
-  properties?: object | object[]| string;
+  properties?: object | object[] | string;
   style?: any;
 }
 
@@ -151,8 +149,8 @@ interface CalendarData {
 }
 
 export interface VisualizationType {
-  _id?:string
-  __v?:number
+  _id?: string;
+  __v?: number;
   projectName?: string;
   type?: VisualizationTypesEnum | VisualizationTypesEnum[];
   description?: string;
@@ -164,11 +162,11 @@ export interface VisualizationType {
 }
 
 export interface ExtendedVisualizationType {
-  visualizations?: VisualizationType[]
+  visualizations?: VisualizationType[];
   pagination?: {
-    count:number,
-    pageCount:number
-  }
+    count: number;
+    pageCount: number;
+  };
 }
 
 export interface VisualizationFilter {
@@ -179,7 +177,7 @@ export interface VisualizationFilter {
   text?: string;
   page?: number;
   sort?: {
-    element:string,
+    element: string;
     sortOrder: string | number;
-  }
+  };
 }
