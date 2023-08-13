@@ -4,7 +4,7 @@ import React, { useRef, useEffect } from "react";
 
 // Import the echarts core module, which provides the necessary interfaces for using echarts.
 import * as echarts from "echarts/core";
-import { SankeyChart  } from "echarts/charts";
+import { SankeyChart, GraphChart  } from "echarts/charts";
 // Import the tooltip, title, rectangular coordinate system, dataset and transform components
 import {
   TooltipComponent,
@@ -35,7 +35,7 @@ const ReactEcharts = <T extends EChartsOption>({
 }: ReactEChartsProps<T>): JSX.Element => {
 
   echarts.use([
-    
+    GraphChart,
     TooltipComponent,
     GridComponent,
     DatasetComponent,

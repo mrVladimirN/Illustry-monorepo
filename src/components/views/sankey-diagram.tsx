@@ -2,27 +2,25 @@ import * as React from "react";
 import ReactEcharts from "./echarts";
 import { EChartsOption } from "echarts/types/dist/echarts";
 import {
-  computeCategories,
-  computeLinks,
-  computeNodes,
+  computeCategoriesSankey,
+  computeLinksSankey,
+  computeNodesSankey,
 } from "@/lib/visualizations/node-link/helper";
 
 const SankeyGraphView = ({ data }: any) => {
   const { nodes, links } = data;
-  const categories: string[] = computeCategories(nodes);
+  const categories: string[] = computeCategoriesSankey(nodes);
   const option: EChartsOption = {
     tooltip: {
       trigger: "item",
       triggerOn: "mousemove",
+      //@ts-ignore
       formatter: function (params) {
+        //@ts-ignore
         return params.data.prop;
       },
     },
-    legend: [
-      {
-        data: categories,
-      },
-    ],
+
     animation: false,
     emphasis: {
       focus: "adjacency",
@@ -37,8 +35,8 @@ const SankeyGraphView = ({ data }: any) => {
           focus: "adjacency",
         },
         nodeAlign: "right",
-        data: computeNodes(nodes),
-        links: computeLinks(links),
+        data: computeNodesSankey(nodes, categories),
+        links: computeLinksSankey(links),
         lineStyle: {
           color: "source",
           curveness: 0.5,
@@ -48,7 +46,10 @@ const SankeyGraphView = ({ data }: any) => {
   };
   return (
     <div className="w-full mt-4 h-screens-90 sm:mt-6 lg:mt-8">
-       <ReactEcharts option={option} className="w-full h-[90vh] sm:h-120 lg:h-160" />
+      <ReactEcharts
+        option={option}
+        className="w-full h-[90vh] sm:h-120 lg:h-160"
+      />
     </div>
   );
 };
