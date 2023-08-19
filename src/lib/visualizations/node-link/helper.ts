@@ -88,9 +88,7 @@ export const constructLegendTextColor = (
   categories: {
     name: string;
   }[]
-) => {
-
-};
+) => {};
 export const computeNodesFLG = (
   nodes: Node[],
   categories: {
@@ -105,19 +103,11 @@ export const computeNodesFLG = (
       id: index.toString(),
       name: node.name,
       category: categoryIndex,
-      
     };
   });
 };
 
-export const computeLinksFLG = (
-  links: Link[],
-  nodes: {
-    id: string;
-    name: string | undefined;
-    category: number;
-  }[]
-) => {
+export const computeLinksFLG = (links: Link[], nodes: Node[]) => {
   return links.map((link, index) => {
     const source = nodes.findIndex((node) => node.name === link.source);
     const target = nodes.findIndex((node) => node.name === link.target);
@@ -129,3 +119,7 @@ export const computeLinksFLG = (
     };
   });
 };
+
+// HEB transformers
+
+

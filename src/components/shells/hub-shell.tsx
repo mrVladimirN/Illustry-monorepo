@@ -10,6 +10,9 @@ const SankeyGraphView = lazy(() => import("@/components/views/sankey-diagram"));
 const ForcedLayoutGraphView = lazy(
   () => import("@/components/views/forced-layout-graph")
 );
+const HierarchicalEdgeBundlingView =  lazy(
+  () => import("@/components/views/hierarchical-edge-bundling")
+);
 export function HubShell({ data }: HubShellProps) {
   const renderGraph = () => {
     if (data) {
@@ -19,7 +22,7 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense
               fallback={<Icons.spinner className="h-4 w-4 animate-spin" />}
             >
-              {/* <HierarchicalEdgeBundlingView data={data} /> */}
+              <HierarchicalEdgeBundlingView data={data.data} />
             </Suspense>
           );
         case "force-directed-graph":

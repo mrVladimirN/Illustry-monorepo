@@ -29,6 +29,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
+    "d3": "^5.0.0",
     "echarts": "^5.4.3",
     "lucide-react": "^0.263.1",
     "next": "13.4.12",
@@ -43,6 +44,7 @@
   },
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.9",
+    "@types/d3": "^7.4.0",
     "@types/echarts": "^4.9.18",
     "@types/node": "20.4.5",
     "@types/react": "18.2.16",
