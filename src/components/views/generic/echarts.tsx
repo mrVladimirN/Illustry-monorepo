@@ -4,19 +4,21 @@ import React, { useRef, useEffect } from "react";
 
 // Import the echarts core module, which provides the necessary interfaces for using echarts.
 import * as echarts from "echarts/core";
-import { SankeyChart, GraphChart  } from "echarts/charts";
+import { SankeyChart, GraphChart, HeatmapChart  } from "echarts/charts";
 // Import the tooltip, title, rectangular coordinate system, dataset and transform components
 import {
   TooltipComponent,
   GridComponent,
   DatasetComponent,
   TransformComponent,
-  LegendComponent 
+  LegendComponent,
+  VisualMapComponent,
+  CalendarComponent 
 } from "echarts/components";
 
 import { SVGRenderer } from "echarts/renderers";
 
-import { EChartsOption, SetOptionOpts } from "echarts/types/dist/echarts";
+import { EChartsOption, SetOptionOpts, HeatmapSeriesOption } from "echarts/types/dist/echarts";
 
 export interface ReactEChartsProps<T> {
   option: T;
@@ -42,7 +44,10 @@ const ReactEcharts = <T extends EChartsOption>({
     SVGRenderer,
     TransformComponent,
     SankeyChart,
-    LegendComponent 
+    LegendComponent ,
+    HeatmapChart,
+    VisualMapComponent,
+    CalendarComponent 
   ]);
 
   const chartRef = useRef<HTMLDivElement>(null);

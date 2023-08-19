@@ -1,5 +1,5 @@
 import * as React from "react";
-import ReactEcharts from "./echarts";
+import ReactEcharts from "./generic/echarts";
 import { EChartsOption } from "echarts/types/dist/echarts";
 import {
   computeCategoriesFLG,

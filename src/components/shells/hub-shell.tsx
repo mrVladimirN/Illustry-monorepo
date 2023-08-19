@@ -13,6 +13,7 @@ const ForcedLayoutGraphView = lazy(
 const HierarchicalEdgeBundlingView =  lazy(
   () => import("@/components/views/hierarchical-edge-bundling")
 );
+const CalendarView = lazy(() => import("@/components/views/calendar-graph"))
 export function HubShell({ data }: HubShellProps) {
   const renderGraph = () => {
     if (data) {
@@ -41,6 +42,14 @@ export function HubShell({ data }: HubShellProps) {
               <SankeyGraphView data={data.data} />
             </Suspense>
           );
+        case "calendar":
+          return (
+            <Suspense
+            fallback={<Icons.spinner className="h-4 w-4 animate-spin" />}
+          >
+            <CalendarView data={data.data} />
+          </Suspense>
+          )
         default:
           return null;
       }

@@ -113,8 +113,6 @@ export interface Timeline {
 
 export interface CalendarHeatmap {
   calendar: CalendarData[];
-  categories: any;
-  tooltip?: any;
 }
 export interface NodeLink {
   nodes: Node[];
@@ -141,11 +139,11 @@ export interface Link {
   style?: any;
 }
 
-interface CalendarData {
+export interface CalendarData {
   date: string;
-  value: number;
-  year: number;
+  value?: number;
   category: string;
+  properties?: object | object[] | string;
 }
 
 export interface VisualizationType {
