@@ -1,7 +1,7 @@
 import * as React from "react";
 import ReactEcharts from "./generic/echarts";
 import { EChartsOption, SeriesOption } from "echarts/types/dist/echarts";
-import {  computeCalendar, computeCategoriesCalendar, computeColors, computeElementsCalendar, createPropertiesForToolTip } from "@/lib/visualizations/calendar/helper";
+import {  computeCalendar, computeCategoriesCalendar, computeColors, computeElementsCalendar, computePropertiesForToolTip } from "@/lib/visualizations/calendar/helper";
 import { CalendarOption } from "echarts/types/dist/shared";
 import { CalendarData } from "@/types";
 
@@ -23,11 +23,11 @@ const CalendarGraph = ({ data }: any) => {
           })
           if(element) {
             if(element.properties) {
-            return createPropertiesForToolTip(element.properties, element.value)
+            return computePropertiesForToolTip(element.properties, element.value)
           }
           else 
           {
-            return createPropertiesForToolTip(null, element.value)
+            return computePropertiesForToolTip(null, element.value)
           }
           }
         }

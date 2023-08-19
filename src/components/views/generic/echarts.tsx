@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef, useEffect } from "react";
 
-
+import 'echarts-wordcloud';
 // Import the echarts core module, which provides the necessary interfaces for using echarts.
 import * as echarts from "echarts/core";
 import { SankeyChart, GraphChart, HeatmapChart  } from "echarts/charts";
@@ -18,7 +18,7 @@ import {
 
 import { SVGRenderer } from "echarts/renderers";
 
-import { EChartsOption, SetOptionOpts, HeatmapSeriesOption } from "echarts/types/dist/echarts";
+import { EChartsOption, SetOptionOpts, HeatmapSeriesOption, WordCloudSeriesOption } from "echarts/types/dist/echarts";
 
 export interface ReactEChartsProps<T> {
   option: T;
@@ -28,7 +28,7 @@ export interface ReactEChartsProps<T> {
   theme?: "light" | "dark";
 }
 
-const ReactEcharts = <T extends EChartsOption>({
+const ReactEcharts = <T extends EChartsOption|WordCloudSeriesOption>({
   option,
   className,
   settings,
@@ -47,7 +47,7 @@ const ReactEcharts = <T extends EChartsOption>({
     LegendComponent ,
     HeatmapChart,
     VisualMapComponent,
-    CalendarComponent 
+    CalendarComponent ,
   ]);
 
   const chartRef = useRef<HTMLDivElement>(null);

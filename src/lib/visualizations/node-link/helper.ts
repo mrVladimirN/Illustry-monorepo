@@ -24,7 +24,7 @@ export const computeNodesSankey = (nodes: Node[], categories: string[]) => {
         color: colorMapSchema.get(node.category),
         borderColor: colorMapSchema.get(node.category),
       },
-      prop: createPropertiesForToolTip(node.properties),
+      prop: computePropertiesForToolTip(node.properties),
     };
   });
 };
@@ -35,11 +35,11 @@ export const computeLinksSankey = (links: Link[]) => {
       source: link.source,
       target: link.target,
       value: link.value,
-      prop: createPropertiesForToolTip(link.properties, link.value),
+      prop: computePropertiesForToolTip(link.properties, link.value),
     };
   });
 };
-const createPropertiesForToolTip = (
+const computePropertiesForToolTip = (
   properties: any,
   value?: number | string
 ) => {
@@ -115,7 +115,7 @@ export const computeLinksFLG = (links: Link[], nodes: Node[]) => {
       source: source,
       target: target,
       value: link.value,
-      prop: createPropertiesForToolTip(link.properties, link.value),
+      prop: computePropertiesForToolTip(link.properties, link.value),
     };
   });
 };

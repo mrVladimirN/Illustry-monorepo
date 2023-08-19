@@ -22,7 +22,7 @@ export const computeElementsCalendar = (element: CalendarData) => {
   return [element.date, element.value ? element.value : 1, element.category];
 };
 
-export const createPropertiesForToolTip = (
+export const computePropertiesForToolTip = (
   properties: any,
   value?: number | string
 ) => {
