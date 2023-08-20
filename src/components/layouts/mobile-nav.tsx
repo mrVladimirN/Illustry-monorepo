@@ -12,6 +12,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Icons } from "@/components/icons";
 import { useState } from "react";
+import { ThemeToggle } from "./theme-toggle";
 
 interface MobileNavProps {
   items?: MainNavItem[];
@@ -57,6 +58,9 @@ export function MobileNav({ items }: MobileNavProps) {
                 {item.title}
               </MobileLink>
             ))}
+            <div className="my-4 h-[calc(100vh-8rem)] pb-10">
+              <ThemeToggle />
+            </div>
           </div>
         </ScrollArea>
       </SheetContent>

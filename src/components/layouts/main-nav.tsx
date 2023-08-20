@@ -62,10 +62,9 @@ export function MainNav({ items }: MainNavProps) {
             ))}
         </NavigationMenuList>
       </NavigationMenu>
-       <div className="flex flex-1 items-center justify-end space-x-4">
+      <div className="flex flex-1 items-center justify-end space-x-4">
         <ThemeToggle />
       </div>
-
     </div>
   );
 }
