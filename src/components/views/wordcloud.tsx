@@ -4,9 +4,16 @@ import {
   EChartsOption,
   WordCloudSeriesOption,
 } from "echarts/types/dist/echarts";
-import { computeWords,computePropertiesForToolTip } from "@/lib/visualizations/word-cloud/utils";
+import {
+  computeWords,
+  computePropertiesForToolTip,
+} from "@/lib/visualizations/word-cloud/utils";
+import { WordCloudData } from "types/visualizations";
+interface WordCloudProp {
+  data: WordCloudData;
+}
 
-const WordCloudView = ({ data }: any) => {
+const WordCloudView = ({ data }: WordCloudProp) => {
   const { words } = data;
   const option: EChartsOption = {
     tooltip: {

@@ -1,6 +1,5 @@
 import * as React from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import type { DataTableFilterableColumn } from "@/types";
 import {
   flexRender,
   getCoreRowModel,
@@ -27,6 +26,21 @@ import {
 } from "@/components/ui/table";
 import { DataTablePagination } from "@/components/data-table/data-table-pagination";
 import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
+interface Option {
+  label: string;
+  value: string;
+  icon?: React.ComponentType<{ className?: string }>;
+}
+
+interface DataTableSearchableColumn<TData> {
+  id: keyof TData;
+  title: string;
+}
+
+interface DataTableFilterableColumn<TData>
+  extends DataTableSearchableColumn<TData> {
+  options: Option[];
+}
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];

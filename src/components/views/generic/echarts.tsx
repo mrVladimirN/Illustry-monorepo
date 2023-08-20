@@ -77,7 +77,7 @@ const ReactEcharts = <T extends EChartsOption|WordCloudSeriesOption>({
     // Update chart
     if (chartRef.current !== null) {
       const chart = echarts.getInstanceByDom(chartRef.current);
-      chart?.setOption(option as any, settings);
+      chart?.setOption(option as EChartsOption, settings);
     }
   }, [option, settings, theme]);
 

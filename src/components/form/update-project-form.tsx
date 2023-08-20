@@ -21,12 +21,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Icons } from "@/components/icons";
 import { updateProject } from "@/app/_actions/project";
 import { Checkbox } from "../ui/checkbox";
-import { ProjectType } from "@/types";
+import { ProjectUpdate } from "types/project";
 
 type Inputs = z.infer<typeof projectUpdateSchema>;
 
 interface UpdateProjectFormProps {
-  project?: ProjectType;
+  project?: ProjectUpdate;
 }
 export function UpdateProjectForm({ project }: UpdateProjectFormProps) {
   const router = useRouter();
@@ -45,7 +45,7 @@ export function UpdateProjectForm({ project }: UpdateProjectFormProps) {
     startTransition(async () => {
       try {
         if (project && project.name) {
-          await updateProject({ name: project.name, ...data });
+          await updateProject({ name: project.name, ...data } as ProjectUpdate);
 
           form.reset();
           toast.success("Project updated successfully.");

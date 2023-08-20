@@ -1,10 +1,5 @@
 "use client";
 
-import {
-  ProjectType,
-  VisualizationType,
-  VisualizationTypesEnum,
-} from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
 import { DataTableColumnHeader } from "../data-table/data-table-column-header";
@@ -25,6 +20,7 @@ import Link from "next/link";
 import { toast } from "sonner";
 import { deleteVisualization } from "@/app/_actions/visualization";
 import { Badge } from "../ui/badge";
+import { VisualizationType, VisualizationTypesEnum } from "types/visualizations";
 interface VisualizationsTableShellProps {
   data?: VisualizationType[];
   pageCount?: number;

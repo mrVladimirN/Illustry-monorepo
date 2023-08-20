@@ -1,7 +1,7 @@
 import { colors } from "@/config/theme1";
-import { CalendarData } from "@/types";
+import { CalendarType } from "types/visualizations";
 
-export const computeCategoriesCalendar = (calendarData: CalendarData[]) => {
+export const computeCategoriesCalendar = (calendarData: CalendarType[]) => {
   return [
     ...new Set(
       calendarData.map((cal) => {
@@ -18,7 +18,7 @@ export const computeColors = (categories: string[]) => {
   });
   return color;
 };
-export const computeElementsCalendar = (element: CalendarData) => {
+export const computeElementsCalendar = (element: CalendarType) => {
   return [element.date, element.value ? element.value : 1, element.category];
 };
 
@@ -35,10 +35,7 @@ export const computePropertiesForToolTip = (
           prop += `<div style="font-weight: bold">${key}:${propValue}</div>`;
         }
       }
-
-      if (value) {
-        prop += `<div style="font-weight: bold">value:${value}</div>`;
-      }
+    
     } else if (typeof properties === "string") {
       prop += properties;
     }
@@ -50,7 +47,7 @@ export const computePropertiesForToolTip = (
   return prop;
 };
 
-export const computeCalendar = (calendarData: CalendarData[]) => {
+export const computeCalendar = (calendarData: CalendarType[]) => {
   const years = [
     ...new Set(
       calendarData.map((cal) => {

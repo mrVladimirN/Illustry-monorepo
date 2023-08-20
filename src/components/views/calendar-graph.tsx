@@ -3,9 +3,12 @@ import ReactEcharts from "./generic/echarts";
 import { EChartsOption, SeriesOption } from "echarts/types/dist/echarts";
 import {  computeCalendar, computeCategoriesCalendar, computeColors, computeElementsCalendar, computePropertiesForToolTip } from "@/lib/visualizations/calendar/helper";
 import { CalendarOption } from "echarts/types/dist/shared";
-import { CalendarData } from "@/types";
+import { CalendarData, CalendarType } from "types/visualizations";
 
-const CalendarGraph = ({ data }: any) => {
+interface CalendarGraphProp {
+  data: CalendarData
+}
+const CalendarGraph = ({ data }: CalendarGraphProp) => {
   const { calendar } = data;
   const categories: string[] = computeCategoriesCalendar(calendar);
   const computedCalendar = computeCalendar(calendar)
@@ -17,7 +20,7 @@ const CalendarGraph = ({ data }: any) => {
       formatter: function (params) {
         //@ts-ignore
         if(params && params.data && params.data.length) {
-          const element = (calendar as CalendarData[]).find(el => {
+          const element = (calendar as CalendarType[]).find(el => {
              //@ts-ignore
             return el.date === params.data[0]
           })

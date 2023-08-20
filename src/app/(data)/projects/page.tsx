@@ -2,8 +2,8 @@ import React from "react";
 import { env } from "@/env.mjs";
 import { Metadata } from "next";
 import { browseProjects } from "@/app/_actions/project";
-import { ProjectFilter } from "@/types";
 import { ProjectsTableShell } from "@/components/shells/projects-table-shell";
+import { ProjectFilter } from "types/project";
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: "Projects",

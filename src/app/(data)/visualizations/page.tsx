@@ -2,8 +2,8 @@ import React from "react";
 import { env } from "@/env.mjs";
 import { Metadata } from "next";
 import { browseVisualizations } from "@/app/_actions/visualization";
-import { VisualizationFilter } from "@/types";
 import { VisualizationsTableShell } from "@/components/shells/visualizations-table-shell";
+import { VisualizationFilter } from "types/visualizations";
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),

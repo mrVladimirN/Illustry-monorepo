@@ -6,8 +6,12 @@ import {
   computeLinksSankey,
   computeNodesSankey,
 } from "@/lib/visualizations/node-link/helper";
+import { NodeLinkData } from "types/visualizations";
+interface SankeyGraphProp {
+  data: NodeLinkData
+}
 
-const SankeyGraphView = ({ data }: any) => {
+const SankeyGraphView = ({ data }: SankeyGraphProp) => {
   const { nodes, links } = data;
   const categories: string[] = computeCategoriesSankey(nodes);
   const option: EChartsOption = {

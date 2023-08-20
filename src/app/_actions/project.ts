@@ -1,13 +1,9 @@
 "use server";
 
 import { makeRequest } from "@/lib/request";
-import {
-  ProjectFilter,
-  ExtendedProjectType,
-  ProjectType,
-  ProjectCreate,
-} from "@/types";
+
 import { revalidateTag } from "next/cache";
+import { ExtendedProjectType, ProjectCreate, ProjectFilter, ProjectType, ProjectUpdate } from "types/project";
 export const browseProjects = async (filter?: ProjectFilter) => {
   revalidateTag("projects");
   let newFilter: ProjectFilter = {};
@@ -39,7 +35,7 @@ export const deleteProject = async (projectName: string) => {
   return await makeRequest<boolean>(request, ["projects"]);
 };
 
-export const updateProject = async (project: ProjectType) => {
+export const updateProject = async (project: ProjectUpdate) => {
   revalidateTag("projects");
   const request = new Request("http://localhost:7000/api/project", {
     method: "PUT",

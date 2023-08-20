@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import type { MainNavItem } from "@/types";
 
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -16,7 +15,24 @@ import {
 } from "@/components/ui/navigation-menu";
 import { Icons } from "@/components/icons";
 import { ThemeToggle } from "./theme-toggle";
+interface NavItem {
+  title: string;
+  href?: string;
+  disabled?: boolean;
+  external?: boolean;
+  icon?: keyof typeof Icons;
+  label?: string;
+  description?: string;
+}
 
+export interface NavItemWithChildren extends NavItem {
+  items: NavItemWithChildren[];
+}
+
+export interface NavItemWithOptionalChildren extends NavItem {
+  items?: NavItemWithChildren[];
+}
+export type MainNavItem = NavItemWithOptionalChildren;
 interface MainNavProps {
   items?: MainNavItem[];
 }

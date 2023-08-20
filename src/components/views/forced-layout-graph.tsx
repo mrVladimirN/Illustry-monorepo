@@ -6,8 +6,12 @@ import {
   computeLinksFLG,
   computeNodesFLG,
 } from "@/lib/visualizations/node-link/helper";
+import { NodeLinkData } from "types/visualizations";
 
-const ForcedLayoutGraphView = ({ data }: any) => {
+interface ForcedLayoutGraphProp {
+  data: NodeLinkData
+}
+const ForcedLayoutGraphView = ({ data }: ForcedLayoutGraphProp) => {
   const { nodes, links } = data;
   const categories: { name: string }[] = computeCategoriesFLG(nodes);
   const option: EChartsOption = {

@@ -1,6 +1,5 @@
 "use client";
 
-import { ProjectType } from "@/types";
 import { ColumnDef } from "@tanstack/react-table";
 import * as React from "react";
 import { DataTableColumnHeader } from "../data-table/data-table-column-header";
@@ -20,6 +19,7 @@ import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { toast } from "sonner";
 import { deleteProject } from "@/app/_actions/project";
+import { ProjectType } from "types/project";
 interface ProjectsTableShellProps {
   data?: ProjectType[];
   pageCount?: number;

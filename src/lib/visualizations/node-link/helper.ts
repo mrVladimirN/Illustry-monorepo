@@ -1,5 +1,5 @@
 import { colors } from "@/config/theme1";
-import { Link, Node } from "@/types";
+import { Link,Node } from "types/visualizations";
 
 //Sankey transformers
 export const computeCategoriesSankey = (nodes: Node[]) => {

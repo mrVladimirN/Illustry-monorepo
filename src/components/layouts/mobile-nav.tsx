@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import type { MainNavItem } from "@/types";
 import { usePathname } from "next/navigation";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
@@ -13,7 +12,24 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Icons } from "@/components/icons";
 import { useState } from "react";
 import { ThemeToggle } from "./theme-toggle";
+interface NavItem {
+  title: string;
+  href?: string;
+  disabled?: boolean;
+  external?: boolean;
+  icon?: keyof typeof Icons;
+  label?: string;
+  description?: string;
+}
 
+export interface NavItemWithChildren extends NavItem {
+  items: NavItemWithChildren[];
+}
+
+export interface NavItemWithOptionalChildren extends NavItem {
+  items?: NavItemWithChildren[];
+}
+export type MainNavItem = NavItemWithOptionalChildren;
 interface MobileNavProps {
   items?: MainNavItem[];
 }

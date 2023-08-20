@@ -2,7 +2,12 @@
 'use client'
 import * as React from "react";
 import { select, cluster, lineRadial, curveBundle, hierarchy } from "d3";
-const ForcedLayoutGraphView = ({ data }: any) => {
+import { NodeLinkData } from "types/visualizations";
+interface ForcedLayoutGraphProp {
+  data: NodeLinkData
+}
+
+const HierarchicalEdgeBundlingGraphView = ({ data }: ForcedLayoutGraphProp) => {
   React.useEffect(() => {
     createHedge(data);
     return () => {
@@ -263,4 +268,4 @@ const ForcedLayoutGraphView = ({ data }: any) => {
   );
 };
 
-export default ForcedLayoutGraphView;
+export default HierarchicalEdgeBundlingGraphView;

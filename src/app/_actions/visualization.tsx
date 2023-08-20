@@ -1,12 +1,9 @@
 "use server";
 
 import { makeRequest } from "@/lib/request";
-import {
-  VisualizationType,
-  VisualizationFilter,
-  ExtendedVisualizationType,
-} from "@/types";
+
 import { revalidateTag } from "next/cache";
+import { ExtendedVisualizationType, VisualizationFilter, VisualizationType } from "types/visualizations";
 export const createOrUpdateVisualizations = async (formData: FormData) => {
   revalidateTag("visualizations");
   const request = new Request(`http://localhost:7000/api/visualization`, {
