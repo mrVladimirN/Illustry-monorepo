@@ -66,17 +66,17 @@ export class ProjectBZL {
 
   delete(filter: ProjectFilter): Promise<boolean> {
     let newProjectFilter: ExtendedMongoQuery = {};
-    let newIllustrationFilter: ExtendedMongoQuery = {};
+    let newVisualizationFilter: ExtendedMongoQuery = {};
     if (!_.isNil(filter)) {
       newProjectFilter = this.dbaccInstance.Project.createFilter(filter);
-      newIllustrationFilter = this.dbaccInstance.Visualization.createFilter({
+      newVisualizationFilter = this.dbaccInstance.Visualization.createFilter({
         projectName: filter.name,
       });
     }
     return Promise.resolve(this.dbaccInstance.Project.delete(newProjectFilter))
       .then(() => {
         return Promise.resolve(
-          this.dbaccInstance.Visualization.deleteMany(newIllustrationFilter)
+          this.dbaccInstance.Visualization.deleteMany(newVisualizationFilter)
         );
       })
       .then(() => {

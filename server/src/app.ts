@@ -1,6 +1,6 @@
 import express from "express";
 import ProjectRoutes from "./routes/project/project";
-import IllustrationRoutes from "./routes/illustration/illustration";
+import VisualizationRoutes from "./routes/visualization/visualization";
 require("dotenv").config();
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -15,7 +15,7 @@ app.use((req, res, next) => {
   next();
 });
 app.use(ProjectRoutes);
-app.use(IllustrationRoutes);
+app.use(VisualizationRoutes);
 app.listen(process.env.ILLUSTRY_PORT, () => {
   return console.log(`server is listening on ${process.env.ILLUSTRY_PORT}`);
 });
