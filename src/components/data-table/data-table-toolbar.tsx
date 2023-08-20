@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import Link from "next/link";
-import type { DataTableFilterableColumn } from "@/types";
 import { Cross2Icon, PlusCircledIcon, TrashIcon } from "@radix-ui/react-icons";
 import type { Table } from "@tanstack/react-table";
 
@@ -28,7 +27,21 @@ const SearchButton = ({ containerStyles }: SearchButtonProps) => (
     />
   </button>
 );
+interface Option {
+  label: string;
+  value: string;
+  icon?: React.ComponentType<{ className?: string }>;
+}
 
+interface DataTableSearchableColumn<TData> {
+  id: keyof TData;
+  title: string;
+}
+
+interface DataTableFilterableColumn<TData>
+  extends DataTableSearchableColumn<TData> {
+  options: Option[];
+}
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   filterableColumns?: DataTableFilterableColumn<TData>[];
@@ -70,30 +83,30 @@ export function DataTableToolbar<TData>({
 
   return (
     <div className="flex w-full items-center justify-between space-x-2 overflow-auto p-1">
-    <div className="flex flex-1 items-center space-x-2">
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          router.push(
-            `${pathname}?${createQueryString({
-              page: 1,
-              text: debouncedText.length > 0 ? debouncedText : null,
-            })}`,
-            {
-              scroll: false,
-            }
-          );
-        }}
-        className="flex items-center space-x-2" // Added flex container
-      >
-        <Input
-          placeholder={`Filter ...`}
-          value={text}
-          onChange={(event) => setText(event.target.value)}
-          className="h-8 w-[150px] lg:w-[250px]"
-        />
-        <SearchButton containerStyles="ml-[5%]" />
-      </form>
+      <div className="flex flex-1 items-center space-x-2">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            router.push(
+              `${pathname}?${createQueryString({
+                page: 1,
+                text: debouncedText.length > 0 ? debouncedText : null,
+              })}`,
+              {
+                scroll: false,
+              }
+            );
+          }}
+          className="flex items-center space-x-2" // Added flex container
+        >
+          <Input
+            placeholder={`Filter ...`}
+            value={text}
+            onChange={(event) => setText(event.target.value)}
+            className="h-8 w-[150px] lg:w-[250px]"
+          />
+          <SearchButton containerStyles="ml-[5%]" />
+        </form>
         {filterableColumns.length > 0 &&
           filterableColumns.map(
             (column) =>
