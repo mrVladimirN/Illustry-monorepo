@@ -36,21 +36,3 @@ export {
   MongoQuery,
   DeepPartial,
 } from "./types/utils";
-
-// validators
-
-export { fileValidator } from "./validators/files";
-
-export {
-  projectCreateSchema,
-  projectFilterSchema,
-  projectUpdateSchema,
-  projectExtendedTypeSchema
-} from "./validators/projects";
-
-export {
-  visualizationFilterSchema,
-  visualizationPartialTypeSchema,
-  visualizationTypeSchema,
-  visualizationExtendedTypeSchema
-} from './validators/visualizations'

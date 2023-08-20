@@ -18,8 +18,9 @@ export interface WordCloudData {
 
 // Calendar
 export interface CalendarType extends with_optional_properties {
-  name: string;
+  date: string;
   value: number;
+  category: string;
 }
 
 export interface CalendarData {
@@ -29,19 +30,19 @@ export interface CalendarData {
 // Node-Link (force-directed-graph, sankey, hierarchical-edge-bundling )
 
 export interface Node extends with_optional_properties {
-    name:string,
-    category: string
+  name: string;
+  category: string;
 }
 
 export interface Link extends with_optional_properties {
-    source: string,
-    target: string,
-    value: number
+  source: string;
+  target: string;
+  value: number;
 }
 
 export interface NodeLinkData {
-    nodes: Node[],
-    links: Link[]
+  nodes: Node[];
+  links: Link[];
 }
 export enum VisualizationTypesEnum {
   WORLD_CLOUD = "word-cloud",
