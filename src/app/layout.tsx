@@ -1,13 +1,16 @@
-import type { Metadata } from "next"
-import { env } from "@/env.mjs"
+import type { Metadata } from "next";
+import { env } from "@/env.mjs";
 
-import "@/styles/global.css"
+import "@/styles/global.css";
 
-import { siteConfig } from "@/config/site"
-import { fontMono, fontSans } from "@/lib/fonts"
-import { cn } from "@/lib/utils"
-import { Toaster } from "@/components/ui/toaster"
-import { ThemeProvider } from "@/components/theme-provider"
+import { siteConfig } from "@/config/site";
+import { fontMono, fontSans } from "@/lib/fonts";
+import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/toaster";
+import {
+  ThemeColorsProvider,
+  ThemeProvider,
+} from "@/components/theme-provider";
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
@@ -23,7 +26,6 @@ export const metadata: Metadata = {
     "Server Components",
     "Server Actions",
     "VisualizationHub",
-
   ],
   authors: [
     {
@@ -36,30 +38,32 @@ export const metadata: Metadata = {
     { media: "(prefers-color-scheme: light)", color: "white" },
     { media: "(prefers-color-scheme: dark)", color: "black" },
   ],
-}
+};
 
 interface RootLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
-        <html lang="en" suppressHydrationWarning>
-          <head />
-          <body
-            className={cn(
-              "min-h-screen bg-background font-sans antialiased",
-              fontSans.variable,
-              fontMono.variable
-            )}
-          >
+      <html lang="en" suppressHydrationWarning>
+        <head />
+        <body
+          className={cn(
+            "min-h-screen bg-background font-sans antialiased",
+            fontSans.variable,
+            fontMono.variable
+          )}
+        >
+          <ThemeColorsProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               {children}
             </ThemeProvider>
-            <Toaster />
-          </body>
-        </html>
+          </ThemeColorsProvider>
+          <Toaster />
+        </body>
+      </html>
     </>
-  )
+  );
 }

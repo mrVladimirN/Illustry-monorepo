@@ -3,46 +3,230 @@
 import * as React from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import type { ThemeProviderProps } from "next-themes/dist/types";
-import {
-  Dispatch,
-  SetStateAction,
-  createContext,
-  useContext,
-  useState,
-} from "react";
-
-export interface ContextValue {
-  screenSize: number | undefined;
-  activeMenu: boolean;
-  setActiveMenu: Dispatch<SetStateAction<boolean>>;
-  setScreenSize: Dispatch<SetStateAction<number | undefined>>;
+import { createContext } from "react";
+import { cloneDeep } from "@/lib/utils";
+import { DeepPartial } from "types/utils";
+interface OptionAction {
+  type: "apply";
+  modifiedData?: DeepPartial<ThemeColors>;
 }
-const StateContext = createContext<ContextValue>({
-  activeMenu: true,
-  setActiveMenu: () => {},
-  screenSize: undefined,
-  setScreenSize: () => {},
-});
-export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
-  const [screenSize, setScreenSize] = useState<number | undefined>(undefined);
-  const [activeMenu, setActiveMenu] = useState<boolean>(true);
-
-  const contextValue: ContextValue = {
-    activeMenu,
-    screenSize,
-    setScreenSize,
-    setActiveMenu,
+interface AuxProps {
+  children: React.ReactNode;
+}
+export interface ThemeColors {
+  calendar: {
+    dark: {
+      colors: string[];
+    };
+    light: {
+      colors: string[];
+    };
   };
+  heb: {
+    dark: {
+      initialColor: string;
+      colorin: string;
+      colorout: string;
+      nodeColor: string;
+      linkColor: string;
+    };
+    light: {
+      initialColor: string;
+      colorin: string;
+      colorout: string;
+      nodeColor: string;
+      linkColor: string;
+    };
+  };
+  flg: {
+    dark: {
+      colors: string[];
+    };
+    light: {
+      colors: string[];
+    };
+  };
+  sankey: {
+    dark: {
+      colors: string[];
+    };
+    light: {
+      colors: string[];
+    };
+  };
+  wordcloud: {
+    dark: {
+      colors: string[];
+    };
+    light: {
+      colors: string[];
+    };
+  };
+}
+export const initialThemeColors: ThemeColors = {
+  calendar: {
+    dark: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+    light: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+  },
+  flg: {
+    dark: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+    light: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+  },
+  sankey: {
+    dark: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+    light: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+  },
+  wordcloud: {
+    dark: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+    light: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+  },
+  heb: {
+    light: {
+      initialColor: "#bbb",
+      colorin: "#00f",
+      colorout: "#f00",
+      nodeColor: "#bbb",
+      linkColor: "#bbb",
+    },
+    dark: {
+      initialColor: "#bbb",
+      colorin: "#00f",
+      colorout: "#f00",
+      nodeColor: "#bbb",
+      linkColor: "#bbb",
+    },
+  },
+};
+
+const ThemeColorsContext = createContext<ThemeColors>(initialThemeColors);
+const ThemeDispatchContext = createContext<
+  React.Dispatch<OptionAction> | undefined
+>(undefined);
+const themeColorsReducer = (
+  data: ThemeColors,
+  action: OptionAction
+): ThemeColors => {
+  if (action.type === "apply" && action.modifiedData) {
+    const newData: ThemeColors = { ...data };
+
+    // Iterate through properties of action.modifiedData
+    for (const key in action.modifiedData) {
+      if (key in newData) {
+        newData[key as keyof ThemeColors] = {
+          ...newData[key as keyof ThemeColors],
+          ...(action.modifiedData as any)[key], // Using any type assertion here
+        };
+      }
+    }
+
+    return newData;
+  } else {
+    return data;
+  }
+};
+
+
+export function ThemeColorsProvider({ children }: AuxProps) {
+  const [themeProv, dispatchDataProv] = React.useReducer(
+    themeColorsReducer,
+    initialThemeColors
+  );
+
   return (
-    <StateContext.Provider value={contextValue}>
-      <NextThemesProvider {...props}>
+    <ThemeColorsContext.Provider value={themeProv}>
+      <ThemeDispatchContext.Provider value={dispatchDataProv}>
         {children}
-      </NextThemesProvider>
-    </StateContext.Provider>
+      </ThemeDispatchContext.Provider>
+    </ThemeColorsContext.Provider>
   );
 }
-export const useStateContext = (): ContextValue | undefined => {
-  const context = useContext(StateContext);
+export function useThemeColors() {
+  return React.useContext(ThemeColorsContext);
+}
+export function useThemeColorsDispach() {
+  return React.useContext(ThemeDispatchContext);
+}
 
-  return context;
-};
+export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+}

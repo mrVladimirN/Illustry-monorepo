@@ -129,7 +129,7 @@ export function VisualizationsTableShell({
               (
                 tag // Add the return statement here
               ) => (
-                <Badge key={tag} variant="outline" className="capitalize">
+                <Badge key={tag} variant="outline" className="capitalize ml-1">
                   {tag}
                 </Badge>
               )

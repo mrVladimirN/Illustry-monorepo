@@ -21,5 +21,11 @@ export const siteConfig = {
       description: "All examples",
       items: [],
     },
+    {
+      title: "Theme",
+      href: "/theme",
+      description: "Set theme",
+      items: [],
+    },
   ],
 };
