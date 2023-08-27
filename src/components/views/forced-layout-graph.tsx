@@ -9,11 +9,15 @@ import {
 import { NodeLinkData } from "types/visualizations";
 
 interface ForcedLayoutGraphProp {
-  data: NodeLinkData
+  data: NodeLinkData;
+  colors: string[];
 }
-const ForcedLayoutGraphView = ({ data }: ForcedLayoutGraphProp) => {
+const ForcedLayoutGraphView = ({ data, colors }: ForcedLayoutGraphProp) => {
   const { nodes, links } = data;
-  const categories: { name: string }[] = computeCategoriesFLG(nodes);
+  const categories: {
+    name: string;
+    itemStyle: { color: string | undefined };
+  }[] = computeCategoriesFLG(nodes, colors);
   const option: EChartsOption = {
     tooltip: {
       trigger: "item",
@@ -25,17 +29,6 @@ const ForcedLayoutGraphView = ({ data }: ForcedLayoutGraphProp) => {
       },
     },
 
-    legend: {
-      data: categories.map((cat) => {
-        return cat.name;
-      }),
-      emphasis: {
-        selectorLabel: {
-          show: false,
-          silent: true,
-        },
-      },
-    },
     series: [
       {
         type: "graph",

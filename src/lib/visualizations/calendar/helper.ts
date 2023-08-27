@@ -1,4 +1,3 @@
-import { colors } from "@/config/theme1";
 import { CalendarType } from "types/visualizations";
 
 export const computeCategoriesCalendar = (calendarData: CalendarType[]) => {
@@ -11,7 +10,7 @@ export const computeCategoriesCalendar = (calendarData: CalendarType[]) => {
   ];
 };
 
-export const computeColors = (categories: string[]) => {
+export const computeColors = (categories: string[], colors: string[]) => {
   const color: { [key: string]: string } = {};
   categories.forEach((cat, index) => {
     color[cat] = colors[index] as string;

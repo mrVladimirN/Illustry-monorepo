@@ -9,9 +9,10 @@ import {
 import { NodeLinkData } from "types/visualizations";
 interface SankeyGraphProp {
   data: NodeLinkData
+  colors: string[]
 }
 
-const SankeyGraphView = ({ data }: SankeyGraphProp) => {
+const SankeyGraphView = ({ data, colors }: SankeyGraphProp) => {
   const { nodes, links } = data;
   const categories: string[] = computeCategoriesSankey(nodes);
   const option: EChartsOption = {
@@ -39,7 +40,7 @@ const SankeyGraphView = ({ data }: SankeyGraphProp) => {
           focus: "adjacency",
         },
         nodeAlign: "right",
-        data: computeNodesSankey(nodes, categories),
+        data: computeNodesSankey(nodes, categories,colors),
         links: computeLinksSankey(links),
         lineStyle: {
           color: "source",

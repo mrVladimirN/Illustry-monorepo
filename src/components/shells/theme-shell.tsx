@@ -12,9 +12,13 @@ import {
   AccordionTrigger,
   AccordionItem,
 } from "../ui/accordion";
-import { Input } from "../ui/input";
+import { useEffect, useRef, useState } from "react";
+import DefaultThemesAccordion from "../ui/theme/default-themes";
+import GenericThemesAccordion from "../ui/theme/generic-themes";
+import { ScrollArea } from "../ui/scroll-area";
 
 export function ThemeShell() {
+  
   const colorPalette: { [key: string]: string[] } = {
     FreshMeadow: [
       "#5DBE6E",
@@ -108,73 +112,108 @@ export function ThemeShell() {
     ],
   };
   const activeTheme = useThemeColors();
+
   const themeDispatch = useThemeColorsDispach();
+  const [activeColorPickerIndex, setActiveColorPickerIndex] = useState<
+    number | null
+  >(null);
+  const colorPickerRef = useRef<HTMLDivElement>(null);
+  const handleOutsideClick = (event: any) => {
+    if (
+      colorPickerRef.current &&
+      !colorPickerRef.current.contains(event.target)
+    ) {
+      setActiveColorPickerIndex(null);
+    }
+  };
+  const handleApplyTheme = (themeName: string) => {
+    const appliedThemeColors: DeepPartial<ThemeColors> = {
+      flg: {
+        dark: { colors: colorPalette[themeName] },
+        light: { colors: colorPalette[themeName] },
+      },
+      sankey: {
+        dark: { colors: colorPalette[themeName] },
+        light: { colors: colorPalette[themeName] },
+      },
+      calendar: {
+        dark: { colors: colorPalette[themeName] },
+        light: { colors: colorPalette[themeName] },
+      },
+      wordcloud: {
+        dark: { colors: colorPalette[themeName] },
+        light: { colors: colorPalette[themeName] },
+      },
+      heb: {
+        dark: { colors: colorPalette[themeName] },
+        light: { colors: colorPalette[themeName] },
+      },
+    };
+    if (themeDispatch) {
+      themeDispatch({
+        type: "apply",
+        modifiedData: appliedThemeColors,
+      });
+    }
+  };
+  const handleColorChange = (
+    newColor: string,
+    index: number,
+    visualization: string,
+    theme: string
+  ) => {
+    const updatedTheme = { ...activeTheme };
+    //@ts-ignore
+    updatedTheme[visualization][theme].colors[index] = newColor;
+    if (themeDispatch) {
+      setTimeout(() => {
+        themeDispatch({
+          type: "apply",
+          modifiedData: updatedTheme,
+        });
+      }, 200);
+    }
+  };
+  const handleColorAdd = (visualization: string, theme: string) => {
+    const updatedTheme = { ...activeTheme };
+    //@ts-ignore
+    updatedTheme[visualization][theme].colors.push("#FFFFFF");
+    if (themeDispatch) {
+      themeDispatch({
+        type: "apply",
+        modifiedData: updatedTheme,
+      });
+    }
+  };
+  const handleColorDelete = (visualization: string, theme: string) => {
+    const updatedTheme = { ...activeTheme };
+    //@ts-ignore
+    updatedTheme[visualization][theme].colors.pop();
+    if (themeDispatch) {
+      themeDispatch({
+        type: "apply",
+        modifiedData: updatedTheme,
+      });
+    }
+  };
+  useEffect(() => {
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
   return (
-    <div className="fixed w-1/4 p-4 overflow-auto h-full border-r-4">
+    <ScrollArea className="fixed w-1/4 p-4 overflow-y-auto h-screen border-r-4">
       <Accordion type="single" collapsible>
         <AccordionItem value="item-1">
           <AccordionTrigger className="cursor-pointer">
             Default Schemes
           </AccordionTrigger>
           <AccordionContent>
-            <div className="grid grid-cols-2 gap-4">
-              {Object.keys(colorPalette).map((schemeName, index) => (
-                <div
-                  key={index}
-                  className="flex flex-wrap border border-gray-300 rounded cursor-pointer justify-between"
-                  onClick={() => {
-                    const appliedThemeColors: DeepPartial<ThemeColors> = {
-                      flg: {
-                        dark: { colors: colorPalette[schemeName] },
-                        light: { colors: colorPalette[schemeName] },
-                      },
-                      sankey: {
-                        dark: { colors: colorPalette[schemeName] },
-                        light: { colors: colorPalette[schemeName] },
-                      },
-                      calendar: {
-                        dark: { colors: colorPalette[schemeName] },
-                        light: { colors: colorPalette[schemeName] },
-                      },
-                      wordcloud: {
-                        dark: { colors: colorPalette[schemeName] },
-                        light: { colors: colorPalette[schemeName] },
-                      },
-                      heb: {
-                        dark: {
-                          initialColor: colorPalette[schemeName]?.at(3),
-                          colorin: colorPalette[schemeName]?.at(1),
-                          colorout: colorPalette[schemeName]?.at(2),
-                          nodeColor: colorPalette[schemeName]?.at(3),
-                          linkColor: colorPalette[schemeName]?.at(3),
-                        },
-                        light: {
-                          initialColor: colorPalette[schemeName]?.at(3),
-                          colorin: colorPalette[schemeName]?.at(1),
-                          colorout: colorPalette[schemeName]?.at(2),
-                          nodeColor: colorPalette[schemeName]?.at(3),
-                          linkColor: colorPalette[schemeName]?.at(3),
-                        },
-                      },
-                    };
-                    if (themeDispatch) {
-                      themeDispatch({
-                        type: "apply",
-                        modifiedData: appliedThemeColors,
-                      });
-                    }
-                  }}
-                >
-                  {colorPalette[schemeName]?.map((color, index) => (
-                    <div
-                      key={index}
-                      style={{ backgroundColor: color }}
-                      className="w-4 h-4 m-1 border border-gray-300 rounded flex items-center justify-center"
-                    ></div>
-                  ))}
-                </div>
-              ))}
-            </div>
+            <DefaultThemesAccordion
+              colorPalette={colorPalette}
+              handleApplyTheme={handleApplyTheme}
+            />
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-2">
@@ -182,27 +221,15 @@ export function ThemeShell() {
             Sankey Diagram
           </AccordionTrigger>
           <AccordionContent>
-            <div className="flex items-start">
-              <div className="text-sm font-medium pr-4">Colors</div>
-              <div className="flex flex-col justify-end ml-[50%]">
-                {Object.values(activeTheme.sankey.light.colors).map(
-                  (color, index) => (
-                    <div className="flex items-center mb-2" key={index}>
-                      <input
-                        type="text"
-                        className="w-[60%] rounded p-1 border border-gray-300"
-                        value={color}
-                      />
-                      <div
-                        key={index}
-                        style={{ backgroundColor: color }}
-                        className="w-5 h-5 ml-2 border border-gray-300 rounded flex items-center justify-center"
-                      ></div>
-                    </div>
-                  )
-                )}
-              </div>
-            </div>
+            <GenericThemesAccordion
+              activeColorPickerIndex={activeColorPickerIndex}
+              handleColorChange={handleColorChange}
+              handleColorDelete={handleColorDelete}
+              handleColorAdd={handleColorAdd}
+              setActiveColorPickerIndex={setActiveColorPickerIndex}
+              visualization="sankey"
+              colorPickerRef={colorPickerRef}
+            />
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-3">
@@ -210,27 +237,15 @@ export function ThemeShell() {
             Calendar
           </AccordionTrigger>
           <AccordionContent>
-            <div className="flex items-start">
-              <div className="text-sm font-medium pr-4">Colors</div>
-              <div className="flex flex-col justify-end ml-[50%]">
-                {Object.values(activeTheme.sankey.light.colors).map(
-                  (color, index) => (
-                    <div className="flex items-center mb-2" key={index}>
-                      <input
-                        type="text"
-                        className="w-[60%] rounded p-1 border border-gray-300"
-                        value={color}
-                      />
-                      <div
-                        key={index}
-                        style={{ backgroundColor: color }}
-                        className="w-5 h-5 ml-2 border border-gray-300 rounded flex items-center justify-center"
-                      ></div>
-                    </div>
-                  )
-                )}
-              </div>
-            </div>
+            <GenericThemesAccordion
+              activeColorPickerIndex={activeColorPickerIndex}
+              handleColorChange={handleColorChange}
+              handleColorDelete={handleColorDelete}
+              handleColorAdd={handleColorAdd}
+              setActiveColorPickerIndex={setActiveColorPickerIndex}
+              visualization="calendar"
+              colorPickerRef={colorPickerRef}
+            />
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-4">
@@ -238,27 +253,15 @@ export function ThemeShell() {
             Forced-Layout-Graph
           </AccordionTrigger>
           <AccordionContent>
-            <div className="flex items-start">
-              <div className="text-sm font-medium pr-4">Colors</div>
-              <div className="flex flex-col justify-end ml-[50%]">
-                {Object.values(activeTheme.sankey.light.colors).map(
-                  (color, index) => (
-                    <div className="flex items-center mb-2" key={index}>
-                      <input
-                        type="text"
-                        className="w-[60%] rounded p-1 border border-gray-300"
-                        value={color}
-                      />
-                      <div
-                        key={index}
-                        style={{ backgroundColor: color }}
-                        className="w-5 h-5 ml-2 border border-gray-300 rounded flex items-center justify-center"
-                      ></div>
-                    </div>
-                  )
-                )}
-              </div>
-            </div>
+            <GenericThemesAccordion
+              activeColorPickerIndex={activeColorPickerIndex}
+              handleColorChange={handleColorChange}
+              handleColorDelete={handleColorDelete}
+              handleColorAdd={handleColorAdd}
+              setActiveColorPickerIndex={setActiveColorPickerIndex}
+              visualization="flg"
+              colorPickerRef={colorPickerRef}
+            />
           </AccordionContent>
         </AccordionItem>
         <AccordionItem value="item-5">
@@ -266,30 +269,19 @@ export function ThemeShell() {
             Hierarchical-Edge-Bundling
           </AccordionTrigger>
           <AccordionContent>
-            <div className="flex items-start">
-              <div className="text-sm font-medium pr-4">Colors</div>
-              <div className="flex flex-col justify-end ml-[50%]">
-                {Object.values(activeTheme.sankey.light.colors).map(
-                  (color, index) => (
-                    <div className="flex items-center mb-2" key={index}>
-                      <input
-                        type="text"
-                        className="w-[60%] rounded p-1 border border-gray-300"
-                        value={color}
-                      />
-                      <div
-                        key={index}
-                        style={{ backgroundColor: color }}
-                        className="w-5 h-5 ml-2 border border-gray-300 rounded flex items-center justify-center"
-                      ></div>
-                    </div>
-                  )
-                )}
-              </div>
-            </div>
+            <GenericThemesAccordion
+              activeColorPickerIndex={activeColorPickerIndex}
+              handleColorChange={handleColorChange}
+              handleColorDelete={handleColorDelete}
+              handleColorAdd={handleColorAdd}
+              setActiveColorPickerIndex={setActiveColorPickerIndex}
+              visualization="heb"
+              colorPickerRef={colorPickerRef}
+            />
           </AccordionContent>
         </AccordionItem>
       </Accordion>
-    </div>
+    </ScrollArea>
+    
   );
 }

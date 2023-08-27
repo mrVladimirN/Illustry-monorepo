@@ -1,52 +1,60 @@
 import * as React from "react";
 import ReactEcharts from "./generic/echarts";
 import { EChartsOption, SeriesOption } from "echarts/types/dist/echarts";
-import {  computeCalendar, computeCategoriesCalendar, computeColors, computeElementsCalendar, computePropertiesForToolTip } from "@/lib/visualizations/calendar/helper";
+import {
+  computeCalendar,
+  computeCategoriesCalendar,
+  computeColors,
+  computeElementsCalendar,
+  computePropertiesForToolTip,
+} from "@/lib/visualizations/calendar/helper";
 import { CalendarOption } from "echarts/types/dist/shared";
 import { CalendarData, CalendarType } from "types/visualizations";
 
 interface CalendarGraphProp {
-  data: CalendarData
+  data: CalendarData;
+  colors: string[];
 }
-const CalendarGraph = ({ data }: CalendarGraphProp) => {
+const CalendarGraph = ({ data, colors }: CalendarGraphProp) => {
   const { calendar } = data;
   const categories: string[] = computeCategoriesCalendar(calendar);
-  const computedCalendar = computeCalendar(calendar)
+  const computedCalendar = computeCalendar(calendar);
   const option: EChartsOption = {
     tooltip: {
       trigger: "item",
       triggerOn: "mousemove",
-   
+
       formatter: function (params) {
         //@ts-ignore
-        if(params && params.data && params.data.length) {
-          const element = (calendar as CalendarType[]).find(el => {
-             //@ts-ignore
-            return el.date === params.data[0]
-          })
-          if(element) {
-            if(element.properties) {
-            return computePropertiesForToolTip(element.properties, element.value)
-          }
-          else 
-          {
-            return computePropertiesForToolTip(null, element.value)
-          }
+        if (params && params.data && params.data.length) {
+          const element = (calendar as CalendarType[]).find((el) => {
+            //@ts-ignore
+            return el.date === params.data[0];
+          });
+          if (element) {
+            if (element.properties) {
+              return computePropertiesForToolTip(
+                element.properties,
+                element.value
+              );
+            } else {
+              return computePropertiesForToolTip(null, element.value);
+            }
           }
         }
-        return ""
-        } 
+        return "";
+      },
     },
     visualMap: {
-      orient: 'horizontal',
-      left: 'center',
+      orient: "horizontal",
+      left: "center",
       top: 30,
-      type: 'piecewise',
-      categories:  categories,
-      inRange: { color:  computeColors(categories) }
+      type: "piecewise",
+      categories: categories,
+      inRange: { color: computeColors(categories, colors) },
     },
-    calendar:  computedCalendar.calendar as CalendarOption ,
-    series: computedCalendar.series as SeriesOption
+    calendar: computedCalendar.calendar as CalendarOption,
+    series: computedCalendar.series as SeriesOption,
   };
   return (
     <div className="w-full mt-4 h-screens-90 sm:mt-6 lg:mt-8">

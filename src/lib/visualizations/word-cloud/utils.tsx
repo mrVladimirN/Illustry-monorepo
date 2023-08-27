@@ -1,4 +1,3 @@
-import { colors } from "@/config/theme1";
 import { WordType } from "types/visualizations";
 
 export const computePropertiesForToolTip = (
@@ -43,7 +42,7 @@ const calculateMeanValue = (numbers: number[]) => {
   return mean;
 };
 
-const computeColor = (nr: number, meanValue: number) => {
+const computeColor = (nr: number, meanValue: number, colors: string[]) => {
   const percent = (nr * 100) / meanValue;
   if (percent > 0 && percent <= 25) {
     return colors[0];
@@ -61,9 +60,7 @@ const computeColor = (nr: number, meanValue: number) => {
     return colors[4];
   }
 };
-export const computeWords = (
-  words: WordType[]
-) => {
+export const computeWords = (words: WordType[], colors: string[]) => {
   const values = words.map((word) => {
     return word.value;
   });
@@ -74,7 +71,7 @@ export const computeWords = (
       ...word,
       textStyle: {
         fontWeight: "bold",
-        color: computeColor(word.value, meanValue),
+        color: computeColor(word.value, meanValue, colors),
       },
     };
   });

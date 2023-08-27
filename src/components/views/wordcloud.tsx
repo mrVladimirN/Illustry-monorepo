@@ -11,9 +11,10 @@ import {
 import { WordCloudData } from "types/visualizations";
 interface WordCloudProp {
   data: WordCloudData;
+  colors: string[]
 }
 
-const WordCloudView = ({ data }: WordCloudProp) => {
+const WordCloudView = ({ data, colors }: WordCloudProp) => {
   const { words } = data;
   const option: EChartsOption = {
     tooltip: {
@@ -34,7 +35,7 @@ const WordCloudView = ({ data }: WordCloudProp) => {
       {
         type: "wordCloud",
         shape: "circle",
-        data: computeWords(words),
+        data: computeWords(words, colors),
         keepAspect: true,
         left: "center",
         top: "center",

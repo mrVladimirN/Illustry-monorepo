@@ -1,5 +1,4 @@
-import { colors } from "@/config/theme1";
-import { Link,Node } from "types/visualizations";
+import { Link, Node } from "types/visualizations";
 
 //Sankey transformers
 export const computeCategoriesSankey = (nodes: Node[]) => {
@@ -12,7 +11,11 @@ export const computeCategoriesSankey = (nodes: Node[]) => {
   ];
 };
 
-export const computeNodesSankey = (nodes: Node[], categories: string[]) => {
+export const computeNodesSankey = (
+  nodes: Node[],
+  categories: string[],
+  colors: string[]
+) => {
   const colorMapSchema = new Map<string, string>();
   categories.forEach((cat, index) => {
     colorMapSchema.set(cat, colors[index] as string);
@@ -72,15 +75,15 @@ const computePropertiesForToolTip = (
 
 // FLG transformers
 
-export const computeCategoriesFLG = (nodes: Node[]) => {
+export const computeCategoriesFLG = (nodes: Node[], colors: string[]) => {
   return [
     ...new Set(
       nodes.map((node) => {
         return node.category;
       })
     ),
-  ].map((node) => {
-    return { name: node };
+  ].map((node, index) => {
+    return { name: node, itemStyle: { color: colors[index] } };
   });
 };
 
@@ -121,5 +124,3 @@ export const computeLinksFLG = (links: Link[], nodes: Node[]) => {
 };
 
 // HEB transformers
-
-

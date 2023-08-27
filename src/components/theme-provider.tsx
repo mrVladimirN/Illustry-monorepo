@@ -24,18 +24,10 @@ export interface ThemeColors {
   };
   heb: {
     dark: {
-      initialColor: string;
-      colorin: string;
-      colorout: string;
-      nodeColor: string;
-      linkColor: string;
+      colors: string[];
     };
     light: {
-      initialColor: string;
-      colorin: string;
-      colorout: string;
-      nodeColor: string;
-      linkColor: string;
+      colors: string[];
     };
   };
   flg: {
@@ -161,19 +153,27 @@ export const initialThemeColors: ThemeColors = {
     },
   },
   heb: {
-    light: {
-      initialColor: "#bbb",
-      colorin: "#00f",
-      colorout: "#f00",
-      nodeColor: "#bbb",
-      linkColor: "#bbb",
-    },
     dark: {
-      initialColor: "#bbb",
-      colorin: "#00f",
-      colorout: "#f00",
-      nodeColor: "#bbb",
-      linkColor: "#bbb",
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+    light: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
     },
   },
 };
@@ -187,8 +187,7 @@ const themeColorsReducer = (
   action: OptionAction
 ): ThemeColors => {
   if (action.type === "apply" && action.modifiedData) {
-    const newData: ThemeColors = { ...data };
-
+    const newData: ThemeColors = cloneDeep(data);
     // Iterate through properties of action.modifiedData
     for (const key in action.modifiedData) {
       if (key in newData) {
@@ -201,17 +200,24 @@ const themeColorsReducer = (
 
     return newData;
   } else {
-    return data;
+    const newData: ThemeColors = cloneDeep(data);
+    return newData;
   }
 };
-
-
 export function ThemeColorsProvider({ children }: AuxProps) {
+  let initialTheme = initialThemeColors;
+  if (typeof window !== "undefined" && window.localStorage) {
+    const storedTheme = localStorage.getItem("colorTheme");
+    initialTheme = storedTheme ? JSON.parse(storedTheme) : initialThemeColors;
+  }
   const [themeProv, dispatchDataProv] = React.useReducer(
     themeColorsReducer,
-    initialThemeColors
+    initialTheme
   );
-
+  // Add a useEffect to update localStorage whenever themeProv changes
+  React.useEffect(() => {
+    localStorage.setItem("colorTheme", JSON.stringify(themeProv));
+  }, [themeProv]);
   return (
     <ThemeColorsContext.Provider value={themeProv}>
       <ThemeDispatchContext.Provider value={dispatchDataProv}>
