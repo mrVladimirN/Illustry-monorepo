@@ -11,14 +11,13 @@ import { Input } from "@/components/ui/input";
 import { DataTableFacetedFilter } from "@/components/data-table/data-table-faceted-filter";
 import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import Image from "next/image";
 import { useDebounce } from "@/hooks/use-debounce";
 interface SearchButtonProps {
   containerStyles: string;
 }
 const SearchButton = ({ containerStyles }: SearchButtonProps) => (
   <button type="submit" className={`-ml-3 z-10 ${containerStyles}`}>
-    <Image
+    <img
       src="/magnifying-glass.svg"
       alt="magnifying glass"
       width={40}

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { env } from "@/env.mjs";
 
-import "@/styles/global.css";
+import "./globals.css";
 
 import { siteConfig } from "@/config/site";
 import { fontMono, fontSans } from "@/lib/fonts";

@@ -12,13 +12,43 @@ import {
   AccordionTrigger,
   AccordionItem,
 } from "../ui/accordion";
-import { useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import DefaultThemesAccordion from "../ui/theme/default-themes";
 import GenericThemesAccordion from "../ui/theme/generic-themes";
 import { ScrollArea } from "../ui/scroll-area";
+import Fallback from "../ui/fallback";
+import dynamic from "next/dynamic";
+import { siteConfig } from "@/config/site";
+const SankeyGraphView = dynamic(
+  () => import("@/components/views/sankey-diagram"),
+  {
+    ssr: false,
+  }
+);
 
+const ForcedLayoutGraphView = dynamic(
+  () => import("@/components/views/forced-layout-graph"),
+  {
+    ssr: false,
+  }
+);
+const HierarchicalEdgeBundlingView = dynamic(
+  () => import("@/components/views/hierarchical-edge-bundling"),
+  {
+    ssr: false,
+  }
+);
+const CalendarView = dynamic(
+  () => import("@/components/views/calendar-graph"),
+  {
+    ssr: false,
+  }
+);
+
+const WordCloudView = dynamic(() => import("@/components/views/wordcloud"), {
+  ssr: false,
+});
 export function ThemeShell() {
-  
   const colorPalette: { [key: string]: string[] } = {
     FreshMeadow: [
       "#5DBE6E",
@@ -117,6 +147,16 @@ export function ThemeShell() {
   const [activeColorPickerIndex, setActiveColorPickerIndex] = useState<
     number | null
   >(null);
+  const [showDiagram, setShowDiagram] = useState({
+    sankey: false,
+    heb: false,
+    flg: false,
+    wordCloud: false,
+    calendar: false,
+  });
+  const theme =
+    typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
+  const isDarkTheme = theme === "dark";
   const colorPickerRef = useRef<HTMLDivElement>(null);
   const handleOutsideClick = (event: any) => {
     if (
@@ -202,86 +242,241 @@ export function ThemeShell() {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
+
   return (
-    <ScrollArea className="fixed w-1/4 p-4 overflow-y-auto h-screen border-r-4">
-      <Accordion type="single" collapsible>
-        <AccordionItem value="item-1">
-          <AccordionTrigger className="cursor-pointer">
-            Default Schemes
-          </AccordionTrigger>
-          <AccordionContent>
-            <DefaultThemesAccordion
-              colorPalette={colorPalette}
-              handleApplyTheme={handleApplyTheme}
+    <div className="flex h-screen">
+      <ScrollArea className="fixed w-1/4 p-4 overflow-y-auto h-screen border-r-4">
+        <Accordion type="single" collapsible>
+          <AccordionItem
+            value="item-1"
+            onClick={() =>
+              setShowDiagram({
+                heb: false,
+                sankey: false,
+                calendar: false,
+                flg: false,
+                wordCloud: false,
+              })
+            }
+          >
+            <AccordionTrigger className="cursor-pointer">
+              Default Schemes
+            </AccordionTrigger>
+            <AccordionContent>
+              <DefaultThemesAccordion
+                colorPalette={colorPalette}
+                handleApplyTheme={handleApplyTheme}
+              />
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem
+            value="item-2"
+            onClick={() =>
+              setShowDiagram({
+                heb: false,
+                sankey: true,
+                calendar: false,
+                flg: false,
+                wordCloud: false,
+              })
+            }
+          >
+            <AccordionTrigger className="cursor-pointer">
+              Sankey Diagram
+            </AccordionTrigger>
+            <AccordionContent>
+              <GenericThemesAccordion
+                activeColorPickerIndex={activeColorPickerIndex}
+                handleColorChange={handleColorChange}
+                handleColorDelete={handleColorDelete}
+                handleColorAdd={handleColorAdd}
+                setActiveColorPickerIndex={setActiveColorPickerIndex}
+                visualization="sankey"
+                colorPickerRef={colorPickerRef}
+              />
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem
+            value="item-3"
+            onClick={() =>
+              setShowDiagram({
+                heb: false,
+                sankey: false,
+                calendar: true,
+                flg: false,
+                wordCloud: false,
+              })
+            }
+          >
+            <AccordionTrigger className="cursor-pointer">
+              Calendar
+            </AccordionTrigger>
+            <AccordionContent>
+              <GenericThemesAccordion
+                activeColorPickerIndex={activeColorPickerIndex}
+                handleColorChange={handleColorChange}
+                handleColorDelete={handleColorDelete}
+                handleColorAdd={handleColorAdd}
+                setActiveColorPickerIndex={setActiveColorPickerIndex}
+                visualization="calendar"
+                colorPickerRef={colorPickerRef}
+              />
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem
+            value="item-4"
+            onClick={() =>
+              setShowDiagram({
+                heb: false,
+                sankey: false,
+                calendar: false,
+                flg: true,
+                wordCloud: false,
+              })
+            }
+          >
+            <AccordionTrigger className="cursor-pointer">
+              Forced-Layout-Graph
+            </AccordionTrigger>
+            <AccordionContent>
+              <GenericThemesAccordion
+                activeColorPickerIndex={activeColorPickerIndex}
+                handleColorChange={handleColorChange}
+                handleColorDelete={handleColorDelete}
+                handleColorAdd={handleColorAdd}
+                setActiveColorPickerIndex={setActiveColorPickerIndex}
+                visualization="flg"
+                colorPickerRef={colorPickerRef}
+              />
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-5">
+            <AccordionTrigger
+              className="cursor-pointer"
+              onClick={() =>
+                setShowDiagram({
+                  heb: true,
+                  sankey: false,
+                  calendar: false,
+                  flg: false,
+                  wordCloud: false,
+                })
+              }
+            >
+              Hierarchical-Edge-Bundling
+            </AccordionTrigger>
+            <AccordionContent>
+              <GenericThemesAccordion
+                activeColorPickerIndex={activeColorPickerIndex}
+                handleColorChange={handleColorChange}
+                handleColorDelete={handleColorDelete}
+                handleColorAdd={handleColorAdd}
+                setActiveColorPickerIndex={setActiveColorPickerIndex}
+                visualization="heb"
+                colorPickerRef={colorPickerRef}
+              />
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-6">
+            <AccordionTrigger
+              className="cursor-pointer"
+              onClick={() =>
+                setShowDiagram({
+                  heb: false,
+                  sankey: false,
+                  calendar: false,
+                  flg: false,
+                  wordCloud: true,
+                })
+              }
+            >
+              Word-Cloud
+            </AccordionTrigger>
+            <AccordionContent>
+              <GenericThemesAccordion
+                activeColorPickerIndex={activeColorPickerIndex}
+                handleColorChange={handleColorChange}
+                handleColorDelete={handleColorDelete}
+                handleColorAdd={handleColorAdd}
+                setActiveColorPickerIndex={setActiveColorPickerIndex}
+                visualization="wordcloud"
+                colorPickerRef={colorPickerRef}
+              />
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+      </ScrollArea>
+      {showDiagram.sankey && (
+        <div className="flex-grow p-4">
+          <Suspense fallback={<Fallback />}>
+            <SankeyGraphView
+              data={siteConfig.nodeLink}
+              colors={
+                isDarkTheme
+                  ? activeTheme.sankey.dark.colors
+                  : activeTheme.sankey.light.colors
+              }
             />
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-2">
-          <AccordionTrigger className="cursor-pointer">
-            Sankey Diagram
-          </AccordionTrigger>
-          <AccordionContent>
-            <GenericThemesAccordion
-              activeColorPickerIndex={activeColorPickerIndex}
-              handleColorChange={handleColorChange}
-              handleColorDelete={handleColorDelete}
-              handleColorAdd={handleColorAdd}
-              setActiveColorPickerIndex={setActiveColorPickerIndex}
-              visualization="sankey"
-              colorPickerRef={colorPickerRef}
+          </Suspense>
+        </div>
+      )}
+      {showDiagram.calendar && (
+        <div className="flex-grow p-4">
+          <Suspense fallback={<Fallback />}>
+            <CalendarView
+              data={{ calendar: siteConfig.calendar }}
+              colors={
+                isDarkTheme
+                  ? activeTheme.calendar.dark.colors
+                  : activeTheme.calendar.light.colors
+              }
+              isDarkTheme={isDarkTheme}
             />
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-3">
-          <AccordionTrigger className="cursor-pointer">
-            Calendar
-          </AccordionTrigger>
-          <AccordionContent>
-            <GenericThemesAccordion
-              activeColorPickerIndex={activeColorPickerIndex}
-              handleColorChange={handleColorChange}
-              handleColorDelete={handleColorDelete}
-              handleColorAdd={handleColorAdd}
-              setActiveColorPickerIndex={setActiveColorPickerIndex}
-              visualization="calendar"
-              colorPickerRef={colorPickerRef}
+          </Suspense>
+        </div>
+      )}
+      {showDiagram.flg && (
+        <div className="flex-grow p-4">
+          <Suspense fallback={<Fallback />}>
+            <ForcedLayoutGraphView
+              data={siteConfig.nodeLink}
+              colors={
+                isDarkTheme
+                  ? activeTheme.flg.dark.colors
+                  : activeTheme.flg.light.colors
+              }
             />
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-4">
-          <AccordionTrigger className="cursor-pointer">
-            Forced-Layout-Graph
-          </AccordionTrigger>
-          <AccordionContent>
-            <GenericThemesAccordion
-              activeColorPickerIndex={activeColorPickerIndex}
-              handleColorChange={handleColorChange}
-              handleColorDelete={handleColorDelete}
-              handleColorAdd={handleColorAdd}
-              setActiveColorPickerIndex={setActiveColorPickerIndex}
-              visualization="flg"
-              colorPickerRef={colorPickerRef}
+          </Suspense>
+        </div>
+      )}
+      {showDiagram.wordCloud && (
+        <div className="flex-grow p-4">
+          <Suspense fallback={<Fallback />}>
+            <WordCloudView
+              data={{ words: siteConfig.words }}
+              colors={
+                isDarkTheme
+                  ? activeTheme.wordcloud.dark.colors
+                  : activeTheme.wordcloud.light.colors
+              }
             />
-          </AccordionContent>
-        </AccordionItem>
-        <AccordionItem value="item-5">
-          <AccordionTrigger className="cursor-pointer">
-            Hierarchical-Edge-Bundling
-          </AccordionTrigger>
-          <AccordionContent>
-            <GenericThemesAccordion
-              activeColorPickerIndex={activeColorPickerIndex}
-              handleColorChange={handleColorChange}
-              handleColorDelete={handleColorDelete}
-              handleColorAdd={handleColorAdd}
-              setActiveColorPickerIndex={setActiveColorPickerIndex}
-              visualization="heb"
-              colorPickerRef={colorPickerRef}
+          </Suspense>
+        </div>
+      )}
+      {showDiagram.heb && (
+        <div className="flex-grow p-4">
+          <Suspense fallback={<Fallback />}>
+            <HierarchicalEdgeBundlingView
+              data={siteConfig.nodeLink}
+              colors={
+                isDarkTheme
+                  ? activeTheme.heb.dark.colors
+                  : activeTheme.heb.light.colors
+              }
             />
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
-    </ScrollArea>
-    
+          </Suspense>
+        </div>
+      )}
+    </div>
   );
 }

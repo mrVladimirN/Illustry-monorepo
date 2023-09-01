@@ -5,7 +5,6 @@ import {
   computeCalendar,
   computeCategoriesCalendar,
   computeColors,
-  computeElementsCalendar,
   computePropertiesForToolTip,
 } from "@/lib/visualizations/calendar/helper";
 import { CalendarOption } from "echarts/types/dist/shared";
@@ -14,11 +13,13 @@ import { CalendarData, CalendarType } from "types/visualizations";
 interface CalendarGraphProp {
   data: CalendarData;
   colors: string[];
+  isDarkTheme: boolean;
 }
-const CalendarGraph = ({ data, colors }: CalendarGraphProp) => {
+const CalendarGraph = ({ data, colors, isDarkTheme }: CalendarGraphProp) => {
   const { calendar } = data;
   const categories: string[] = computeCategoriesCalendar(calendar);
-  const computedCalendar = computeCalendar(calendar);
+  const computedCalendar = computeCalendar(calendar, isDarkTheme);
+  const textColor = isDarkTheme ? "#888" : "#333";
   const option: EChartsOption = {
     tooltip: {
       trigger: "item",
@@ -51,8 +52,12 @@ const CalendarGraph = ({ data, colors }: CalendarGraphProp) => {
       top: 30,
       type: "piecewise",
       categories: categories,
+      textStyle: {
+        color: textColor,
+      },
       inRange: { color: computeColors(categories, colors) },
     },
+
     calendar: computedCalendar.calendar as CalendarOption,
     series: computedCalendar.series as SeriesOption,
   };

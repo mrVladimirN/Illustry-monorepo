@@ -34,7 +34,6 @@ export const computePropertiesForToolTip = (
           prop += `<div style="font-weight: bold">${key}:${propValue}</div>`;
         }
       }
-    
     } else if (typeof properties === "string") {
       prop += properties;
     }
@@ -46,7 +45,10 @@ export const computePropertiesForToolTip = (
   return prop;
 };
 
-export const computeCalendar = (calendarData: CalendarType[]) => {
+export const computeCalendar = (
+  calendarData: CalendarType[],
+  isDarkTheme: boolean
+) => {
   const years = [
     ...new Set(
       calendarData.map((cal) => {
@@ -54,6 +56,8 @@ export const computeCalendar = (calendarData: CalendarType[]) => {
       })
     ),
   ];
+  const textColor = isDarkTheme ? "#888" : "#333";
+
   const groupedByYears = calendarData.reduce((group: any, event) => {
     const eventDate = new Date(event.date);
     const eventYear = eventDate.getFullYear();
@@ -86,7 +90,28 @@ export const computeCalendar = (calendarData: CalendarType[]) => {
           borderWidth: 0.5,
         },
         orient: "horizontal",
-        yearLabel: { show: true, fontSize: 14, position: "top" },
+        dayLabel: {
+          show: true,
+          fontSize: 14,
+          textStyle: {
+            color: textColor,
+          },
+        },
+        monthLabel: {
+          show: true,
+          fontSize: 14,
+          textStyle: {
+            color: textColor,
+          },
+        },
+        yearLabel: {
+          show: true,
+          fontSize: 14,
+          position: "top",
+          textStyle: {
+            color: textColor,
+          },
+        },
       };
     }),
     series: series,

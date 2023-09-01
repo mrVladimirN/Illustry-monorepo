@@ -55,7 +55,11 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <HierarchicalEdgeBundlingView
                 data={data.data as NodeLinkData}
-                colors={isDarkTheme ? activeTheme.heb.dark.colors : activeTheme.heb.light.colors}
+                colors={
+                  isDarkTheme
+                    ? activeTheme.heb.dark.colors
+                    : activeTheme.heb.light.colors
+                }
               />
             </Suspense>
           );
@@ -64,7 +68,11 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <ForcedLayoutGraphView
                 data={data.data as NodeLinkData}
-                colors={isDarkTheme ? activeTheme.flg.dark.colors : activeTheme.flg.light.colors}
+                colors={
+                  isDarkTheme
+                    ? activeTheme.flg.dark.colors
+                    : activeTheme.flg.light.colors
+                }
               />
             </Suspense>
           );
@@ -73,7 +81,11 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <SankeyGraphView
                 data={data.data as NodeLinkData}
-                colors={isDarkTheme ? activeTheme.sankey.dark.colors : activeTheme.sankey.light.colors}
+                colors={
+                  isDarkTheme
+                    ? activeTheme.sankey.dark.colors
+                    : activeTheme.sankey.light.colors
+                }
               />
             </Suspense>
           );
@@ -81,8 +93,13 @@ export function HubShell({ data }: HubShellProps) {
           return (
             <Suspense fallback={<Fallback />}>
               <CalendarView
+                isDarkTheme={isDarkTheme}
                 data={data.data as CalendarData}
-                colors={isDarkTheme ? activeTheme.calendar.dark.colors : activeTheme.calendar.light.colors}
+                colors={
+                  isDarkTheme
+                    ? activeTheme.calendar.dark.colors
+                    : activeTheme.calendar.light.colors
+                }
               />
             </Suspense>
           );
@@ -91,7 +108,11 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <WordCloudView
                 data={data.data as WordCloudData}
-                colors={isDarkTheme ? activeTheme.wordcloud.dark.colors : activeTheme.wordcloud.light.colors}
+                colors={
+                  isDarkTheme
+                    ? activeTheme.wordcloud.dark.colors
+                    : activeTheme.wordcloud.light.colors
+                }
               />
             </Suspense>
           );

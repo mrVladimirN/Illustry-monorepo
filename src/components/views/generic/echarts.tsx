@@ -75,20 +75,15 @@ const ReactEcharts = <T extends EChartsOption|WordCloudSeriesOption>({
 
   useEffect(() => {
     // Update chart
+    let chart: echarts.ECharts | undefined;
     if (chartRef.current !== null) {
       const chart = echarts.getInstanceByDom(chartRef.current);
       chart?.setOption(option as EChartsOption, settings);
-    }
-  }, [option, settings, theme]);
-
-  useEffect(() => {
-    // Update chart
-    if (chartRef.current !== null) {
-      const chart = echarts.getInstanceByDom(chartRef.current);
       loading === true ? chart?.showLoading() : chart?.hideLoading();
     }
-  }, [loading, theme]);
+  }, [option, settings, theme,loading]);
 
+  
   return (
     <div ref={chartRef} className={className}  />
   );
