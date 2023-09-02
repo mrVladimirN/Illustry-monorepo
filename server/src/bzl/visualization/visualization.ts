@@ -16,7 +16,6 @@ export class VisualizationBZL {
   }
 
   createOrUpdate(Visualization: VisualizationCreate): Promise<VisualizationType> {
-    console.log("pe aici nu?")
     return Promise.resolve(
       Factory.getInstance()
         .getBZL()

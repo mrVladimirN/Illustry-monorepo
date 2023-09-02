@@ -95,7 +95,6 @@ export class Visualization {
   }
 
   browse(filter: ExtendedMongoQuery): Promise<ExtendedVisualizationType> {
-    console.log(JSON.stringify(filter))
     return Promise.resolve()
       .then(() => {
         return this.modelInstance.VisualizationModel.find(
@@ -117,7 +116,6 @@ export class Visualization {
         const count = await this.modelInstance.VisualizationModel.countDocuments(
           filter.query ? filter.query : {}
         );
-        console.log(res)
         return {
           visualizations: res,
           pagination: {
@@ -132,7 +130,6 @@ export class Visualization {
     filter: ExtendedMongoQuery,
     data: VisualizationUpdate
   ): Promise<VisualizationType> {
-   console.log("ajung aici?")
     if (_.isNil(data.createdAt)) {
       data.createdAt = new Date();
     }

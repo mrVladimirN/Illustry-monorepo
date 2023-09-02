@@ -62,11 +62,13 @@ const visualizationNodeLinkSchema = visualizationDataSchema.extend({
     z.literal(VisualizationTypesEnum.FORCE_DIRECTED_GRAPH),
     z.literal(VisualizationTypesEnum.SANKEY),
     z.literal(VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING),
+    z.literal(VisualizationTypesEnum.MATRIX),
     z.array(
       z.union([
         z.literal(VisualizationTypesEnum.FORCE_DIRECTED_GRAPH),
         z.literal(VisualizationTypesEnum.SANKEY),
         z.literal(VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING),
+        z.literal(VisualizationTypesEnum.MATRIX)
       ])
     ),
   ]),
@@ -93,11 +95,13 @@ const visualizationPartialNodeLinkSchema = visualizationDataSchema.extend({
     z.literal(VisualizationTypesEnum.FORCE_DIRECTED_GRAPH),
     z.literal(VisualizationTypesEnum.SANKEY),
     z.literal(VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING),
+    z.literal(VisualizationTypesEnum.MATRIX),
     z.array(
       z.union([
         z.literal(VisualizationTypesEnum.FORCE_DIRECTED_GRAPH),
         z.literal(VisualizationTypesEnum.SANKEY),
         z.literal(VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING),
+        z.literal(VisualizationTypesEnum.MATRIX),
       ])
     ),
   ]),
