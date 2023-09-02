@@ -1,8 +1,8 @@
 import { Connection, Model } from "mongoose";
 import { Project } from "./project/Project";
-import { Visualization } from "./visualization/visualization";
 import { ProjectType } from "types/project";
 import { VisualizationType } from "types/visualizations";
+import { Visualization } from "./visualization/Visualization";
 
 export class ModelInstance {
   private _projectModel?: Model<ProjectType>;
