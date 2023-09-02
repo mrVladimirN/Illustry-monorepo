@@ -1,6 +1,6 @@
 {
   "name": "@illustry/types",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A module for Illustry Types",
   "types": "illustry.d.ts",
   "files": [
@@ -18,8 +18,5 @@
   "bugs": {
     "url": "https://github.com/mrVladimirN/IllustryTypes"
   },
-  "homepage": "https://github.com/mrVladimirN/IllustryTypes#readme",
-  "dependencies": {
-    "zod": "^3.22.2"
-  }
+  "homepage": "https://github.com/mrVladimirN/IllustryTypes#readme"
 }

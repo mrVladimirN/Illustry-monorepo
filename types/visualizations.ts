@@ -50,6 +50,7 @@ export enum VisualizationTypesEnum {
   SANKEY = "sankey",
   CALENDAR = "calendar",
   HIERARCHICAL_EDGE_BUNDLING = "hierarchical-edge-bundling",
+  MATRIX = "matrix"
 }
 
 interface VisualizationData {

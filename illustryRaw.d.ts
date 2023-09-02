@@ -111,7 +111,8 @@ declare module "types/visualizations" {
         FORCE_DIRECTED_GRAPH = "force-directed-graph",
         SANKEY = "sankey",
         CALENDAR = "calendar",
-        HIERARCHICAL_EDGE_BUNDLING = "hierarchical-edge-bundling"
+        HIERARCHICAL_EDGE_BUNDLING = "hierarchical-edge-bundling",
+        MATRIX = "matrix"
     }
     interface VisualizationData {
         projectName: string;
