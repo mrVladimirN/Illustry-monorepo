@@ -4,6 +4,7 @@ import {
   with_optional_id,
   with_optional_version,
   with_optional_properties,
+  with_optional_labels,
 } from "./utils";
 
 // Word-cloud
@@ -29,7 +30,7 @@ export interface CalendarData {
 
 // Node-Link (force-directed-graph, sankey, hierarchical-edge-bundling )
 
-export interface Node extends with_optional_properties {
+export interface Node extends with_optional_properties, with_optional_labels {
   name: string;
   category: string;
 }
@@ -50,7 +51,7 @@ export enum VisualizationTypesEnum {
   SANKEY = "sankey",
   CALENDAR = "calendar",
   HIERARCHICAL_EDGE_BUNDLING = "hierarchical-edge-bundling",
-  MATRIX = "matrix"
+  MATRIX = "matrix",
 }
 
 interface VisualizationData {

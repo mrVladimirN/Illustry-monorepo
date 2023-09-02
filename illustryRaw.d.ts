@@ -41,6 +41,10 @@ declare module "types/utils" {
     export interface with_optional_properties {
         properties?: object | object[] | string;
     }
+    export interface with_optional_labels extends with_optional_properties {
+        name: string;
+        value: number;
+    }
 }
 declare module "types/project" {
     import { with_optional_id, with_optional_version, with_id, DeepPartial } from "types/utils";
@@ -77,7 +81,7 @@ declare module "types/project" {
     }
 }
 declare module "types/visualizations" {
-    import { DeepPartial, with_id, with_optional_id, with_optional_version, with_optional_properties } from "types/utils";
+    import { DeepPartial, with_id, with_optional_id, with_optional_version, with_optional_properties, with_optional_labels } from "types/utils";
     export interface WordType extends with_optional_properties {
         name: string;
         value: number;
@@ -93,7 +97,7 @@ declare module "types/visualizations" {
     export interface CalendarData {
         calendar: CalendarType[];
     }
-    export interface Node extends with_optional_properties {
+    export interface Node extends with_optional_properties, with_optional_labels {
         name: string;
         category: string;
     }
@@ -154,5 +158,5 @@ declare module "index" {
     export { AcceptedFile, FileProperties } from "types/files";
     export { ProjectCreate, ProjectFilter, ProjectType, ProjectUpdate, ExtendedProjectType, } from "types/project";
     export { VisualizationCreate, VisualizationFilter, VisualizationType, VisualizationTypesEnum, VisualizationUpdate, ExtendedVisualizationType, Node, Link, NodeLinkData, WordType, WordCloudData, CalendarType, CalendarData, } from "types/visualizations";
-    export { with_id, with_optional_id, with_optional_properties, with_optional_version, with_version, ExtendedMongoQuery, MongoQuery, DeepPartial, } from "types/utils";
+    export { with_id, with_optional_id, with_optional_properties, with_optional_version, with_version, ExtendedMongoQuery, MongoQuery, DeepPartial, with_optional_labels } from "types/utils";
 }

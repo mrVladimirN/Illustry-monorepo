@@ -35,4 +35,5 @@ export {
   ExtendedMongoQuery,
   MongoQuery,
   DeepPartial,
+  with_optional_labels
 } from "./types/utils";
