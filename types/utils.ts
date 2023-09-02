@@ -30,7 +30,10 @@ export type MongoQuery = { [key: string]: string | object };
 export interface with_optional_properties {
   properties?: object | object[] | string;
 }
-export interface with_optional_labels extends with_optional_properties {
-  name: string;
-  value: number;
+export interface with_optional_labels {
+  labels?: {
+    name: string;
+    value: number;
+    properties?: object | object[] | string;
+  }[];
 }
