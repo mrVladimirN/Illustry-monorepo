@@ -5,12 +5,9 @@ import {
   cluster,
   lineRadial,
   curveBundle,
-  hierarchy,
-  HierarchyNode,
 } from "d3";
-import { NodeLinkData, Node, Link } from "types/visualizations";
+import { NodeLinkData} from "types/visualizations";
 import {
-  assignToComponents,
   createHebLinks,
   createHebNodes,
   createToolTip,

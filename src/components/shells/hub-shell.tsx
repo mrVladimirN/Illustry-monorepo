@@ -41,12 +41,16 @@ const CalendarView = dynamic(
 const WordCloudView = dynamic(() => import("@/components/views/wordcloud"), {
   ssr: false,
 });
+const MatrixView = dynamic(() => import("@/components/views/matrix/matrix"), {
+  ssr: false,
+});
 export function HubShell({ data }: HubShellProps) {
   const activeTheme = useThemeColors();
 
   const renderGraph = () => {
     if (data) {
-      const theme = localStorage.getItem("theme");
+      const theme =
+        typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
       const isDarkTheme = theme === "dark";
 
       switch (data.type) {
@@ -108,6 +112,19 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <WordCloudView
                 data={data.data as WordCloudData}
+                colors={
+                  isDarkTheme
+                    ? activeTheme.wordcloud.dark.colors
+                    : activeTheme.wordcloud.light.colors
+                }
+              />
+            </Suspense>
+          );
+        case "matrix":
+          return (
+            <Suspense fallback={<Fallback />}>
+              <MatrixView
+                data={data.data as NodeLinkData}
                 colors={
                   isDarkTheme
                     ? activeTheme.wordcloud.dark.colors
