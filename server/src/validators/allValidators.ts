@@ -29,9 +29,15 @@ const calendarDataSchema = z.object({
 });
 
 // Node-Link (force-directed-graph, sankey, hierarchical-edge-bundling)
+const labelsSchema = z.object({
+  name: stringSchema,
+  value: numberSchema,
+  properties: z.union([z.any(), z.array(z.any()), z.string()]).optional(),
+});
 const nodeSchema = z.object({
   name: stringSchema,
   category: stringSchema,
+  labels: z.array(labelsSchema).optional(),
   properties: z.union([z.any(), z.array(z.any()), z.string()]).optional(),
 });
 
@@ -68,7 +74,7 @@ const visualizationNodeLinkSchema = visualizationDataSchema.extend({
         z.literal(VisualizationTypesEnum.FORCE_DIRECTED_GRAPH),
         z.literal(VisualizationTypesEnum.SANKEY),
         z.literal(VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING),
-        z.literal(VisualizationTypesEnum.MATRIX)
+        z.literal(VisualizationTypesEnum.MATRIX),
       ])
     ),
   ]),
