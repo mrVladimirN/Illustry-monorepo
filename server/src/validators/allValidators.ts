@@ -53,6 +53,13 @@ const nodeLinkDataSchema = z.object({
   links: z.array(linkSchema),
 });
 
+//Chart
+
+const chartDataSchema = z.object({
+  headers: z.array(stringSchema),
+  values: z.record(z.array(z.number())),
+});
+
 // VisualizationData
 const visualizationDataSchema = z.object({
   projectName: stringSchema,
@@ -80,7 +87,13 @@ const visualizationNodeLinkSchema = visualizationDataSchema.extend({
   ]),
   data: nodeLinkDataSchema,
 });
-
+const visualizationChartSchema = visualizationDataSchema.extend({
+  type: z.union([
+    z.literal(VisualizationTypesEnum.LINE_CHART),
+    z.array(z.literal(VisualizationTypesEnum.LINE_CHART)),
+  ]),
+  data: chartDataSchema,
+});
 const visualizationCalendarSchema = visualizationDataSchema.extend({
   type: z.union([
     z.literal(VisualizationTypesEnum.CALENDAR),
@@ -114,7 +127,14 @@ const visualizationPartialNodeLinkSchema = visualizationDataSchema.extend({
   data: nodeLinkDataSchema,
   projectName: stringSchema.optional(),
 });
-
+const visualizationPartialChartSchema = visualizationDataSchema.extend({
+  type: z.union([
+    z.literal(VisualizationTypesEnum.LINE_CHART),
+    z.array(z.literal(VisualizationTypesEnum.LINE_CHART)),
+  ]),
+  data: chartDataSchema,
+  projectName: stringSchema.optional(),
+});
 const visualizationPartialCalendarSchema = visualizationDataSchema.extend({
   type: z.union([
     z.literal(VisualizationTypesEnum.CALENDAR),
@@ -135,11 +155,13 @@ export const visualizationTypeSchema = z.union([
   visualizationNodeLinkSchema,
   visualizationCalendarSchema,
   visualizationWordCloudSchema,
+  visualizationChartSchema,
 ]);
 export const visualizationPartialTypeSchema = z.union([
   visualizationPartialNodeLinkSchema,
   visualizationPartialCalendarSchema,
   visualizationWordPartialCloudSchema,
+  visualizationPartialChartSchema,
 ]);
 export const visualizationFilterSchema = z.object({
   projectName: stringSchema.optional(),
