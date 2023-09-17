@@ -19,6 +19,7 @@ export {
   ExtendedVisualizationType,
   Node,
   Link,
+  Chart,
   NodeLinkData,
   WordType,
   WordCloudData,

@@ -46,7 +46,7 @@ export interface NodeLinkData {
   links: Link[];
 }
 
-interface Chart {
+export interface Chart {
   [key: string]: { [key: string]: number[] }[];
 }
 
