@@ -4,6 +4,7 @@ import Fallback from "../ui/fallback";
 import dynamic from "next/dynamic";
 import {
   CalendarData,
+  Chart,
   NodeLinkData,
   VisualizationType,
   WordCloudData,
@@ -42,6 +43,9 @@ const WordCloudView = dynamic(() => import("@/components/views/wordcloud"), {
   ssr: false,
 });
 const MatrixView = dynamic(() => import("@/components/views/matrix/matrix"), {
+  ssr: false,
+});
+const LineChartView = dynamic(() => import("@/components/views/line-chart"), {
   ssr: false,
 });
 export function HubShell({ data }: HubShellProps) {
@@ -125,6 +129,19 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <MatrixView
                 data={data.data as NodeLinkData}
+                colors={
+                  isDarkTheme
+                    ? activeTheme.wordcloud.dark.colors
+                    : activeTheme.wordcloud.light.colors
+                }
+              />
+            </Suspense>
+          );
+        case "line-chart":
+          return (
+            <Suspense fallback={<Fallback />}>
+              <LineChartView
+                data={data.data as Chart}
                 colors={
                   isDarkTheme
                     ? activeTheme.wordcloud.dark.colors

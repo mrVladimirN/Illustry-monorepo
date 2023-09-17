@@ -31,6 +31,7 @@ const WordCloudView = ({ data, colors }: WordCloudProp) => {
         );
       },
     },
+    
     series: [
       {
         type: "wordCloud",

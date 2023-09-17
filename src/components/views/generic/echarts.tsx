@@ -1,10 +1,15 @@
 "use client";
 import React, { useRef, useEffect } from "react";
 
-import 'echarts-wordcloud';
+import "echarts-wordcloud";
 // Import the echarts core module, which provides the necessary interfaces for using echarts.
 import * as echarts from "echarts/core";
-import { SankeyChart, GraphChart, HeatmapChart  } from "echarts/charts";
+import {
+  SankeyChart,
+  GraphChart,
+  HeatmapChart,
+  LineChart,
+} from "echarts/charts";
 // Import the tooltip, title, rectangular coordinate system, dataset and transform components
 import {
   TooltipComponent,
@@ -13,29 +18,34 @@ import {
   TransformComponent,
   LegendComponent,
   VisualMapComponent,
-  CalendarComponent 
+  CalendarComponent,
+  ToolboxComponent 
 } from "echarts/components";
 
 import { SVGRenderer } from "echarts/renderers";
 
-import { EChartsOption, SetOptionOpts, HeatmapSeriesOption, WordCloudSeriesOption } from "echarts/types/dist/echarts";
+import {
+  EChartsOption,
+  SetOptionOpts,
+ 
+  WordCloudSeriesOption,
+} from "echarts/types/dist/echarts";
 
 export interface ReactEChartsProps<T> {
   option: T;
-  className?: string ;
+  className?: string;
   settings?: SetOptionOpts;
   loading?: boolean;
   theme?: "light" | "dark";
 }
 
-const ReactEcharts = <T extends EChartsOption|WordCloudSeriesOption>({
+const ReactEcharts = <T extends EChartsOption | WordCloudSeriesOption>({
   option,
   className,
   settings,
   loading,
   theme,
 }: ReactEChartsProps<T>): JSX.Element => {
-
   echarts.use([
     GraphChart,
     TooltipComponent,
@@ -44,10 +54,12 @@ const ReactEcharts = <T extends EChartsOption|WordCloudSeriesOption>({
     SVGRenderer,
     TransformComponent,
     SankeyChart,
-    LegendComponent ,
+    LegendComponent,
     HeatmapChart,
     VisualMapComponent,
-    CalendarComponent ,
+    CalendarComponent,
+    LineChart,
+    ToolboxComponent 
   ]);
 
   const chartRef = useRef<HTMLDivElement>(null);
@@ -81,12 +93,9 @@ const ReactEcharts = <T extends EChartsOption|WordCloudSeriesOption>({
       chart?.setOption(option as EChartsOption, settings);
       loading === true ? chart?.showLoading() : chart?.hideLoading();
     }
-  }, [option, settings, theme,loading]);
+  }, [option, settings, theme, loading]);
 
-  
-  return (
-    <div ref={chartRef} className={className}  />
-  );
+  return <div ref={chartRef} className={className} />;
 };
 
 export default ReactEcharts;
