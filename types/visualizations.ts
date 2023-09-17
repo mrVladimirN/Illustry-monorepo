@@ -47,7 +47,8 @@ export interface NodeLinkData {
 }
 
 export interface Chart {
-  [key: string]: { [key: string]: number[] }[];
+  headers: string[];
+  values: { [key: string]: number[] }[];
 }
 
 export enum VisualizationTypesEnum {

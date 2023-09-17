@@ -1,6 +1,6 @@
 {
   "name": "@illustry/types",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A module for Illustry Types",
   "types": "illustry.d.ts",
   "files": [

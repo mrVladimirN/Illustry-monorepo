@@ -114,7 +114,8 @@ declare module "types/visualizations" {
         links: Link[];
     }
     export interface Chart {
-        [key: string]: {
+        headers: string[];
+        values: {
             [key: string]: number[];
         }[];
     }
