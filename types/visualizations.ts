@@ -45,6 +45,11 @@ export interface NodeLinkData {
   nodes: Node[];
   links: Link[];
 }
+
+interface Chart {
+  [key: string]: { [key: string]: number[] }[];
+}
+
 export enum VisualizationTypesEnum {
   WORLD_CLOUD = "word-cloud",
   FORCE_DIRECTED_GRAPH = "force-directed-graph",
@@ -52,6 +57,7 @@ export enum VisualizationTypesEnum {
   CALENDAR = "calendar",
   HIERARCHICAL_EDGE_BUNDLING = "hierarchical-edge-bundling",
   MATRIX = "matrix",
+  LINE_CHART = "line-chart",
 }
 
 interface VisualizationData {
@@ -60,7 +66,7 @@ interface VisualizationData {
   description?: string;
   name: string;
   tags?: string[];
-  data: WordCloudData | NodeLinkData | CalendarData;
+  data: WordCloudData | NodeLinkData | CalendarData | Chart;
   createdAt?: Date;
   updatedAt?: Date;
 }

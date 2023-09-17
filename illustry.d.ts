@@ -113,13 +113,19 @@ declare module "types/visualizations" {
         nodes: Node[];
         links: Link[];
     }
+    interface Chart {
+        [key: string]: {
+            [key: string]: number[];
+        }[];
+    }
     export const enum VisualizationTypesEnum {
         WORLD_CLOUD = "word-cloud",
         FORCE_DIRECTED_GRAPH = "force-directed-graph",
         SANKEY = "sankey",
         CALENDAR = "calendar",
         HIERARCHICAL_EDGE_BUNDLING = "hierarchical-edge-bundling",
-        MATRIX = "matrix"
+        MATRIX = "matrix",
+        LINE_CHART = "line-chart"
     }
     interface VisualizationData {
         projectName: string;
@@ -127,7 +133,7 @@ declare module "types/visualizations" {
         description?: string;
         name: string;
         tags?: string[];
-        data: WordCloudData | NodeLinkData | CalendarData;
+        data: WordCloudData | NodeLinkData | CalendarData | Chart;
         createdAt?: Date;
         updatedAt?: Date;
     }
