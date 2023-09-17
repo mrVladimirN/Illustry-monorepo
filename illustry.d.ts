@@ -117,7 +117,7 @@ declare module "types/visualizations" {
         headers: string[];
         values: {
             [key: string]: number[];
-        }[];
+        };
     }
     export const enum VisualizationTypesEnum {
         WORLD_CLOUD = "word-cloud",
@@ -126,7 +126,8 @@ declare module "types/visualizations" {
         CALENDAR = "calendar",
         HIERARCHICAL_EDGE_BUNDLING = "hierarchical-edge-bundling",
         MATRIX = "matrix",
-        LINE_CHART = "line-chart"
+        LINE_CHART = "line-chart",
+        BAR_CHART = "bar-chart"
     }
     interface VisualizationData {
         projectName: string;
