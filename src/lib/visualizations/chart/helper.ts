@@ -16,7 +16,6 @@ export const constructSeries = (
   }[] = [];
 
   const keys = Object.keys(values);
-
   keys.forEach((key, index) => {
     const seriesMember = {
       name: key,

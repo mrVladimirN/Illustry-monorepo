@@ -48,6 +48,18 @@ const CalendarView = dynamic(
 const WordCloudView = dynamic(() => import("@/components/views/wordcloud"), {
   ssr: false,
 });
+
+const LineChartView = dynamic(() => import("@/components/views/line-chart"), {
+  ssr: false,
+});
+interface ShowDiagramState {
+  heb: boolean;
+  sankey: boolean;
+  calendar: boolean;
+  flg: boolean;
+  wordCloud: boolean;
+  lineChart: boolean;
+}
 export function ThemeShell() {
   const colorPalette: { [key: string]: string[] } = {
     FreshMeadow: [
@@ -147,12 +159,13 @@ export function ThemeShell() {
   const [activeColorPickerIndex, setActiveColorPickerIndex] = useState<
     number | null
   >(null);
-  const [showDiagram, setShowDiagram] = useState({
+  const [showDiagram, setShowDiagram] = useState<ShowDiagramState>({
     sankey: false,
     heb: false,
     flg: false,
     wordCloud: false,
     calendar: false,
+    lineChart: false,
   });
   const theme =
     typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
@@ -236,6 +249,19 @@ export function ThemeShell() {
       });
     }
   };
+  const setShowDiagramHandler = (keyToSet?: keyof ShowDiagramState) => {
+    setShowDiagram((prev) => {
+      // Create a new object with all keys set to false
+      const newState = Object.fromEntries(
+        Object.keys(prev).map((key) => [key, false])
+      );
+      if (keyToSet) {
+        // Set the specified key to true
+        newState[keyToSet] = true;
+      }
+      return newState as unknown as ShowDiagramState;
+    });
+  };
   useEffect(() => {
     document.addEventListener("mousedown", handleOutsideClick);
     return () => {
@@ -247,18 +273,7 @@ export function ThemeShell() {
     <div className="flex h-screen">
       <ScrollArea className="fixed w-1/4 p-4 overflow-y-auto h-screen border-r-4">
         <Accordion type="single" collapsible>
-          <AccordionItem
-            value="item-1"
-            onClick={() =>
-              setShowDiagram({
-                heb: false,
-                sankey: false,
-                calendar: false,
-                flg: false,
-                wordCloud: false,
-              })
-            }
-          >
+          <AccordionItem value="item-1" onClick={() => setShowDiagramHandler()}>
             <AccordionTrigger className="cursor-pointer">
               Default Schemes
             </AccordionTrigger>
@@ -271,15 +286,7 @@ export function ThemeShell() {
           </AccordionItem>
           <AccordionItem
             value="item-2"
-            onClick={() =>
-              setShowDiagram({
-                heb: false,
-                sankey: true,
-                calendar: false,
-                flg: false,
-                wordCloud: false,
-              })
-            }
+            onClick={() => setShowDiagramHandler("sankey")}
           >
             <AccordionTrigger className="cursor-pointer">
               Sankey Diagram
@@ -298,15 +305,7 @@ export function ThemeShell() {
           </AccordionItem>
           <AccordionItem
             value="item-3"
-            onClick={() =>
-              setShowDiagram({
-                heb: false,
-                sankey: false,
-                calendar: true,
-                flg: false,
-                wordCloud: false,
-              })
-            }
+            onClick={() => setShowDiagramHandler("calendar")}
           >
             <AccordionTrigger className="cursor-pointer">
               Calendar
@@ -325,15 +324,7 @@ export function ThemeShell() {
           </AccordionItem>
           <AccordionItem
             value="item-4"
-            onClick={() =>
-              setShowDiagram({
-                heb: false,
-                sankey: false,
-                calendar: false,
-                flg: true,
-                wordCloud: false,
-              })
-            }
+            onClick={() => setShowDiagramHandler("flg")}
           >
             <AccordionTrigger className="cursor-pointer">
               Forced-Layout-Graph
@@ -353,15 +344,7 @@ export function ThemeShell() {
           <AccordionItem value="item-5">
             <AccordionTrigger
               className="cursor-pointer"
-              onClick={() =>
-                setShowDiagram({
-                  heb: true,
-                  sankey: false,
-                  calendar: false,
-                  flg: false,
-                  wordCloud: false,
-                })
-              }
+              onClick={() => setShowDiagramHandler("heb")}
             >
               Hierarchical-Edge-Bundling
             </AccordionTrigger>
@@ -380,15 +363,7 @@ export function ThemeShell() {
           <AccordionItem value="item-6">
             <AccordionTrigger
               className="cursor-pointer"
-              onClick={() =>
-                setShowDiagram({
-                  heb: false,
-                  sankey: false,
-                  calendar: false,
-                  flg: false,
-                  wordCloud: true,
-                })
-              }
+              onClick={() => setShowDiagramHandler("wordCloud")}
             >
               Word-Cloud
             </AccordionTrigger>
@@ -400,6 +375,25 @@ export function ThemeShell() {
                 handleColorAdd={handleColorAdd}
                 setActiveColorPickerIndex={setActiveColorPickerIndex}
                 visualization="wordcloud"
+                colorPickerRef={colorPickerRef}
+              />
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-7">
+            <AccordionTrigger
+              className="cursor-pointer"
+              onClick={() => setShowDiagramHandler("lineChart")}
+            >
+              Line-Chart
+            </AccordionTrigger>
+            <AccordionContent>
+              <GenericThemesAccordion
+                activeColorPickerIndex={activeColorPickerIndex}
+                handleColorChange={handleColorChange}
+                handleColorDelete={handleColorDelete}
+                handleColorAdd={handleColorAdd}
+                setActiveColorPickerIndex={setActiveColorPickerIndex}
+                visualization="lineChart"
                 colorPickerRef={colorPickerRef}
               />
             </AccordionContent>
@@ -472,6 +466,20 @@ export function ThemeShell() {
                 isDarkTheme
                   ? activeTheme.heb.dark.colors
                   : activeTheme.heb.light.colors
+              }
+            />
+          </Suspense>
+        </div>
+      )}
+      {showDiagram.lineChart && (
+        <div className="flex-grow p-4">
+          <Suspense fallback={<Fallback />}>
+            <LineChartView
+              data={siteConfig.lineChart}
+              colors={
+                isDarkTheme
+                  ? activeTheme.lineChart.dark.colors
+                  : activeTheme.lineChart.light.colors
               }
             />
           </Suspense>

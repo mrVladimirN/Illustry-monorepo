@@ -144,8 +144,8 @@ export function HubShell({ data }: HubShellProps) {
                 data={data.data as Chart}
                 colors={
                   isDarkTheme
-                    ? activeTheme.wordcloud.dark.colors
-                    : activeTheme.wordcloud.light.colors
+                    ? activeTheme.lineChart.dark.colors
+                    : activeTheme.lineChart.light.colors
                 }
               />
             </Suspense>

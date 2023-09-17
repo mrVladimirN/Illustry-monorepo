@@ -54,6 +54,14 @@ export interface ThemeColors {
       colors: string[];
     };
   };
+  lineChart:{
+    dark: {
+      colors: string[];
+    };
+    light: {
+      colors: string[];
+    };
+  }
 }
 export const initialThemeColors: ThemeColors = {
   calendar: {
@@ -153,6 +161,30 @@ export const initialThemeColors: ThemeColors = {
     },
   },
   heb: {
+    dark: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+    light: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+  },
+  lineChart: {
     dark: {
       colors: [
         "#5DBE6E",

@@ -194,4 +194,13 @@ export const siteConfig = {
       category: "1",
     },
   ],
+  lineChart: {
+    headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    values: {
+      "Statistic 1": [120, 132, 101, 134, 90, 230, 210],
+      "Statistic 2": [220, 182, 191, 234, 290, 330, 310],
+      "Statistic 3": [150, 232, 201, 154, 190, 330, 410],
+      "Statistic 4": [320, 332, 301, 334, 390, 330, 320]
+    }
+  }
 };
