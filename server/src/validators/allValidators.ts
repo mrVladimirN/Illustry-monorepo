@@ -90,7 +90,13 @@ const visualizationNodeLinkSchema = visualizationDataSchema.extend({
 const visualizationChartSchema = visualizationDataSchema.extend({
   type: z.union([
     z.literal(VisualizationTypesEnum.LINE_CHART),
-    z.array(z.literal(VisualizationTypesEnum.LINE_CHART)),
+    z.literal(VisualizationTypesEnum.BAR_CHART),
+    z.array(
+      z.union([
+        z.literal(VisualizationTypesEnum.LINE_CHART),
+        z.literal(VisualizationTypesEnum.BAR_CHART),
+      ])
+    ),
   ]),
   data: chartDataSchema,
 });
@@ -127,10 +133,16 @@ const visualizationPartialNodeLinkSchema = visualizationDataSchema.extend({
   data: nodeLinkDataSchema,
   projectName: stringSchema.optional(),
 });
-const visualizationPartialChartSchema = visualizationDataSchema.extend({
+export const visualizationPartialChartSchema = visualizationDataSchema.extend({
   type: z.union([
     z.literal(VisualizationTypesEnum.LINE_CHART),
-    z.array(z.literal(VisualizationTypesEnum.LINE_CHART)),
+    z.literal(VisualizationTypesEnum.BAR_CHART),
+    z.array(
+      z.union([
+        z.literal(VisualizationTypesEnum.LINE_CHART),
+        z.literal(VisualizationTypesEnum.BAR_CHART),
+      ])
+    ),
   ]),
   data: chartDataSchema,
   projectName: stringSchema.optional(),
