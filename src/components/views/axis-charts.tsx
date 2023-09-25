@@ -5,12 +5,13 @@ import { EChartsOption } from "echarts/types/dist/echarts";
 import { Chart } from "types/visualizations";
 import { constructSeries } from "@/lib/visualizations/chart/helper";
 import { SeriesOption } from "echarts";
-interface LineChartProp {
+interface AxisChartProp {
   data: Chart;
   colors: string[];
+  type: "line" | "bar";
 }
 
-const LineChartView = ({ data, colors }: LineChartProp) => {
+const AxisChartView = ({ data, colors, type }: AxisChartProp) => {
   const { headers, values } = data;
   const option: EChartsOption = {
     tooltip: {
@@ -32,7 +33,7 @@ const LineChartView = ({ data, colors }: LineChartProp) => {
     xAxis: [
       {
         type: "category",
-        boundaryGap: false,
+        boundaryGap: type === "line" ? false : true,
         data: headers,
       },
     ],
@@ -41,7 +42,7 @@ const LineChartView = ({ data, colors }: LineChartProp) => {
         type: "value",
       },
     ],
-    series: constructSeries(values, colors, false, "line", false) as SeriesOption,
+    series: constructSeries(values, colors, false, type, false) as SeriesOption,
   };
   return (
     <div className="w-full mt-4 h-screens-90 sm:mt-6 lg:mt-8">
@@ -52,4 +53,4 @@ const LineChartView = ({ data, colors }: LineChartProp) => {
     </div>
   );
 };
-export default LineChartView;
+export default AxisChartView;

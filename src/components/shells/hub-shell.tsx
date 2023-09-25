@@ -45,7 +45,7 @@ const WordCloudView = dynamic(() => import("@/components/views/wordcloud"), {
 const MatrixView = dynamic(() => import("@/components/views/matrix/matrix"), {
   ssr: false,
 });
-const LineChartView = dynamic(() => import("@/components/views/line-chart"), {
+const AxisChartView = dynamic(() => import("@/components/views/axis-charts"), {
   ssr: false,
 });
 export function HubShell({ data }: HubShellProps) {
@@ -140,13 +140,28 @@ export function HubShell({ data }: HubShellProps) {
         case "line-chart":
           return (
             <Suspense fallback={<Fallback />}>
-              <LineChartView
+              <AxisChartView
                 data={data.data as Chart}
                 colors={
                   isDarkTheme
                     ? activeTheme.lineChart.dark.colors
                     : activeTheme.lineChart.light.colors
                 }
+                type="line"
+              />
+            </Suspense>
+          );
+          case "bar-chart":
+          return (
+            <Suspense fallback={<Fallback />}>
+              <AxisChartView
+                data={data.data as Chart}
+                colors={
+                  isDarkTheme
+                    ? activeTheme.barChart.dark.colors
+                    : activeTheme.barChart.light.colors
+                }
+                type="bar"
               />
             </Suspense>
           );

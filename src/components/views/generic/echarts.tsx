@@ -9,6 +9,7 @@ import {
   GraphChart,
   HeatmapChart,
   LineChart,
+  BarChart
 } from "echarts/charts";
 // Import the tooltip, title, rectangular coordinate system, dataset and transform components
 import {
@@ -59,6 +60,7 @@ const ReactEcharts = <T extends EChartsOption | WordCloudSeriesOption>({
     VisualMapComponent,
     CalendarComponent,
     LineChart,
+    BarChart,
     ToolboxComponent 
   ]);
 

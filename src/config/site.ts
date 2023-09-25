@@ -194,7 +194,7 @@ export const siteConfig = {
       category: "1",
     },
   ],
-  lineChart: {
+  axisChart: {
     headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
     values: {
       "Statistic 1": [120, 132, 101, 134, 90, 230, 210],

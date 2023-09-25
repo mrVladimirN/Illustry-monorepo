@@ -19,6 +19,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import Fallback from "../ui/fallback";
 import dynamic from "next/dynamic";
 import { siteConfig } from "@/config/site";
+
 const SankeyGraphView = dynamic(
   () => import("@/components/views/sankey-diagram"),
   {
@@ -49,7 +50,7 @@ const WordCloudView = dynamic(() => import("@/components/views/wordcloud"), {
   ssr: false,
 });
 
-const LineChartView = dynamic(() => import("@/components/views/line-chart"), {
+const AxisChartView = dynamic(() => import("@/components/views/axis-charts"), {
   ssr: false,
 });
 interface ShowDiagramState {
@@ -59,6 +60,7 @@ interface ShowDiagramState {
   flg: boolean;
   wordCloud: boolean;
   lineChart: boolean;
+  barChart: boolean;
 }
 export function ThemeShell() {
   const colorPalette: { [key: string]: string[] } = {
@@ -166,6 +168,7 @@ export function ThemeShell() {
     wordCloud: false,
     calendar: false,
     lineChart: false,
+    barChart: false
   });
   const theme =
     typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
@@ -398,6 +401,25 @@ export function ThemeShell() {
               />
             </AccordionContent>
           </AccordionItem>
+          <AccordionItem value="item-8">
+            <AccordionTrigger
+              className="cursor-pointer"
+              onClick={() => setShowDiagramHandler("barChart")}
+            >
+              Bar-Chart
+            </AccordionTrigger>
+            <AccordionContent>
+              <GenericThemesAccordion
+                activeColorPickerIndex={activeColorPickerIndex}
+                handleColorChange={handleColorChange}
+                handleColorDelete={handleColorDelete}
+                handleColorAdd={handleColorAdd}
+                setActiveColorPickerIndex={setActiveColorPickerIndex}
+                visualization="barChart"
+                colorPickerRef={colorPickerRef}
+              />
+            </AccordionContent>
+          </AccordionItem>
         </Accordion>
       </ScrollArea>
       {showDiagram.sankey && (
@@ -474,13 +496,29 @@ export function ThemeShell() {
       {showDiagram.lineChart && (
         <div className="flex-grow p-4">
           <Suspense fallback={<Fallback />}>
-            <LineChartView
-              data={siteConfig.lineChart}
+            <AxisChartView
+              data={siteConfig.axisChart}
               colors={
                 isDarkTheme
                   ? activeTheme.lineChart.dark.colors
                   : activeTheme.lineChart.light.colors
               }
+              type={"line"}
+            />
+          </Suspense>
+        </div>
+      )}
+      {showDiagram.barChart && (
+        <div className="flex-grow p-4">
+          <Suspense fallback={<Fallback />}>
+            <AxisChartView
+              data={siteConfig.axisChart}
+              colors={
+                isDarkTheme
+                  ? activeTheme.barChart.dark.colors
+                  : activeTheme.barChart.light.colors
+              }
+              type={"bar"}
             />
           </Suspense>
         </div>
