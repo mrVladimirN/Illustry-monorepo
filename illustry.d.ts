@@ -113,10 +113,18 @@ declare module "types/visualizations" {
         nodes: Node[];
         links: Link[];
     }
-    export interface Chart {
+    export interface AxisChartData {
         headers: string[];
         values: {
             [key: string]: number[];
+        };
+    }
+    export interface ScatterData {
+        points: [number, number][];
+    }
+    export interface PieChartData {
+        values: {
+            [key: string]: number;
         };
     }
     export const enum VisualizationTypesEnum {
@@ -127,7 +135,8 @@ declare module "types/visualizations" {
         HIERARCHICAL_EDGE_BUNDLING = "hierarchical-edge-bundling",
         MATRIX = "matrix",
         LINE_CHART = "line-chart",
-        BAR_CHART = "bar-chart"
+        BAR_CHART = "bar-chart",
+        PIE_CHART = "pie-chart"
     }
     interface VisualizationData {
         projectName: string;
@@ -135,7 +144,7 @@ declare module "types/visualizations" {
         description?: string;
         name: string;
         tags?: string[];
-        data: WordCloudData | NodeLinkData | CalendarData | Chart;
+        data: WordCloudData | NodeLinkData | CalendarData | AxisChartData | ScatterData | PieChartData;
         createdAt?: Date;
         updatedAt?: Date;
     }
@@ -168,6 +177,6 @@ declare module "types/visualizations" {
 declare module "index" {
     export { AcceptedFile, FileProperties } from "types/files";
     export { ProjectCreate, ProjectFilter, ProjectType, ProjectUpdate, ExtendedProjectType, } from "types/project";
-    export { VisualizationCreate, VisualizationFilter, VisualizationType, VisualizationTypesEnum, VisualizationUpdate, ExtendedVisualizationType, Node, Link, Chart, NodeLinkData, WordType, WordCloudData, CalendarType, CalendarData, } from "types/visualizations";
+    export { VisualizationCreate, VisualizationFilter, VisualizationType, VisualizationTypesEnum, VisualizationUpdate, ExtendedVisualizationType, Node, Link, AxisChartData, PieChartData, ScatterData, NodeLinkData, WordType, WordCloudData, CalendarType, CalendarData, } from "types/visualizations";
     export { with_id, with_optional_id, with_optional_properties, with_optional_version, with_version, ExtendedMongoQuery, MongoQuery, DeepPartial, with_optional_labels } from "types/utils";
 }

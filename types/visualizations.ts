@@ -46,11 +46,17 @@ export interface NodeLinkData {
   links: Link[];
 }
 
-export interface Chart {
+export interface AxisChartData {
   headers: string[];
   values: { [key: string]: number[] };
 }
 
+export interface ScatterData {
+  points: [number, number][];
+}
+export interface PieChartData {
+  values: { [key: string]: number };
+}
 export enum VisualizationTypesEnum {
   WORLD_CLOUD = "word-cloud",
   FORCE_DIRECTED_GRAPH = "force-directed-graph",
@@ -60,6 +66,7 @@ export enum VisualizationTypesEnum {
   MATRIX = "matrix",
   LINE_CHART = "line-chart",
   BAR_CHART = "bar-chart",
+  PIE_CHART = "pie-chart",
 }
 
 interface VisualizationData {
@@ -68,7 +75,13 @@ interface VisualizationData {
   description?: string;
   name: string;
   tags?: string[];
-  data: WordCloudData | NodeLinkData | CalendarData | Chart;
+  data:
+    | WordCloudData
+    | NodeLinkData
+    | CalendarData
+    | AxisChartData
+    | ScatterData
+    | PieChartData;
   createdAt?: Date;
   updatedAt?: Date;
 }
