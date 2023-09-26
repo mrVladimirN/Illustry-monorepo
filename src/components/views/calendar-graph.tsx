@@ -47,6 +47,7 @@ const CalendarGraph = ({ data, colors, isDarkTheme }: CalendarGraphProp) => {
       },
     },
     visualMap: {
+      show: false,
       orient: "horizontal",
       left: "center",
       top: 30,

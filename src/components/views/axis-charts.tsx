@@ -2,11 +2,11 @@ import * as React from "react";
 import ReactEcharts from "./generic/echarts";
 import { EChartsOption } from "echarts/types/dist/echarts";
 
-import { Chart } from "types/visualizations";
+import { AxisChartData } from "types/visualizations";
 import { constructSeries } from "@/lib/visualizations/chart/helper";
 import { SeriesOption } from "echarts";
 interface AxisChartProp {
-  data: Chart;
+  data: AxisChartData;
   colors: string[];
   type: "line" | "bar";
 }
@@ -42,7 +42,7 @@ const AxisChartView = ({ data, colors, type }: AxisChartProp) => {
         type: "value",
       },
     ],
-    series: constructSeries(values, colors, false, type, false) as SeriesOption,
+    series: constructSeries(values, colors, false, type, false) as SeriesOption ,
   };
   return (
     <div className="w-full mt-4 h-screens-90 sm:mt-6 lg:mt-8">

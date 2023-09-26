@@ -9,7 +9,9 @@ import {
   GraphChart,
   HeatmapChart,
   LineChart,
-  BarChart
+  BarChart,
+  ScatterChart,
+  PieChart,
 } from "echarts/charts";
 // Import the tooltip, title, rectangular coordinate system, dataset and transform components
 import {
@@ -20,7 +22,7 @@ import {
   LegendComponent,
   VisualMapComponent,
   CalendarComponent,
-  ToolboxComponent 
+  ToolboxComponent,
 } from "echarts/components";
 
 import { SVGRenderer } from "echarts/renderers";
@@ -28,7 +30,6 @@ import { SVGRenderer } from "echarts/renderers";
 import {
   EChartsOption,
   SetOptionOpts,
- 
   WordCloudSeriesOption,
 } from "echarts/types/dist/echarts";
 
@@ -60,8 +61,10 @@ const ReactEcharts = <T extends EChartsOption | WordCloudSeriesOption>({
     VisualMapComponent,
     CalendarComponent,
     LineChart,
+    PieChart,
     BarChart,
-    ToolboxComponent 
+    ToolboxComponent,
+    ScatterChart,
   ]);
 
   const chartRef = useRef<HTMLDivElement>(null);

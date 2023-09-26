@@ -19,6 +19,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import Fallback from "../ui/fallback";
 import dynamic from "next/dynamic";
 import { siteConfig } from "@/config/site";
+import { ScatterData } from "types/visualizations";
 
 const SankeyGraphView = dynamic(
   () => import("@/components/views/sankey-diagram"),
@@ -53,6 +54,12 @@ const WordCloudView = dynamic(() => import("@/components/views/wordcloud"), {
 const AxisChartView = dynamic(() => import("@/components/views/axis-charts"), {
   ssr: false,
 });
+const PieView = dynamic(() => import("@/components/views/pie-chart"), {
+  ssr: false,
+});
+const ScatterView = dynamic(() => import("@/components/views/scatter"), {
+  ssr: false,
+});
 interface ShowDiagramState {
   heb: boolean;
   sankey: boolean;
@@ -61,6 +68,8 @@ interface ShowDiagramState {
   wordCloud: boolean;
   lineChart: boolean;
   barChart: boolean;
+  pieChart: boolean;
+  scatter: boolean;
 }
 export function ThemeShell() {
   const colorPalette: { [key: string]: string[] } = {
@@ -168,7 +177,9 @@ export function ThemeShell() {
     wordCloud: false,
     calendar: false,
     lineChart: false,
-    barChart: false
+    barChart: false,
+    scatter: false,
+    pieChart: false,
   });
   const theme =
     typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
@@ -201,6 +212,22 @@ export function ThemeShell() {
         light: { colors: colorPalette[themeName] },
       },
       heb: {
+        dark: { colors: colorPalette[themeName] },
+        light: { colors: colorPalette[themeName] },
+      },
+      lineChart: {
+        dark: { colors: colorPalette[themeName] },
+        light: { colors: colorPalette[themeName] },
+      },
+      barChart: {
+        dark: { colors: colorPalette[themeName] },
+        light: { colors: colorPalette[themeName] },
+      },
+      scatter: {
+        dark: { colors: colorPalette[themeName] },
+        light: { colors: colorPalette[themeName] },
+      },
+      pieChart: {
         dark: { colors: colorPalette[themeName] },
         light: { colors: colorPalette[themeName] },
       },
@@ -420,6 +447,44 @@ export function ThemeShell() {
               />
             </AccordionContent>
           </AccordionItem>
+          <AccordionItem value="item-9">
+            <AccordionTrigger
+              className="cursor-pointer"
+              onClick={() => setShowDiagramHandler("pieChart")}
+            >
+              Pie-Chart
+            </AccordionTrigger>
+            <AccordionContent>
+              <GenericThemesAccordion
+                activeColorPickerIndex={activeColorPickerIndex}
+                handleColorChange={handleColorChange}
+                handleColorDelete={handleColorDelete}
+                handleColorAdd={handleColorAdd}
+                setActiveColorPickerIndex={setActiveColorPickerIndex}
+                visualization="pieChart"
+                colorPickerRef={colorPickerRef}
+              />
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-8">
+            <AccordionTrigger
+              className="cursor-pointer"
+              onClick={() => setShowDiagramHandler("scatter")}
+            >
+              Scatter
+            </AccordionTrigger>
+            <AccordionContent>
+              <GenericThemesAccordion
+                activeColorPickerIndex={activeColorPickerIndex}
+                handleColorChange={handleColorChange}
+                handleColorDelete={handleColorDelete}
+                handleColorAdd={handleColorAdd}
+                setActiveColorPickerIndex={setActiveColorPickerIndex}
+                visualization="scatter"
+                colorPickerRef={colorPickerRef}
+              />
+            </AccordionContent>
+          </AccordionItem>
         </Accordion>
       </ScrollArea>
       {showDiagram.sankey && (
@@ -519,6 +584,35 @@ export function ThemeShell() {
                   : activeTheme.barChart.light.colors
               }
               type={"bar"}
+            />
+          </Suspense>
+        </div>
+      )}
+      {showDiagram.pieChart && (
+        <div className="flex-grow p-4">
+          <Suspense fallback={<Fallback />}>
+            <PieView
+              data={siteConfig.pieChart}
+              colors={
+                isDarkTheme
+                  ? activeTheme.pieChart.dark.colors
+                  : activeTheme.pieChart.light.colors
+              }
+            />
+          </Suspense>
+        </div>
+      )}
+      {showDiagram.scatter && (
+        <div className="flex-grow p-4">
+          <Suspense fallback={<Fallback />}>
+            <ScatterView
+              data={siteConfig.scatter as ScatterData}
+              colors={
+                isDarkTheme
+                  ? activeTheme.scatter.dark.colors
+                  : activeTheme.scatter.light.colors
+              }
+              isDarkTheme={isDarkTheme}
             />
           </Suspense>
         </div>

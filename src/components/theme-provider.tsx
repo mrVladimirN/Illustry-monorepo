@@ -70,6 +70,22 @@ export interface ThemeColors {
       colors: string[];
     };
   };
+  scatter: {
+    dark: {
+      colors: string[];
+    };
+    light: {
+      colors: string[];
+    };
+  };
+  pieChart: {
+    dark: {
+      colors: string[];
+    };
+    light: {
+      colors: string[];
+    };
+  };
 }
 export const initialThemeColors: ThemeColors = {
   calendar: {
@@ -217,6 +233,54 @@ export const initialThemeColors: ThemeColors = {
     },
   },
   barChart: {
+    dark: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+    light: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+  },
+  scatter: {
+    dark: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+    light: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+  },
+  pieChart: {
     dark: {
       colors: [
         "#5DBE6E",

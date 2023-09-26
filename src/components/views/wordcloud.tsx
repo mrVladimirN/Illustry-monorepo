@@ -7,7 +7,7 @@ import {
 import {
   computeWords,
   computePropertiesForToolTip,
-} from "@/lib/visualizations/word-cloud/utils";
+} from "@/lib/visualizations/word-cloud/helper";
 import { WordCloudData } from "types/visualizations";
 interface WordCloudProp {
   data: WordCloudData;

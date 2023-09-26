@@ -202,5 +202,23 @@ export const siteConfig = {
       "Statistic 3": [150, 232, 201, 154, 190, 330, 410],
       "Statistic 4": [320, 332, 301, 334, 390, 330, 320]
     }
+  },
+  pieChart: {
+    values: {
+      "Statistic 1": 122,
+      "Statistic 2": 222,
+      "Statistic 3": 510,
+      "Statistic 4": 320 
+    }
+  },
+  scatter: {
+    points: [
+      {"value":[3.275154, 2.957587], "category":"3"},
+      {"value":[-3.344465, 2.603513], "category":"2"},
+      {"value":[0.355083, -3.376585], "category":"2"},
+      {"value": [1.852435, 3.547351], "category":"1"},
+      {"value":[-2.078973, 2.552013], "category":"1"}
+    
+  ]
   }
 };
