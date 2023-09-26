@@ -20,6 +20,7 @@ export {
   Node,
   Link,
   AxisChartData,
+  ScatterPoint,
   PieChartData,
   ScatterData,
   NodeLinkData,
