@@ -53,11 +53,26 @@ const nodeLinkDataSchema = z.object({
   links: z.array(linkSchema),
 });
 
-//Chart
+//AxisChart
 
-const chartDataSchema = z.object({
+const axisChartDataSchema = z.object({
   headers: z.array(stringSchema),
   values: z.record(z.array(z.number())),
+});
+
+//Scatter
+export const scatterDataSchema = z.object({
+  points: z.array(
+    z.object({
+      value: z.tuple([z.number(), z.number()]),
+      category: z.string(),
+    })
+  ),
+});
+
+//PieChart
+export const pieChartDataSchema = z.object({
+  values: z.record(z.number()),
 });
 
 // VisualizationData
@@ -87,7 +102,7 @@ const visualizationNodeLinkSchema = visualizationDataSchema.extend({
   ]),
   data: nodeLinkDataSchema,
 });
-const visualizationChartSchema = visualizationDataSchema.extend({
+const visualizationAxisChartSchema = visualizationDataSchema.extend({
   type: z.union([
     z.literal(VisualizationTypesEnum.LINE_CHART),
     z.literal(VisualizationTypesEnum.BAR_CHART),
@@ -98,7 +113,21 @@ const visualizationChartSchema = visualizationDataSchema.extend({
       ])
     ),
   ]),
-  data: chartDataSchema,
+  data: axisChartDataSchema,
+});
+const visualizationScatterSchema = visualizationDataSchema.extend({
+  type: z.union([
+    z.literal(VisualizationTypesEnum.SCATTER),
+    z.array(z.literal(VisualizationTypesEnum.SCATTER)),
+  ]),
+  data: scatterDataSchema,
+});
+const visualizationPieChartSchema = visualizationDataSchema.extend({
+  type: z.union([
+    z.literal(VisualizationTypesEnum.PIE_CHART),
+    z.array(z.literal(VisualizationTypesEnum.PIE_CHART)),
+  ]),
+  data: pieChartDataSchema,
 });
 const visualizationCalendarSchema = visualizationDataSchema.extend({
   type: z.union([
@@ -133,7 +162,7 @@ const visualizationPartialNodeLinkSchema = visualizationDataSchema.extend({
   data: nodeLinkDataSchema,
   projectName: stringSchema.optional(),
 });
-export const visualizationPartialChartSchema = visualizationDataSchema.extend({
+const visualizationPartialAxisChartSchema = visualizationDataSchema.extend({
   type: z.union([
     z.literal(VisualizationTypesEnum.LINE_CHART),
     z.literal(VisualizationTypesEnum.BAR_CHART),
@@ -144,7 +173,7 @@ export const visualizationPartialChartSchema = visualizationDataSchema.extend({
       ])
     ),
   ]),
-  data: chartDataSchema,
+  data: axisChartDataSchema,
   projectName: stringSchema.optional(),
 });
 const visualizationPartialCalendarSchema = visualizationDataSchema.extend({
@@ -155,7 +184,7 @@ const visualizationPartialCalendarSchema = visualizationDataSchema.extend({
   data: calendarDataSchema,
   projectName: stringSchema.optional(),
 });
-const visualizationWordPartialCloudSchema = visualizationDataSchema.extend({
+const visualizationPartialWordCloudSchema = visualizationDataSchema.extend({
   type: z.union([
     z.literal(VisualizationTypesEnum.WORLD_CLOUD),
     z.array(z.literal(VisualizationTypesEnum.WORLD_CLOUD)),
@@ -163,17 +192,37 @@ const visualizationWordPartialCloudSchema = visualizationDataSchema.extend({
   data: wordCloudDataSchema,
   projectName: stringSchema.optional(),
 });
+const visualizationPartialScatterSchema = visualizationDataSchema.extend({
+  type: z.union([
+    z.literal(VisualizationTypesEnum.SCATTER),
+    z.array(z.literal(VisualizationTypesEnum.SCATTER)),
+  ]),
+  data: scatterDataSchema,
+  projectName: stringSchema.optional(),
+});
+const visualizationPartialPieChartSchema = visualizationDataSchema.extend({
+  type: z.union([
+    z.literal(VisualizationTypesEnum.PIE_CHART),
+    z.array(z.literal(VisualizationTypesEnum.PIE_CHART)),
+  ]),
+  data: pieChartDataSchema,
+  projectName: stringSchema.optional(),
+});
 export const visualizationTypeSchema = z.union([
   visualizationNodeLinkSchema,
   visualizationCalendarSchema,
   visualizationWordCloudSchema,
-  visualizationChartSchema,
+  visualizationAxisChartSchema,
+  visualizationScatterSchema,
+  visualizationPieChartSchema,
 ]);
 export const visualizationPartialTypeSchema = z.union([
   visualizationPartialNodeLinkSchema,
   visualizationPartialCalendarSchema,
-  visualizationWordPartialCloudSchema,
-  visualizationPartialChartSchema,
+  visualizationPartialWordCloudSchema,
+  visualizationPartialAxisChartSchema,
+  visualizationPartialScatterSchema,
+  visualizationPartialPieChartSchema,
 ]);
 export const visualizationFilterSchema = z.object({
   projectName: stringSchema.optional(),
