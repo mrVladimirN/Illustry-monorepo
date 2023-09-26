@@ -67,6 +67,7 @@ export enum VisualizationTypesEnum {
   LINE_CHART = "line-chart",
   BAR_CHART = "bar-chart",
   PIE_CHART = "pie-chart",
+  SCATTER ="scatter"
 }
 
 interface VisualizationData {

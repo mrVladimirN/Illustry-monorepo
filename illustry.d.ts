@@ -136,7 +136,8 @@ declare module "types/visualizations" {
         MATRIX = "matrix",
         LINE_CHART = "line-chart",
         BAR_CHART = "bar-chart",
-        PIE_CHART = "pie-chart"
+        PIE_CHART = "pie-chart",
+        SCATTER = "scatter"
     }
     interface VisualizationData {
         projectName: string;
