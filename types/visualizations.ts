@@ -50,9 +50,12 @@ export interface AxisChartData {
   headers: string[];
   values: { [key: string]: number[] };
 }
-
+export interface ScatterPoint extends with_optional_properties {
+  value: [number, number]
+  category: string
+}
 export interface ScatterData {
-  points: [number, number][];
+  points: ScatterPoint[]
 }
 export interface PieChartData {
   values: { [key: string]: number };

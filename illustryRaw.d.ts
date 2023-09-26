@@ -109,6 +109,10 @@ declare module "types/visualizations" {
         target: string;
         value: number;
     }
+    export interface ScatterPoint extends with_optional_properties {
+        value: [number, number][]
+        category: string
+    }
     export interface NodeLinkData {
         nodes: Node[];
         links: Link[];
@@ -120,7 +124,7 @@ declare module "types/visualizations" {
         };
     }
     export interface ScatterData {
-        points: [number, number][];
+        points: ScatterPoint[];
     }
     export interface PieChartData {
         values: {
