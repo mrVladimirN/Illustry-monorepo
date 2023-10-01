@@ -51,14 +51,24 @@ export interface AxisChartData {
   values: { [key: string]: number[] };
 }
 export interface ScatterPoint extends with_optional_properties {
-  value: [number, number]
-  category: string
+  value: [number, number];
+  category: string;
 }
 export interface ScatterData {
-  points: ScatterPoint[]
+  points: ScatterPoint[];
 }
 export interface PieChartData {
   values: { [key: string]: number };
+}
+export interface TreeMapNode {
+  name: string;
+  value: number;
+  category: string;
+  children?: TreeMapNode[];
+}
+
+export interface TreeMapData {
+  values: TreeMapNode[];
 }
 export enum VisualizationTypesEnum {
   WORLD_CLOUD = "word-cloud",
@@ -70,7 +80,8 @@ export enum VisualizationTypesEnum {
   LINE_CHART = "line-chart",
   BAR_CHART = "bar-chart",
   PIE_CHART = "pie-chart",
-  SCATTER ="scatter"
+  SCATTER = "scatter",
+  TREEMAP = "treemap",
 }
 
 interface VisualizationData {
@@ -85,7 +96,8 @@ interface VisualizationData {
     | CalendarData
     | AxisChartData
     | ScatterData
-    | PieChartData;
+    | PieChartData
+    | TreeMapData;
   createdAt?: Date;
   updatedAt?: Date;
 }

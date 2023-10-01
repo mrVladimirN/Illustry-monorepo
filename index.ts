@@ -28,6 +28,8 @@ export {
   WordCloudData,
   CalendarType,
   CalendarData,
+  TreeMapNode,
+  TreeMapData
 } from "./types/visualizations";
 
 export {

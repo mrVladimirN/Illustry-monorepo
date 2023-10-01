@@ -131,6 +131,15 @@ declare module "types/visualizations" {
             [key: string]: number;
         };
     }
+    export interface TreeMapNode {
+        name: string;
+        value: number;
+        category: string;
+        children?: TreeMapNode[];
+    }
+    export interface TreeMapData {
+        values: TreeMapNode[];
+    }
     export const enum VisualizationTypesEnum {
         WORLD_CLOUD = "word-cloud",
         FORCE_DIRECTED_GRAPH = "force-directed-graph",
@@ -141,7 +150,8 @@ declare module "types/visualizations" {
         LINE_CHART = "line-chart",
         BAR_CHART = "bar-chart",
         PIE_CHART = "pie-chart",
-        SCATTER = "scatter"
+        SCATTER = "scatter",
+        TREEMAP = "treemap"
     }
     interface VisualizationData {
         projectName: string;
@@ -149,7 +159,7 @@ declare module "types/visualizations" {
         description?: string;
         name: string;
         tags?: string[];
-        data: WordCloudData | NodeLinkData | CalendarData | AxisChartData | ScatterData | PieChartData;
+        data: WordCloudData | NodeLinkData | CalendarData | AxisChartData | ScatterData | PieChartData | TreeMapData;
         createdAt?: Date;
         updatedAt?: Date;
     }
@@ -182,6 +192,6 @@ declare module "types/visualizations" {
 declare module "index" {
     export { AcceptedFile, FileProperties } from "types/files";
     export { ProjectCreate, ProjectFilter, ProjectType, ProjectUpdate, ExtendedProjectType, } from "types/project";
-    export { VisualizationCreate, VisualizationFilter, VisualizationType, VisualizationTypesEnum, VisualizationUpdate, ExtendedVisualizationType, Node, Link, AxisChartData, ScatterPoint, PieChartData, ScatterData, NodeLinkData, WordType, WordCloudData, CalendarType, CalendarData, } from "types/visualizations";
+    export { VisualizationCreate, VisualizationFilter, VisualizationType, VisualizationTypesEnum, VisualizationUpdate, ExtendedVisualizationType, Node, Link, AxisChartData, ScatterPoint, PieChartData, ScatterData, NodeLinkData, WordType, WordCloudData, CalendarType, CalendarData, TreeMapNode, TreeMapData } from "types/visualizations";
     export { with_id, with_optional_id, with_optional_properties, with_optional_version, with_version, ExtendedMongoQuery, MongoQuery, DeepPartial, with_optional_labels } from "types/utils";
 }
