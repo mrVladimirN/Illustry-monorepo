@@ -131,14 +131,14 @@ declare module "types/visualizations" {
             [key: string]: number;
         };
     }
-    export interface TreeMapNode {
+    export interface TreeMapNode extends with_optional_properties {
         name: string;
         value: number;
         category: string;
         children?: TreeMapNode[];
     }
     export interface TreeMapData {
-        values: TreeMapNode[];
+        nodes: TreeMapNode[];
     }
     export enum VisualizationTypesEnum {
         WORLD_CLOUD = "word-cloud",
