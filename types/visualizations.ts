@@ -60,15 +60,18 @@ export interface ScatterData {
 export interface PieChartData {
   values: { [key: string]: number };
 }
-export interface TreeMapNode extends with_optional_properties {
+export interface FunnelData {
+  values: { [key: string]: number };
+}
+export interface HierarchyNode extends with_optional_properties {
   name: string;
   value: number;
   category: string;
-  children?: TreeMapNode[];
+  children?: HierarchyNode[];
 }
 
-export interface TreeMapData {
-  nodes: TreeMapNode[];
+export interface HierarchyData {
+  nodes: HierarchyNode[];
 }
 export enum VisualizationTypesEnum {
   WORLD_CLOUD = "word-cloud",
@@ -82,6 +85,8 @@ export enum VisualizationTypesEnum {
   PIE_CHART = "pie-chart",
   SCATTER = "scatter",
   TREEMAP = "treemap",
+  SUNBURST= "sunburst",
+  FUNNEL= "funnel"
 }
 
 interface VisualizationData {
@@ -97,7 +102,8 @@ interface VisualizationData {
     | AxisChartData
     | ScatterData
     | PieChartData
-    | TreeMapData;
+    | HierarchyData
+    | FunnelData;
   createdAt?: Date;
   updatedAt?: Date;
 }

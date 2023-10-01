@@ -28,8 +28,9 @@ export {
   WordCloudData,
   CalendarType,
   CalendarData,
-  TreeMapNode,
-  TreeMapData
+  HierarchyData,
+  HierarchyNode,
+  FunnelData
 } from "./types/visualizations";
 
 export {

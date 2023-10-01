@@ -131,14 +131,19 @@ declare module "types/visualizations" {
             [key: string]: number;
         };
     }
-    export interface TreeMapNode extends with_optional_properties {
+    export interface FunnelData {
+        values: {
+            [key: string]: number;
+        };
+    }
+    export interface HierarchyNode extends with_optional_properties {
         name: string;
         value: number;
         category: string;
-        children?: TreeMapNode[];
+        children?: HierarchyNode[];
     }
-    export interface TreeMapData {
-        nodes: TreeMapNode[];
+    export interface HierarchyData {
+        nodes: HierarchyNode[];
     }
     export const enum VisualizationTypesEnum {
         WORLD_CLOUD = "word-cloud",
@@ -151,7 +156,9 @@ declare module "types/visualizations" {
         BAR_CHART = "bar-chart",
         PIE_CHART = "pie-chart",
         SCATTER = "scatter",
-        TREEMAP = "treemap"
+        TREEMAP = "treemap",
+        SUNBURST = "sunburst",
+        FUNNEL = "funnel"
     }
     interface VisualizationData {
         projectName: string;
@@ -159,7 +166,7 @@ declare module "types/visualizations" {
         description?: string;
         name: string;
         tags?: string[];
-        data: WordCloudData | NodeLinkData | CalendarData | AxisChartData | ScatterData | PieChartData | TreeMapData;
+        data: WordCloudData | NodeLinkData | CalendarData | AxisChartData | ScatterData | PieChartData | HierarchyData | FunnelData;
         createdAt?: Date;
         updatedAt?: Date;
     }
@@ -192,6 +199,6 @@ declare module "types/visualizations" {
 declare module "index" {
     export { AcceptedFile, FileProperties } from "types/files";
     export { ProjectCreate, ProjectFilter, ProjectType, ProjectUpdate, ExtendedProjectType, } from "types/project";
-    export { VisualizationCreate, VisualizationFilter, VisualizationType, VisualizationTypesEnum, VisualizationUpdate, ExtendedVisualizationType, Node, Link, AxisChartData, ScatterPoint, PieChartData, ScatterData, NodeLinkData, WordType, WordCloudData, CalendarType, CalendarData, TreeMapNode, TreeMapData } from "types/visualizations";
+    export { VisualizationCreate, VisualizationFilter, VisualizationType, VisualizationTypesEnum, VisualizationUpdate, ExtendedVisualizationType, Node, Link, AxisChartData, ScatterPoint, PieChartData, ScatterData, NodeLinkData, WordType, WordCloudData, CalendarType, CalendarData, HierarchyData, HierarchyNode, FunnelData } from "types/visualizations";
     export { with_id, with_optional_id, with_optional_properties, with_optional_version, with_version, ExtendedMongoQuery, MongoQuery, DeepPartial, with_optional_labels } from "types/utils";
 }
