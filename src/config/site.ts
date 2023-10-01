@@ -220,5 +220,64 @@ export const siteConfig = {
       {"value":[-2.078973, 2.552013], "category":"1"}
     
   ]
+  },
+  treeMap: {
+    nodes: [
+      {
+        "name": "Node Group 1",
+        "value": 100,
+        "category": "1",
+        "children": [
+          {
+            "name": "Node 1",
+            "value": 40,
+            "category": "2",
+            "children": [
+              {
+                "name": "Node 1.1",
+                "value": 20,
+                "category": "3"
+              },
+              {
+                "name": "Node 1.2",
+                "value": 10,
+                "category": "4"
+              }
+            ]
+          },
+          {
+            "name": "Node 1.1",
+            "value": 30,
+            "category": "2",
+            "children": [
+              {
+                "name": "Node 1.1.1",
+                "value": 15,
+                "category": "5"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Node group 2",
+        "value": 50,
+        "category": "6",
+        "children": [
+          {
+            "name": "Node 2",
+            "value": 25,
+            "category": "7",
+            "children": [
+              {
+                "name": "Node 2.2",
+                "value": 12,
+                "category": "8"
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 };

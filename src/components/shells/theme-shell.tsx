@@ -19,7 +19,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import Fallback from "../ui/fallback";
 import dynamic from "next/dynamic";
 import { siteConfig } from "@/config/site";
-import { ScatterData } from "types/visualizations";
+import { ScatterData, TreeMapData } from "types/visualizations";
 
 const SankeyGraphView = dynamic(
   () => import("@/components/views/sankey-diagram"),
@@ -60,6 +60,9 @@ const PieView = dynamic(() => import("@/components/views/pie-chart"), {
 const ScatterView = dynamic(() => import("@/components/views/scatter"), {
   ssr: false,
 });
+const TreeMapView = dynamic(() => import("@/components/views/treemap-chart"), {
+  ssr: false,
+});
 interface ShowDiagramState {
   heb: boolean;
   sankey: boolean;
@@ -70,6 +73,7 @@ interface ShowDiagramState {
   barChart: boolean;
   pieChart: boolean;
   scatter: boolean;
+  treeMap: boolean;
 }
 export function ThemeShell() {
   const colorPalette: { [key: string]: string[] } = {
@@ -180,6 +184,7 @@ export function ThemeShell() {
     barChart: false,
     scatter: false,
     pieChart: false,
+    treeMap:false
   });
   const theme =
     typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
@@ -228,6 +233,10 @@ export function ThemeShell() {
         light: { colors: colorPalette[themeName] },
       },
       pieChart: {
+        dark: { colors: colorPalette[themeName] },
+        light: { colors: colorPalette[themeName] },
+      },
+      treeMap: {
         dark: { colors: colorPalette[themeName] },
         light: { colors: colorPalette[themeName] },
       },
@@ -466,7 +475,7 @@ export function ThemeShell() {
               />
             </AccordionContent>
           </AccordionItem>
-          <AccordionItem value="item-8">
+          <AccordionItem value="item-10">
             <AccordionTrigger
               className="cursor-pointer"
               onClick={() => setShowDiagramHandler("scatter")}
@@ -481,6 +490,25 @@ export function ThemeShell() {
                 handleColorAdd={handleColorAdd}
                 setActiveColorPickerIndex={setActiveColorPickerIndex}
                 visualization="scatter"
+                colorPickerRef={colorPickerRef}
+              />
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-11">
+            <AccordionTrigger
+              className="cursor-pointer"
+              onClick={() => setShowDiagramHandler("treeMap")}
+            >
+              TreeMap
+            </AccordionTrigger>
+            <AccordionContent>
+              <GenericThemesAccordion
+                activeColorPickerIndex={activeColorPickerIndex}
+                handleColorChange={handleColorChange}
+                handleColorDelete={handleColorDelete}
+                handleColorAdd={handleColorAdd}
+                setActiveColorPickerIndex={setActiveColorPickerIndex}
+                visualization="treeMap"
                 colorPickerRef={colorPickerRef}
               />
             </AccordionContent>
@@ -613,6 +641,20 @@ export function ThemeShell() {
                   : activeTheme.scatter.light.colors
               }
               isDarkTheme={isDarkTheme}
+            />
+          </Suspense>
+        </div>
+      )}
+        {showDiagram.treeMap && (
+        <div className="flex-grow p-4">
+          <Suspense fallback={<Fallback />}>
+            <TreeMapView
+              data={ siteConfig.treeMap as TreeMapData }
+              colors={
+                isDarkTheme
+                  ? activeTheme.treeMap.dark.colors
+                  : activeTheme.treeMap.light.colors
+              }
             />
           </Suspense>
         </div>

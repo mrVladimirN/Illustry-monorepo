@@ -128,14 +128,11 @@ export const computeLinksFLG = (links: Link[], nodes: Node[]) => {
 
 import {
   select,
-  cluster,
-  lineRadial,
-  curveBundle,
-  hierarchy,
   HierarchyNode,
   LineRadial,
+  hierarchy,
 } from "d3";
-import { Dispatch } from "react";
+import { TreeMapNode } from "index";
 
 export const assignToComponents = (
   d: { category: string; name: string },
@@ -422,7 +419,9 @@ const constructMatrixToolTipAndStyle = (
 ) => {
   const className = classNames ? classNames.join(" ") : "";
   return `<${htmlElement} class="${className}" style=${
-    style?.length ? `${style};border: 1px solid #ddd ;` : "width:10%;text-align:center; border: 1px solid #ddd ;"
+    style?.length
+      ? `${style};border: 1px solid #ddd ;`
+      : "width:10%;text-align:center; border: 1px solid #ddd ;"
   }>${tooltip?.length ? tooltip : ""}${name}</${htmlElement}>`;
 };
 export const categoryMap = (nodes: Node[]) => {
@@ -657,11 +656,14 @@ const sortLowerTable = (n: number, newDir: string) => {
   });
 };
 export const addStyleTooltipWithHover = () => {
-  
-  const sortableItems = document.querySelectorAll(".right-sortable-items, .left-sortable-items");
+  const sortableItems = document.querySelectorAll(
+    ".right-sortable-items, .left-sortable-items"
+  );
 
   sortableItems.forEach((sortableItem) => {
-    const tooltip:HTMLElement = sortableItem.querySelector(".tooltip") as HTMLElement ;
+    const tooltip: HTMLElement = sortableItem.querySelector(
+      ".tooltip"
+    ) as HTMLElement;
 
     if (tooltip) {
       tooltip.style.visibility = "hidden";
@@ -747,11 +749,10 @@ const createLeftPropertiesString = (
           "td",
           foundLabel.value,
           foundLabel.properties,
-          [  "left-sortable-items"]
+          ["left-sortable-items"]
         );
       } else {
         finalProduct += constructPropertiesMatrix("td", "", undefined, [
-          
           "left-sortable-items",
         ]);
       }
@@ -781,7 +782,7 @@ const populateLinks = (
       "td",
       foundLink.value,
       foundLink.properties,
-      [ "right-sortable-items", "left-sortable-items"]
+      ["right-sortable-items", "left-sortable-items"]
     );
   } else {
     finalProduct += constructPropertiesMatrix("td", "", undefined, [
@@ -836,3 +837,5 @@ export const createHeadersAndPropertiesString = (
     "</tbody>";
   return tableString;
 };
+
+ 

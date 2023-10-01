@@ -12,6 +12,7 @@ import {
   BarChart,
   ScatterChart,
   PieChart,
+  TreemapChart
 } from "echarts/charts";
 // Import the tooltip, title, rectangular coordinate system, dataset and transform components
 import {
@@ -65,6 +66,7 @@ const ReactEcharts = <T extends EChartsOption | WordCloudSeriesOption>({
     BarChart,
     ToolboxComponent,
     ScatterChart,
+    TreemapChart
   ]);
 
   const chartRef = useRef<HTMLDivElement>(null);

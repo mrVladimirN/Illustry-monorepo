@@ -18,7 +18,7 @@ import {
   onNodeOrLinkMouseOut,
   packageHierarchy,
 } from "@/lib/visualizations/node-link/helper";
-interface ForcedLayoutGraphProp {
+interface HierarchicalEdgeBundlingGraphProp {
   data: NodeLinkData;
   colors: string[];
 }
@@ -26,7 +26,7 @@ interface ForcedLayoutGraphProp {
 const HierarchicalEdgeBundlingGraphView = ({
   data,
   colors,
-}: ForcedLayoutGraphProp) => {
+}: HierarchicalEdgeBundlingGraphProp) => {
   useEffect(() => {
     createHedge(data, colors);
     return () => {

@@ -9,6 +9,7 @@ import {
   VisualizationType,
   WordCloudData,
   ScatterData,
+  TreeMapData,
 } from "types/visualizations";
 import { useThemeColors } from "../theme-provider";
 import { PieChartData } from "index";
@@ -55,6 +56,10 @@ const ScatterView = dynamic(() => import("@/components/views/scatter"), {
 });
 
 const PieView = dynamic(() => import("@/components/views/pie-chart"), {
+  ssr: false,
+});
+
+const TreeMapView = dynamic(() => import("@/components/views/treemap-chart"), {
   ssr: false,
 });
 export function HubShell({ data }: HubShellProps) {
@@ -201,7 +206,20 @@ export function HubShell({ data }: HubShellProps) {
               />
             </Suspense>
           );
-        default:
+          case "treemap":
+            return (
+              <Suspense fallback={<Fallback />}>
+                <TreeMapView
+                  data={data.data as TreeMapData}
+                  colors={
+                    isDarkTheme
+                      ? activeTheme.treeMap.dark.colors
+                      : activeTheme.treeMap.light.colors
+                  }
+                />
+              </Suspense>
+            );
+          default:
           return null;
       }
     }
