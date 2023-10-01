@@ -94,6 +94,22 @@ export interface ThemeColors {
       colors: string[];
     };
   };
+  sunburst: {
+    dark: {
+      colors: string[];
+    };
+    light: {
+      colors: string[];
+    };
+  };
+  funnel: {
+    dark: {
+      colors: string[];
+    };
+    light: {
+      colors: string[];
+    };
+  };
 }
 export const initialThemeColors: ThemeColors = {
   calendar: {
@@ -313,6 +329,54 @@ export const initialThemeColors: ThemeColors = {
     },
   },
   treeMap: {
+    dark: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+    light: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+  },
+  sunburst: {
+    dark: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+    light: {
+      colors: [
+        "#5DBE6E",
+        "#4C8BF5",
+        "#F0AC40",
+        "#D73D6C",
+        "#1D7A8A",
+        "#B65911",
+        "#84BA5B",
+      ],
+    },
+  },
+  funnel: {
     dark: {
       colors: [
         "#5DBE6E",

@@ -1,42 +1,40 @@
 import * as React from "react";
 import ReactEcharts from "./generic/echarts";
 import { EChartsOption } from "echarts/types/dist/echarts";
-import { PieChartData } from "types/visualizations";
+import { FunnelData } from "types/visualizations";
 import { computeValues } from "@/lib/visualizations/pieFunnel/helper";
 
-interface PieProp {
-  data: PieChartData;
+interface FunnelProp {
+  data: FunnelData;
   colors: string[];
 }
 
-const PieView = ({ data, colors }: PieProp) => {
+const FunnelView = ({ data, colors }: FunnelProp) => {
   const option: EChartsOption = {
     tooltip: {
       trigger: "item",
     },
     series: [
       {
-        type: "pie",
-        radius: ["40%", "70%"],
-        avoidLabelOverlap: false,
-        itemStyle: {
-          borderRadius: 10,
-          borderColor: "#fff",
-          borderWidth: 2,
-        },
+        type: "funnel",
+        minSize: '0%',
+        maxSize: '100%',
+        gap: 2,
         label: {
-          show: false,
-          position: "center",
+          show: true,
+          position: 'inside'
+        },
+        labelLine: {
+          length: 10,
+          lineStyle: {
+            width: 1,
+            type: 'solid'
+          }
         },
         emphasis: {
           label: {
-            show: true,
-            fontSize: 40,
-            fontWeight: "bold",
-          },
-        },
-        labelLine: {
-          show: true,
+            fontSize: 20
+          }
         },
         data: computeValues(data, colors),
       },
@@ -51,4 +49,4 @@ const PieView = ({ data, colors }: PieProp) => {
     </div>
   );
 };
-export default PieView;
+export default FunnelView;

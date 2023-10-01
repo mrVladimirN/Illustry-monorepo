@@ -19,7 +19,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import Fallback from "../ui/fallback";
 import dynamic from "next/dynamic";
 import { siteConfig } from "@/config/site";
-import { ScatterData, TreeMapData } from "types/visualizations";
+import { ScatterData, HierarchyData } from "types/visualizations";
 
 const SankeyGraphView = dynamic(
   () => import("@/components/views/sankey-diagram"),
@@ -63,6 +63,15 @@ const ScatterView = dynamic(() => import("@/components/views/scatter"), {
 const TreeMapView = dynamic(() => import("@/components/views/treemap-chart"), {
   ssr: false,
 });
+const SunBurstView = dynamic(
+  () => import("@/components/views/sunburst-chart"),
+  {
+    ssr: false,
+  }
+);
+const FunnelView = dynamic(() => import("@/components/views/funnel-chart"), {
+  ssr: false,
+});
 interface ShowDiagramState {
   heb: boolean;
   sankey: boolean;
@@ -74,6 +83,8 @@ interface ShowDiagramState {
   pieChart: boolean;
   scatter: boolean;
   treeMap: boolean;
+  sunburst: boolean;
+  funnel: boolean;
 }
 export function ThemeShell() {
   const colorPalette: { [key: string]: string[] } = {
@@ -184,7 +195,9 @@ export function ThemeShell() {
     barChart: false,
     scatter: false,
     pieChart: false,
-    treeMap:false
+    treeMap: false,
+    sunburst: false,
+    funnel: false,
   });
   const theme =
     typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
@@ -237,6 +250,14 @@ export function ThemeShell() {
         light: { colors: colorPalette[themeName] },
       },
       treeMap: {
+        dark: { colors: colorPalette[themeName] },
+        light: { colors: colorPalette[themeName] },
+      },
+      sunburst: {
+        dark: { colors: colorPalette[themeName] },
+        light: { colors: colorPalette[themeName] },
+      },
+      funnel: {
         dark: { colors: colorPalette[themeName] },
         light: { colors: colorPalette[themeName] },
       },
@@ -513,6 +534,44 @@ export function ThemeShell() {
               />
             </AccordionContent>
           </AccordionItem>
+          <AccordionItem value="item-12">
+            <AccordionTrigger
+              className="cursor-pointer"
+              onClick={() => setShowDiagramHandler("sunburst")}
+            >
+              Sunburst
+            </AccordionTrigger>
+            <AccordionContent>
+              <GenericThemesAccordion
+                activeColorPickerIndex={activeColorPickerIndex}
+                handleColorChange={handleColorChange}
+                handleColorDelete={handleColorDelete}
+                handleColorAdd={handleColorAdd}
+                setActiveColorPickerIndex={setActiveColorPickerIndex}
+                visualization="sunburst"
+                colorPickerRef={colorPickerRef}
+              />
+            </AccordionContent>
+          </AccordionItem>
+          <AccordionItem value="item-13">
+            <AccordionTrigger
+              className="cursor-pointer"
+              onClick={() => setShowDiagramHandler("funnel")}
+            >
+              Funnel
+            </AccordionTrigger>
+            <AccordionContent>
+              <GenericThemesAccordion
+                activeColorPickerIndex={activeColorPickerIndex}
+                handleColorChange={handleColorChange}
+                handleColorDelete={handleColorDelete}
+                handleColorAdd={handleColorAdd}
+                setActiveColorPickerIndex={setActiveColorPickerIndex}
+                visualization="funnel"
+                colorPickerRef={colorPickerRef}
+              />
+            </AccordionContent>
+          </AccordionItem>
         </Accordion>
       </ScrollArea>
       {showDiagram.sankey && (
@@ -630,6 +689,20 @@ export function ThemeShell() {
           </Suspense>
         </div>
       )}
+      {showDiagram.funnel && (
+        <div className="flex-grow p-4">
+          <Suspense fallback={<Fallback />}>
+            <FunnelView
+              data={siteConfig.funnel}
+              colors={
+                isDarkTheme
+                  ? activeTheme.funnel.dark.colors
+                  : activeTheme.funnel.light.colors
+              }
+            />
+          </Suspense>
+        </div>
+      )}
       {showDiagram.scatter && (
         <div className="flex-grow p-4">
           <Suspense fallback={<Fallback />}>
@@ -645,15 +718,29 @@ export function ThemeShell() {
           </Suspense>
         </div>
       )}
-        {showDiagram.treeMap && (
+      {showDiagram.treeMap && (
         <div className="flex-grow p-4">
           <Suspense fallback={<Fallback />}>
             <TreeMapView
-              data={ siteConfig.treeMap as TreeMapData }
+              data={siteConfig.hierarchy as HierarchyData}
               colors={
                 isDarkTheme
                   ? activeTheme.treeMap.dark.colors
                   : activeTheme.treeMap.light.colors
+              }
+            />
+          </Suspense>
+        </div>
+      )}
+      {showDiagram.sunburst && (
+        <div className="flex-grow p-4">
+          <Suspense fallback={<Fallback />}>
+            <SunBurstView
+              data={siteConfig.hierarchy as HierarchyData}
+              colors={
+                isDarkTheme
+                  ? activeTheme.sunburst.dark.colors
+                  : activeTheme.sunburst.light.colors
               }
             />
           </Suspense>

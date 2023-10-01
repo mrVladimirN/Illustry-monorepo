@@ -211,6 +211,14 @@ export const siteConfig = {
       "Statistic 4": 320 
     }
   },
+  funnel: {
+    values: {
+      "Statistic 1": 122,
+      "Statistic 2": 222,
+      "Statistic 3": 510,
+      "Statistic 4": 320 
+    }
+  },
   scatter: {
     points: [
       {"value":[3.275154, 2.957587], "category":"3"},
@@ -221,7 +229,7 @@ export const siteConfig = {
     
   ]
   },
-  treeMap: {
+  hierarchy: {
     nodes: [
       {
         "name": "Node Group 1",

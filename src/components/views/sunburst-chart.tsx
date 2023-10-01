@@ -4,23 +4,18 @@ import React from "react";
 import { HierarchyData } from "types/visualizations";
 import ReactEcharts from "./generic/echarts";
 import {
-  computeMaxDepth,
-  createLevels,
   computeCategories,
   computeNodesHierarchy,
-  calculateMeanValue,
-  computeUniqueValues,
 } from "@/lib/visualizations/hierarchy-charts/helper";
 
-interface TreeMapProp {
+interface SunburstViewProp {
   data: HierarchyData;
   colors: string[];
 }
 
-const TreeMapView = ({ data, colors }: TreeMapProp) => {
+const SunburstView = ({ data, colors }: SunburstViewProp) => {
   const { nodes } = data;
   const categories = computeCategories(nodes);
-  const maxDepth = computeMaxDepth(nodes);
   const option: EChartsOption = {
     tooltip: {
       trigger: "item",
@@ -33,11 +28,8 @@ const TreeMapView = ({ data, colors }: TreeMapProp) => {
     },
     series: [
       {
-        type: "treemap",
-        visibleMin: calculateMeanValue(computeUniqueValues(nodes)),
+        type: "sunburst",
         data: computeNodesHierarchy(nodes, categories, colors),
-        leafDepth: maxDepth,
-        levels: createLevels(2),
       },
     ],
   };
@@ -51,4 +43,4 @@ const TreeMapView = ({ data, colors }: TreeMapProp) => {
   );
 };
 
-export default TreeMapView;
+export default SunburstView;

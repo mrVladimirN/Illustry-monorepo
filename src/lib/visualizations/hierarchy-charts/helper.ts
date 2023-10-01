@@ -1,4 +1,4 @@
-import { TreeMapNode } from "types/visualizations";
+import { HierarchyNode } from "types/visualizations";
 interface ProcessedNode {
   name: string;
   value:number,
@@ -9,9 +9,9 @@ interface ProcessedNode {
   prop: any; // You can define a type for this property
   children: ProcessedNode[];
 }
-// TreeMap
+// TreeMap/Sunburst
 
-const findMaxDepth = (item: TreeMapNode, depth: number, maxDepth: number): number => {
+const findMaxDepth = (item: HierarchyNode, depth: number, maxDepth: number): number => {
   if (Array.isArray(item.children)) {
     // If the 'children' property is an array, recursively find the maximum depth
     item.children.forEach((nestedItem) => {
@@ -24,7 +24,7 @@ const findMaxDepth = (item: TreeMapNode, depth: number, maxDepth: number): numbe
   return maxDepth; // Return the updated maxDepth
 };
 
-export const computeMaxDepth = (arr: TreeMapNode[]): number => {
+export const computeMaxDepth = (arr: HierarchyNode[]): number => {
   let maxDepth = 0;
 
   arr.forEach((item) => {
@@ -35,10 +35,10 @@ export const computeMaxDepth = (arr: TreeMapNode[]): number => {
   return maxDepth;
 };
 
-export const computeCategories = (arr: TreeMapNode[]): string[] => {
+export const computeCategories = (arr: HierarchyNode[]): string[] => {
   const uniqueCategories = new Set<string>();
 
-  function extractCategories(item: TreeMapNode) {
+  function extractCategories(item: HierarchyNode) {
     uniqueCategories.add(item.category); // Add the category to the Set
 
     if (item.children) {
@@ -53,8 +53,8 @@ export const computeCategories = (arr: TreeMapNode[]): string[] => {
 
   return Array.from(uniqueCategories); // Convert Set to an array
 };
-export const computeNodesTreemap = (
-  nodes: TreeMapNode[],
+export const computeNodesHierarchy = (
+  nodes: HierarchyNode[],
   categories: string[],
   colors: string[]
 ) => {
@@ -62,7 +62,7 @@ export const computeNodesTreemap = (
   categories.forEach((cat, index) => {
     colorMapSchema.set(cat, colors[index] as string);
   });
-  const processNode = (node: TreeMapNode) => {
+  const processNode = (node: HierarchyNode) => {
     const processedNode: ProcessedNode = {
       name: node.name,
       value: node.value,
@@ -144,10 +144,10 @@ export const calculateMeanValue = (numbers: number[]) => {
   return mean;
 };
 
-export const computeUniqueValues = (arr: TreeMapNode[]): number[] => {
+export const computeUniqueValues = (arr: HierarchyNode[]): number[] => {
   const uniqueCategories = new Set<number>();
 
-  function extractValues(item: TreeMapNode) {
+  function extractValues(item: HierarchyNode) {
     uniqueCategories.add(item.value); // Add the category to the Set
 
     if (item.children) {

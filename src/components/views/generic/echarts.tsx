@@ -12,7 +12,9 @@ import {
   BarChart,
   ScatterChart,
   PieChart,
-  TreemapChart
+  TreemapChart,
+  SunburstChart,
+  FunnelChart
 } from "echarts/charts";
 // Import the tooltip, title, rectangular coordinate system, dataset and transform components
 import {
@@ -66,7 +68,9 @@ const ReactEcharts = <T extends EChartsOption | WordCloudSeriesOption>({
     BarChart,
     ToolboxComponent,
     ScatterChart,
-    TreemapChart
+    TreemapChart,
+    SunburstChart,
+    FunnelChart
   ]);
 
   const chartRef = useRef<HTMLDivElement>(null);

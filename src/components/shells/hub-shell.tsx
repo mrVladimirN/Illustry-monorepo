@@ -9,7 +9,8 @@ import {
   VisualizationType,
   WordCloudData,
   ScatterData,
-  TreeMapData,
+  HierarchyData,
+  FunnelData,
 } from "types/visualizations";
 import { useThemeColors } from "../theme-provider";
 import { PieChartData } from "index";
@@ -60,6 +61,15 @@ const PieView = dynamic(() => import("@/components/views/pie-chart"), {
 });
 
 const TreeMapView = dynamic(() => import("@/components/views/treemap-chart"), {
+  ssr: false,
+});
+const SunBurstView = dynamic(
+  () => import("@/components/views/sunburst-chart"),
+  {
+    ssr: false,
+  }
+);
+const FunnelView = dynamic(() => import("@/components/views/funnel-chart"), {
   ssr: false,
 });
 export function HubShell({ data }: HubShellProps) {
@@ -192,6 +202,19 @@ export function HubShell({ data }: HubShellProps) {
               />
             </Suspense>
           );
+        case "funnel":
+          return (
+            <Suspense fallback={<Fallback />}>
+              <FunnelView
+                data={data.data as FunnelData}
+                colors={
+                  isDarkTheme
+                    ? activeTheme.funnel.dark.colors
+                    : activeTheme.funnel.light.colors
+                }
+              />
+            </Suspense>
+          );
         case "scatter":
           return (
             <Suspense fallback={<Fallback />}>
@@ -206,20 +229,33 @@ export function HubShell({ data }: HubShellProps) {
               />
             </Suspense>
           );
-          case "treemap":
-            return (
-              <Suspense fallback={<Fallback />}>
-                <TreeMapView
-                  data={data.data as TreeMapData}
-                  colors={
-                    isDarkTheme
-                      ? activeTheme.treeMap.dark.colors
-                      : activeTheme.treeMap.light.colors
-                  }
-                />
-              </Suspense>
-            );
-          default:
+        case "treemap":
+          return (
+            <Suspense fallback={<Fallback />}>
+              <TreeMapView
+                data={data.data as HierarchyData}
+                colors={
+                  isDarkTheme
+                    ? activeTheme.treeMap.dark.colors
+                    : activeTheme.treeMap.light.colors
+                }
+              />
+            </Suspense>
+          );
+        case "sunburst":
+          return (
+            <Suspense fallback={<Fallback />}>
+              <SunBurstView
+                data={data.data as HierarchyData}
+                colors={
+                  isDarkTheme
+                    ? activeTheme.sunburst.dark.colors
+                    : activeTheme.sunburst.light.colors
+                }
+              />
+            </Suspense>
+          );
+        default:
           return null;
       }
     }
