@@ -30,7 +30,7 @@ export class Factory {
   static getInstance(): Factory {
     return Factory._instance || new Factory();
   }
-  DbaccInstance(): DbaccInstance {
+  getDbaccInstance(): DbaccInstance {
     return Factory._dbaccInstance;
   }
   getBZL(): BZLInstance {

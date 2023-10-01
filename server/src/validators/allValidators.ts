@@ -75,6 +75,20 @@ export const pieChartDataSchema = z.object({
   values: z.record(z.number()),
 });
 
+//TreeMap
+
+const treeMapNode: any = z.object({
+  name: z.string(),
+  value: z.number(),
+  category: z.string(),
+  properties: z.union([z.any(), z.array(z.any()), z.string()]).optional(),
+  children: z.array(z.lazy(() => treeMapNode)).optional(),
+});
+
+const treeMapDataSchema = z.object({
+  nodes: z.array(treeMapNode),
+});
+
 // VisualizationData
 const visualizationDataSchema = z.object({
   projectName: stringSchema,
@@ -143,7 +157,13 @@ const visualizationWordCloudSchema = visualizationDataSchema.extend({
   ]),
   data: wordCloudDataSchema,
 });
-
+const visualizationTreemapSchema = visualizationDataSchema.extend({
+  type: z.union([
+    z.literal(VisualizationTypesEnum.TREEMAP),
+    z.array(z.literal(VisualizationTypesEnum.TREEMAP)),
+  ]),
+  data: treeMapDataSchema,
+});
 const visualizationPartialNodeLinkSchema = visualizationDataSchema.extend({
   type: z.union([
     z.literal(VisualizationTypesEnum.FORCE_DIRECTED_GRAPH),
@@ -208,6 +228,14 @@ const visualizationPartialPieChartSchema = visualizationDataSchema.extend({
   data: pieChartDataSchema,
   projectName: stringSchema.optional(),
 });
+const visualizationPartialTreemapSchema = visualizationDataSchema.extend({
+  type: z.union([
+    z.literal(VisualizationTypesEnum.TREEMAP),
+    z.array(z.literal(VisualizationTypesEnum.TREEMAP)),
+  ]),
+  data: treeMapDataSchema,
+  projectName: stringSchema.optional(),
+});
 export const visualizationTypeSchema = z.union([
   visualizationNodeLinkSchema,
   visualizationCalendarSchema,
@@ -215,6 +243,7 @@ export const visualizationTypeSchema = z.union([
   visualizationAxisChartSchema,
   visualizationScatterSchema,
   visualizationPieChartSchema,
+  visualizationTreemapSchema,
 ]);
 export const visualizationPartialTypeSchema = z.union([
   visualizationPartialNodeLinkSchema,
@@ -223,6 +252,7 @@ export const visualizationPartialTypeSchema = z.union([
   visualizationPartialAxisChartSchema,
   visualizationPartialScatterSchema,
   visualizationPartialPieChartSchema,
+  visualizationPartialTreemapSchema,
 ]);
 export const visualizationFilterSchema = z.object({
   projectName: stringSchema.optional(),
