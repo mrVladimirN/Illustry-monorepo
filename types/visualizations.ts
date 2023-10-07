@@ -28,6 +28,27 @@ export interface CalendarData {
   calendar: CalendarType[];
 }
 
+export interface TimelineEventTag {
+  name: string;
+}
+
+export interface TimelineEvent {
+  summary: string;
+  date: string;
+  type: string;
+  author: string;
+  tags?: TimelineEventTag[];
+  description?: string;
+}
+
+export interface TimelineData {
+  [date: string]: {
+    summary?: {
+      title?: string;
+    };
+    events: TimelineEvent[];
+  };
+}
 // Node-Link (force-directed-graph, sankey, hierarchical-edge-bundling )
 
 export interface Node extends with_optional_properties, with_optional_labels {
@@ -86,7 +107,8 @@ export enum VisualizationTypesEnum {
   SCATTER = "scatter",
   TREEMAP = "treemap",
   SUNBURST= "sunburst",
-  FUNNEL= "funnel"
+  FUNNEL= "funnel",
+  TIMELINE = "timeline"
 }
 
 interface VisualizationData {

@@ -30,7 +30,10 @@ export {
   CalendarData,
   HierarchyData,
   HierarchyNode,
-  FunnelData
+  FunnelData,
+  TimelineEventTag,
+  TimelineEvent,
+  TimelineData
 } from "./types/visualizations";
 
 export {

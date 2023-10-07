@@ -100,6 +100,25 @@ declare module "types/visualizations" {
     export interface CalendarData {
         calendar: CalendarType[];
     }
+    export interface TimelineEventTag {
+        name: string;
+    }
+    export interface TimelineEvent {
+        summary: string;
+        date: string;
+        type: string;
+        author: string;
+        tags?: TimelineEventTag[];
+        description?: string;
+    }
+    export interface TimelineData {
+        [date: string]: {
+            summary?: {
+                title?: string;
+            };
+            events: TimelineEvent[];
+        };
+    }
     export interface Node extends with_optional_properties, with_optional_labels {
         name: string;
         category: string;
@@ -158,7 +177,8 @@ declare module "types/visualizations" {
         SCATTER = "scatter",
         TREEMAP = "treemap",
         SUNBURST = "sunburst",
-        FUNNEL = "funnel"
+        FUNNEL = "funnel",
+        TIMELINE = "timeline"
     }
     interface VisualizationData {
         projectName: string;
@@ -199,6 +219,6 @@ declare module "types/visualizations" {
 declare module "index" {
     export { AcceptedFile, FileProperties } from "types/files";
     export { ProjectCreate, ProjectFilter, ProjectType, ProjectUpdate, ExtendedProjectType, } from "types/project";
-    export { VisualizationCreate, VisualizationFilter, VisualizationType, VisualizationTypesEnum, VisualizationUpdate, ExtendedVisualizationType, Node, Link, AxisChartData, ScatterPoint, PieChartData, ScatterData, NodeLinkData, WordType, WordCloudData, CalendarType, CalendarData, HierarchyData, HierarchyNode, FunnelData } from "types/visualizations";
+    export { VisualizationCreate, VisualizationFilter, VisualizationType, VisualizationTypesEnum, VisualizationUpdate, ExtendedVisualizationType, Node, Link, AxisChartData, ScatterPoint, PieChartData, ScatterData, NodeLinkData, WordType, WordCloudData, CalendarType, CalendarData, HierarchyData, HierarchyNode, FunnelData, TimelineEventTag, TimelineEvent, TimelineData } from "types/visualizations";
     export { with_id, with_optional_id, with_optional_properties, with_optional_version, with_version, ExtendedMongoQuery, MongoQuery, DeepPartial, with_optional_labels } from "types/utils";
 }
