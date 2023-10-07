@@ -125,7 +125,8 @@ interface VisualizationData {
     | ScatterData
     | PieChartData
     | HierarchyData
-    | FunnelData;
+    | FunnelData 
+    | TimelineData;
   createdAt?: Date;
   updatedAt?: Date;
 }

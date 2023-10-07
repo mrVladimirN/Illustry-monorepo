@@ -186,7 +186,7 @@ declare module "types/visualizations" {
         description?: string;
         name: string;
         tags?: string[];
-        data: WordCloudData | NodeLinkData | CalendarData | AxisChartData | ScatterData | PieChartData | HierarchyData | FunnelData;
+        data: WordCloudData | NodeLinkData | CalendarData | AxisChartData | ScatterData | PieChartData | HierarchyData | FunnelData | TimelineData;
         createdAt?: Date;
         updatedAt?: Date;
     }
