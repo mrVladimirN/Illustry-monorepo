@@ -210,6 +210,7 @@ declare module "types/visualizations" {
         tags?: string;
         text?: string;
         page?: number;
+        per_page?: number;
         sort?: {
             element: string;
             sortOrder: string | number;
