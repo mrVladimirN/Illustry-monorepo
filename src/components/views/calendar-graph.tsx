@@ -15,7 +15,7 @@ interface CalendarGraphProp {
   colors: string[];
   isDarkTheme: boolean;
 }
-const CalendarGraph = ({ data, colors, isDarkTheme }: CalendarGraphProp) => {
+const CalendarGraphView = ({ data, colors, isDarkTheme }: CalendarGraphProp) => {
   const { calendar } = data;
   const categories: string[] = computeCategoriesCalendar(calendar);
   const computedCalendar = computeCalendar(calendar, isDarkTheme);
@@ -71,4 +71,4 @@ const CalendarGraph = ({ data, colors, isDarkTheme }: CalendarGraphProp) => {
     </div>
   );
 };
-export default CalendarGraph;
+export default CalendarGraphView;

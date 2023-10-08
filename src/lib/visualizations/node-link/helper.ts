@@ -132,7 +132,6 @@ import {
   LineRadial,
   hierarchy,
 } from "d3";
-import { TreeMapNode } from "index";
 
 export const assignToComponents = (
   d: { category: string; name: string },

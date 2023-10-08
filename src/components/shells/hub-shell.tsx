@@ -11,6 +11,7 @@ import {
   ScatterData,
   HierarchyData,
   FunnelData,
+  TimelineData,
 } from "types/visualizations";
 import { useThemeColors } from "../theme-provider";
 import { PieChartData } from "index";
@@ -42,7 +43,6 @@ const CalendarView = dynamic(
     ssr: false,
   }
 );
-
 const WordCloudView = dynamic(() => import("@/components/views/wordcloud"), {
   ssr: false,
 });
@@ -72,6 +72,12 @@ const SunBurstView = dynamic(
 const FunnelView = dynamic(() => import("@/components/views/funnel-chart"), {
   ssr: false,
 });
+const TimelineView = dynamic(
+  () => import("@/components/views/timeline/timeline"),
+  {
+    ssr: false,
+  }
+);
 export function HubShell({ data }: HubShellProps) {
   const activeTheme = useThemeColors();
 
@@ -247,6 +253,20 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <SunBurstView
                 data={data.data as HierarchyData}
+                colors={
+                  isDarkTheme
+                    ? activeTheme.sunburst.dark.colors
+                    : activeTheme.sunburst.light.colors
+                }
+              />
+            </Suspense>
+          );
+        case "timeline":
+          return (
+            <Suspense fallback={<Fallback />}>
+              <TimelineView
+                data={data.data as TimelineData}
+                isDarkTheme={isDarkTheme}
                 colors={
                   isDarkTheme
                     ? activeTheme.sunburst.dark.colors

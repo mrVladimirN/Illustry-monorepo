@@ -18,7 +18,6 @@ interface VisualizationsProps {
 }
 const Visualizations = async ({ searchParams }: VisualizationsProps) => {
   const { page, text, per_page, sort } = searchParams;
-
   const visualizations = await browseVisualizations({
     page: page ? Number(page) : 1,
     text: text,
