@@ -89,6 +89,30 @@ const hierarchySchema = z.object({
   nodes: z.array(hierarchyNode),
 });
 
+//TimeLine
+
+const TimelineEventTagSchema = z.object({
+  name: z.string(),
+});
+
+const TimelineEventSchema = z.object({
+  summary: z.string(),
+  date: z.string(),
+  type: z.string(),
+  author: z.string(),
+  tags: z.array(TimelineEventTagSchema).optional(),
+  description: z.string().optional(),
+});
+
+const TimelineDataSchema = z.record(
+  z.object({
+    summary: z.object({
+      title: z.string().optional(),
+    }).optional(),
+    events: z.array(TimelineEventSchema),
+  })
+);
+
 // VisualizationData
 const visualizationDataSchema = z.object({
   projectName: stringSchema,
@@ -115,6 +139,16 @@ const visualizationNodeLinkSchema = visualizationDataSchema.extend({
     ),
   ]),
   data: nodeLinkDataSchema,
+});
+const visualizationTimelineSchema =visualizationDataSchema.extend({
+  type: z.union([
+    z.literal(VisualizationTypesEnum.TIMELINE),
+
+    z.array(
+        z.literal(VisualizationTypesEnum.TIMELINE),
+    ),
+  ]),
+  data: TimelineDataSchema,
 });
 const visualizationAxisChartSchema = visualizationDataSchema.extend({
   type: z.union([
@@ -260,6 +294,17 @@ const visualizationPartialHierarchySchema = visualizationDataSchema.extend({
   data: hierarchySchema,
   projectName: stringSchema.optional(),
 });
+
+const visualizationPartialTimelineSchema= visualizationDataSchema.extend({
+  type: z.union([
+    z.literal(VisualizationTypesEnum.TIMELINE),
+    z.array(
+        z.literal(VisualizationTypesEnum.TIMELINE),
+    ),
+  ]),
+  data: TimelineDataSchema,
+  projectName: stringSchema.optional(),
+})
 export const visualizationTypeSchema = z.union([
   visualizationNodeLinkSchema,
   visualizationCalendarSchema,
@@ -268,6 +313,7 @@ export const visualizationTypeSchema = z.union([
   visualizationScatterSchema,
   visualizationPieChartFunnelSchema,
   visualizationHierarchySchema,
+  visualizationTimelineSchema
 ]);
 export const visualizationPartialTypeSchema = z.union([
   visualizationPartialNodeLinkSchema,
@@ -277,6 +323,7 @@ export const visualizationPartialTypeSchema = z.union([
   visualizationPartialScatterSchema,
   visualizationPartialPieChartFunnelSchema,
   visualizationPartialHierarchySchema,
+  visualizationPartialTimelineSchema
 ]);
 export const visualizationFilterSchema = z.object({
   projectName: stringSchema.optional(),

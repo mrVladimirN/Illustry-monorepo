@@ -4,7 +4,13 @@ import _ from "lodash";
 
 import validator from "validator";
 import { ExtendedMongoQuery, MongoQuery } from "types/utils";
-import { ExtendedProjectType, ProjectCreate, ProjectFilter, ProjectType, ProjectUpdate } from "types/project";
+import {
+  ExtendedProjectType,
+  ProjectCreate,
+  ProjectFilter,
+  ProjectType,
+  ProjectUpdate,
+} from "types/project";
 
 const PAGE_SIZE = 10;
 export class Project {
@@ -20,7 +26,7 @@ export class Project {
         name: filter.name,
       });
     }
-    if(filter.isActive) {
+    if (filter.isActive) {
       (query["$and"] as Array<object>).push({
         isActive: filter.isActive,
       });

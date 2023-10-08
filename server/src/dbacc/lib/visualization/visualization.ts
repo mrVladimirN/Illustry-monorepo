@@ -64,19 +64,25 @@ export class Visualization {
       });
     }
     if ((query["$and"] as Array<object>).length === 0) delete query["$and"];
-
     const skip =
-      filter && filter.page && filter.page > 1
-        ? (filter.page - 1) * PAGE_SIZE
-        : 0;
-    let sort = {};
-    if (filter.sort && filter.sort.element) {
-      const sortField = filter.sort.element;
-      const sortOrder = filter.sort.sortOrder || 1;
-      sort = { [sortField]: sortOrder };
-    }
-    return { query: query, page:  skip , sort: sort };
+    filter && filter.page && filter.page > 1
+      ? filter.per_page
+        ? (filter.page - 1) * filter.per_page
+        : (filter.page - 1) * PAGE_SIZE
+      : 0;
+  let sort = {};
+  if (filter.sort && filter.sort.element) {
+    const sortField = filter.sort.element;
+    const sortOrder = filter.sort.sortOrder === -1 ? -1 : 1;
+    sort = { [sortField]: sortOrder };
   }
+  return {
+    query: query,
+    page: skip,
+    sort: sort,
+    per_page: filter.per_page ? filter.per_page : PAGE_SIZE,
+  };
+}
 
   create(data: VisualizationCreate): Promise<VisualizationType> {
     return Promise.resolve().then(() => {
@@ -108,7 +114,7 @@ export class Visualization {
           {
             sort: filter.sort ? filter.sort : { name: 1 },
             skip: filter && filter.page ? _.toNumber(filter.page) : 0,
-            limit: PAGE_SIZE,
+            limit: filter.per_page,
           }
         );
       })
@@ -120,7 +126,10 @@ export class Visualization {
           visualizations: res,
           pagination: {
             count: count,
-            pageCount: count > 0 ? count / PAGE_SIZE : 1,
+            pageCount:
+            count > 0
+              ? count / (filter.per_page ? filter.per_page : PAGE_SIZE)
+              : 1,
           },
         };
       });

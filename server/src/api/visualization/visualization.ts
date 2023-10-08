@@ -123,6 +123,7 @@ export const browse = (
     text: request && request.body && request.body.text,
     page: request && request.body && request.body.page,
     sort: request && request.body && request.body.sort,
+    per_page: request && request.body && request.body.per_page
   };
   return Bluebird.Promise.resolve(
     visualizationFilterSchema.safeParse(visualizationFilter)
