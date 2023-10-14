@@ -5,17 +5,23 @@ import {
   computeCalendar,
   computeCategoriesCalendar,
   computeColors,
+  computeLegendColors,
   computePropertiesForToolTip,
 } from "@/lib/visualizations/calendar/helper";
 import { CalendarOption } from "echarts/types/dist/shared";
 import { CalendarData, CalendarType } from "types/visualizations";
+import Legend from "../ui/legend";
 
 interface CalendarGraphProp {
   data: CalendarData;
   colors: string[];
   isDarkTheme: boolean;
 }
-const CalendarGraphView = ({ data, colors, isDarkTheme }: CalendarGraphProp) => {
+const CalendarGraphView = ({
+  data,
+  colors,
+  isDarkTheme,
+}: CalendarGraphProp) => {
   const { calendar } = data;
   const categories: string[] = computeCategoriesCalendar(calendar);
   const computedCalendar = computeCalendar(calendar, isDarkTheme);
@@ -62,12 +68,19 @@ const CalendarGraphView = ({ data, colors, isDarkTheme }: CalendarGraphProp) => 
     calendar: computedCalendar.calendar as CalendarOption,
     series: computedCalendar.series as SeriesOption,
   };
+  const canvasHeight = `${computedCalendar.calendar.length * 17.5}vh`;
   return (
-    <div className="w-full mt-4 h-screens-90 sm:mt-6 lg:mt-8">
-      <ReactEcharts
-        option={option}
-        className="w-full h-[100vh] sm:h-120 lg:h-160"
-      />
+    <div className="relative mt-[4%] flex flex-col items-center">
+      <Legend legendData={computeLegendColors(categories, colors)} />
+      <div className="w-full w-full">
+        <ReactEcharts
+          option={option}
+          className="w-full sm:h-120 lg:h-160"
+          style={{
+            height: canvasHeight,
+          }}
+        />
+      </div>
     </div>
   );
 };

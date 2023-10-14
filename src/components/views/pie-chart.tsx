@@ -2,7 +2,11 @@ import * as React from "react";
 import ReactEcharts from "./generic/echarts";
 import { EChartsOption } from "echarts/types/dist/echarts";
 import { PieChartData } from "types/visualizations";
-import { computeValues } from "@/lib/visualizations/pieFunnel/helper";
+import {
+  computeLegendColors,
+  computeValues,
+} from "@/lib/visualizations/pieFunnel/helper";
+import Legend from "../ui/legend";
 
 interface PieProp {
   data: PieChartData;
@@ -43,11 +47,11 @@ const PieView = ({ data, colors }: PieProp) => {
     ],
   };
   return (
-    <div className="w-full mt-4 h-screens-90 sm:mt-6 lg:mt-8">
-      <ReactEcharts
-        option={option}
-        className="w-full h-[90vh] sm:h-120 lg:h-160"
-      />
+    <div className="relative mt-[4%] flex flex-col items-center">
+      <Legend legendData={computeLegendColors(data, colors)} />
+      <div className="w-full mt-4 h-[80vh]">
+        <ReactEcharts option={option} className="w-full h-full" />
+      </div>
     </div>
   );
 };

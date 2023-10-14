@@ -42,6 +42,7 @@ export interface ReactEChartsProps<T> {
   settings?: SetOptionOpts;
   loading?: boolean;
   theme?: "light" | "dark";
+  style?: object;
 }
 
 const ReactEcharts = <T extends EChartsOption | WordCloudSeriesOption>({
@@ -50,6 +51,7 @@ const ReactEcharts = <T extends EChartsOption | WordCloudSeriesOption>({
   settings,
   loading,
   theme,
+  style
 }: ReactEChartsProps<T>): JSX.Element => {
   echarts.use([
     GraphChart,
@@ -106,7 +108,7 @@ const ReactEcharts = <T extends EChartsOption | WordCloudSeriesOption>({
     }
   }, [option, settings, theme, loading]);
 
-  return <div ref={chartRef} className={className} />;
+  return <div ref={chartRef} className={className} style={style} />;
 };
 
 export default ReactEcharts;

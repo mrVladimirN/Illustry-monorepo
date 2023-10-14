@@ -7,6 +7,8 @@ import {
   computeCategories,
   computeNodesHierarchy,
 } from "@/lib/visualizations/hierarchy-charts/helper";
+import Legend from "../ui/legend";
+import { computeLegendColors } from "@/lib/visualizations/calendar/helper";
 
 interface SunburstViewProp {
   data: HierarchyData;
@@ -34,11 +36,11 @@ const SunburstView = ({ data, colors }: SunburstViewProp) => {
     ],
   };
   return (
-    <div className="w-full mt-4 h-screens-90 sm:mt-6 lg:mt-8">
-      <ReactEcharts
-        option={option}
-        className="w-full h-[90vh] sm:h-120 lg:h-160"
-      />
+    <div className="relative mt-[4%] flex flex-col items-center">
+      <Legend legendData={computeLegendColors(categories, colors)} />
+      <div className="w-full mt-4 h-[80vh]">
+        <ReactEcharts option={option} className="w-full h-full" />
+      </div>
     </div>
   );
 };

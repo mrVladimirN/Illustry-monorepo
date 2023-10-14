@@ -1,3 +1,5 @@
+import { AxisChartData } from "types/visualizations";
+
 export const constructSeries = (
   values: { [key: string]: number[] },
   colors: string[],
@@ -22,9 +24,11 @@ export const constructSeries = (
       type: type,
       stack: stacked ? "Total" : undefined,
       color: colors.length >= index ? colors[index] : undefined,
-      areaStyle: area? {
-        color: colors.length >= index ? colors[index] : undefined,
-      }: undefined,
+      areaStyle: area
+        ? {
+            color: colors.length >= index ? colors[index] : undefined,
+          }
+        : undefined,
       emphasis: {
         focus: "series",
       },
@@ -33,4 +37,19 @@ export const constructSeries = (
     seriesArray.push(seriesMember);
   });
   return seriesArray;
+};
+
+export const computeLegendColors = (
+  data: AxisChartData,
+  colors: string[]
+) => {
+  const keys = Object.keys(data.values);
+  const legendColorObject: { [key: string]: string } = {};
+
+  keys.forEach((key, index) => {
+    legendColorObject[key] =
+      colors.length > index ? (colors[index] as string) : "";
+  });
+
+  return legendColorObject;
 };

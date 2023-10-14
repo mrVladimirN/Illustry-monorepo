@@ -17,6 +17,13 @@ export const computeColors = (categories: string[], colors: string[]) => {
   });
   return color;
 };
+export const computeLegendColors = (categories: string[], colors: string[]) => {
+  const color: { [key: string]: string } = {};
+  categories.forEach((cat, index) => {
+    color[cat] = colors[index] as string;
+  });
+  return color;
+};
 export const computeElementsCalendar = (element: CalendarType) => {
   return [element.date, element.value ? element.value : 1, element.category];
 };

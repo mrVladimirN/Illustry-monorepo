@@ -2,7 +2,11 @@ import * as React from "react";
 import ReactEcharts from "./generic/echarts";
 import { EChartsOption } from "echarts/types/dist/echarts";
 import { FunnelData } from "types/visualizations";
-import { computeValues } from "@/lib/visualizations/pieFunnel/helper";
+import {
+  computeLegendColors,
+  computeValues,
+} from "@/lib/visualizations/pieFunnel/helper";
+import Legend from "../ui/legend";
 
 interface FunnelProp {
   data: FunnelData;
@@ -17,35 +21,35 @@ const FunnelView = ({ data, colors }: FunnelProp) => {
     series: [
       {
         type: "funnel",
-        minSize: '0%',
-        maxSize: '100%',
+        minSize: "0%",
+        maxSize: "100%",
         gap: 2,
         label: {
           show: true,
-          position: 'inside'
+          position: "inside",
         },
         labelLine: {
           length: 10,
           lineStyle: {
             width: 1,
-            type: 'solid'
-          }
+            type: "solid",
+          },
         },
         emphasis: {
           label: {
-            fontSize: 20
-          }
+            fontSize: 20,
+          },
         },
         data: computeValues(data, colors),
       },
     ],
   };
   return (
-    <div className="w-full mt-4 h-screens-90 sm:mt-6 lg:mt-8">
-      <ReactEcharts
-        option={option}
-        className="w-full h-[90vh] sm:h-120 lg:h-160"
-      />
+    <div className="relative mt-[4%] flex flex-col items-center">
+      <Legend legendData={computeLegendColors(data, colors)} />
+      <div className="w-full mt-4 h-[80vh]">
+        <ReactEcharts option={option} className="w-full h-full" />
+      </div>
     </div>
   );
 };

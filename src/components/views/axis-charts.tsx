@@ -3,8 +3,12 @@ import ReactEcharts from "./generic/echarts";
 import { EChartsOption } from "echarts/types/dist/echarts";
 
 import { AxisChartData } from "types/visualizations";
-import { constructSeries } from "@/lib/visualizations/chart/helper";
+import {
+  computeLegendColors,
+  constructSeries,
+} from "@/lib/visualizations/chart/helper";
 import { SeriesOption } from "echarts";
+import Legend from "../ui/legend";
 interface AxisChartProp {
   data: AxisChartData;
   colors: string[];
@@ -42,14 +46,14 @@ const AxisChartView = ({ data, colors, type }: AxisChartProp) => {
         type: "value",
       },
     ],
-    series: constructSeries(values, colors, false, type, false) as SeriesOption ,
+    series: constructSeries(values, colors, false, type, false) as SeriesOption,
   };
   return (
-    <div className="w-full mt-4 h-screens-90 sm:mt-6 lg:mt-8">
-      <ReactEcharts
-        option={option}
-        className="w-full h-[90vh] sm:h-120 lg:h-160"
-      />
+    <div className="relative mt-[4%] flex flex-col items-center">
+      <Legend legendData={computeLegendColors(data, colors)} />
+      <div className="w-full mt-4 h-[80vh]">
+        <ReactEcharts option={option} className="w-full h-full" />
+      </div>
     </div>
   );
 };

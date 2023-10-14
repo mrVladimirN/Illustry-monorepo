@@ -7,9 +7,11 @@ import {
   computeNodesSankey,
 } from "@/lib/visualizations/node-link/helper";
 import { NodeLinkData } from "types/visualizations";
+import { computeLegendColors } from "@/lib/visualizations/calendar/helper";
+import Legend from "../ui/legend";
 interface SankeyGraphProp {
-  data: NodeLinkData
-  colors: string[]
+  data: NodeLinkData;
+  colors: string[];
 }
 
 const SankeyGraphView = ({ data, colors }: SankeyGraphProp) => {
@@ -40,7 +42,7 @@ const SankeyGraphView = ({ data, colors }: SankeyGraphProp) => {
           focus: "adjacency",
         },
         nodeAlign: "right",
-        data: computeNodesSankey(nodes, categories,colors),
+        data: computeNodesSankey(nodes, categories, colors),
         links: computeLinksSankey(links),
         lineStyle: {
           color: "source",
@@ -50,11 +52,11 @@ const SankeyGraphView = ({ data, colors }: SankeyGraphProp) => {
     ],
   };
   return (
-    <div className="w-full mt-4 h-screens-90 sm:mt-6 lg:mt-8">
-      <ReactEcharts
-        option={option}
-        className="w-full h-[90vh] sm:h-120 lg:h-160"
-      />
+    <div className="relative mt-[4%] flex flex-col items-center">
+      <Legend legendData={computeLegendColors(categories, colors)} />
+      <div className="w-full mt-4 h-[80vh]">
+        <ReactEcharts option={option} className="w-full h-full" />
+      </div>
     </div>
   );
 };
