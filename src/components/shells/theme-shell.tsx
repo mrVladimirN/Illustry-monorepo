@@ -199,9 +199,6 @@ export function ThemeShell() {
     sunburst: false,
     funnel: false,
   });
-  const theme =
-    typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
-  const isDarkTheme = theme === "dark";
   const colorPickerRef = useRef<HTMLDivElement>(null);
   const handleOutsideClick = (event: any) => {
     if (
@@ -579,11 +576,6 @@ export function ThemeShell() {
           <Suspense fallback={<Fallback />}>
             <SankeyGraphView
               data={siteConfig.nodeLink}
-              colors={
-                isDarkTheme
-                  ? activeTheme.sankey.dark.colors
-                  : activeTheme.sankey.light.colors
-              }
               legend={false}
               options={false}
             />
@@ -595,12 +587,6 @@ export function ThemeShell() {
           <Suspense fallback={<Fallback />}>
             <CalendarView
               data={{ calendar: siteConfig.calendar }}
-              colors={
-                isDarkTheme
-                  ? activeTheme.calendar.dark.colors
-                  : activeTheme.calendar.light.colors
-              }
-              isDarkTheme={isDarkTheme}
               legend={false}
               options={false}
             />
@@ -612,11 +598,6 @@ export function ThemeShell() {
           <Suspense fallback={<Fallback />}>
             <ForcedLayoutGraphView
               data={siteConfig.nodeLink}
-              colors={
-                isDarkTheme
-                  ? activeTheme.flg.dark.colors
-                  : activeTheme.flg.light.colors
-              }
               legend={false}
               options={false}
             />
@@ -628,11 +609,6 @@ export function ThemeShell() {
           <Suspense fallback={<Fallback />}>
             <WordCloudView
               data={{ words: siteConfig.words }}
-              colors={
-                isDarkTheme
-                  ? activeTheme.wordcloud.dark.colors
-                  : activeTheme.wordcloud.light.colors
-              }
               legend={false}
               options={false}
             />
@@ -644,11 +620,6 @@ export function ThemeShell() {
           <Suspense fallback={<Fallback />}>
             <HierarchicalEdgeBundlingView
               data={siteConfig.nodeLink}
-              colors={
-                isDarkTheme
-                  ? activeTheme.heb.dark.colors
-                  : activeTheme.heb.light.colors
-              }
               legend={false}
               options={false}
             />
@@ -660,11 +631,6 @@ export function ThemeShell() {
           <Suspense fallback={<Fallback />}>
             <AxisChartView
               data={siteConfig.axisChart}
-              colors={
-                isDarkTheme
-                  ? activeTheme.lineChart.dark.colors
-                  : activeTheme.lineChart.light.colors
-              }
               legend={false}
               options={false}
               type={"line"}
@@ -677,11 +643,6 @@ export function ThemeShell() {
           <Suspense fallback={<Fallback />}>
             <AxisChartView
               data={siteConfig.axisChart}
-              colors={
-                isDarkTheme
-                  ? activeTheme.barChart.dark.colors
-                  : activeTheme.barChart.light.colors
-              }
               legend={false}
               options={false}
               type={"bar"}
@@ -694,11 +655,6 @@ export function ThemeShell() {
           <Suspense fallback={<Fallback />}>
             <PieView
               data={siteConfig.pieChart}
-              colors={
-                isDarkTheme
-                  ? activeTheme.pieChart.dark.colors
-                  : activeTheme.pieChart.light.colors
-              }
               legend={false}
               options={false}
             />
@@ -710,11 +666,6 @@ export function ThemeShell() {
           <Suspense fallback={<Fallback />}>
             <FunnelView
               data={siteConfig.funnel}
-              colors={
-                isDarkTheme
-                  ? activeTheme.funnel.dark.colors
-                  : activeTheme.funnel.light.colors
-              }
               legend={false}
               options={false}
             />
@@ -726,14 +677,8 @@ export function ThemeShell() {
           <Suspense fallback={<Fallback />}>
             <ScatterView
               data={siteConfig.scatter as ScatterData}
-              colors={
-                isDarkTheme
-                  ? activeTheme.scatter.dark.colors
-                  : activeTheme.scatter.light.colors
-              }
               legend={false}
               options={false}
-              isDarkTheme={isDarkTheme}
             />
           </Suspense>
         </div>
@@ -743,11 +688,6 @@ export function ThemeShell() {
           <Suspense fallback={<Fallback />}>
             <TreeMapView
               data={siteConfig.hierarchy as HierarchyData}
-              colors={
-                isDarkTheme
-                  ? activeTheme.treeMap.dark.colors
-                  : activeTheme.treeMap.light.colors
-              }
               legend={false}
               options={false}
             />
@@ -759,11 +699,6 @@ export function ThemeShell() {
           <Suspense fallback={<Fallback />}>
             <SunBurstView
               data={siteConfig.hierarchy as HierarchyData}
-              colors={
-                isDarkTheme
-                  ? activeTheme.sunburst.dark.colors
-                  : activeTheme.sunburst.light.colors
-              }
               legend={false}
               options={false}
             />

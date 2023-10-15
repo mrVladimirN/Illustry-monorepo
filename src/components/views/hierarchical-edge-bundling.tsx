@@ -14,17 +14,24 @@ import {
   packageHierarchy,
 } from "@/lib/visualizations/node-link/helper";
 import { with_legend, with_options } from "@/lib/types/utils";
+import { useThemeColors } from "../theme-provider";
 interface HierarchicalEdgeBundlingGraphProp extends with_legend, with_options {
   data: NodeLinkData;
-  colors: string[];
 }
 
 const HierarchicalEdgeBundlingGraphView = ({
   data,
-  colors,
   legend,
   options,
 }: HierarchicalEdgeBundlingGraphProp) => {
+  const activeTheme = useThemeColors();
+  const theme =
+    typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
+  const isDarkTheme = theme === "dark";
+  const colors = isDarkTheme
+    ? activeTheme.heb.dark.colors
+    : activeTheme.heb.light.colors;
+
   useEffect(() => {
     createHedge(data, colors);
     return () => {

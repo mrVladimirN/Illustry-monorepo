@@ -1,3 +1,4 @@
+'use client'
 import * as React from "react";
 import ReactEcharts from "./generic/echarts";
 import {
@@ -10,12 +11,20 @@ import {
 } from "@/lib/visualizations/word-cloud/helper";
 import { WordCloudData } from "types/visualizations";
 import { with_legend, with_options } from "@/lib/types/utils";
+import { useThemeColors } from "../theme-provider";
 interface WordCloudProp extends with_legend, with_options {
   data: WordCloudData;
-  colors: string[];
 }
 
-const WordCloudView = ({ data, colors, legend, options }: WordCloudProp) => {
+const WordCloudView = ({ data,  legend, options }: WordCloudProp) => {
+  const activeTheme = useThemeColors();
+  const theme =
+    typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
+  const isDarkTheme = theme === "dark";
+  const colors = isDarkTheme
+    ? activeTheme.wordcloud.dark.colors
+    : activeTheme.wordcloud.light.colors;
+
   const { words } = data;
   const option: EChartsOption = {
     tooltip: {

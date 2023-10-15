@@ -1,3 +1,4 @@
+'use client'
 import * as React from "react";
 import ReactEcharts from "./generic/echarts";
 import { EChartsOption, SeriesOption } from "echarts/types/dist/echarts";
@@ -12,19 +13,24 @@ import { CalendarOption } from "echarts/types/dist/shared";
 import { CalendarData, CalendarType } from "types/visualizations";
 import Legend from "../ui/legend";
 import { with_legend, with_options } from "@/lib/types/utils";
+import { useThemeColors } from "../theme-provider";
 
 interface CalendarGraphProp extends with_legend, with_options {
   data: CalendarData;
-  colors: string[];
-  isDarkTheme: boolean;
 }
 const CalendarGraphView = ({
   data,
-  colors,
-  isDarkTheme,
   legend,
   options,
 }: CalendarGraphProp) => {
+  const activeTheme = useThemeColors();
+  const theme =
+    typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
+  const isDarkTheme = theme === "dark";
+  const colors = isDarkTheme
+    ? activeTheme.calendar.dark.colors
+    : activeTheme.calendar.light.colors;
+
   const { calendar } = data;
   const categories: string[] = computeCategoriesCalendar(calendar);
   const computedCalendar = computeCalendar(calendar, isDarkTheme);

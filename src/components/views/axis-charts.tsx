@@ -1,3 +1,4 @@
+"use client";
 import * as React from "react";
 import ReactEcharts from "./generic/echarts";
 import { EChartsOption } from "echarts/types/dist/echarts";
@@ -10,19 +11,25 @@ import {
 import { SeriesOption } from "echarts";
 import Legend from "../ui/legend";
 import { with_legend, with_options } from "@/lib/types/utils";
+import { useThemeColors } from "../theme-provider";
 interface AxisChartProp extends with_legend, with_options {
   data: AxisChartData;
-  colors: string[];
   type: "line" | "bar";
 }
 
-const AxisChartView = ({
-  data,
-  colors,
-  type,
-  legend,
-  options,
-}: AxisChartProp) => {
+const AxisChartView = ({ data, type, legend, options }: AxisChartProp) => {
+  const activeTheme = useThemeColors();
+  const theme =
+    typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
+  const isDarkTheme = theme === "dark";
+  const colors = isDarkTheme
+    ? type === "bar"
+      ? activeTheme.barChart.dark.colors
+      : activeTheme.barChart.light.colors
+    : type === "line"
+    ? activeTheme.lineChart.dark.colors
+    : activeTheme.lineChart.light.colors;
+
   const { headers, values } = data;
   const option: EChartsOption = {
     tooltip: {

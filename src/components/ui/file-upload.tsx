@@ -4,19 +4,21 @@ interface FileUploadProps {
   acceptedFiles: ExtFile[];
   updateFiles: (incomingFiles: ExtFile[]) => void;
   removeFile: (id: string) => void;
+  fileFormat: string
 }
 
 export const FileUpload = ({
   acceptedFiles,
   updateFiles,
   removeFile,
+  fileFormat
 }: FileUploadProps) => {
   return (
     <>
       <Dropzone
         onChange={updateFiles}
         value={acceptedFiles}
-        accept="application/json"
+        accept= {fileFormat}
       >
         {acceptedFiles.map((file: any) => (
           <FileMosaic key={file.id} {...file} onDelete={removeFile} info />

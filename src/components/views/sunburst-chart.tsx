@@ -10,13 +10,21 @@ import {
 import Legend from "../ui/legend";
 import { computeLegendColors } from "@/lib/visualizations/calendar/helper";
 import { with_legend, with_options } from "@/lib/types/utils";
+import { useThemeColors } from "../theme-provider";
 
 interface SunburstViewProp extends with_legend, with_options {
   data: HierarchyData;
-  colors: string[];
 }
 
-const SunburstView = ({ data, colors, legend, options }: SunburstViewProp) => {
+const SunburstView = ({ data, legend, options }: SunburstViewProp) => {
+  const activeTheme = useThemeColors();
+  const theme =
+    typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
+  const isDarkTheme = theme === "dark";
+  const colors = isDarkTheme
+    ? activeTheme.sunburst.dark.colors
+    : activeTheme.sunburst.light.colors;
+
   const { nodes } = data;
   const categories = computeCategories(nodes);
   const option: EChartsOption = {

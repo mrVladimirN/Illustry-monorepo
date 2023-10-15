@@ -1,3 +1,4 @@
+'use client'
 import React, { useState } from "react";
 import { useInView } from "react-intersection-observer";
 import { TimelineData } from "types/visualizations";
@@ -11,17 +12,16 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
 import { with_legend, with_options } from "@/lib/types/utils";
 interface TimelineProp extends with_legend, with_options {
   data: TimelineData;
-  colors: string[];
-  isDarkTheme: boolean;
 }
 
 const TimelineView = ({
   data,
-  colors,
-  isDarkTheme,
   legend,
   options,
 }: TimelineProp) => {
+  const theme =
+    typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
+  const isDarkTheme = theme === "dark";
   const { ref, inView } = useInView({
     triggerOnce: true,
   });

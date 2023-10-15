@@ -18,8 +18,6 @@ import {
   UncontrolledFormMessage,
 } from "@/components/ui/form";
 
-import { Icons } from "@/components/icons";
-
 import {
   Select,
   SelectContent,
@@ -30,9 +28,10 @@ import {
 } from "../ui/select";
 
 import { ExtFile } from "@files-ui/react";
-import { FileUpload } from "../ui/file-upload";
 import { visualizationSchema } from "@/lib/validation/visualizations";
-type Inputs = z.infer<typeof visualizationSchema>;
+import { JsonFileFormatter } from "../ui/jsonFileFormatFormItem";
+import { ExelFileFormatter } from "../ui/exelFileFormatFormItem";
+export type Inputs = z.infer<typeof visualizationSchema>;
 
 export function AddVisualizationForm() {
   const router = useRouter();
@@ -64,7 +63,7 @@ export function AddVisualizationForm() {
           files.forEach((f) => {
             formData.append("File", f.file as File);
           });
-
+          
           const res = await fetch("http://localhost:7000/api/visualization", {
             method: "POST",
             body: formData,
@@ -131,35 +130,21 @@ export function AddVisualizationForm() {
           </div>
 
           {selectedFileType === "CSV" ? (
-            <p className="text-red-500">
-              CSV visualization is not yet implemented.
-            </p>
+            <ExelFileFormatter
+              acceptedFiles={files}
+              updateFiles={updateFiles}
+              removeFile={removeFile}
+              isPending={isPending}
+              form={form}
+            />
           ) : (
-            <>
-              <FormItem className="flex w-full flex-col gap-1.5">
-                <FormLabel>Files</FormLabel>
-                <FormControl>
-                  <FileUpload
-                    acceptedFiles={files}
-                    updateFiles={updateFiles}
-                    removeFile={removeFile}
-                  />
-                </FormControl>
-                <UncontrolledFormMessage
-                  message={form.formState.errors.fileType?.message}
-                />
-              </FormItem>
-              <Button className="w-fit" disabled={isPending}>
-                {isPending && (
-                  <Icons.spinner
-                    className="mr-2 h-4 w-4 animate-spin"
-                    aria-hidden="true"
-                  />
-                )}
-                Add Visualizations
-                <span className="sr-only">Add Visualizations</span>
-              </Button>
-            </>
+            <JsonFileFormatter
+              acceptedFiles={files}
+              updateFiles={updateFiles}
+              removeFile={removeFile}
+              isPending={isPending}
+              form={form}
+            />
           )}
         </form>
       </Form>

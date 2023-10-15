@@ -1,4 +1,3 @@
-"use client";
 import { Suspense } from "react";
 import Fallback from "../ui/fallback";
 import dynamic from "next/dynamic";
@@ -13,7 +12,6 @@ import {
   FunnelData,
   TimelineData,
 } from "types/visualizations";
-import { useThemeColors } from "../theme-provider";
 import { PieChartData } from "index";
 
 interface HubShellProps {
@@ -22,82 +20,73 @@ interface HubShellProps {
 const SankeyGraphView = dynamic(
   () => import("@/components/views/sankey-diagram"),
   {
-    ssr: false,
+    ssr: true,
   }
 );
 const ForcedLayoutGraphView = dynamic(
   () => import("@/components/views/forced-layout-graph"),
   {
-    ssr: false,
+    ssr: true,
   }
 );
 const HierarchicalEdgeBundlingView = dynamic(
   () => import("@/components/views/hierarchical-edge-bundling"),
   {
-    ssr: false,
+    ssr: true,
   }
 );
 const CalendarView = dynamic(
   () => import("@/components/views/calendar-graph"),
   {
-    ssr: false,
+    ssr: true,
   }
 );
 const WordCloudView = dynamic(() => import("@/components/views/wordcloud"), {
-  ssr: false,
+  ssr: true,
 });
 const MatrixView = dynamic(() => import("@/components/views/matrix/matrix"), {
-  ssr: false,
+  ssr: true,
 });
 const AxisChartView = dynamic(() => import("@/components/views/axis-charts"), {
-  ssr: false,
+  ssr: true,
 });
 const ScatterView = dynamic(() => import("@/components/views/scatter"), {
-  ssr: false,
+  ssr: true,
 });
 
 const PieView = dynamic(() => import("@/components/views/pie-chart"), {
-  ssr: false,
+  ssr: true,
 });
 
 const TreeMapView = dynamic(() => import("@/components/views/treemap-chart"), {
-  ssr: false,
+  ssr: true,
 });
 const SunBurstView = dynamic(
   () => import("@/components/views/sunburst-chart"),
   {
-    ssr: false,
+    ssr: true,
   }
 );
 const FunnelView = dynamic(() => import("@/components/views/funnel-chart"), {
-  ssr: false,
+  ssr: true,
 });
 const TimelineView = dynamic(
   () => import("@/components/views/timeline/timeline"),
   {
-    ssr: false,
+    ssr: true,
   }
 );
 export function HubShell({ data }: HubShellProps) {
-  const activeTheme = useThemeColors();
 
   const renderGraph = () => {
     if (data) {
-      const theme =
-        typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
-      const isDarkTheme = theme === "dark";
-
       switch (data.type) {
         case "hierarchical-edge-bundling":
           return (
             <Suspense fallback={<Fallback />}>
               <HierarchicalEdgeBundlingView
                 data={data.data as NodeLinkData}
-                colors={
-                  isDarkTheme
-                    ? activeTheme.heb.dark.colors
-                    : activeTheme.heb.light.colors
-                }
+                
                 legend={true}
                 options={true}
               />
@@ -108,11 +97,7 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <ForcedLayoutGraphView
                 data={data.data as NodeLinkData}
-                colors={
-                  isDarkTheme
-                    ? activeTheme.flg.dark.colors
-                    : activeTheme.flg.light.colors
-                }
+               
                 legend={true}
                 options={true}
               />
@@ -123,11 +108,7 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <SankeyGraphView
                 data={data.data as NodeLinkData}
-                colors={
-                  isDarkTheme
-                    ? activeTheme.sankey.dark.colors
-                    : activeTheme.sankey.light.colors
-                }
+              
                 legend={true}
                 options={true}
               />
@@ -137,13 +118,7 @@ export function HubShell({ data }: HubShellProps) {
           return (
             <Suspense fallback={<Fallback />}>
               <CalendarView
-                isDarkTheme={isDarkTheme}
                 data={data.data as CalendarData}
-                colors={
-                  isDarkTheme
-                    ? activeTheme.calendar.dark.colors
-                    : activeTheme.calendar.light.colors
-                }
                 legend={true}
                 options={true}
               />
@@ -154,11 +129,6 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <WordCloudView
                 data={data.data as WordCloudData}
-                colors={
-                  isDarkTheme
-                    ? activeTheme.wordcloud.dark.colors
-                    : activeTheme.wordcloud.light.colors
-                }
                 legend={true}
                 options={true}
               />
@@ -169,11 +139,6 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <MatrixView
                 data={data.data as NodeLinkData}
-                colors={
-                  isDarkTheme
-                    ? activeTheme.wordcloud.dark.colors
-                    : activeTheme.wordcloud.light.colors
-                }
                 legend={true}
                 options={true}
               />
@@ -184,11 +149,6 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <AxisChartView
                 data={data.data as AxisChartData}
-                colors={
-                  isDarkTheme
-                    ? activeTheme.lineChart.dark.colors
-                    : activeTheme.lineChart.light.colors
-                }
                 legend={true}
                 options={true}
                 type="line"
@@ -200,11 +160,6 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <AxisChartView
                 data={data.data as AxisChartData}
-                colors={
-                  isDarkTheme
-                    ? activeTheme.barChart.dark.colors
-                    : activeTheme.barChart.light.colors
-                }
                 legend={true}
                 options={true}
                 type="bar"
@@ -216,11 +171,6 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <PieView
                 data={data.data as PieChartData}
-                colors={
-                  isDarkTheme
-                    ? activeTheme.pieChart.dark.colors
-                    : activeTheme.pieChart.light.colors
-                }
                 legend={true}
                 options={true}
               />
@@ -231,11 +181,6 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <FunnelView
                 data={data.data as FunnelData}
-                colors={
-                  isDarkTheme
-                    ? activeTheme.funnel.dark.colors
-                    : activeTheme.funnel.light.colors
-                }
                 legend={true}
                 options={true}
               />
@@ -246,14 +191,8 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <ScatterView
                 data={data.data as ScatterData}
-                colors={
-                  isDarkTheme
-                    ? activeTheme.scatter.dark.colors
-                    : activeTheme.scatter.light.colors
-                }
                 legend={true}
                 options={true}
-                isDarkTheme={isDarkTheme}
               />
             </Suspense>
           );
@@ -262,11 +201,7 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <TreeMapView
                 data={data.data as HierarchyData}
-                colors={
-                  isDarkTheme
-                    ? activeTheme.treeMap.dark.colors
-                    : activeTheme.treeMap.light.colors
-                }
+               
                 legend={true}
                 options={true}
               />
@@ -277,11 +212,6 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <SunBurstView
                 data={data.data as HierarchyData}
-                colors={
-                  isDarkTheme
-                    ? activeTheme.sunburst.dark.colors
-                    : activeTheme.sunburst.light.colors
-                }
                 legend={true}
                 options={true}
               />
@@ -292,17 +222,12 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <TimelineView
                 data={data.data as TimelineData}
-                isDarkTheme={isDarkTheme}
-                colors={
-                  isDarkTheme
-                    ? activeTheme.sunburst.dark.colors
-                    : activeTheme.sunburst.light.colors
-                }
+              
                 legend={true}
                 options={true}
               />
             </Suspense>
-          );
+         );
         default:
           return null;
       }

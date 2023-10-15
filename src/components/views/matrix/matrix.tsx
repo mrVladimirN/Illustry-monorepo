@@ -10,13 +10,22 @@ import {
   sortRows,
 } from "@/lib/visualizations/node-link/helper";
 import { with_legend, with_options } from "@/lib/types/utils";
+import { useThemeColors } from "@/components/theme-provider";
+
 interface MatrixProp extends with_legend, with_options {
   data: NodeLinkData;
-  colors: string[];
 }
 
-const MatrixView = ({ data, colors, legend, options }: MatrixProp) => {
+const MatrixView = ({ data, legend, options }: MatrixProp) => {
   const tableRef = useRef<HTMLDivElement>(null);
+  const activeTheme = useThemeColors();
+  const theme =
+    typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
+  const isDarkTheme = theme === "dark";
+  const colors = isDarkTheme
+    ? activeTheme.heb.dark.colors
+    : activeTheme.heb.light.colors;
+
   useEffect(() => {
     if (tableRef.current) {
       tableRef.current.innerHTML = createMatrix(data, colors);
