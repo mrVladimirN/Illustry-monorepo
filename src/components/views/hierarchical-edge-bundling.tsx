@@ -1,12 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
-import {
-  select,
-  cluster,
-  lineRadial,
-  curveBundle,
-} from "d3";
-import { NodeLinkData} from "types/visualizations";
+import { select, cluster, lineRadial, curveBundle } from "d3";
+import { NodeLinkData } from "types/visualizations";
 import {
   createHebLinks,
   createHebNodes,
@@ -18,7 +13,8 @@ import {
   onNodeOrLinkMouseOut,
   packageHierarchy,
 } from "@/lib/visualizations/node-link/helper";
-interface HierarchicalEdgeBundlingGraphProp {
+import { with_legend, with_options } from "@/lib/types/utils";
+interface HierarchicalEdgeBundlingGraphProp extends with_legend, with_options {
   data: NodeLinkData;
   colors: string[];
 }
@@ -26,6 +22,8 @@ interface HierarchicalEdgeBundlingGraphProp {
 const HierarchicalEdgeBundlingGraphView = ({
   data,
   colors,
+  legend,
+  options,
 }: HierarchicalEdgeBundlingGraphProp) => {
   useEffect(() => {
     createHedge(data, colors);
@@ -33,7 +31,7 @@ const HierarchicalEdgeBundlingGraphView = ({
       select("#hedgeBundleSvg").remove();
       select(".my-tooltip").remove();
     };
-  }, [data, JSON.stringify(colors)]); 
+  }, [data, JSON.stringify(colors)]);
   const createHedge = (graph: NodeLinkData, colors: string[]) => {
     const colorin = colors[0];
     const colorout = colors[1];

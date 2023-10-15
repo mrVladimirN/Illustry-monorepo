@@ -7,13 +7,14 @@ import {
   computeValues,
 } from "@/lib/visualizations/pieFunnel/helper";
 import Legend from "../ui/legend";
+import { with_legend, with_options } from "@/lib/types/utils";
 
-interface PieProp {
+interface PieProp extends with_legend, with_options {
   data: PieChartData;
   colors: string[];
 }
 
-const PieView = ({ data, colors }: PieProp) => {
+const PieView = ({ data, colors, legend, options }: PieProp) => {
   const option: EChartsOption = {
     tooltip: {
       trigger: "item",
@@ -48,7 +49,7 @@ const PieView = ({ data, colors }: PieProp) => {
   };
   return (
     <div className="relative mt-[4%] flex flex-col items-center">
-      <Legend legendData={computeLegendColors(data, colors)} />
+      {legend && <Legend legendData={computeLegendColors(data, colors)} />}
       <div className="w-full mt-4 h-[80vh]">
         <ReactEcharts option={option} className="w-full h-full" />
       </div>

@@ -98,6 +98,8 @@ export function HubShell({ data }: HubShellProps) {
                     ? activeTheme.heb.dark.colors
                     : activeTheme.heb.light.colors
                 }
+                legend={true}
+                options={true}
               />
             </Suspense>
           );
@@ -111,6 +113,8 @@ export function HubShell({ data }: HubShellProps) {
                     ? activeTheme.flg.dark.colors
                     : activeTheme.flg.light.colors
                 }
+                legend={true}
+                options={true}
               />
             </Suspense>
           );
@@ -124,6 +128,8 @@ export function HubShell({ data }: HubShellProps) {
                     ? activeTheme.sankey.dark.colors
                     : activeTheme.sankey.light.colors
                 }
+                legend={true}
+                options={true}
               />
             </Suspense>
           );
@@ -138,6 +144,8 @@ export function HubShell({ data }: HubShellProps) {
                     ? activeTheme.calendar.dark.colors
                     : activeTheme.calendar.light.colors
                 }
+                legend={true}
+                options={true}
               />
             </Suspense>
           );
@@ -151,6 +159,8 @@ export function HubShell({ data }: HubShellProps) {
                     ? activeTheme.wordcloud.dark.colors
                     : activeTheme.wordcloud.light.colors
                 }
+                legend={true}
+                options={true}
               />
             </Suspense>
           );
@@ -164,6 +174,8 @@ export function HubShell({ data }: HubShellProps) {
                     ? activeTheme.wordcloud.dark.colors
                     : activeTheme.wordcloud.light.colors
                 }
+                legend={true}
+                options={true}
               />
             </Suspense>
           );
@@ -177,6 +189,8 @@ export function HubShell({ data }: HubShellProps) {
                     ? activeTheme.lineChart.dark.colors
                     : activeTheme.lineChart.light.colors
                 }
+                legend={true}
+                options={true}
                 type="line"
               />
             </Suspense>
@@ -191,6 +205,8 @@ export function HubShell({ data }: HubShellProps) {
                     ? activeTheme.barChart.dark.colors
                     : activeTheme.barChart.light.colors
                 }
+                legend={true}
+                options={true}
                 type="bar"
               />
             </Suspense>
@@ -205,6 +221,8 @@ export function HubShell({ data }: HubShellProps) {
                     ? activeTheme.pieChart.dark.colors
                     : activeTheme.pieChart.light.colors
                 }
+                legend={true}
+                options={true}
               />
             </Suspense>
           );
@@ -218,6 +236,8 @@ export function HubShell({ data }: HubShellProps) {
                     ? activeTheme.funnel.dark.colors
                     : activeTheme.funnel.light.colors
                 }
+                legend={true}
+                options={true}
               />
             </Suspense>
           );
@@ -231,6 +251,8 @@ export function HubShell({ data }: HubShellProps) {
                     ? activeTheme.scatter.dark.colors
                     : activeTheme.scatter.light.colors
                 }
+                legend={true}
+                options={true}
                 isDarkTheme={isDarkTheme}
               />
             </Suspense>
@@ -245,6 +267,8 @@ export function HubShell({ data }: HubShellProps) {
                     ? activeTheme.treeMap.dark.colors
                     : activeTheme.treeMap.light.colors
                 }
+                legend={true}
+                options={true}
               />
             </Suspense>
           );
@@ -258,6 +282,8 @@ export function HubShell({ data }: HubShellProps) {
                     ? activeTheme.sunburst.dark.colors
                     : activeTheme.sunburst.light.colors
                 }
+                legend={true}
+                options={true}
               />
             </Suspense>
           );
@@ -272,6 +298,8 @@ export function HubShell({ data }: HubShellProps) {
                     ? activeTheme.sunburst.dark.colors
                     : activeTheme.sunburst.light.colors
                 }
+                legend={true}
+                options={true}
               />
             </Suspense>
           );

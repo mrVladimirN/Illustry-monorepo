@@ -9,12 +9,18 @@ import {
 import { NodeLinkData } from "types/visualizations";
 import { computeLegendColors } from "@/lib/visualizations/calendar/helper";
 import Legend from "../ui/legend";
-interface SankeyGraphProp {
+import { with_legend, with_options } from "@/lib/types/utils";
+interface SankeyGraphProp extends with_legend, with_options {
   data: NodeLinkData;
   colors: string[];
 }
 
-const SankeyGraphView = ({ data, colors }: SankeyGraphProp) => {
+const SankeyGraphView = ({
+  data,
+  colors,
+  legend,
+  options,
+}: SankeyGraphProp) => {
   const { nodes, links } = data;
   const categories: string[] = computeCategoriesSankey(nodes);
   const option: EChartsOption = {
@@ -53,7 +59,9 @@ const SankeyGraphView = ({ data, colors }: SankeyGraphProp) => {
   };
   return (
     <div className="relative mt-[4%] flex flex-col items-center">
-      <Legend legendData={computeLegendColors(categories, colors)} />
+      {legend && (
+        <Legend legendData={computeLegendColors(categories, colors)} />
+      )}
       <div className="w-full mt-4 h-[80vh]">
         <ReactEcharts option={option} className="w-full h-full" />
       </div>

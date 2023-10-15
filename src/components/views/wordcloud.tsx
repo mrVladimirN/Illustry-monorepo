@@ -9,12 +9,13 @@ import {
   computePropertiesForToolTip,
 } from "@/lib/visualizations/word-cloud/helper";
 import { WordCloudData } from "types/visualizations";
-interface WordCloudProp {
+import { with_legend, with_options } from "@/lib/types/utils";
+interface WordCloudProp extends with_legend, with_options {
   data: WordCloudData;
-  colors: string[]
+  colors: string[];
 }
 
-const WordCloudView = ({ data, colors }: WordCloudProp) => {
+const WordCloudView = ({ data, colors, legend, options }: WordCloudProp) => {
   const { words } = data;
   const option: EChartsOption = {
     tooltip: {
@@ -31,7 +32,7 @@ const WordCloudView = ({ data, colors }: WordCloudProp) => {
         );
       },
     },
-    
+
     series: [
       {
         type: "wordCloud",

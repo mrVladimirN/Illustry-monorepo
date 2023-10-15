@@ -7,13 +7,14 @@ import {
   computeValues,
 } from "@/lib/visualizations/pieFunnel/helper";
 import Legend from "../ui/legend";
+import { with_legend, with_options } from "@/lib/types/utils";
 
-interface FunnelProp {
+interface FunnelProp extends with_legend, with_options {
   data: FunnelData;
   colors: string[];
 }
 
-const FunnelView = ({ data, colors }: FunnelProp) => {
+const FunnelView = ({ data, colors, legend, options }: FunnelProp) => {
   const option: EChartsOption = {
     tooltip: {
       trigger: "item",
@@ -46,7 +47,7 @@ const FunnelView = ({ data, colors }: FunnelProp) => {
   };
   return (
     <div className="relative mt-[4%] flex flex-col items-center">
-      <Legend legendData={computeLegendColors(data, colors)} />
+      {legend && <Legend legendData={computeLegendColors(data, colors)} />}
       <div className="w-full mt-4 h-[80vh]">
         <ReactEcharts option={option} className="w-full h-full" />
       </div>

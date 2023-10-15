@@ -7,22 +7,29 @@ import { formatDate } from "@/lib/utils";
 import TimelineElement from "./timelineElement";
 import TimelineAccordion from "./timelineAccordion";
 import { Button } from "@/components/ui/button";
-import { ChevronLeftIcon, ChevronRightIcon} from "@radix-ui/react-icons";
-interface TimelineProp {
+import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
+import { with_legend, with_options } from "@/lib/types/utils";
+interface TimelineProp extends with_legend, with_options {
   data: TimelineData;
   colors: string[];
   isDarkTheme: boolean;
 }
 
-const TimelineView = ({ data, colors, isDarkTheme }: TimelineProp) => {
+const TimelineView = ({
+  data,
+  colors,
+  isDarkTheme,
+  legend,
+  options,
+}: TimelineProp) => {
   const { ref, inView } = useInView({
     triggerOnce: true,
   });
   const sortedKeys = Object.keys(data).sort();
-  
-  const elementsPerPage = 10;  
+
+  const elementsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(0);
-  
+
   const startIndex = currentPage * elementsPerPage;
   const endIndex = startIndex + elementsPerPage;
   const displayedDates = sortedKeys.slice(startIndex, endIndex);
@@ -67,27 +74,27 @@ const TimelineView = ({ data, colors, isDarkTheme }: TimelineProp) => {
       </VerticalTimeline>
       <div className="flex justify-center mt-[5%] mb-[10%]">
         <Button
-            suppressHydrationWarning
-            aria-label="Go to previous page"
-            variant="outline"
-            size="icon"
-            className="hidden h-8 w-8 lg:flex"
-            onClick={handlePreviousPage}
-            disabled={currentPage === 0}
-          >
-            <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
-          </Button>
-          <Button
-            suppressHydrationWarning
-            aria-label="Go to next page"
-            variant="outline"
-            size="icon"
-            className="h-8 w-8"
-            onClick={handleNextPage}
-            disabled={endIndex >= sortedKeys.length}
-          >
-            <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
-          </Button>
+          suppressHydrationWarning
+          aria-label="Go to previous page"
+          variant="outline"
+          size="icon"
+          className="hidden h-8 w-8 lg:flex"
+          onClick={handlePreviousPage}
+          disabled={currentPage === 0}
+        >
+          <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+        </Button>
+        <Button
+          suppressHydrationWarning
+          aria-label="Go to next page"
+          variant="outline"
+          size="icon"
+          className="h-8 w-8"
+          onClick={handleNextPage}
+          disabled={endIndex >= sortedKeys.length}
+        >
+          <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+        </Button>
       </div>
     </div>
   );

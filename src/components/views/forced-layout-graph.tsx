@@ -9,12 +9,18 @@ import {
 import { NodeLinkData } from "types/visualizations";
 import { computeLegendColors } from "@/lib/visualizations/calendar/helper";
 import Legend from "../ui/legend";
+import { with_legend, with_options } from "@/lib/types/utils";
 
-interface ForcedLayoutGraphProp {
+interface ForcedLayoutGraphProp extends with_legend, with_options {
   data: NodeLinkData;
   colors: string[];
 }
-const ForcedLayoutGraphView = ({ data, colors }: ForcedLayoutGraphProp) => {
+const ForcedLayoutGraphView = ({
+  data,
+  colors,
+  legend,
+  options,
+}: ForcedLayoutGraphProp) => {
   const { nodes, links } = data;
   const categories: {
     name: string;
@@ -62,14 +68,16 @@ const ForcedLayoutGraphView = ({ data, colors }: ForcedLayoutGraphProp) => {
   };
   return (
     <div className="relative mt-[4%] flex flex-col items-center">
-      <Legend
-        legendData={computeLegendColors(
-          categories.map((category) => {
-            return category.name;
-          }),
-          colors
-        )}
-      />
+      {legend && (
+        <Legend
+          legendData={computeLegendColors(
+            categories.map((category) => {
+              return category.name;
+            }),
+            colors
+          )}
+        />
+      )}
       <div className="w-full mt-4 h-[80vh]">
         <ReactEcharts option={option} className="w-full h-full" />
       </div>

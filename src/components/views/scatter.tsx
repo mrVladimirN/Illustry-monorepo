@@ -10,14 +10,21 @@ import {
 } from "@/lib/visualizations/scatter/helper";
 import { computeLegendColors } from "@/lib/visualizations/calendar/helper";
 import Legend from "../ui/legend";
+import { with_legend, with_options } from "@/lib/types/utils";
 
-interface ScatterProp {
+interface ScatterProp extends with_legend, with_options {
   data: ScatterData;
   colors: string[];
   isDarkTheme: boolean;
 }
 
-const ScatterView = ({ data, colors, isDarkTheme }: ScatterProp) => {
+const ScatterView = ({
+  data,
+  colors,
+  isDarkTheme,
+  legend,
+  options,
+}: ScatterProp) => {
   const textColor = isDarkTheme ? "#888" : "#333";
   const { points } = data;
   const categories = computeCategoriesScatter(points);
@@ -82,7 +89,9 @@ const ScatterView = ({ data, colors, isDarkTheme }: ScatterProp) => {
   };
   return (
     <div className="relative mt-[4%] flex flex-col items-center">
-      <Legend legendData={computeLegendColors(categories, colors)} />
+      {legend && (
+        <Legend legendData={computeLegendColors(categories, colors)} />
+      )}
       <div className="w-full mt-4 h-[80vh]">
         <ReactEcharts option={option} className="w-full h-full" />
       </div>

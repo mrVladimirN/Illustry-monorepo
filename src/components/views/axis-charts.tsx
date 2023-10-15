@@ -9,13 +9,20 @@ import {
 } from "@/lib/visualizations/chart/helper";
 import { SeriesOption } from "echarts";
 import Legend from "../ui/legend";
-interface AxisChartProp {
+import { with_legend, with_options } from "@/lib/types/utils";
+interface AxisChartProp extends with_legend, with_options {
   data: AxisChartData;
   colors: string[];
   type: "line" | "bar";
 }
 
-const AxisChartView = ({ data, colors, type }: AxisChartProp) => {
+const AxisChartView = ({
+  data,
+  colors,
+  type,
+  legend,
+  options,
+}: AxisChartProp) => {
   const { headers, values } = data;
   const option: EChartsOption = {
     tooltip: {
@@ -50,7 +57,7 @@ const AxisChartView = ({ data, colors, type }: AxisChartProp) => {
   };
   return (
     <div className="relative mt-[4%] flex flex-col items-center">
-      <Legend legendData={computeLegendColors(data, colors)} />
+      {legend && <Legend legendData={computeLegendColors(data, colors)} />}
       <div className="w-full mt-4 h-[80vh]">
         <ReactEcharts option={option} className="w-full h-full" />
       </div>

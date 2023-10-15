@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { select  } from "d3";
+import { select } from "d3";
 import { NodeLinkData, Node } from "types/visualizations";
 import {
   addStyleTooltipWithHover,
@@ -9,19 +9,20 @@ import {
   sortColumns,
   sortRows,
 } from "@/lib/visualizations/node-link/helper";
-interface MatrixProp {
+import { with_legend, with_options } from "@/lib/types/utils";
+interface MatrixProp extends with_legend, with_options {
   data: NodeLinkData;
   colors: string[];
 }
 
-const MatrixView = ({ data, colors }: MatrixProp) => {
+const MatrixView = ({ data, colors, legend, options }: MatrixProp) => {
   const tableRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (tableRef.current) {
       tableRef.current.innerHTML = createMatrix(data, colors);
       sortRows();
       sortColumns();
-      addStyleTooltipWithHover()
+      addStyleTooltipWithHover();
     }
 
     return () => {

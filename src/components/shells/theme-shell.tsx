@@ -584,6 +584,8 @@ export function ThemeShell() {
                   ? activeTheme.sankey.dark.colors
                   : activeTheme.sankey.light.colors
               }
+              legend={false}
+              options={false}
             />
           </Suspense>
         </div>
@@ -599,6 +601,8 @@ export function ThemeShell() {
                   : activeTheme.calendar.light.colors
               }
               isDarkTheme={isDarkTheme}
+              legend={false}
+              options={false}
             />
           </Suspense>
         </div>
@@ -613,6 +617,8 @@ export function ThemeShell() {
                   ? activeTheme.flg.dark.colors
                   : activeTheme.flg.light.colors
               }
+              legend={false}
+              options={false}
             />
           </Suspense>
         </div>
@@ -627,6 +633,8 @@ export function ThemeShell() {
                   ? activeTheme.wordcloud.dark.colors
                   : activeTheme.wordcloud.light.colors
               }
+              legend={false}
+              options={false}
             />
           </Suspense>
         </div>
@@ -641,6 +649,8 @@ export function ThemeShell() {
                   ? activeTheme.heb.dark.colors
                   : activeTheme.heb.light.colors
               }
+              legend={false}
+              options={false}
             />
           </Suspense>
         </div>
@@ -655,6 +665,8 @@ export function ThemeShell() {
                   ? activeTheme.lineChart.dark.colors
                   : activeTheme.lineChart.light.colors
               }
+              legend={false}
+              options={false}
               type={"line"}
             />
           </Suspense>
@@ -670,6 +682,8 @@ export function ThemeShell() {
                   ? activeTheme.barChart.dark.colors
                   : activeTheme.barChart.light.colors
               }
+              legend={false}
+              options={false}
               type={"bar"}
             />
           </Suspense>
@@ -685,6 +699,8 @@ export function ThemeShell() {
                   ? activeTheme.pieChart.dark.colors
                   : activeTheme.pieChart.light.colors
               }
+              legend={false}
+              options={false}
             />
           </Suspense>
         </div>
@@ -699,6 +715,8 @@ export function ThemeShell() {
                   ? activeTheme.funnel.dark.colors
                   : activeTheme.funnel.light.colors
               }
+              legend={false}
+              options={false}
             />
           </Suspense>
         </div>
@@ -713,6 +731,8 @@ export function ThemeShell() {
                   ? activeTheme.scatter.dark.colors
                   : activeTheme.scatter.light.colors
               }
+              legend={false}
+              options={false}
               isDarkTheme={isDarkTheme}
             />
           </Suspense>
@@ -728,6 +748,8 @@ export function ThemeShell() {
                   ? activeTheme.treeMap.dark.colors
                   : activeTheme.treeMap.light.colors
               }
+              legend={false}
+              options={false}
             />
           </Suspense>
         </div>
@@ -742,6 +764,8 @@ export function ThemeShell() {
                   ? activeTheme.sunburst.dark.colors
                   : activeTheme.sunburst.light.colors
               }
+              legend={false}
+              options={false}
             />
           </Suspense>
         </div>

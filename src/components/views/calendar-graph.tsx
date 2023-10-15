@@ -11,8 +11,9 @@ import {
 import { CalendarOption } from "echarts/types/dist/shared";
 import { CalendarData, CalendarType } from "types/visualizations";
 import Legend from "../ui/legend";
+import { with_legend, with_options } from "@/lib/types/utils";
 
-interface CalendarGraphProp {
+interface CalendarGraphProp extends with_legend, with_options {
   data: CalendarData;
   colors: string[];
   isDarkTheme: boolean;
@@ -21,6 +22,8 @@ const CalendarGraphView = ({
   data,
   colors,
   isDarkTheme,
+  legend,
+  options,
 }: CalendarGraphProp) => {
   const { calendar } = data;
   const categories: string[] = computeCategoriesCalendar(calendar);
@@ -71,7 +74,9 @@ const CalendarGraphView = ({
   const canvasHeight = `${computedCalendar.calendar.length * 17.5}vh`;
   return (
     <div className="relative mt-[4%] flex flex-col items-center">
-      <Legend legendData={computeLegendColors(categories, colors)} />
+      {legend && (
+        <Legend legendData={computeLegendColors(categories, colors)} />
+      )}
       <div className="w-full w-full">
         <ReactEcharts
           option={option}
