@@ -5,7 +5,7 @@ import { UpdateProjectForm } from "@/components/form/update-project-form";
 import { findOneProject } from "@/app/_actions/project";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_BACKEND_PUBLIC_URL),
   title: "Update Project",
   description: "Update a product",
 };

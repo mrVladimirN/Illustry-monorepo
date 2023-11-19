@@ -5,7 +5,7 @@ import { browseProjects } from "@/app/_actions/project";
 import { ProjectsTableShell } from "@/components/shells/projects-table-shell";
 import { ProjectFilter } from "types/project";
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_BACKEND_PUBLIC_URL),
   title: "Projects",
   description: "Manage your projects",
 };
@@ -33,8 +33,8 @@ const Projects = async ({ searchParams }: ProjectsProps) => {
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-gray-50 rounded-3xl dark:bg-gray-800">
       <div className="space-y-2.5">
         <ProjectsTableShell
-          data={projects.projects}
-          pageCount={Math.ceil(projects.pagination?.pageCount as number)}
+          data={projects ? projects.projects: []}
+          pageCount={projects ? Math.ceil(projects.pagination?.pageCount as number): 1}
         ></ProjectsTableShell>
       </div>
     </div>

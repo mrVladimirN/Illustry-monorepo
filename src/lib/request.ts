@@ -10,11 +10,11 @@ export const makeRequest = <T>(
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Request failed");
+       console.debug("Request failed");
       }
       return response.json();
     })
     .catch((err) => {
-      throw new Error(err.message);
+      console.debug(err.message);
     });
 };

@@ -1,13 +1,19 @@
 import { Inputs } from "@/components/form/add-visualization-form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
+import { ExelVisualizationMapping } from "./visualizationDetailsMapping";
 
 interface ExelWordCloudMappingProps {
   form: UseFormReturn<Inputs>; // Include the form context
+  fileDetails: boolean;
 }
-export function ExelWordCloudMapping({ form }: ExelWordCloudMappingProps) {
+export function ExelWordCloudMapping({
+  form,
+  fileDetails,
+}: ExelWordCloudMappingProps) {
   return (
     <div className="space-y-4">
+      {fileDetails && <ExelVisualizationMapping form={form} />}
       <div className="flex items-center space-x-4">
         <div className="w-20">Names:</div>
         <div className="flex-grow">

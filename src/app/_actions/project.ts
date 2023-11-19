@@ -1,7 +1,7 @@
 "use server";
 
 import { makeRequest } from "@/lib/request";
-
+import { env } from "@/env.mjs";
 import { revalidateTag } from "next/cache";
 import { ExtendedProjectType, ProjectCreate, ProjectFilter, ProjectType, ProjectUpdate } from "types/project";
 export const browseProjects = async (filter?: ProjectFilter) => {
@@ -11,7 +11,7 @@ export const browseProjects = async (filter?: ProjectFilter) => {
   if (filter) {
     newFilter = filter;
   }
-  const request = new Request("http://localhost:7000/api/projects", {
+  const request = new Request(`${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/projects`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -23,7 +23,7 @@ export const browseProjects = async (filter?: ProjectFilter) => {
 
 export const deleteProject = async (projectName: string) => {
   revalidateTag("projects");
-  const request = new Request(`http://localhost:7000/api/project`, {
+  const request = new Request(`${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/project`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -37,7 +37,7 @@ export const deleteProject = async (projectName: string) => {
 
 export const updateProject = async (project: ProjectUpdate) => {
   revalidateTag("projects");
-  const request = new Request("http://localhost:7000/api/project", {
+  const request = new Request(`${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/project`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -54,7 +54,7 @@ export const createProject = async (project: ProjectCreate) => {
     projectDescription: project.description,
     isActive: project.isActive,
   };
-  const request = new Request(`http://localhost:7000/api/project`, {
+  const request = new Request(`${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/project`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -66,7 +66,7 @@ export const createProject = async (project: ProjectCreate) => {
 
 export const findOneProject = async (projectName: string) => {
   const request = new Request(
-    `http://localhost:7000/api/project/${projectName}`,
+    `${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/project/${projectName}`,
     {
       method: "POST",
       headers: {

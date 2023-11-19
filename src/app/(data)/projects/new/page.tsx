@@ -4,7 +4,7 @@ import { env } from "@/env.mjs";
 import { AddProjectForm } from "@/components/form/add-project-form";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_BACKEND_PUBLIC_URL),
   title: "New Project",
   description: "Add a new project",
 };

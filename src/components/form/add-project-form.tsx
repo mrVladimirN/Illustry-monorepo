@@ -35,7 +35,7 @@ export function AddProjectForm() {
     defaultValues: {
       name: "",
       description: "",
-      isActive: false
+      isActive: false,
     },
   });
 
@@ -56,73 +56,70 @@ export function AddProjectForm() {
 
   return (
     <div>
-    <h2 className="text-2xl font-bold mb-4">Add a new Project</h2>
-    <Form {...form}>
-      <form
-        className="grid w-full max-w-xl gap-5"
-        onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
-      >
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input placeholder="Type project name here." {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Type project description here."
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="isActive"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-           
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
-              
-              <FormMessage />
-              <FormLabel>
-                  Make this project active
-                </FormLabel>
-            </FormItem>
-          )}
-        />
-        <Button className="w-fit" disabled={isPending}>
-          {isPending && (
-            <Icons.spinner
-              className="mr-2 h-4 w-4 animate-spin"
-              aria-hidden="true"
-            />
-          )}
-          Add Project
-          <span className="sr-only">Add Project</span>
-        </Button>
-      </form>
-    </Form>
+      <h2 className="text-2xl font-bold mb-4">Add a new Project</h2>
+      <Form {...form}>
+        <form
+          className="grid w-full max-w-xl gap-5"
+          onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
+        >
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Type project name here." {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Type project description here."
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="isActive"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
+
+                <FormMessage />
+                <FormLabel>Make this project active</FormLabel>
+              </FormItem>
+            )}
+          />
+          <Button className="w-fit" disabled={isPending}>
+            {isPending && (
+              <Icons.spinner
+                className="mr-2 h-4 w-4 animate-spin"
+                aria-hidden="true"
+              />
+            )}
+            Add Project
+            <span className="sr-only">Add Project</span>
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 }

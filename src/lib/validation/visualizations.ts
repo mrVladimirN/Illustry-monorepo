@@ -16,24 +16,9 @@ export enum visualizationTypesEnum {
   FUNNEL = "funnel",
   TIMELINE = "timeline",
 }
-
-const jsonSchema = z.object({
-  fileType: z.literal("JSON"),
-  files: z
-  .unknown()
-  .refine((val) => {
-    if (!Array.isArray(val)) return false;
-    if (val.some((file) => !(file instanceof File))) return false;
-    return true;
-  }, "Must be an array of File")
-  .nullable()
-  .default(null),
-});
-
-const exelSchema = z.object({
-  fileType: z.enum(["EXEL", "JSON"], {
-    required_error: "Must be a valid type",
-  }),
+const commonFileSchema = z.object({
+  allFileDetails: z.boolean(),
+  fileType: z.string(),
   files: z
     .unknown()
     .refine((val) => {
@@ -43,34 +28,68 @@ const exelSchema = z.object({
     }, "Must be an array of File")
     .nullable()
     .default(null),
+});
+
+export const jsonSchema = commonFileSchema.extend({
+  fileType: z.literal("JSON"),
   name: z
     .string()
-    .min(1, {
-      message: "Must be at least 1 character",
-    })
-    .refine((value) => value !== undefined, {
-      message: "Name is required", // Custom error message for the required field
-    })
+    // .min(1, {
+    //   message: "Must be at least 1 character",
+    // })
     .optional(),
-  includeHeaders: z.boolean(),
-  type: z.union([
-    z.literal(visualizationTypesEnum.WORLD_CLOUD),
-    z.literal(visualizationTypesEnum.FORCE_DIRECTED_GRAPH),
-    z.literal(visualizationTypesEnum.SANKEY),
-    z.literal(visualizationTypesEnum.CALENDAR),
-    z.literal(visualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING),
-    z.literal(visualizationTypesEnum.MATRIX),
-    z.literal(visualizationTypesEnum.LINE_CHART),
-    z.literal(visualizationTypesEnum.BAR_CHART),
-    z.literal(visualizationTypesEnum.PIE_CHART),
-    z.literal(visualizationTypesEnum.SCATTER),
-    z.literal(visualizationTypesEnum.TREEMAP),
-    z.literal(visualizationTypesEnum.SUNBURST),
-    z.literal(visualizationTypesEnum.FUNNEL),
-    z.literal(visualizationTypesEnum.TIMELINE),
-  ]),
+  type: z
+    .union([
+      z.literal(visualizationTypesEnum.WORLD_CLOUD),
+      z.literal(visualizationTypesEnum.FORCE_DIRECTED_GRAPH),
+      z.literal(visualizationTypesEnum.SANKEY),
+      z.literal(visualizationTypesEnum.CALENDAR),
+      z.literal(visualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING),
+      z.literal(visualizationTypesEnum.MATRIX),
+      z.literal(visualizationTypesEnum.LINE_CHART),
+      z.literal(visualizationTypesEnum.BAR_CHART),
+      z.literal(visualizationTypesEnum.PIE_CHART),
+      z.literal(visualizationTypesEnum.SCATTER),
+      z.literal(visualizationTypesEnum.TREEMAP),
+      z.literal(visualizationTypesEnum.SUNBURST),
+      z.literal(visualizationTypesEnum.FUNNEL),
+      z.literal(visualizationTypesEnum.TIMELINE),
+    ])
+    .optional(),
   tags: z.string().optional(),
-  mapping: z.any(),
   description: z.string().max(50).optional(),
+});
+
+export const exelSchema = commonFileSchema.extend({
+  fileType: z.literal("EXEL"),
+  name: z
+    .string()
+    // .min(1, {
+    //   message: "Must be at least 1 character",
+    // })
+    .optional(),
+  type: z
+    .union([
+      z.literal(visualizationTypesEnum.WORLD_CLOUD),
+      z.literal(visualizationTypesEnum.FORCE_DIRECTED_GRAPH),
+      z.literal(visualizationTypesEnum.SANKEY),
+      z.literal(visualizationTypesEnum.CALENDAR),
+      z.literal(visualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING),
+      z.literal(visualizationTypesEnum.MATRIX),
+      z.literal(visualizationTypesEnum.LINE_CHART),
+      z.literal(visualizationTypesEnum.BAR_CHART),
+      z.literal(visualizationTypesEnum.PIE_CHART),
+      z.literal(visualizationTypesEnum.SCATTER),
+      z.literal(visualizationTypesEnum.TREEMAP),
+      z.literal(visualizationTypesEnum.SUNBURST),
+      z.literal(visualizationTypesEnum.FUNNEL),
+      z.literal(visualizationTypesEnum.TIMELINE),
+    ])
+    .optional(),
+  tags: z.string().optional(),
+  description: z.string().max(50).optional(),
+  includeHeaders: z.boolean(),
+  sheets: z.string().default("1"),
+  mapping: z.any(),
 });
 export const visualizationSchema = z.union([jsonSchema, exelSchema]);

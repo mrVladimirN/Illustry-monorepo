@@ -1,12 +1,12 @@
 "use server";
 
 import { makeRequest } from "@/lib/request";
-
+import { env } from "@/env.mjs";
 import { revalidateTag } from "next/cache";
 import { ExtendedVisualizationType, VisualizationFilter, VisualizationType } from "types/visualizations";
 export const createOrUpdateVisualizations = async (formData: FormData) => {
   revalidateTag("visualizations");
-  const request = new Request(`http://localhost:7000/api/visualization`, {
+  const request = new Request(`${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/visualization`, {
     method: "POST",
     body: formData,
   });
@@ -19,7 +19,7 @@ export const browseVisualizations = async (filter?: VisualizationFilter) => {
     newFilter = filter;
   }
   revalidateTag("visualizations");
-  const request = new Request(`http://localhost:7000/api/visualizations`, {
+  const request = new Request(`${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/visualizations`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -35,7 +35,7 @@ export const deleteVisualization = async (
   VisualizationFilter: VisualizationFilter
 ) => {
   revalidateTag("visualizations");
-  const request = new Request(`http://localhost:7000/api/visualization`, {
+  const request = new Request(`${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/visualization`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export const deleteVisualization = async (
 export const updateVisualization = async (
   VisualizationCreate: VisualizationType
 ) => {
-  const request = new Request(`http://localhost:7000/api/visualization`, {
+  const request = new Request(`${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/visualization`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -63,7 +63,7 @@ export const findOneVisualization = async (
 ) => {
   revalidateTag("visualizations");
   const request = new Request(
-    `http://localhost:7000/api/visualization/${visualizationFilter.name}`,
+    `${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/visualization/${visualizationFilter.name}`,
     {
       method: "POST",
       headers: {

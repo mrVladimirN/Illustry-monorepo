@@ -13,7 +13,7 @@ import {
 } from "@/components/theme-provider";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_BACKEND_PUBLIC_URL),
   title: {
     default: siteConfig.name,
     template: `%s - ${siteConfig.name}`,
@@ -34,10 +34,6 @@ export const metadata: Metadata = {
     },
   ],
   creator: "mrVladimirN",
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "white" },
-    { media: "(prefers-color-scheme: dark)", color: "black" },
-  ],
 };
 
 interface RootLayoutProps {

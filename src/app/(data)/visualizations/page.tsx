@@ -6,7 +6,7 @@ import { VisualizationsTableShell } from "@/components/shells/visualizations-tab
 import { VisualizationFilter } from "types/visualizations";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_BACKEND_PUBLIC_URL),
   title: "Visualizations",
   description: "Manage your Visualizations",
 };
@@ -33,8 +33,8 @@ const Visualizations = async ({ searchParams }: VisualizationsProps) => {
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-gray-50 rounded-3xl dark:bg-gray-800">
       <div className="space-y-2.5">
         <VisualizationsTableShell
-          data={visualizations.visualizations}
-          pageCount={Math.ceil(visualizations.pagination?.pageCount as number)}
+          data={visualizations ? visualizations.visualizations: []}
+          pageCount={visualizations? Math.ceil(visualizations.pagination?.pageCount as number): 1}
         ></VisualizationsTableShell>
       </div>
     </div>
