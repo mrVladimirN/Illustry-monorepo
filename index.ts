@@ -1,6 +1,6 @@
 // Types
 
-export { AcceptedFile, FileProperties } from "./types/files";
+export { FileDetails, FileProperties } from "./types/files";
 
 export {
   ProjectCreate,
@@ -33,7 +33,7 @@ export {
   FunnelData,
   TimelineEventTag,
   TimelineEvent,
-  TimelineData
+  TimelineData,
 } from "./types/visualizations";
 
 export {
@@ -45,5 +45,5 @@ export {
   ExtendedMongoQuery,
   MongoQuery,
   DeepPartial,
-  with_optional_labels
+  with_optional_labels,
 } from "./types/utils";
