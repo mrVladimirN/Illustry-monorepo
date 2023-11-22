@@ -3,13 +3,11 @@ import * as Bluebird from "bluebird";
 import _ from "lodash";
 import { returnResponse } from "../../utils/helper";
 import { FileError } from "../../errors/fileError";
-
 import { Factory } from "../../factory";
-
 import { generateErrorMessage } from "zod-error";
 import { prettifyZodError } from "../../validators/prettifyError";
 import { FileProperties } from "types/files";
-import { VisualizationCreate, VisualizationType,VisualizationFilter } from "types/visualizations";
+import { VisualizationType, VisualizationFilter } from "types/visualizations";
 import { visualizationFilterSchema } from "../../validators/allValidators";
 
 export const createOrUpdate = (
@@ -17,7 +15,7 @@ export const createOrUpdate = (
   response: Response,
   next: Function
 ) => {
-  const files = _.get(request, "files.File");
+  const files = _.get(request, "files.file");
   if (_.isNil(files))
     return returnResponse(
       response,
@@ -31,10 +29,25 @@ export const createOrUpdate = (
       type: _.get(f, "mimetype") as unknown as string,
     };
   });
+
+  const fileDetails =
+    request.body && request.body.fileDetails
+      ? JSON.parse(request.body.fileDetails)
+      : undefined;
+  const visualizationDetails =
+    request.body && request.body.visualizationDetails
+      ? JSON.parse(request.body.visualizationDetails)
+      : undefined;
+  const allFileDetails = request.body.fullDetails === "true";
   return Bluebird.Promise.resolve(
     Factory.getInstance()
       .getBZL()
-      .VisualizationBZL.createOrUpdateFromFiles(computedFiles)
+      .VisualizationBZL.createOrUpdateFromFiles(
+        computedFiles,
+        allFileDetails,
+        visualizationDetails,
+        fileDetails
+      )
   )
     .asCallback((errGPC: Error, data: VisualizationType) => {
       return returnResponse(response, errGPC, data, next);
@@ -43,7 +56,7 @@ export const createOrUpdate = (
       return returnResponse(response, err, null, next);
     });
 };
- 
+
 // export const update = (
 //   request: Request,
 //   response: Response,
@@ -123,7 +136,7 @@ export const browse = (
     text: request && request.body && request.body.text,
     page: request && request.body && request.body.page,
     sort: request && request.body && request.body.sort,
-    per_page: request && request.body && request.body.per_page
+    per_page: request && request.body && request.body.per_page,
   };
   return Bluebird.Promise.resolve(
     visualizationFilterSchema.safeParse(visualizationFilter)

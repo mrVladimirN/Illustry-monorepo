@@ -1,21 +1,37 @@
-import { Promise } from "bluebird";
+import Bluebird, { Promise } from "bluebird";
 
 import { DbaccInstance } from "../../dbacc/lib";
 import _ from "lodash";
-import { readFiles } from "../../utils/reader";
 import { Factory } from "../../factory";
 import { NoDataFoundError } from "../../errors/noDataFoundError";
-import { ExtendedVisualizationType, VisualizationCreate, VisualizationFilter, VisualizationType,VisualizationUpdate } from "types/visualizations";
-import { FileProperties } from "types/files";
+import {
+  ExtendedVisualizationType,
+  VisualizationCreate,
+  VisualizationFilter,
+  VisualizationType,
+  VisualizationTypesEnum,
+  VisualizationUpdate,
+} from "types/visualizations";
+import { FileDetails, FileProperties } from "types/files";
 import { ProjectFilter } from "types/project";
 import { ExtendedMongoQuery } from "types/utils";
+import {
+  exelFilesToVisualizations,
+  jsonFilesToVisualizations,
+} from "../../utils/reader";
+import { visualizationTypeSchema } from "../../validators/allValidators";
+import { generateErrorMessage } from "zod-error";
+import { prettifyZodError } from "../../validators/prettifyError";
+
 export class VisualizationBZL {
   private dbaccInstance: DbaccInstance;
   constructor(dbaccInstance: DbaccInstance) {
     this.dbaccInstance = dbaccInstance;
   }
 
-  createOrUpdate(Visualization: VisualizationCreate): Promise<VisualizationType> {
+  createOrUpdate(
+    Visualization: VisualizationCreate
+  ): Promise<VisualizationType> {
     return Promise.resolve(
       Factory.getInstance()
         .getBZL()
@@ -60,35 +76,47 @@ export class VisualizationBZL {
         }
       })
       .catch((err) => {
-      
         throw err;
       });
   }
 
   createOrUpdateFromFiles(
-    files: FileProperties[]
+    files: FileProperties[],
+    allFileDetails: boolean,
+    visualizationDetails: VisualizationUpdate,
+    fileDetails: FileDetails
   ): Promise<VisualizationType[]> {
     return Factory.getInstance()
       .getBZL()
       .ProjectBZL.browse({ isActive: true } as ProjectFilter)
       .then((res) => {
         if (res && res.projects && res.projects.length > 0) {
-          return Promise.resolve(readFiles(files)).then((illlustrations) => {
-            return Promise.map(illlustrations, (ill) => {
-              _.set(
-                ill as unknown as VisualizationCreate,
-                "projectName",
-                res && res.projects && res.projects[0].name
+          if (!fileDetails) {
+            throw new Error("No file details was provided");
+          }
+          switch (fileDetails.fileType) {
+            case "EXEL":
+              return this.exelFileProcessor(
+                files,
+                allFileDetails,
+                res.projects[0].name,
+                fileDetails,
+                visualizationDetails
               );
-              return this.createOrUpdate(ill as unknown as VisualizationCreate);
-            });
-          });
+            case "JSON":
+              return this.jsonFileProcessor(
+                files,
+                allFileDetails,
+                res.projects[0].name,
+                visualizationDetails
+              );
+          }
         } else {
           throw new Error("No Active Project");
         }
       })
-      .catch(err => {
-        throw err
+      .catch((err) => {
+        throw err;
       });
   }
 
@@ -143,6 +171,84 @@ export class VisualizationBZL {
       this.dbaccInstance.Visualization.deleteMany(newFilter)
     ).then(() => {
       return true;
+    });
+  }
+
+  private visualizationDetailsProcessor(
+    illustrations: unknown[],
+    allFileDetails: boolean,
+    projectName: string,
+    visualizationDetails: VisualizationUpdate
+  ): Bluebird<VisualizationType[]> {
+    return Promise.map(illustrations, (ill) => {
+      _.set(ill as unknown as VisualizationCreate, "projectName", projectName);
+
+      if (!allFileDetails) {
+        _.forEach(Object.keys(visualizationDetails), (key) => {
+          _.set(
+            ill as unknown as VisualizationCreate,
+            key,
+            _.get(visualizationDetails, key)
+          );
+        });
+      }
+      console.log(ill)
+      const validVisualization = visualizationTypeSchema.safeParse(ill);
+
+      if (!validVisualization.success) {
+        const errorMessage = generateErrorMessage(
+          validVisualization.error.issues,
+          prettifyZodError()
+        );
+        throw new Error(errorMessage);
+      } else {
+        return this.createOrUpdate(ill as unknown as VisualizationCreate);
+      }
+    });
+  }
+
+  private jsonFileProcessor(
+    files: FileProperties[],
+    allFileDetails: boolean,
+    projectName: string,
+    visualizationDetails: VisualizationUpdate
+  ): Bluebird<VisualizationType[]> {
+    return Promise.resolve(
+      jsonFilesToVisualizations(
+        files,
+        visualizationDetails.type as VisualizationTypesEnum,
+        allFileDetails
+      )
+    ).then((illlustrations) => {
+      return this.visualizationDetailsProcessor(
+        illlustrations,
+        allFileDetails,
+        projectName,
+        visualizationDetails
+      );
+    });
+  }
+  private exelFileProcessor(
+    files: FileProperties[],
+    allFileDetails: boolean,
+    projectName: string,
+    fileDetails: FileDetails,
+    visualizationDetails: VisualizationUpdate
+  ): Bluebird<VisualizationType[]> {
+    return Promise.resolve(
+      exelFilesToVisualizations(
+        files,
+        fileDetails,
+        visualizationDetails.type as VisualizationTypesEnum,
+        allFileDetails
+      )
+    ).then((illlustrations) => {
+      return this.visualizationDetailsProcessor(
+        illlustrations,
+        allFileDetails,
+        projectName,
+        visualizationDetails
+      );
     });
   }
 }

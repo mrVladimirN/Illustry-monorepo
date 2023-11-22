@@ -1,48 +1,142 @@
 import _ from "lodash";
-import { Promise, reject, resolve } from "bluebird";
+import { Promise } from "bluebird";
 import * as fs from "fs";
 import { FileError } from "../errors/fileError";
+import { FileDetails, FileProperties } from "types/files";
+import {
+  VisualizationCreate,
+  VisualizationTypesEnum,
+} from "types/visualizations";
+import { transformerProvider } from "../bzl/transformers/transformersProvider";
+import {
+  exelDataProvider,
+  jsonDataProvider,
+} from "../bzl/transformers/dataProvider";
+const XlsxStreamReader = require("xlsx-stream-reader");
 
-import { generateErrorMessage } from "zod-error";
-import { prettifyZodError } from "../validators/prettifyError";
-import { FileProperties } from "types/files";
-import { VisualizationCreate } from "types/visualizations";
-import { visualizationPartialTypeSchema } from "../validators/allValidators";
+const readJsonFile = (
+  file: FileProperties,
+  visualizationType: VisualizationTypesEnum,
+  allFileDetails: boolean
+) => {
+  return new Promise((resolve, reject) => {
+    if (file.type !== "application/json") {
+      reject(new FileError("The provided file is not JSON format"));
+    }
+    const buffer = fs.createReadStream(file.filePath);
+    let finalText: string = "";
+    buffer.on("error", (err: any) => {
+      reject(new FileError("Problems while uploading the files"));
+    });
+    buffer.on("data", (data: string | Buffer) => {
+      finalText = finalText + data;
+    });
+    buffer.on("end", () => {
+      fs.unlinkSync(_.get(file, "filePath"));
+      const visualization = JSON.parse(finalText) as VisualizationCreate;
+      resolve(
+        jsonDataProvider(visualizationType, visualization, allFileDetails)
+      );
+    });
+  });
+};
 
-const readFile = (file: FileProperties) => {
-  if (file.type === "application/json") {
-    return new Promise((resolve, reject) => {
-      const buffer = fs.createReadStream(file.filePath);
-      let finalText: string = "";
+const readExelFile = (
+  file: FileProperties,
+  fileDetails: FileDetails,
+  visualizationType: VisualizationTypesEnum,
+  allFileDetails: boolean
+) => {
+  return new Promise((resolve, reject) => {
+    if (
+      file.type !==
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ) {
+      reject(new FileError("The provided file is not EXEL format"));
+    }
+    const workBookReader = new XlsxStreamReader();
+    const computedRows: any = [];
 
-      buffer.on("error", (err: any) => {
-        reject(new FileError("Problems while uploading the files"));
-      });
-      buffer.on("data", (data: string | Buffer) => {
-        finalText = finalText + data;
-      });
-      buffer.on("end", () => {
-        fs.unlinkSync(_.get(file, "filePath"));
-        const visualization = JSON.parse(finalText) as VisualizationCreate;
-        const validvisualization =
-          visualizationPartialTypeSchema.safeParse(visualization);
+    const buffer = fs.createReadStream(file.filePath);
+    buffer.pipe(workBookReader);
 
-        if (!validvisualization.success) {
-          const errorMessage = generateErrorMessage(
-            validvisualization.error.issues,
-            prettifyZodError()
-          );
-          reject(errorMessage);
+    workBookReader.on("error", (error: any) => {
+      reject(new FileError("Problems while uploading the files"));
+    });
+
+    workBookReader.on("worksheet", function (workSheetReader: any) {
+      const sheets =
+        fileDetails && fileDetails.sheets && !_.isEmpty(fileDetails.sheets)
+          ? _.toNumber(fileDetails.sheets)
+          : 1;
+      if (workSheetReader.id > sheets) {
+        workSheetReader.skip();
+        return;
+      }
+      workSheetReader.on("row", function (row: any) {
+        const includeHeaders = fileDetails && fileDetails.includeHeaders;
+        if (!includeHeaders) {
+          if (_.toNumber(row.attributes.r) !== 1) {
+            //skip first row (because it is header)
+            computedRows.push(
+              transformerProvider(
+                visualizationType,
+                fileDetails.mapping,
+                row.values,
+                allFileDetails
+              )
+            );
+          }
         } else {
-          resolve(visualization);
+          computedRows.push(
+            transformerProvider(
+              visualizationType,
+              fileDetails.mapping,
+              row.values,
+              allFileDetails
+            )
+          );
         }
       });
+      workSheetReader.on("end", function () {});
+
+      // call process after registering handlers
+      workSheetReader.process();
     });
-  }
+
+    workBookReader.on("end", () => {
+      fs.unlinkSync(_.get(file, "filePath"));
+      resolve(
+        exelDataProvider(visualizationType, computedRows, allFileDetails)
+      );
+    });
+  });
 };
-export const readFiles = (files: FileProperties[]) => {
+
+export const exelFilesToVisualizations = (
+  files: FileProperties[],
+  fileDetails: FileDetails,
+  visualizationType: VisualizationTypesEnum,
+  allFileDetails: boolean
+) => {
   return Promise.map(files, (file) => {
-    return Promise.resolve(readFile(file));
+    return Promise.resolve(
+      readExelFile(file, fileDetails, visualizationType, allFileDetails)
+    );
+  }).then((files) => {
+    return files;
+  });
+};
+
+export const jsonFilesToVisualizations = (
+  files: FileProperties[],
+  visualizationType: VisualizationTypesEnum,
+  allFileDetails: boolean
+) => {
+  return Promise.map(files, (file) => {
+    return Promise.resolve(
+      readJsonFile(file, visualizationType, allFileDetails)
+    );
   }).then((files) => {
     return files;
   });

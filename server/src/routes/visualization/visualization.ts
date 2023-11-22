@@ -9,7 +9,7 @@ const upload = multer({
   storage: storage,
   limits: { fileSize: 100 * 1024 * 1024 },
 });
-const finalupload = upload.fields([{ name: "File", maxCount: 10 }]);
+const finalupload = upload.fields([{ name: "file", maxCount: 10 }]);
 router.post("/api/visualization", finalupload, VisualizationAPI.createOrUpdate);
 router.post("/api/visualizations", VisualizationAPI.browse);
 router.post("/api/visualization/:name", VisualizationAPI.findOne);
