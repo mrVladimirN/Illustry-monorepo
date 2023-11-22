@@ -23,7 +23,7 @@ export function MappingTab({
   router,
 }: MappingTabProps) {
   const [fileDetails, setFileDetails] = React.useState<boolean>(false);
-  const handleAllFileDetails = (value: boolean) => {
+  const handleFullDetails = (value: boolean) => {
     if (value !== fileDetails) {
       setFileDetails(value);
     }
@@ -82,7 +82,7 @@ export function MappingTab({
       <div className="col-span-2">
         <FormField
           control={form.control}
-          name="allFileDetails"
+          name="fullDetails"
           render={({ field }) => (
             <>
               <FormItem>
@@ -95,7 +95,7 @@ export function MappingTab({
                       className="ml-[3%] mt-[0.5%]"
                       defaultChecked={fileDetails}
                       onCheckedChange={(isChecked) => {
-                        handleAllFileDetails(isChecked as boolean);
+                        handleFullDetails(isChecked as boolean);
                         field.onChange(isChecked);
                       }}
                     />

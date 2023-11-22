@@ -15,26 +15,10 @@ export function ExelVisualizationMapping({
         <div className="flex-grow">
           <Input
             placeholder="Column number for Visualization Name"
-            defaultValue={form.getValues("mapping.VisualizationName") || ""}
             onChange={(e) => {
               setTimeout(() => {
                 const value = e.target.value;
-                form.setValue("mapping.VisualizationName", value);
-              }, 100);
-            }}
-          />
-        </div>
-      </div>
-      <div className="flex items-center space-x-4">
-        <div className="w-20">Visualization Type:</div>
-        <div className="flex-grow">
-          <Input
-            placeholder="Column number for Visualization Type"
-            defaultValue={form.getValues("mapping.VisualizationType") || ""}
-            onChange={(e) => {
-              setTimeout(() => {
-                const value = e.target.value;
-                form.setValue("mapping.VisualizationType", value);
+                form.setValue("mapping.visualizationName", value);
               }, 100);
             }}
           />
@@ -45,13 +29,10 @@ export function ExelVisualizationMapping({
         <div className="flex-grow">
           <Input
             placeholder="Column number for Visualization Description"
-            defaultValue={
-              form.getValues("mapping.VisualizationDescription") || ""
-            }
             onChange={(e) => {
               setTimeout(() => {
                 const value = e.target.value;
-                form.setValue("mapping.VisualizationDescription", value);
+                form.setValue("mapping.visualizationDescription", value);
               }, 100);
             }}
           />
@@ -62,10 +43,9 @@ export function ExelVisualizationMapping({
         <div className="flex-grow">
           <Input
             placeholder="Column number for Visualization Tags"
-            defaultValue={form.getValues("mapping.VisualizationTags") || ""}
             onChange={(e) => {
               const value = e.target.value;
-              form.setValue("mapping.VisualizationTags", value);
+              form.setValue("mapping.visualizationTags", value);
             }}
           />
         </div>

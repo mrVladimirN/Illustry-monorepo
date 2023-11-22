@@ -17,7 +17,7 @@ export enum visualizationTypesEnum {
   TIMELINE = "timeline",
 }
 const commonFileSchema = z.object({
-  allFileDetails: z.boolean(),
+  fullDetails: z.boolean().default(false),
   fileType: z.string(),
   files: z
     .unknown()
@@ -88,7 +88,7 @@ export const exelSchema = commonFileSchema.extend({
     .optional(),
   tags: z.string().optional(),
   description: z.string().max(50).optional(),
-  includeHeaders: z.boolean(),
+  includeHeaders: z.boolean().default(false),
   sheets: z.string().default("1"),
   mapping: z.any(),
 });

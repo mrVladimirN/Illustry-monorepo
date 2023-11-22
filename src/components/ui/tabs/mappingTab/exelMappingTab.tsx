@@ -14,6 +14,14 @@ import { Inputs } from "@/components/form/add-visualization-form";
 import { UseFormReturn } from "react-hook-form";
 import { ExelWordCloudMapping } from "./exelMappings/exelWordCloudMapping";
 import { VisualizationDetails } from "./visualizationDetails";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../select";
+import { ExelVisualizationMapping } from "./exelMappings/visualizationDetailsMapping";
 interface ExelMappingTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
   router: AppRouterInstance;
@@ -28,9 +36,22 @@ export function ExelMappingTab({
     if (type) {
       switch (type) {
         case visualizationTypesEnum.WORLD_CLOUD:
-          return <ExelWordCloudMapping form={form} fileDetails={fileDetails}/>;
+          return (
+            <>
+              <div className="space-y-4">
+                {fileDetails && <ExelVisualizationMapping form={form} />}
+                <ExelWordCloudMapping form={form} />
+              </div>
+            </>
+          );
         default:
-          return null;
+          return (
+            <>
+              <div className="space-y-4">
+                {fileDetails && <ExelVisualizationMapping form={form} />}
+              </div>
+            </>
+          );
       }
     }
   };
@@ -40,16 +61,59 @@ export function ExelMappingTab({
       <div className="col-span-1">
         <FormField
           control={form.control}
+          name="type"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Type</FormLabel>
+              <FormControl>
+                <Select
+                  value={form.getValues("type")}
+                  onValueChange={(value: visualizationTypesEnum) => {
+                    form.setValue("type", value);
+                    router.refresh();
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="word-cloud">WordCloud</SelectItem>
+                    <SelectItem value="force-directed-graph">
+                      Forced Layout Graph
+                    </SelectItem>
+                    <SelectItem value="sankey">Sankey</SelectItem>
+                    <SelectItem value="calendar">Calendar</SelectItem>
+                    <SelectItem value="hierarchical-edge-bundling">
+                      Hierarchical Edge Bundling
+                    </SelectItem>
+                    <SelectItem value="matrix">Matrix</SelectItem>
+                    <SelectItem value="line-chart">Line Chart</SelectItem>
+                    <SelectItem value="bar-chart">Bar Chart</SelectItem>
+                    <SelectItem value="pie-chart">Pie Chart</SelectItem>
+                    <SelectItem value="scatter">Scatter</SelectItem>
+                    <SelectItem value="treemap">Treemap</SelectItem>
+                    <SelectItem value="sunburst">Sunburst</SelectItem>
+                    <SelectItem value="funnel">Funnel</SelectItem>
+                    <SelectItem value="timeline">Timeline</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>
+      <div className="col-span-1">
+        <FormField
+          control={form.control}
           name="sheets"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Sheets number</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="Type how many sheets to include"
-                  defaultValue={
-                    form.getValues("sheets") || "1"
-                  }
+                  placeholder="How many sheets to include"
+                  defaultValue={form.getValues("sheets") || "1"}
                   onChange={(e) => {
                     setTimeout(() => {
                       const value = e.target.value;
@@ -94,7 +158,11 @@ export function ExelMappingTab({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Mapping</FormLabel>
-              <FormControl>{renderMapping(form.getValues("type") as visualizationTypesEnum)}</FormControl>
+              <FormControl>
+                {renderMapping(
+                  form.getValues("type") as visualizationTypesEnum
+                )}
+              </FormControl>
               <FormMessage />
             </FormItem>
           )}

@@ -20,7 +20,10 @@ import { Tabs, TabsList, TabsTrigger } from "../ui/tabs";
 import { MappingTab } from "../ui/tabs/mappingTab/mappingTab";
 import { TypeTab } from "../ui/tabs/typeTab/typeTab";
 import { FileDetails } from "types/files";
-import { VisualizationUpdate } from "types/visualizations";
+import {
+  VisualizationTypesEnum,
+  VisualizationUpdate,
+} from "types/visualizations";
 
 export type Inputs = z.infer<typeof visualizationSchema>;
 export type ExelType = z.infer<typeof exelSchema>;
@@ -49,7 +52,6 @@ export function AddVisualizationForm() {
     resolver: zodResolver(visualizationSchema),
     defaultValues: {
       fileType: fileTypes.JSON,
-      allFileDetails: true,
     },
   });
 
@@ -58,26 +60,26 @@ export function AddVisualizationForm() {
       try {
         if (files.length > 0) {
           const formData = new FormData();
-          const fileDetails: FileDetails = { fileType: data.fileType };
-          fileDetails.includeHeaders = (data as ExelType).includeHeaders;
-          fileDetails.mapping = (data as ExelType).mapping;
-          fileDetails.sheets = (data as ExelType).sheets;
-          fileDetails.type = (data as ExelType).type;
-          formData.append("allFileDetails", data.allFileDetails.toString());
-          formData.append("FileDetails", JSON.stringify(fileDetails));
+          const fileDetails: FileDetails = {
+            fileType: data.fileType,
+            includeHeaders: (data as ExelType).includeHeaders,
+            mapping: (data as ExelType).mapping,
+            sheets: (data as ExelType).sheets,
+          };
+          formData.append("fullDetails", data.fullDetails.toString());
+          formData.append("fileDetails", JSON.stringify(fileDetails));
           const visualizationDetails: VisualizationUpdate = {
             name: (data as ExelType).name as string,
+            type: (data as ExelType).type as unknown as VisualizationTypesEnum,
+            description: (data as ExelType).description,
+            tags: (data as ExelType).tags?.split(","),
           };
-          visualizationDetails.description = (data as ExelType).description;
-          visualizationDetails.tags = (data as ExelType).tags?.split(",");
-          if (data.allFileDetails) {
-            formData.append(
-              "VisualizationDetails",
-              JSON.stringify(visualizationDetails)
-            );
-          }
+          formData.append(
+            "visualizationDetails",
+            JSON.stringify(visualizationDetails)
+          );
           files.forEach((f) => {
-            formData.append("File", f.file as File);
+            formData.append("file", f.file as File);
           });
           const res = await fetch(
             `${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/visualization`,
@@ -115,7 +117,7 @@ export function AddVisualizationForm() {
         tags: "",
         includeHeaders: false,
         description: "",
-        mapping: { Names: "", Values: "", Properties: "" },
+        mapping: { names: "", values: "", properties: "" },
       });
       setFiles([]); // Clear the files
     }

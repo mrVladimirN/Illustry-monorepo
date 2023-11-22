@@ -4,14 +4,6 @@ import { makeRequest } from "@/lib/request";
 import { env } from "@/env.mjs";
 import { revalidateTag } from "next/cache";
 import { ExtendedVisualizationType, VisualizationFilter, VisualizationType } from "types/visualizations";
-export const createOrUpdateVisualizations = async (formData: FormData) => {
-  revalidateTag("visualizations");
-  const request = new Request(`${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/visualization`, {
-    method: "POST",
-    body: formData,
-  });
-  return await makeRequest<VisualizationType[]>(request, ["visualizations"]);
-};
 
 export const browseVisualizations = async (filter?: VisualizationFilter) => {
   let newFilter: VisualizationFilter = {};
