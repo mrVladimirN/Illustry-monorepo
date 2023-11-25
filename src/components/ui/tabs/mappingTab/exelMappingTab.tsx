@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "../../select";
 import { ExelVisualizationMapping } from "./exelMappings/visualizationDetailsMapping";
+import { ExelNodeLinkMapping } from "./exelMappings/exelNodeLinkMapping";
 interface ExelMappingTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
   router: AppRouterInstance;
@@ -41,6 +42,17 @@ export function ExelMappingTab({
               <div className="space-y-4">
                 {fileDetails && <ExelVisualizationMapping form={form} />}
                 <ExelWordCloudMapping form={form} />
+              </div>
+            </>
+          );
+        case visualizationTypesEnum.FORCE_DIRECTED_GRAPH:
+        case visualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
+        case visualizationTypesEnum.SANKEY:
+          return (
+            <>
+              <div className="space-y-4">
+                {fileDetails && <ExelVisualizationMapping form={form} />}
+                <ExelNodeLinkMapping form={form} />
               </div>
             </>
           );
