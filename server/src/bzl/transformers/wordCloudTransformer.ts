@@ -1,22 +1,13 @@
 import _ from "lodash";
 
-// TODO: mapping will have a type
 export const wordCloudTransformer = (
-  mapping: any,
-  values: any,
+  mapping: Record<string, unknown>,
+  values: Record<string, unknown>,
   allFileDetails: boolean
 ) => {
   const baseValues = {
-    name:
-      values[_.toNumber(mapping.names)] &&
-      typeof values[_.toNumber(mapping.names)] === "string"
-        ? values[_.toNumber(mapping.names)]
-        : "",
-    value:
-      values[_.toNumber(mapping.values)] &&
-      typeof values[_.toNumber(mapping.values)] === "number"
-        ? values[_.toNumber(mapping.values)]
-        : 0,
+    name: values[_.toNumber(mapping.names)],
+    value: values[_.toNumber(mapping.values)],
     properties: values[_.toNumber(mapping.properties)],
   };
   const visualizationDetails = {
@@ -38,6 +29,9 @@ export const wordCloudTransformer = (
         : undefined,
   };
   return allFileDetails
-    ? { ...baseValues, ...visualizationDetails }
-    : baseValues;
+    ? {
+        ...{ words: baseValues },
+        ...visualizationDetails,
+      }
+    : { words: baseValues };
 };
