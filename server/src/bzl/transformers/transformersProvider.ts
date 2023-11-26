@@ -3,6 +3,7 @@ import { wordCloudTransformer } from "./wordCloudTransformer";
 import { nodeLinkTransformer } from "./nodeLinkTransformers";
 import _ from "lodash";
 import { calendarTransformer } from "./calendarTransformers";
+import { axisChartTransformer } from "./axisChartTransformer";
 
 export const transformerProvider = (
   type: VisualizationTypesEnum,
@@ -19,5 +20,8 @@ export const transformerProvider = (
       return nodeLinkTransformer(mapping, values, allFileDetails);
     case VisualizationTypesEnum.CALENDAR:
       return calendarTransformer(mapping, values, allFileDetails);
+    case VisualizationTypesEnum.BAR_CHART:
+    case VisualizationTypesEnum.LINE_CHART:
+      return axisChartTransformer(mapping, values, allFileDetails);
   }
 };
