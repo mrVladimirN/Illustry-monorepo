@@ -1,6 +1,5 @@
 'use client'
 import * as React from "react";
-import ReactEcharts from "./generic/echarts";
 import { EChartsOption } from "echarts/types/dist/echarts";
 import { FunnelData } from "types/visualizations";
 import {
@@ -10,11 +9,12 @@ import {
 import Legend from "../ui/legend";
 import { with_legend, with_options } from "@/lib/types/utils";
 import { useThemeColors } from "../theme-provider";
+import dynamic from "next/dynamic";
 
 interface FunnelProp extends with_legend, with_options {
   data: FunnelData;
 }
-
+const ReactEcharts = dynamic(() => import("./generic/echarts"), { ssr: false });
 const FunnelView = ({ data,  legend, options }: FunnelProp) => {
   const activeTheme = useThemeColors();
   const theme =

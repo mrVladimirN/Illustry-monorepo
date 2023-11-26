@@ -1,6 +1,5 @@
-'use client'
+"use client";
 import * as React from "react";
-import ReactEcharts from "./generic/echarts";
 import { EChartsOption, SeriesOption } from "echarts/types/dist/echarts";
 import {
   computeCalendar,
@@ -14,15 +13,12 @@ import { CalendarData, CalendarType } from "types/visualizations";
 import Legend from "../ui/legend";
 import { with_legend, with_options } from "@/lib/types/utils";
 import { useThemeColors } from "../theme-provider";
-
+import dynamic from "next/dynamic";
+const ReactEcharts = dynamic(() => import("./generic/echarts"), { ssr: false });
 interface CalendarGraphProp extends with_legend, with_options {
   data: CalendarData;
 }
-const CalendarGraphView = ({
-  data,
-  legend,
-  options,
-}: CalendarGraphProp) => {
+const CalendarGraphView = ({ data, legend, options }: CalendarGraphProp) => {
   const activeTheme = useThemeColors();
   const theme =
     typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
@@ -30,7 +26,6 @@ const CalendarGraphView = ({
   const colors = isDarkTheme
     ? activeTheme.calendar.dark.colors
     : activeTheme.calendar.light.colors;
-
   const { calendar } = data;
   const categories: string[] = computeCategoriesCalendar(calendar);
   const computedCalendar = computeCalendar(calendar, isDarkTheme);
@@ -77,13 +72,13 @@ const CalendarGraphView = ({
     calendar: computedCalendar.calendar as CalendarOption,
     series: computedCalendar.series as SeriesOption,
   };
-  const canvasHeight = `${computedCalendar.calendar.length * 17.5}vh`;
+  const canvasHeight = `${computedCalendar.calendar.length * 35}vh`;
   return (
     <div className="relative mt-[4%] flex flex-col items-center">
       {legend && (
         <Legend legendData={computeLegendColors(categories, colors)} />
       )}
-      <div className="w-full w-full">
+      <div className="w-full h-full">
         <ReactEcharts
           option={option}
           className="w-full sm:h-120 lg:h-160"

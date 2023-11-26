@@ -55,7 +55,7 @@ export function ExelNodeLinkMapping({ form }: ExelNodeLinkMappingProps) {
         <div className="w-20">Sources:</div>
         <div className="flex-grow">
           <Input
-            placeholder="Column number for Nodes"
+            placeholder="Column number for Sources"
             defaultValue={form.getValues("mapping.sources") || ""}
             onChange={(e) => {
               setTimeout(() => {
@@ -70,7 +70,7 @@ export function ExelNodeLinkMapping({ form }: ExelNodeLinkMappingProps) {
         <div className="w-20">Targets:</div>
         <div className="flex-grow">
           <Input
-            placeholder="Column number for Nodes"
+            placeholder="Column number for Targets"
             defaultValue={form.getValues("mapping.targets") || ""}
             onChange={(e) => {
               setTimeout(() => {
@@ -85,7 +85,7 @@ export function ExelNodeLinkMapping({ form }: ExelNodeLinkMappingProps) {
         <div className="w-20">Values:</div>
         <div className="flex-grow">
           <Input
-            placeholder="Column number for Nodes"
+            placeholder="Column number for Values"
             defaultValue={form.getValues("mapping.values") || ""}
             onChange={(e) => {
               setTimeout(() => {

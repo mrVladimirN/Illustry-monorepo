@@ -14,7 +14,7 @@ import {
   PieChart,
   TreemapChart,
   SunburstChart,
-  FunnelChart
+  FunnelChart,
 } from "echarts/charts";
 // Import the tooltip, title, rectangular coordinate system, dataset and transform components
 import {
@@ -51,7 +51,7 @@ const ReactEcharts = <T extends EChartsOption | WordCloudSeriesOption>({
   settings,
   loading,
   theme,
-  style
+  style,
 }: ReactEChartsProps<T>): JSX.Element => {
   echarts.use([
     GraphChart,
@@ -72,7 +72,7 @@ const ReactEcharts = <T extends EChartsOption | WordCloudSeriesOption>({
     ScatterChart,
     TreemapChart,
     SunburstChart,
-    FunnelChart
+    FunnelChart,
   ]);
 
   const chartRef = useRef<HTMLDivElement>(null);

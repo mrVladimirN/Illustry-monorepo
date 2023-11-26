@@ -1,6 +1,6 @@
-'use client'
+"use client";
 import * as React from "react";
-import ReactEcharts from "./generic/echarts";
+ 
 import { EChartsOption } from "echarts/types/dist/echarts";
 import {
   computeCategoriesFLG,
@@ -12,7 +12,8 @@ import { computeLegendColors } from "@/lib/visualizations/calendar/helper";
 import Legend from "../ui/legend";
 import { with_legend, with_options } from "@/lib/types/utils";
 import { useThemeColors } from "../theme-provider";
-
+import dynamic from "next/dynamic";
+const ReactEcharts = dynamic(() => import("./generic/echarts"), { ssr: false });
 interface ForcedLayoutGraphProp extends with_legend, with_options {
   data: NodeLinkData;
 }

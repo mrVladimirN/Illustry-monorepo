@@ -77,7 +77,6 @@ const TimelineView = dynamic(
   }
 );
 export function HubShell({ data }: HubShellProps) {
-
   const renderGraph = () => {
     if (data) {
       switch (data.type) {
@@ -86,7 +85,6 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <HierarchicalEdgeBundlingView
                 data={data.data as NodeLinkData}
-                
                 legend={true}
                 options={true}
               />
@@ -97,7 +95,6 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <ForcedLayoutGraphView
                 data={data.data as NodeLinkData}
-               
                 legend={true}
                 options={true}
               />
@@ -108,7 +105,6 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <SankeyGraphView
                 data={data.data as NodeLinkData}
-              
                 legend={true}
                 options={true}
               />
@@ -201,7 +197,6 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <TreeMapView
                 data={data.data as HierarchyData}
-               
                 legend={true}
                 options={true}
               />
@@ -222,12 +217,11 @@ export function HubShell({ data }: HubShellProps) {
             <Suspense fallback={<Fallback />}>
               <TimelineView
                 data={data.data as TimelineData}
-              
                 legend={true}
                 options={true}
               />
             </Suspense>
-         );
+          );
         default:
           return null;
       }

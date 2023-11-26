@@ -23,6 +23,8 @@ import {
 } from "../../select";
 import { ExelVisualizationMapping } from "./exelMappings/visualizationDetailsMapping";
 import { ExelNodeLinkMapping } from "./exelMappings/exelNodeLinkMapping";
+import { VisualizationType } from "./visualizationType";
+import { ExelCalendarMapping } from "./exelMappings/exelCalendarMapping";
 interface ExelMappingTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
   router: AppRouterInstance;
@@ -56,6 +58,15 @@ export function ExelMappingTab({
               </div>
             </>
           );
+        case visualizationTypesEnum.CALENDAR:
+          return (
+            <>
+              <div className="space-y-4">
+                {fileDetails && <ExelVisualizationMapping form={form} />}
+                <ExelCalendarMapping form={form} />
+              </div>
+            </>
+          );
         default:
           return (
             <>
@@ -69,52 +80,8 @@ export function ExelMappingTab({
   };
   return (
     <div className="grid grid-cols-2 gap-5">
-      {!fileDetails && <VisualizationDetails form={form} router={router} />}
-      <div className="col-span-1">
-        <FormField
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Type</FormLabel>
-              <FormControl>
-                <Select
-                  value={form.getValues("type")}
-                  onValueChange={(value: visualizationTypesEnum) => {
-                    form.setValue("type", value);
-                    router.refresh();
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="word-cloud">WordCloud</SelectItem>
-                    <SelectItem value="force-directed-graph">
-                      Forced Layout Graph
-                    </SelectItem>
-                    <SelectItem value="sankey">Sankey</SelectItem>
-                    <SelectItem value="calendar">Calendar</SelectItem>
-                    <SelectItem value="hierarchical-edge-bundling">
-                      Hierarchical Edge Bundling
-                    </SelectItem>
-                    <SelectItem value="matrix">Matrix</SelectItem>
-                    <SelectItem value="line-chart">Line Chart</SelectItem>
-                    <SelectItem value="bar-chart">Bar Chart</SelectItem>
-                    <SelectItem value="pie-chart">Pie Chart</SelectItem>
-                    <SelectItem value="scatter">Scatter</SelectItem>
-                    <SelectItem value="treemap">Treemap</SelectItem>
-                    <SelectItem value="sunburst">Sunburst</SelectItem>
-                    <SelectItem value="funnel">Funnel</SelectItem>
-                    <SelectItem value="timeline">Timeline</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-      </div>
+      {!fileDetails && <VisualizationDetails form={form} />}
+      <VisualizationType form={form} router={router} />
       <div className="col-span-1">
         <FormField
           control={form.control}

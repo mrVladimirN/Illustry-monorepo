@@ -1,5 +1,4 @@
 import { Inputs } from "@/components/form/add-visualization-form";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
 import { UseFormReturn } from "react-hook-form";
 import {
   FormField,
@@ -13,11 +12,9 @@ import { Textarea } from "../../textarea";
 
 export interface VisualizationDetailsProp {
   form: UseFormReturn<Inputs>; // Include the form context
-  router: AppRouterInstance;
 }
 export function VisualizationDetails({
   form,
-  router,
 }: VisualizationDetailsProp) {
   return (
     <>
@@ -45,7 +42,6 @@ export function VisualizationDetails({
           )}
         />
       </div>
-
       <div className="col-span-1">
         <FormField
           control={form.control}
@@ -94,6 +90,7 @@ export function VisualizationDetails({
           )}
         />
       </div>
+  
     </>
   );
 }

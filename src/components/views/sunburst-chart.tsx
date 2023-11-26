@@ -2,7 +2,6 @@
 import { EChartsOption } from "echarts";
 import React from "react";
 import { HierarchyData } from "types/visualizations";
-import ReactEcharts from "./generic/echarts";
 import {
   computeCategories,
   computeNodesHierarchy,
@@ -11,11 +10,12 @@ import Legend from "../ui/legend";
 import { computeLegendColors } from "@/lib/visualizations/calendar/helper";
 import { with_legend, with_options } from "@/lib/types/utils";
 import { useThemeColors } from "../theme-provider";
+import dynamic from "next/dynamic";
 
 interface SunburstViewProp extends with_legend, with_options {
   data: HierarchyData;
 }
-
+const ReactEcharts = dynamic(() => import("./generic/echarts"), { ssr: false });
 const SunburstView = ({ data, legend, options }: SunburstViewProp) => {
   const activeTheme = useThemeColors();
   const theme =
