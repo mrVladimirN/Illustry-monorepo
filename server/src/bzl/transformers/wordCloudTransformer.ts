@@ -1,4 +1,6 @@
 import _ from "lodash";
+import { visualizationDetailsExtractor } from "../../utils/helper";
+import { WordType } from "types/visualizations";
 
 export const wordCloudTransformer = (
   mapping: Record<string, unknown>,
@@ -10,28 +12,33 @@ export const wordCloudTransformer = (
     value: values[_.toNumber(mapping.values)],
     properties: values[_.toNumber(mapping.properties)],
   };
-  const visualizationDetails = {
-    visualizationName:
-      values[_.toNumber(mapping.visualizationName)] &&
-      typeof values[_.toNumber(mapping.visualizationName)] === "string" &&
-      !_.isEmpty(values[_.toNumber(mapping.visualizationName)])
-        ? values[_.toNumber(mapping.visualizationName)]
-        : undefined,
-    visualizationDescription:
-      values[_.toNumber(mapping.visualizationDescription)] &&
-      typeof values[_.toNumber(mapping.visualizationDescription)] === "string"
-        ? values[_.toNumber(mapping.visualizationDescription)]
-        : undefined,
-    visualizationTags:
-      values[_.toNumber(mapping.visualizationTags)] &&
-      typeof values[_.toNumber(mapping.visualizationTags)] === "string"
-        ? values[_.toNumber(mapping.visualizationTags)]
-        : undefined,
-  };
+  const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails
     ? {
-        ...{ words: baseValues },
+        ...{ word: baseValues },
         ...visualizationDetails,
       }
-    : { words: baseValues };
+    : { word: baseValues };
+};
+export const wordsExtractor = (data: Record<string, unknown>[]) => {
+  const transformedData = data.reduce(
+    (result, item) => {
+      const words = item.word;
+      const { name, value, properties } = words as Record<string, unknown>;
+      let word;
+      word = (result.words as Record<string, unknown>[]).find(
+        (w: Record<string, unknown>) => w.name === name
+      );
+
+      if (_.isNil(word)) {
+        word = { name, value, properties } as WordType;
+        if (!_.isNil(word.name) && !_.isNil(word.value)) {
+          (result.words as WordType[]).push(word);
+        }
+      }
+      return result;
+    },
+    { words: [] }
+  );
+  return transformedData;
 };

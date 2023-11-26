@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { visualizationDetailsExtractor } from "../../utils/helper";
 import { Node, Link } from "types/visualizations";
 
 export const nodeLinkTransformer = (
@@ -7,31 +8,14 @@ export const nodeLinkTransformer = (
   allFileDetails: boolean
 ) => {
   const baseValues = {
-    category: values[_.toNumber(mapping.categories)],
     name: values[_.toNumber(mapping.nodes)],
+    category: values[_.toNumber(mapping.categories)],
     properties: values[_.toNumber(mapping.properties)],
     source: values[_.toNumber(mapping.sources)],
     target: values[_.toNumber(mapping.targets)],
     value: values[_.toNumber(mapping.values)],
   };
-  const visualizationDetails = {
-    visualizationName:
-      values[_.toNumber(mapping.visualizationName)] &&
-      typeof values[_.toNumber(mapping.visualizationName)] === "string" &&
-      !_.isEmpty(values[_.toNumber(mapping.visualizationName)])
-        ? values[_.toNumber(mapping.visualizationName)]
-        : undefined,
-    visualizationDescription:
-      values[_.toNumber(mapping.visualizationDescription)] &&
-      typeof values[_.toNumber(mapping.visualizationDescription)] === "string"
-        ? values[_.toNumber(mapping.visualizationDescription)]
-        : undefined,
-    visualizationTags:
-      values[_.toNumber(mapping.visualizationTags)] &&
-      typeof values[_.toNumber(mapping.visualizationTags)] === "string"
-        ? values[_.toNumber(mapping.visualizationTags)]
-        : undefined,
-  };
+  const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails
     ? { ...{ nodeLink: baseValues }, ...visualizationDetails }
     : { nodeLink: baseValues };
@@ -45,17 +29,25 @@ export const nodesLinksExtractor = (data: Record<string, unknown>[]) => {
       let link;
       const { category, name, properties, source, target, value } =
         nodeLink as Record<string, unknown>;
-      if (!_.isNil(name) && !_.isNil(category)) {
-        node = (result.nodes as Node[]).find((n: Node) => n.name === name);
-      }
-      if (!node) {
+      node = (result.nodes as Node[]).find((n: Node) => n.name === name);
+      link = (result.links as Link[]).find(
+        (n: Link) => n.source === source && n.target === target
+      );
+      if (_.isNil(node)) {
         node = { name, category, properties } as Node;
-        (result.nodes as Node[]).push(node);
+        if (!_.isNil(node.name) && !_.isNil(node.category)) {
+          (result.nodes as Node[]).push(node);
+        }
       }
-
-      if (!_.isNil(source) && !_.isNil(target) && !_.isNil(value)) {
+      if (_.isNil(link)) {
         link = { source, target, value } as Link;
-        (result.links as Link[]).push(link);
+        if (
+          !_.isNil(link.source) &&
+          !_.isNil(link.target) &&
+          !_.isNil(link.value)
+        ) {
+          (result.links as Link[]).push(link);
+        }
       }
       return result;
     },

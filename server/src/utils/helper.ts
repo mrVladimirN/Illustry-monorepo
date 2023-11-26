@@ -21,7 +21,30 @@ export const returnResponse = (res: any, err: any, data: any, next: any) => {
   }
 };
 
-export const extractVisualizationProperties = (
+export const visualizationDetailsExtractor = (
+  mapping: Record<string, unknown>,
+  values: Record<string, unknown>,
+) => {
+  return {
+    visualizationName:
+      values[_.toNumber(mapping.visualizationName)] &&
+      typeof values[_.toNumber(mapping.visualizationName)] === "string" &&
+      !_.isEmpty(values[_.toNumber(mapping.visualizationName)])
+        ? values[_.toNumber(mapping.visualizationName)]
+        : undefined,
+    visualizationDescription:
+      values[_.toNumber(mapping.visualizationDescription)] &&
+      typeof values[_.toNumber(mapping.visualizationDescription)] === "string"
+        ? values[_.toNumber(mapping.visualizationDescription)]
+        : undefined,
+    visualizationTags:
+      values[_.toNumber(mapping.visualizationTags)] &&
+      typeof values[_.toNumber(mapping.visualizationTags)] === "string"
+        ? values[_.toNumber(mapping.visualizationTags)]
+        : undefined,
+  };
+};
+export const visualizationPropertiesExtractor = (
   arr: Record<string, unknown>[]
 ) => {
   let name: string = "";

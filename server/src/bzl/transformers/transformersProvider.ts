@@ -2,6 +2,7 @@ import { VisualizationTypesEnum } from "types/visualizations";
 import { wordCloudTransformer } from "./wordCloudTransformer";
 import { nodeLinkTransformer } from "./nodeLinkTransformers";
 import _ from "lodash";
+import { calendarTransformer } from "./calendarTransformers";
 
 export const transformerProvider = (
   type: VisualizationTypesEnum,
@@ -16,5 +17,7 @@ export const transformerProvider = (
     case VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
     case VisualizationTypesEnum.SANKEY:
       return nodeLinkTransformer(mapping, values, allFileDetails);
+    case VisualizationTypesEnum.CALENDAR:
+      return calendarTransformer(mapping, values, allFileDetails);
   }
 };

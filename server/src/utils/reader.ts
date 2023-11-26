@@ -33,7 +33,7 @@ const readJsonFile = (
     });
     buffer.on("end", () => {
       fs.unlinkSync(_.get(file, "filePath"));
-      const visualization = JSON.parse(finalText) as VisualizationCreate;
+      const visualization = JSON.parse(finalText) as Record<string, unknown>;
       resolve(
         jsonDataProvider(visualizationType, visualization, allFileDetails)
       );
