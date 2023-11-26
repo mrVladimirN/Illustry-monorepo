@@ -25,6 +25,7 @@ import { ExelVisualizationMapping } from "./exelMappings/visualizationDetailsMap
 import { ExelNodeLinkMapping } from "./exelMappings/exelNodeLinkMapping";
 import { VisualizationType } from "./visualizationType";
 import { ExelCalendarMapping } from "./exelMappings/exelCalendarMapping";
+import { ExelAxisChartMapping } from "./exelMappings/exelaxisChartMapping";
 interface ExelMappingTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
   router: AppRouterInstance;
@@ -64,6 +65,16 @@ export function ExelMappingTab({
               <div className="space-y-4">
                 {fileDetails && <ExelVisualizationMapping form={form} />}
                 <ExelCalendarMapping form={form} />
+              </div>
+            </>
+          );
+        case visualizationTypesEnum.BAR_CHART:
+        case visualizationTypesEnum.LINE_CHART:
+          return (
+            <>
+              <div className="space-y-4">
+                {fileDetails && <ExelVisualizationMapping form={form} />}
+                <ExelAxisChartMapping form={form} />
               </div>
             </>
           );
