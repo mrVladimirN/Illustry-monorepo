@@ -20,6 +20,7 @@ import { VisualizationType } from "./visualizationType";
 import { ExelCalendarMapping } from "./exelMappings/exelCalendarMapping";
 import { ExelAxisChartMapping } from "./exelMappings/exelAxisChartMapping";
 import { ExelPieChartFunnelMapping } from "./exelMappings/exelPieChartFunnelMapping";
+import { ExelScatterMapping } from "./exelMappings/exelScatterMapping";
 interface ExelMappingTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
   router: AppRouterInstance;
@@ -79,6 +80,15 @@ export function ExelMappingTab({
               <div className="space-y-4">
                 {fileDetails && <ExelVisualizationMapping form={form} />}
                 <ExelPieChartFunnelMapping form={form} />
+              </div>
+            </>
+          );
+        case visualizationTypesEnum.SCATTER:
+          return (
+            <>
+              <div className="space-y-4">
+                {fileDetails && <ExelVisualizationMapping form={form} />}
+                <ExelScatterMapping form={form} />
               </div>
             </>
           );
