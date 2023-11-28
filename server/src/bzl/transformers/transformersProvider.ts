@@ -1,10 +1,10 @@
 import { VisualizationTypesEnum } from "types/visualizations";
 import { wordCloudTransformer } from "./wordCloudTransformer";
 import { nodeLinkTransformer } from "./nodeLinkTransformers";
-import _ from "lodash";
 import { calendarTransformer } from "./calendarTransformers";
 import { axisChartTransformer } from "./axisChartTransformer";
 import { pieChartFunnelTransformer } from "./pieChartFunnelTransformer";
+import { scatterTransformer } from "./scatterTransformer";
 
 export const transformerProvider = (
   type: VisualizationTypesEnum,
@@ -27,5 +27,7 @@ export const transformerProvider = (
     case VisualizationTypesEnum.PIE_CHART:
     case VisualizationTypesEnum.FUNNEL:
       return pieChartFunnelTransformer(mapping, values, allFileDetails);
+    case VisualizationTypesEnum.SCATTER:
+      return scatterTransformer(mapping, values, allFileDetails);
   }
 };
