@@ -4,6 +4,7 @@ import { nodeLinkTransformer } from "./nodeLinkTransformers";
 import _ from "lodash";
 import { calendarTransformer } from "./calendarTransformers";
 import { axisChartTransformer } from "./axisChartTransformer";
+import { pieChartFunnelTransformer } from "./pieChartFunnelTransformer";
 
 export const transformerProvider = (
   type: VisualizationTypesEnum,
@@ -23,5 +24,8 @@ export const transformerProvider = (
     case VisualizationTypesEnum.BAR_CHART:
     case VisualizationTypesEnum.LINE_CHART:
       return axisChartTransformer(mapping, values, allFileDetails);
+    case VisualizationTypesEnum.PIE_CHART:
+    case VisualizationTypesEnum.FUNNEL:
+      return pieChartFunnelTransformer(mapping, values, allFileDetails);
   }
 };

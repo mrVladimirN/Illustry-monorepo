@@ -192,7 +192,6 @@ export class VisualizationBZL {
           );
         });
       }
-      console.log(ill)
       const validVisualization = visualizationTypeSchema.safeParse(ill);
 
       if (!validVisualization.success) {

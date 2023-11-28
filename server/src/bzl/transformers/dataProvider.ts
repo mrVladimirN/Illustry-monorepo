@@ -8,6 +8,7 @@ import { nodesLinksExtractor } from "./nodeLinkTransformers";
 import { wordsExtractor } from "./wordCloudTransformer";
 import { calendarExtractor } from "./calendarTransformers";
 import { axisChartExtractor } from "./axisChartTransformer";
+import { pieChartFunnelExtractor } from "./pieChartFunnelTransformer";
 
 export const exelDataProvider = (
   type: VisualizationTypesEnum,
@@ -76,6 +77,22 @@ export const exelDataProvider = (
         return data;
       } else {
         _.set(data, "data", axisChartExtractor(computedRows));
+        _.set(data, "type", type);
+        return data;
+      }
+    case VisualizationTypesEnum.FUNNEL:
+    case VisualizationTypesEnum.PIE_CHART:
+      if (allFileDetails) {
+        const visualizationProperties =
+          visualizationPropertiesExtractor(computedRows);
+        _.set(data, "data", pieChartFunnelExtractor(visualizationProperties.data));
+        _.set(data, "name", visualizationProperties.name);
+        _.set(data, "description", visualizationProperties.description);
+        _.set(data, "tags", visualizationProperties.tags);
+        _.set(data, "type", type);
+        return data;
+      } else {
+        _.set(data, "data", pieChartFunnelExtractor(computedRows));
         _.set(data, "type", type);
         return data;
       }
