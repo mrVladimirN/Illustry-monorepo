@@ -14,18 +14,12 @@ import { Inputs } from "@/components/form/add-visualization-form";
 import { UseFormReturn } from "react-hook-form";
 import { ExelWordCloudMapping } from "./exelMappings/exelWordCloudMapping";
 import { VisualizationDetails } from "./visualizationDetails";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../select";
 import { ExelVisualizationMapping } from "./exelMappings/visualizationDetailsMapping";
 import { ExelNodeLinkMapping } from "./exelMappings/exelNodeLinkMapping";
 import { VisualizationType } from "./visualizationType";
 import { ExelCalendarMapping } from "./exelMappings/exelCalendarMapping";
-import { ExelAxisChartMapping } from "./exelMappings/exelaxisChartMapping";
+import { ExelAxisChartMapping } from "./exelMappings/exelAxisChartMapping";
+import { ExelPieChartFunnelMapping } from "./exelMappings/exelPieChartFunnelMapping";
 interface ExelMappingTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
   router: AppRouterInstance;
@@ -75,6 +69,16 @@ export function ExelMappingTab({
               <div className="space-y-4">
                 {fileDetails && <ExelVisualizationMapping form={form} />}
                 <ExelAxisChartMapping form={form} />
+              </div>
+            </>
+          );
+        case visualizationTypesEnum.PIE_CHART:
+        case visualizationTypesEnum.FUNNEL:
+          return (
+            <>
+              <div className="space-y-4">
+                {fileDetails && <ExelVisualizationMapping form={form} />}
+                <ExelPieChartFunnelMapping form={form} />
               </div>
             </>
           );
