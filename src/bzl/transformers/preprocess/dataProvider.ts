@@ -3,13 +3,14 @@ import {
   VisualizationUpdate,
 } from "types/visualizations";
 import _ from "lodash";
-import { visualizationPropertiesExtractor } from "../../utils/helper";
+import { visualizationPropertiesExtractor } from "../../../utils/helper";
 import { nodesLinksExtractor } from "./nodeLinkTransformers";
 import { wordsExtractor } from "./wordCloudTransformer";
 import { calendarExtractor } from "./calendarTransformers";
 import { axisChartExtractor } from "./axisChartTransformer";
 import { pieChartFunnelExtractor } from "./pieChartFunnelTransformer";
 import { scatterExtractor } from "./scatterTransformer";
+import { hierarchyExtractor } from "./hierarchyTransformers";
 
 export const exelDataProvider = (
   type: VisualizationTypesEnum,
@@ -105,11 +106,7 @@ export const exelDataProvider = (
       if (allFileDetails) {
         const visualizationProperties =
           visualizationPropertiesExtractor(computedRows);
-        _.set(
-          data,
-          "data",
-          scatterExtractor(visualizationProperties.data)
-        );
+        _.set(data, "data", scatterExtractor(visualizationProperties.data));
         _.set(data, "name", visualizationProperties.name);
         _.set(data, "description", visualizationProperties.description);
         _.set(data, "tags", visualizationProperties.tags);
@@ -117,6 +114,22 @@ export const exelDataProvider = (
         return data;
       } else {
         _.set(data, "data", scatterExtractor(computedRows));
+        _.set(data, "type", type);
+        return data;
+      }
+    case VisualizationTypesEnum.TREEMAP:
+    case VisualizationTypesEnum.SUNBURST:
+      if (allFileDetails) {
+        const visualizationProperties =
+          visualizationPropertiesExtractor(computedRows);
+        _.set(data, "data", hierarchyExtractor(visualizationProperties.data));
+        _.set(data, "name", visualizationProperties.name);
+        _.set(data, "description", visualizationProperties.description);
+        _.set(data, "tags", visualizationProperties.tags);
+        _.set(data, "type", type);
+        return data;
+      } else {
+        _.set(data, "data", hierarchyExtractor(computedRows));
         _.set(data, "type", type);
         return data;
       }

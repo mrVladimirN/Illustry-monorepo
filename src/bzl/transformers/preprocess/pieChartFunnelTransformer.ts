@@ -1,5 +1,6 @@
 import _ from "lodash";
-import { visualizationDetailsExtractor } from "../../utils/helper";
+import { visualizationDetailsExtractor } from "../../../utils/helper";
+import { PieChartData } from "types/visualizations";
 
 export const pieChartFunnelTransformer = (
   mapping: Record<string, unknown>,
@@ -19,7 +20,7 @@ export const pieChartFunnelTransformer = (
     : { values: baseValues };
 };
 
-export const pieChartFunnelExtractor = (data: Record<string, unknown>[]) => {
+export const pieChartFunnelExtractor = (data: Record<string, unknown>[]): PieChartData => {
   const transformedData = data.reduce(
     (result, item) => {
       let pieChartFunnelData;
@@ -41,5 +42,5 @@ export const pieChartFunnelExtractor = (data: Record<string, unknown>[]) => {
 
     { values: {} }
   );
-  return transformedData;
+  return transformedData as unknown as PieChartData;
 };

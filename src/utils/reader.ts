@@ -3,15 +3,13 @@ import { Promise } from "bluebird";
 import * as fs from "fs";
 import { FileError } from "../errors/fileError";
 import { FileDetails, FileProperties } from "types/files";
+import { VisualizationTypesEnum } from "types/visualizations";
 import {
-  VisualizationCreate,
-  VisualizationTypesEnum,
-} from "types/visualizations";
-import { transformerProvider } from "../bzl/transformers/transformersProvider";
-import {
-  exelDataProvider,
   jsonDataProvider,
-} from "../bzl/transformers/dataProvider";
+  exelDataProvider,
+} from "../bzl/transformers/preprocess/dataProvider";
+import { transformerProvider } from "../bzl/transformers/preprocess/transformersProvider";
+
 const XlsxStreamReader = require("xlsx-stream-reader");
 
 const readJsonFile = (

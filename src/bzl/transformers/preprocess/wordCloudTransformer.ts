@@ -1,6 +1,6 @@
 import _ from "lodash";
-import { visualizationDetailsExtractor } from "../../utils/helper";
-import { WordType } from "types/visualizations";
+import { visualizationDetailsExtractor } from "../../../utils/helper";
+import { WordCloudData, WordType } from "types/visualizations";
 
 export const wordCloudTransformer = (
   mapping: Record<string, unknown>,
@@ -20,7 +20,9 @@ export const wordCloudTransformer = (
       }
     : { word: baseValues };
 };
-export const wordsExtractor = (data: Record<string, unknown>[]) => {
+export const wordsExtractor = (
+  data: Record<string, unknown>[]
+): WordCloudData => {
   const transformedData = data.reduce(
     (result, item) => {
       const words = item.word;
@@ -40,5 +42,5 @@ export const wordsExtractor = (data: Record<string, unknown>[]) => {
     },
     { words: [] }
   );
-  return transformedData;
+  return transformedData as unknown as WordCloudData;
 };

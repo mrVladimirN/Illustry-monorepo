@@ -1,6 +1,6 @@
 import _ from "lodash";
-import { visualizationDetailsExtractor } from "../../utils/helper";
-import { Node, Link } from "types/visualizations";
+import { visualizationDetailsExtractor } from "../../../utils/helper";
+import { Node, Link, NodeLinkData } from "types/visualizations";
 
 export const nodeLinkTransformer = (
   mapping: Record<string, unknown>,
@@ -21,7 +21,7 @@ export const nodeLinkTransformer = (
     : { nodeLink: baseValues };
 };
 
-export const nodesLinksExtractor = (data: Record<string, unknown>[]) => {
+export const nodesLinksExtractor = (data: Record<string, unknown>[]): NodeLinkData => {
   const transformedData = data.reduce(
     (result, item) => {
       const nodeLink = item.nodeLink;
@@ -53,5 +53,5 @@ export const nodesLinksExtractor = (data: Record<string, unknown>[]) => {
     },
     { nodes: [], links: [] }
   );
-  return transformedData;
+  return transformedData as unknown as NodeLinkData;
 };

@@ -1,6 +1,6 @@
 import _ from "lodash";
-import { visualizationDetailsExtractor } from "../../utils/helper";
-import { CalendarType } from "types/visualizations";
+import { visualizationDetailsExtractor } from "../../../utils/helper";
+import { CalendarData, CalendarType } from "types/visualizations";
 
 const reformatDate = (date: string): string | null => {
   const dateRegex =
@@ -78,7 +78,7 @@ export const calendarTransformer = (
     : { calendar: baseValues };
 };
 
-export const calendarExtractor = (data: Record<string, unknown>[]) => {
+export const calendarExtractor = (data: Record<string, unknown>[]): CalendarData => {
   const transformedData = data.reduce(
     (result, item) => {
       const calendarData = item.calendar;
@@ -105,5 +105,5 @@ export const calendarExtractor = (data: Record<string, unknown>[]) => {
     },
     { calendar: [] }
   );
-  return transformedData;
+  return transformedData as unknown as CalendarData;
 };

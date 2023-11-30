@@ -5,6 +5,7 @@ import { calendarTransformer } from "./calendarTransformers";
 import { axisChartTransformer } from "./axisChartTransformer";
 import { pieChartFunnelTransformer } from "./pieChartFunnelTransformer";
 import { scatterTransformer } from "./scatterTransformer";
+import { hierarchyTransformer } from "./hierarchyTransformers";
 
 export const transformerProvider = (
   type: VisualizationTypesEnum,
@@ -29,5 +30,8 @@ export const transformerProvider = (
       return pieChartFunnelTransformer(mapping, values, allFileDetails);
     case VisualizationTypesEnum.SCATTER:
       return scatterTransformer(mapping, values, allFileDetails);
+    case VisualizationTypesEnum.SUNBURST:
+    case VisualizationTypesEnum.TREEMAP:
+      return hierarchyTransformer(mapping, values, allFileDetails);
   }
 };

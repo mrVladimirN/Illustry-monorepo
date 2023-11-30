@@ -1,6 +1,6 @@
 import _ from "lodash";
-import { visualizationDetailsExtractor } from "../../utils/helper";
-import { ScatterPoint } from "types/visualizations";
+import { visualizationDetailsExtractor } from "../../../utils/helper";
+import { ScatterData, ScatterPoint } from "types/visualizations";
 
 const computeValues = (
   values: Record<string, unknown>,
@@ -29,6 +29,7 @@ export const scatterTransformer = (
   const baseValues = {
     value: computeValues(values, mapping.values as string),
     category: values[_.toNumber(mapping.categories)],
+    properties:  values[_.toNumber(mapping.properties)],
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails
@@ -39,11 +40,11 @@ export const scatterTransformer = (
     : { points: baseValues };
 };
 
-export const scatterExtractor = (data: Record<string, unknown>[]) => {
+export const scatterExtractor = (data: Record<string, unknown>[]): ScatterData => {
   const transformedData = data.reduce(
     (result, item) => {
       let scatterData;
-      const { category, value } = item.points as Record<string, unknown>;
+      const { category, value, properties} = item.points as Record<string, unknown>;
       scatterData = (result.points as ScatterPoint[]).find(
         (e: ScatterPoint) =>
           e.value[0] === (value as unknown[])[0] &&
@@ -51,7 +52,7 @@ export const scatterExtractor = (data: Record<string, unknown>[]) => {
           e.category === category
       );
       if (_.isNil(scatterData)) {
-        scatterData = { category, value };
+        scatterData = { category, value, properties };
         if (!_.isNil(scatterData.category) && !_.isNil(scatterData.value)) {
           (result.points as Record<string, unknown>[]).push(scatterData);
         }
@@ -60,5 +61,5 @@ export const scatterExtractor = (data: Record<string, unknown>[]) => {
     },
     { points: [] }
   );
-  return transformedData;
+  return transformedData as unknown as ScatterData;
 };

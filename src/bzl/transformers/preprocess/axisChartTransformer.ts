@@ -1,5 +1,6 @@
 import _ from "lodash";
-import { visualizationDetailsExtractor } from "../../utils/helper";
+import { visualizationDetailsExtractor } from "../../../utils/helper";
+import { AxisChartData } from "types/visualizations";
 
 const computeValues = (
   values: Record<string, unknown>,
@@ -27,12 +28,17 @@ export const axisChartTransformer = (
     : { values: baseValues };
 };
 
-export const axisChartExtractor = (data: Record<string, unknown>[]) => {
+export const axisChartExtractor = (
+  data: Record<string, unknown>[]
+): AxisChartData => {
   const result: Record<string, unknown> = {};
   const headers: string[] = [];
 
   data.forEach((item) => {
-    const itemData =  ((item.values as Record<string, unknown>).data as Record<string, unknown>[])
+    const itemData = (item.values as Record<string, unknown>).data as Record<
+      string,
+      unknown
+    >[];
     const itemLength = itemData.length;
     for (let i = 0; i < itemLength; i++) {
       const keys = Object.keys(itemData[i]);
@@ -50,7 +56,7 @@ export const axisChartExtractor = (data: Record<string, unknown>[]) => {
         });
       });
     }
-    const itemHeaders = (item.values as Record<string, unknown>).headers
+    const itemHeaders = (item.values as Record<string, unknown>).headers;
     if (itemHeaders) {
       headers.push(itemHeaders as string);
     }
@@ -71,5 +77,5 @@ export const axisChartExtractor = (data: Record<string, unknown>[]) => {
       delete result[key];
     }
   });
-  return { values:{...result}, headers };
+  return { values: { ...result }, headers } as AxisChartData;
 };
