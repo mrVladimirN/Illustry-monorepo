@@ -12,7 +12,7 @@ import { pieChartFunnelExtractor } from "./pieChartFunnelTransformer";
 import { scatterExtractor } from "./scatterTransformer";
 import { hierarchyExtractor } from "./hierarchyTransformers";
 
-export const exelDataProvider = (
+export const excelDataProvider = (
   type: VisualizationTypesEnum,
   computedRows: Record<string, unknown>[],
   allFileDetails: boolean

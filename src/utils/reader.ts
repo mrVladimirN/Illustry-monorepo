@@ -6,7 +6,7 @@ import { FileDetails, FileProperties } from "types/files";
 import { VisualizationTypesEnum } from "types/visualizations";
 import {
   jsonDataProvider,
-  exelDataProvider,
+  excelDataProvider,
 } from "../bzl/transformers/preprocess/dataProvider";
 import { transformerProvider } from "../bzl/transformers/preprocess/transformersProvider";
 
@@ -39,7 +39,7 @@ const readJsonFile = (
   });
 };
 
-const readExelFile = (
+const readExcelFile = (
   file: FileProperties,
   fileDetails: FileDetails,
   visualizationType: VisualizationTypesEnum,
@@ -50,7 +50,7 @@ const readExelFile = (
       file.type !==
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     ) {
-      reject(new FileError("The provided file is not EXEL format"));
+      reject(new FileError("The provided file is not EXCEL format"));
     }
     const workBookReader = new XlsxStreamReader();
     const computedRows: any = [];
@@ -105,13 +105,13 @@ const readExelFile = (
     workBookReader.on("end", () => {
       fs.unlinkSync(_.get(file, "filePath"));
       resolve(
-        exelDataProvider(visualizationType, computedRows, allFileDetails)
+        excelDataProvider(visualizationType, computedRows, allFileDetails)
       );
     });
   });
 };
 
-export const exelFilesToVisualizations = (
+export const excelFilesToVisualizations = (
   files: FileProperties[],
   fileDetails: FileDetails,
   visualizationType: VisualizationTypesEnum,
@@ -119,7 +119,7 @@ export const exelFilesToVisualizations = (
 ) => {
   return Promise.map(files, (file) => {
     return Promise.resolve(
-      readExelFile(file, fileDetails, visualizationType, allFileDetails)
+      readExcelFile(file, fileDetails, visualizationType, allFileDetails)
     );
   }).then((files) => {
     return files;

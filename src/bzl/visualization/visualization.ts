@@ -16,7 +16,7 @@ import { FileDetails, FileProperties } from "types/files";
 import { ProjectFilter } from "types/project";
 import { ExtendedMongoQuery } from "types/utils";
 import {
-  exelFilesToVisualizations,
+  excelFilesToVisualizations,
   jsonFilesToVisualizations,
 } from "../../utils/reader";
 import { visualizationTypeSchema } from "../../validators/allValidators";
@@ -95,8 +95,8 @@ export class VisualizationBZL {
             throw new Error("No file details was provided");
           }
           switch (fileDetails.fileType) {
-            case "EXEL":
-              return this.exelFileProcessor(
+            case "EXCEL":
+              return this.excelFileProcessor(
                 files,
                 allFileDetails,
                 res.projects[0].name,
@@ -104,6 +104,13 @@ export class VisualizationBZL {
                 visualizationDetails
               );
             case "JSON":
+              return this.jsonFileProcessor(
+                files,
+                allFileDetails,
+                res.projects[0].name,
+                visualizationDetails
+              );
+            case "CSV":
               return this.jsonFileProcessor(
                 files,
                 allFileDetails,
@@ -227,7 +234,7 @@ export class VisualizationBZL {
       );
     });
   }
-  private exelFileProcessor(
+  private excelFileProcessor(
     files: FileProperties[],
     allFileDetails: boolean,
     projectName: string,
@@ -235,7 +242,7 @@ export class VisualizationBZL {
     visualizationDetails: VisualizationUpdate
   ): Bluebird<VisualizationType[]> {
     return Promise.resolve(
-      exelFilesToVisualizations(
+      excelFilesToVisualizations(
         files,
         fileDetails,
         visualizationDetails.type as VisualizationTypesEnum,
