@@ -10,28 +10,30 @@ import {
 import { Input } from "../../input";
 import { Checkbox } from "../../checkbox";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { Inputs } from "@/components/form/add-visualization-form";
+import { Inputs, fileTypes } from "@/components/form/add-visualization-form";
 import { UseFormReturn } from "react-hook-form";
-import { ExelWordCloudMapping } from "./exelMappings/exelWordCloudMapping";
+import { ExcelOrCsvWordCloudMapping } from "./excelOrCsvMappings/WordCloudMapping";
 import { VisualizationDetails } from "./visualizationDetails";
-import { ExelVisualizationMapping } from "./exelMappings/visualizationDetailsMapping";
-import { ExelNodeLinkMapping } from "./exelMappings/exelNodeLinkMapping";
+import { ExcelOrCsvVisualizationMapping } from "./excelOrCsvMappings/visualizationDetailsMapping";
+import { ExcelOrCsvNodeLinkMapping } from "./excelOrCsvMappings/NodeLinkMapping";
 import { VisualizationType } from "./visualizationType";
-import { ExelCalendarMapping } from "./exelMappings/exelCalendarMapping";
-import { ExelAxisChartMapping } from "./exelMappings/exelAxisChartMapping";
-import { ExelPieChartFunnelMapping } from "./exelMappings/exelPieChartFunnelMapping";
-import { ExelScatterMapping } from "./exelMappings/exelScatterMapping";
-import { ExelHierarchyMapping } from "./exelMappings/exelHierarchyMapping";
-interface ExelMappingTabProps {
+import { ExcelOrCsvCalendarMapping } from "./excelOrCsvMappings/CalendarMapping";
+import { ExcelOrCsvAxisChartMapping } from "./excelOrCsvMappings/AxisChartMapping";
+import { ExcelOrCsvPieChartFunnelMapping } from "./excelOrCsvMappings/PieChartFunnelMapping";
+import { ExcelOrCsvScatterMapping } from "./excelOrCsvMappings/ScatterMapping";
+import { ExcelOrCsvHierarchyMapping } from "./excelOrCsvMappings/HierarchyMapping";
+interface ExcelMappingTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
   router: AppRouterInstance;
   fileDetails: boolean;
+  selectedFileType: fileTypes;
 }
-export function ExelMappingTab({
+export function ExcelOrCsvMappingTab({
   form,
   router,
   fileDetails,
-}: ExelMappingTabProps) {
+  selectedFileType
+}: ExcelMappingTabProps) {
   const renderMapping = (type: visualizationTypesEnum) => {
     if (type) {
       switch (type) {
@@ -39,8 +41,8 @@ export function ExelMappingTab({
           return (
             <>
               <div className="space-y-4">
-                {fileDetails && <ExelVisualizationMapping form={form} />}
-                <ExelWordCloudMapping form={form} />
+                {fileDetails && <ExcelOrCsvVisualizationMapping form={form} />}
+                <ExcelOrCsvWordCloudMapping form={form} />
               </div>
             </>
           );
@@ -50,8 +52,8 @@ export function ExelMappingTab({
           return (
             <>
               <div className="space-y-4">
-                {fileDetails && <ExelVisualizationMapping form={form} />}
-                <ExelNodeLinkMapping form={form} />
+                {fileDetails && <ExcelOrCsvVisualizationMapping form={form} />}
+                <ExcelOrCsvNodeLinkMapping form={form} />
               </div>
             </>
           );
@@ -59,8 +61,8 @@ export function ExelMappingTab({
           return (
             <>
               <div className="space-y-4">
-                {fileDetails && <ExelVisualizationMapping form={form} />}
-                <ExelCalendarMapping form={form} />
+                {fileDetails && <ExcelOrCsvVisualizationMapping form={form} />}
+                <ExcelOrCsvCalendarMapping form={form} />
               </div>
             </>
           );
@@ -69,8 +71,8 @@ export function ExelMappingTab({
           return (
             <>
               <div className="space-y-4">
-                {fileDetails && <ExelVisualizationMapping form={form} />}
-                <ExelAxisChartMapping form={form} />
+                {fileDetails && <ExcelOrCsvVisualizationMapping form={form} />}
+                <ExcelOrCsvAxisChartMapping form={form} />
               </div>
             </>
           );
@@ -79,8 +81,8 @@ export function ExelMappingTab({
           return (
             <>
               <div className="space-y-4">
-                {fileDetails && <ExelVisualizationMapping form={form} />}
-                <ExelPieChartFunnelMapping form={form} />
+                {fileDetails && <ExcelOrCsvVisualizationMapping form={form} />}
+                <ExcelOrCsvPieChartFunnelMapping form={form} />
               </div>
             </>
           );
@@ -88,8 +90,8 @@ export function ExelMappingTab({
           return (
             <>
               <div className="space-y-4">
-                {fileDetails && <ExelVisualizationMapping form={form} />}
-                <ExelScatterMapping form={form} />
+                {fileDetails && <ExcelOrCsvVisualizationMapping form={form} />}
+                <ExcelOrCsvScatterMapping form={form} />
               </div>
             </>
           );
@@ -98,8 +100,8 @@ export function ExelMappingTab({
           return (
             <>
               <div className="space-y-4">
-                {fileDetails && <ExelVisualizationMapping form={form} />}
-                <ExelHierarchyMapping form={form} />
+                {fileDetails && <ExcelOrCsvVisualizationMapping form={form} />}
+                <ExcelOrCsvHierarchyMapping form={form} />
               </div>
             </>
           );
@@ -107,7 +109,7 @@ export function ExelMappingTab({
           return (
             <>
               <div className="space-y-4">
-                {fileDetails && <ExelVisualizationMapping form={form} />}
+                {fileDetails && <ExcelOrCsvVisualizationMapping form={form} />}
               </div>
             </>
           );
@@ -117,8 +119,8 @@ export function ExelMappingTab({
   return (
     <div className="grid grid-cols-2 gap-5">
       {!fileDetails && <VisualizationDetails form={form} />}
-      <VisualizationType form={form} router={router} />
-      <div className="col-span-1">
+      <VisualizationType form={form} router={router} exclude={true} />
+      {selectedFileType === fileTypes.EXCEL? <div className="col-span-1">
         <FormField
           control={form.control}
           name="sheets"
@@ -141,7 +143,30 @@ export function ExelMappingTab({
             </FormItem>
           )}
         />
-      </div>
+      </div> : <div className="col-span-1">
+        <FormField
+          control={form.control}
+          name="separator"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Separator</FormLabel>
+              <FormControl>
+                <Input
+                  placeholder="Separator"
+                  defaultValue={form.getValues("separator") || ","}
+                  onChange={(e) => {
+                    setTimeout(() => {
+                      const value = e.target.value;
+                      form.setValue("separator", value);
+                    }, 100);
+                  }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </div>}
       <div className="col-span-2">
         <FormField
           control={form.control}

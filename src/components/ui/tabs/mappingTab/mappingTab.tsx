@@ -1,7 +1,7 @@
 import { Icons } from "@/components/icons";
 import { Button } from "../../button";
 import { TabsContent } from "../../tabs";
-import { ExelMappingTab } from "./exelMappingTab";
+import { ExcelOrCsvMappingTab } from "./excelOrCsvMappingTab";
 import { JSONMappingTab } from "./jsonMappingTab";
 import { Inputs, fileTypes } from "@/components/form/add-visualization-form";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
@@ -52,13 +52,15 @@ export function MappingTab({
             </>
           );
 
-        case fileTypes.EXEL:
+        case fileTypes.EXCEL:
+        case fileTypes.CSV:
           return (
             <>
-              <ExelMappingTab
+              <ExcelOrCsvMappingTab
                 form={form}
                 router={router}
                 fileDetails={fileDetails}
+                selectedFileType= {selectedFileType}
               />
               <Button className="w-fit mt-[2%]" disabled={isPending}>
                 {isPending && (

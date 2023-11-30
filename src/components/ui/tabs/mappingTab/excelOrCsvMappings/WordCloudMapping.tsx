@@ -2,22 +2,24 @@ import { Inputs } from "@/components/form/add-visualization-form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 
-interface ExelScatterMappingProps {
+interface ExcelOrCsvWordCloudMappingProps {
   form: UseFormReturn<Inputs>; // Include the form context
 }
-export function ExelScatterMapping({ form }: ExelScatterMappingProps) {
+export function ExcelOrCsvWordCloudMapping({
+  form,
+}: ExcelOrCsvWordCloudMappingProps) {
   return (
     <>
       <div className="flex items-center space-x-4">
-        <div className="w-20">Categories:</div>
+        <div className="w-20">Names:</div>
         <div className="flex-grow">
           <Input
-            placeholder="Column number for Categories"
-            defaultValue={form.getValues("mapping.categories") || ""}
+            placeholder="Column number for Names"
+            defaultValue={form.getValues("mapping.names") || ""}
             onChange={(e) => {
               setTimeout(() => {
                 const value = e.target.value;
-                form.setValue("mapping.categories", value);
+                form.setValue("mapping.names", value);
               }, 100);
             }}
           />
@@ -27,7 +29,7 @@ export function ExelScatterMapping({ form }: ExelScatterMappingProps) {
         <div className="w-20">Values:</div>
         <div className="flex-grow">
           <Input
-            placeholder="Column numbers for Values, coma separated"
+            placeholder="Column number for Values"
             defaultValue={form.getValues("mapping.values") || ""}
             onChange={(e) => {
               setTimeout(() => {

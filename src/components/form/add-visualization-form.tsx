@@ -11,7 +11,8 @@ import { env } from "@/env.mjs";
 import { Form } from "@/components/ui/form";
 import { ExtFile } from "@files-ui/react";
 import {
-  exelSchema,
+  csvSchema,
+  excelSchema,
   jsonSchema,
   visualizationSchema,
   visualizationTypesEnum,
@@ -26,11 +27,13 @@ import {
 } from "types/visualizations";
 
 export type Inputs = z.infer<typeof visualizationSchema>;
-export type ExelType = z.infer<typeof exelSchema>;
+export type ExcelType = z.infer<typeof excelSchema>;
 export type JSONType = z.infer<typeof jsonSchema>;
+export type CSVType = z.infer<typeof csvSchema>;
 export enum fileTypes {
   JSON = "JSON",
-  EXEL = "EXEL",
+  EXCEL = "EXCEL",
+  CSV = "CSV",
 }
 export function AddVisualizationForm() {
   const router = useRouter();
@@ -62,17 +65,18 @@ export function AddVisualizationForm() {
           const formData = new FormData();
           const fileDetails: FileDetails = {
             fileType: data.fileType,
-            includeHeaders: (data as ExelType).includeHeaders,
-            mapping: (data as ExelType).mapping,
-            sheets: (data as ExelType).sheets,
+            includeHeaders: (data as ExcelType).includeHeaders,
+            mapping: (data as ExcelType).mapping,
+            sheets: (data as ExcelType).sheets,
+            separator: (data as unknown as CSVType).separator,
           };
           formData.append("fullDetails", data.fullDetails.toString());
           formData.append("fileDetails", JSON.stringify(fileDetails));
           const visualizationDetails: VisualizationUpdate = {
-            name: (data as ExelType).name as string,
-            type: (data as ExelType).type as unknown as VisualizationTypesEnum,
-            description: (data as ExelType).description,
-            tags: (data as ExelType).tags?.split(","),
+            name: (data as ExcelType).name as string,
+            type: (data as ExcelType).type as unknown as VisualizationTypesEnum,
+            description: (data as ExcelType).description,
+            tags: (data as ExcelType).tags?.split(","),
           };
           formData.append(
             "visualizationDetails",

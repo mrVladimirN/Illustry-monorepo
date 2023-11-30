@@ -6,7 +6,7 @@ import {
   FormControl,
   FormMessage,
 } from "../../form";
-import { ExelFileFormatter } from "./exelFileFormatFormItem";
+import { ExcelFileFormatter } from "./excelFileFormatFormItem";
 import { JsonFileFormatter } from "./jsonFileFormatFormItem";
 import { TabsContent } from "../../tabs";
 import {
@@ -19,6 +19,7 @@ import {
 } from "../../select";
 import { UseFormReturn } from "react-hook-form";
 import { ExtFile } from "@files-ui/react";
+import { CSVFileFormatter } from "./csvFileFormatFormItem";
 interface TypeTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
   handleFileTypeChange: (value: string) => void;
@@ -47,9 +48,18 @@ export function TypeTab({
               form={form}
             />
           );
-        case fileTypes.EXEL:
+        case fileTypes.EXCEL:
           return (
-            <ExelFileFormatter
+            <ExcelFileFormatter
+              acceptedFiles={files}
+              updateFiles={updateFiles}
+              removeFile={removeFile}
+              form={form}
+            />
+          );
+        case fileTypes.CSV:
+          return (
+            <CSVFileFormatter
               acceptedFiles={files}
               updateFiles={updateFiles}
               removeFile={removeFile}
@@ -83,11 +93,13 @@ export function TypeTab({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {[fileTypes.JSON,fileTypes.EXEL].map((option) => (
-                        <SelectItem key={option} value={option}>
-                          {option}
-                        </SelectItem>
-                      ))}
+                      {[fileTypes.JSON, fileTypes.CSV, fileTypes.EXCEL].map(
+                        (option) => (
+                          <SelectItem key={option} value={option}>
+                            {option}
+                          </SelectItem>
+                        )
+                      )}
                     </SelectGroup>
                   </SelectContent>
                 </Select>

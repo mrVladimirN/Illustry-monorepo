@@ -20,7 +20,7 @@ interface VisualizationFileUploadProps {
   removeFile: (id: string) => void;
 }
 
-export const ExelFileFormatter = ({
+export const ExcelFileFormatter = ({
   form, // Include the form context
   acceptedFiles,
   updateFiles,

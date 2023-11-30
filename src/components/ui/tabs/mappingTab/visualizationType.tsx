@@ -19,9 +19,14 @@ import { visualizationTypesEnum } from "@/lib/validation/visualizations";
 export interface VisualizationTypeProp {
   form: UseFormReturn<Inputs>; // Include the form context
   router: AppRouterInstance;
+  exclude?: boolean;
 }
 
-export function VisualizationType({ form, router }: VisualizationTypeProp) {
+export function VisualizationType({
+  form,
+  router,
+  exclude,
+}: VisualizationTypeProp) {
   return (
     <>
       <div className="col-span-1">
@@ -43,24 +48,56 @@ export function VisualizationType({ form, router }: VisualizationTypeProp) {
                     <SelectValue placeholder="Type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="word-cloud">WordCloud</SelectItem>
-                    <SelectItem value="force-directed-graph">
+                    <SelectItem value={visualizationTypesEnum.WORLD_CLOUD}>
+                      WordCloud
+                    </SelectItem>
+                    <SelectItem
+                      value={visualizationTypesEnum.FORCE_DIRECTED_GRAPH}
+                    >
                       Forced Layout Graph
                     </SelectItem>
-                    <SelectItem value="sankey">Sankey</SelectItem>
-                    <SelectItem value="calendar">Calendar</SelectItem>
-                    <SelectItem value="hierarchical-edge-bundling">
+                    <SelectItem value={visualizationTypesEnum.SANKEY}>
+                      Sankey
+                    </SelectItem>
+                    <SelectItem value={visualizationTypesEnum.CALENDAR}>
+                      Calendar
+                    </SelectItem>
+                    <SelectItem
+                      value={visualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING}
+                    >
                       Hierarchical Edge Bundling
                     </SelectItem>
-                    {/* <SelectItem value="matrix">Matrix</SelectItem> */}
-                    <SelectItem value="line-chart">Line Chart</SelectItem>
-                    <SelectItem value="bar-chart">Bar Chart</SelectItem>
-                    <SelectItem value="pie-chart">Pie Chart</SelectItem>
-                    <SelectItem value="scatter">Scatter</SelectItem>
-                    <SelectItem value="treemap">Treemap</SelectItem>
-                    <SelectItem value="sunburst">Sunburst</SelectItem>
-                    <SelectItem value="funnel">Funnel</SelectItem>
-                    <SelectItem value="timeline">Timeline</SelectItem>
+                    {!exclude && (
+                      <SelectItem value={visualizationTypesEnum.MATRIX}>
+                        Matrix
+                      </SelectItem>
+                    )}
+                    <SelectItem value={visualizationTypesEnum.LINE_CHART}>
+                      Line Chart
+                    </SelectItem>
+                    <SelectItem value={visualizationTypesEnum.BAR_CHART}>
+                      Bar Chart
+                    </SelectItem>
+                    <SelectItem value={visualizationTypesEnum.PIE_CHART}>
+                      Pie Chart
+                    </SelectItem>
+                    <SelectItem value={visualizationTypesEnum.SCATTER}>
+                      Scatter
+                    </SelectItem>
+                    <SelectItem value={visualizationTypesEnum.TREEMAP}>
+                      Treemap
+                    </SelectItem>
+                    <SelectItem value={visualizationTypesEnum.SUNBURST}>
+                      Sunburst
+                    </SelectItem>
+                    <SelectItem value={visualizationTypesEnum.FUNNEL}>
+                      Funnel
+                    </SelectItem>
+                    {!exclude && (
+                      <SelectItem value={visualizationTypesEnum.TIMELINE}>
+                        Timeline
+                      </SelectItem>
+                    )}
                   </SelectContent>
                 </Select>
               </FormControl>

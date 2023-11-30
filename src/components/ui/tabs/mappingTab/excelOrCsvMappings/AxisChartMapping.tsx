@@ -2,12 +2,12 @@ import { Inputs } from "@/components/form/add-visualization-form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 
-interface ExelAxisChartMappingProps {
+interface ExcelOrCsvAxisChartMappingProps {
   form: UseFormReturn<Inputs>; // Include the form context
 }
-export function ExelAxisChartMapping({
+export function ExcelOrCsvAxisChartMapping({
   form,
-}: ExelAxisChartMappingProps) {
+}: ExcelOrCsvAxisChartMappingProps) {
   return (
     <>
       <div className="flex items-center space-x-4">

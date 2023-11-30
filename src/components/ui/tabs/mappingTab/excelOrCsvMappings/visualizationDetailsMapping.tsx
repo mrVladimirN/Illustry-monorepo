@@ -2,53 +2,50 @@ import { Inputs } from "@/components/form/add-visualization-form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 
-interface ExelWordCloudMappingProps {
+interface ExcelOrCsvVisualizationMappingProps {
   form: UseFormReturn<Inputs>; // Include the form context
 }
-export function ExelWordCloudMapping({
+export function ExcelOrCsvVisualizationMapping({
   form,
-}: ExelWordCloudMappingProps) {
+}: ExcelOrCsvVisualizationMappingProps) {
   return (
     <>
       <div className="flex items-center space-x-4">
-        <div className="w-20">Names:</div>
+        <div className="w-20">Visualization Name:</div>
         <div className="flex-grow">
           <Input
-            placeholder="Column number for Names"
-            defaultValue={form.getValues("mapping.names") || ""}
+            placeholder="Column number for Visualization Name"
             onChange={(e) => {
               setTimeout(() => {
                 const value = e.target.value;
-                form.setValue("mapping.names", value);
+                form.setValue("mapping.visualizationName", value);
               }, 100);
             }}
           />
         </div>
       </div>
       <div className="flex items-center space-x-4">
-        <div className="w-20">Values:</div>
+        <div className="w-20">Visualization Description:</div>
         <div className="flex-grow">
           <Input
-            placeholder="Column number for Values"
-            defaultValue={form.getValues("mapping.values") || ""}
+            placeholder="Column number for Visualization Description"
             onChange={(e) => {
               setTimeout(() => {
                 const value = e.target.value;
-                form.setValue("mapping.values", value);
+                form.setValue("mapping.visualizationDescription", value);
               }, 100);
             }}
           />
         </div>
       </div>
       <div className="flex items-center space-x-4">
-        <div className="w-20">Properties:</div>
+        <div className="w-20">Visualization Tags:</div>
         <div className="flex-grow">
           <Input
-            placeholder="Column number for Properties"
-            defaultValue={form.getValues("mapping.properties") || ""}
+            placeholder="Column number for Visualization Tags"
             onChange={(e) => {
               const value = e.target.value;
-              form.setValue("mapping.properties", value);
+              form.setValue("mapping.visualizationTags", value);
             }}
           />
         </div>

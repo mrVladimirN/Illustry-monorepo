@@ -2,10 +2,10 @@ import { Inputs } from "@/components/form/add-visualization-form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 
-interface ExelNodeLinkMappingProps {
+interface ExcelOrCsvNodeLinkMappingProps {
   form: UseFormReturn<Inputs>; // Include the form context
 }
-export function ExelNodeLinkMapping({ form }: ExelNodeLinkMappingProps) {
+export function ExcelOrCsvNodeLinkMapping({ form }: ExcelOrCsvNodeLinkMappingProps) {
   return (
     <>
       <div className="flex items-center space-x-4">

@@ -2,12 +2,12 @@ import { Inputs } from "@/components/form/add-visualization-form";
 import { Input } from "@/components/ui/input";
 import { UseFormReturn } from "react-hook-form";
 
-interface ExelPieChartFunnelMappingProps {
+interface ExcelOrCsvPieChartFunnelMappingProps {
   form: UseFormReturn<Inputs>; // Include the form context
 }
-export function ExelPieChartFunnelMapping({
+export function ExcelOrCsvPieChartFunnelMapping({
   form,
-}: ExelPieChartFunnelMappingProps) {
+}: ExcelOrCsvPieChartFunnelMappingProps) {
   return (
     <>
       <div className="flex items-center space-x-4">

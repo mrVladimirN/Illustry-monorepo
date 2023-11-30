@@ -22,7 +22,7 @@ export function JSONMappingTab({
         </p>
       ) : (
         <>
-          <VisualizationType form={form} router={router} />
+          <VisualizationType form={form} router={router} exclude={false} />
           <VisualizationDetails form={form} />
         </>
       )}
