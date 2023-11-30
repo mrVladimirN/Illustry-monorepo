@@ -5,7 +5,7 @@ export interface FileProperties {
 }
 
 export interface FileDetails {
-  fileType: "JSON" | "EXEL" | "CSV";
+  fileType: "JSON" | "EXCEL" | "CSV";
   includeHeaders?: boolean;
   separator?: string;
   mapping?: any;
