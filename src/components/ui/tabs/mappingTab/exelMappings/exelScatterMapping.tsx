@@ -38,6 +38,19 @@ export function ExelScatterMapping({ form }: ExelScatterMappingProps) {
           />
         </div>
       </div>
+      <div className="flex items-center space-x-4">
+        <div className="w-20">Properties:</div>
+        <div className="flex-grow">
+          <Input
+            placeholder="Column number for Properties"
+            defaultValue={form.getValues("mapping.properties") || ""}
+            onChange={(e) => {
+              const value = e.target.value;
+              form.setValue("mapping.properties", value);
+            }}
+          />
+        </div>
+      </div>
     </>
   );
 }
