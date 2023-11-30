@@ -5,9 +5,9 @@ declare module "types/files" {
         delimiter?: string;
     }
     export interface FileDetails {
-        fileType: "JSON" | "EXEL";
-        type?: string;
+        fileType: "JSON" | "EXEL" | "CSV";
         includeHeaders?: boolean;
+        separator?: string;
         mapping?: any;
         sheets?: string;
     }
@@ -223,6 +223,6 @@ declare module "types/visualizations" {
 declare module "index" {
     export { FileDetails, FileProperties } from "types/files";
     export { ProjectCreate, ProjectFilter, ProjectType, ProjectUpdate, ExtendedProjectType, } from "types/project";
-    export { VisualizationCreate, VisualizationFilter, VisualizationType, VisualizationTypesEnum, VisualizationUpdate, ExtendedVisualizationType, Node, Link, AxisChartData, ScatterPoint, PieChartData, ScatterData, NodeLinkData, WordType, WordCloudData, CalendarType, CalendarData, HierarchyData, HierarchyNode, FunnelData, TimelineEventTag, TimelineEvent, TimelineData } from "types/visualizations";
-    export { with_id, with_optional_id, with_optional_properties, with_optional_version, with_version, ExtendedMongoQuery, MongoQuery, DeepPartial, with_optional_labels } from "types/utils";
+    export { VisualizationCreate, VisualizationFilter, VisualizationType, VisualizationTypesEnum, VisualizationUpdate, ExtendedVisualizationType, Node, Link, AxisChartData, ScatterPoint, PieChartData, ScatterData, NodeLinkData, WordType, WordCloudData, CalendarType, CalendarData, HierarchyData, HierarchyNode, FunnelData, TimelineEventTag, TimelineEvent, TimelineData, } from "types/visualizations";
+    export { with_id, with_optional_id, with_optional_properties, with_optional_version, with_version, ExtendedMongoQuery, MongoQuery, DeepPartial, with_optional_labels, } from "types/utils";
 }
