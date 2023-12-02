@@ -20,60 +20,60 @@ interface HubShellProps {
 const SankeyGraphView = dynamic(
   () => import("@/components/views/sankey-diagram"),
   {
-    ssr: true,
+    ssr: false,
   }
 );
 const ForcedLayoutGraphView = dynamic(
   () => import("@/components/views/forced-layout-graph"),
   {
-    ssr: true,
+    ssr: false,
   }
 );
 const HierarchicalEdgeBundlingView = dynamic(
   () => import("@/components/views/hierarchical-edge-bundling"),
   {
-    ssr: true,
+    ssr: false,
   }
 );
 const CalendarView = dynamic(
   () => import("@/components/views/calendar-graph"),
   {
-    ssr: true,
+    ssr: false,
   }
 );
 const WordCloudView = dynamic(() => import("@/components/views/wordcloud"), {
-  ssr: true,
+  ssr: false,
 });
 const MatrixView = dynamic(() => import("@/components/views/matrix/matrix"), {
-  ssr: true,
+  ssr: false,
 });
 const AxisChartView = dynamic(() => import("@/components/views/axis-charts"), {
-  ssr: true,
+  ssr: false,
 });
 const ScatterView = dynamic(() => import("@/components/views/scatter"), {
-  ssr: true,
+  ssr: false,
 });
 
 const PieView = dynamic(() => import("@/components/views/pie-chart"), {
-  ssr: true,
+  ssr: false,
 });
 
 const TreeMapView = dynamic(() => import("@/components/views/treemap-chart"), {
-  ssr: true,
+  ssr: false,
 });
 const SunBurstView = dynamic(
   () => import("@/components/views/sunburst-chart"),
   {
-    ssr: true,
+    ssr: false,
   }
 );
 const FunnelView = dynamic(() => import("@/components/views/funnel-chart"), {
-  ssr: true,
+  ssr: false,
 });
 const TimelineView = dynamic(
   () => import("@/components/views/timeline/timeline"),
   {
-    ssr: true,
+    ssr: false,
   }
 );
 export function HubShell({ data }: HubShellProps) {

@@ -11,11 +11,10 @@ import {
 import { WordCloudData } from "types/visualizations";
 import { with_legend, with_options } from "@/lib/types/utils";
 import { useThemeColors } from "../theme-provider";
-import dynamic from "next/dynamic";
+import ReactEcharts from "./generic/echarts";
 interface WordCloudProp extends with_legend, with_options {
   data: WordCloudData;
 }
-const ReactEcharts = dynamic(() => import("./generic/echarts"), { ssr: false });
 const WordCloudView = ({ data,  legend, options }: WordCloudProp) => {
   const activeTheme = useThemeColors();
   const theme =

@@ -13,8 +13,7 @@ import { CalendarData, CalendarType } from "types/visualizations";
 import Legend from "../ui/legend";
 import { with_legend, with_options } from "@/lib/types/utils";
 import { useThemeColors } from "../theme-provider";
-import dynamic from "next/dynamic";
-const ReactEcharts = dynamic(() => import("./generic/echarts"), { ssr: false });
+import ReactEcharts from "./generic/echarts";
 interface CalendarGraphProp extends with_legend, with_options {
   data: CalendarData;
 }

@@ -12,12 +12,11 @@ import { SeriesOption } from "echarts";
 import Legend from "../ui/legend";
 import { with_legend, with_options } from "@/lib/types/utils";
 import { useThemeColors } from "../theme-provider";
-import dynamic from "next/dynamic";
+import ReactEcharts from "./generic/echarts";
 interface AxisChartProp extends with_legend, with_options {
   data: AxisChartData;
   type: "line" | "bar";
 }
-const ReactEcharts = dynamic(() => import("./generic/echarts"), { ssr: false });
 const AxisChartView = ({ data, type, legend, options }: AxisChartProp) => {
   const activeTheme = useThemeColors();
   const theme =

@@ -14,7 +14,7 @@ export function ExcelOrCsvPieChartFunnelMapping({
         <div className="w-20">Names:</div>
         <div className="flex-grow">
           <Input
-            placeholder="Column numbers for Data, coma separated"
+            placeholder="Column numbers for Names"
             defaultValue={form.getValues("mapping.names") || ""}
             onChange={(e) => {
               setTimeout(() => {
@@ -29,7 +29,7 @@ export function ExcelOrCsvPieChartFunnelMapping({
         <div className="w-20">Values:</div>
         <div className="flex-grow">
           <Input
-            placeholder="Column numbers for Data, coma separated"
+            placeholder="Column numbers for Values"
             defaultValue={form.getValues("mapping.values") || ""}
             onChange={(e) => {
               setTimeout(() => {
@@ -39,7 +39,9 @@ export function ExcelOrCsvPieChartFunnelMapping({
             }}
           />
         </div>
+        
       </div>
+      
     </>
   );
 }

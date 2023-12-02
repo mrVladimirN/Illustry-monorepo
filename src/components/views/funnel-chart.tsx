@@ -9,12 +9,11 @@ import {
 import Legend from "../ui/legend";
 import { with_legend, with_options } from "@/lib/types/utils";
 import { useThemeColors } from "../theme-provider";
-import dynamic from "next/dynamic";
+import ReactEcharts from "./generic/echarts";
 
 interface FunnelProp extends with_legend, with_options {
   data: FunnelData;
 }
-const ReactEcharts = dynamic(() => import("./generic/echarts"), { ssr: false });
 const FunnelView = ({ data,  legend, options }: FunnelProp) => {
   const activeTheme = useThemeColors();
   const theme =

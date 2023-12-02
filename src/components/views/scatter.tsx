@@ -12,12 +12,11 @@ import { computeLegendColors } from "@/lib/visualizations/calendar/helper";
 import Legend from "../ui/legend";
 import { with_legend, with_options } from "@/lib/types/utils";
 import { useThemeColors } from "../theme-provider";
-import dynamic from "next/dynamic";
+import ReactEcharts from "./generic/echarts";
 
 interface ScatterProp extends with_legend, with_options {
   data: ScatterData;
 }
-const ReactEcharts = dynamic(() => import("./generic/echarts"), { ssr: false });
 const ScatterView = ({ data, legend, options }: ScatterProp) => {
   const activeTheme = useThemeColors();
   const theme =

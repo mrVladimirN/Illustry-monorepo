@@ -39,7 +39,8 @@ export function ExcelOrCsvCalendarMapping({
             }}
           />
         </div>
-      </div>   <div className="flex items-center space-x-4">
+      </div>
+      <div className="flex items-center space-x-4">
         <div className="w-20">Categories:</div>
         <div className="flex-grow">
           <Input

@@ -9,12 +9,11 @@ import {
 import Legend from "../ui/legend";
 import { with_legend, with_options } from "@/lib/types/utils";
 import { useThemeColors } from "../theme-provider";
-import dynamic from "next/dynamic";
+import ReactEcharts from "./generic/echarts";
 
 interface PieProp extends with_legend, with_options {
   data: PieChartData;
 }
-const ReactEcharts = dynamic(() => import("./generic/echarts"), { ssr: false });
 const PieView = ({ data,  legend, options }: PieProp) => {
   const activeTheme = useThemeColors();
   const theme =
