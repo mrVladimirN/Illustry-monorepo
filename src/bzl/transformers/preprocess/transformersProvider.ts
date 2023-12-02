@@ -10,7 +10,7 @@ import { hierarchyTransformer } from "./hierarchyTransformers";
 export const transformerProvider = (
   type: VisualizationTypesEnum,
   mapping: Record<string, unknown>,
-  values: Record<string, unknown>,
+  values: unknown[],
   allFileDetails: boolean
 ) => {
   switch (type) {

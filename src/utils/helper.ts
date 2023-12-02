@@ -23,7 +23,7 @@ export const returnResponse = (res: any, err: any, data: any, next: any) => {
 
 export const visualizationDetailsExtractor = (
   mapping: Record<string, unknown>,
-  values: Record<string, unknown>,
+  values: unknown[],
 ) => {
   return {
     visualizationName:

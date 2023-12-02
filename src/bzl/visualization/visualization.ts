@@ -18,6 +18,7 @@ import { ExtendedMongoQuery } from "types/utils";
 import {
   excelFilesToVisualizations,
   jsonFilesToVisualizations,
+  csvFilesToVisualizations
 } from "../../utils/reader";
 import { visualizationTypeSchema } from "../../validators/allValidators";
 import { generateErrorMessage } from "zod-error";
@@ -111,10 +112,11 @@ export class VisualizationBZL {
                 visualizationDetails
               );
             case "CSV":
-              return this.jsonFileProcessor(
+              return this.csvFileProcessor(
                 files,
                 allFileDetails,
                 res.projects[0].name,
+                fileDetails,
                 visualizationDetails
               );
           }
@@ -200,7 +202,7 @@ export class VisualizationBZL {
         });
       }
       const validVisualization = visualizationTypeSchema.safeParse(ill);
-
+      
       if (!validVisualization.success) {
         const errorMessage = generateErrorMessage(
           validVisualization.error.issues,
@@ -243,6 +245,29 @@ export class VisualizationBZL {
   ): Bluebird<VisualizationType[]> {
     return Promise.resolve(
       excelFilesToVisualizations(
+        files,
+        fileDetails,
+        visualizationDetails.type as VisualizationTypesEnum,
+        allFileDetails
+      )
+    ).then((illlustrations) => {
+      return this.visualizationDetailsProcessor(
+        illlustrations,
+        allFileDetails,
+        projectName,
+        visualizationDetails
+      );
+    });
+  }
+  private csvFileProcessor(
+    files: FileProperties[],
+    allFileDetails: boolean,
+    projectName: string,
+    fileDetails: FileDetails,
+    visualizationDetails: VisualizationUpdate
+  ): Bluebird<VisualizationType[]> {
+    return Promise.resolve(
+      csvFilesToVisualizations(
         files,
         fileDetails,
         visualizationDetails.type as VisualizationTypesEnum,

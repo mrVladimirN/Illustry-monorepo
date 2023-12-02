@@ -2,34 +2,39 @@ import _ from "lodash";
 import { visualizationDetailsExtractor } from "../../../utils/helper";
 import { ScatterData, ScatterPoint } from "types/visualizations";
 
-const computeValues = (
-  values: Record<string, unknown>,
-  mapping: string
-): number[] => {
-  const value: number[] = [];
+const computeValues = (values: unknown[], mapping: string): number[] => {
+  const result: number[] = [];
+
   mapping.split(",").forEach((row) => {
+    const index = _.toNumber(row);
+    const valueAtIndex = values[index];
+
     if (
-      !_.isNil(values[_.toNumber(row)]) &&
-      typeof values[_.toNumber(row)] === "number" &&
-      value.length <= 2
+      !_.isNil(valueAtIndex) &&
+      (typeof valueAtIndex === "number" ||
+        (typeof valueAtIndex === "string" &&
+          !isNaN(_.toNumber(valueAtIndex)))) &&
+      result.length <= 1
     ) {
-      value.push(values[_.toNumber(row)] as number);
+      result.push(_.toNumber(valueAtIndex));
     }
   });
-  while (value.length < 2) {
-    value.push(0);
+
+  while (result.length < 2) {
+    result.push(0);
   }
-  return value;
+
+  return result;
 };
 export const scatterTransformer = (
   mapping: Record<string, unknown>,
-  values: Record<string, unknown>,
+  values: unknown[],
   allFileDetails: boolean
 ) => {
   const baseValues = {
     value: computeValues(values, mapping.values as string),
     category: values[_.toNumber(mapping.categories)],
-    properties:  values[_.toNumber(mapping.properties)],
+    properties: values[_.toNumber(mapping.properties)],
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails
@@ -40,11 +45,16 @@ export const scatterTransformer = (
     : { points: baseValues };
 };
 
-export const scatterExtractor = (data: Record<string, unknown>[]): ScatterData => {
+export const scatterExtractor = (
+  data: Record<string, unknown>[]
+): ScatterData => {
   const transformedData = data.reduce(
     (result, item) => {
       let scatterData;
-      const { category, value, properties} = item.points as Record<string, unknown>;
+      const { category, value, properties } = item.points as Record<
+        string,
+        unknown
+      >;
       scatterData = (result.points as ScatterPoint[]).find(
         (e: ScatterPoint) =>
           e.value[0] === (value as unknown[])[0] &&

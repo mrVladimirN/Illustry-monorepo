@@ -12,7 +12,7 @@ import { pieChartFunnelExtractor } from "./pieChartFunnelTransformer";
 import { scatterExtractor } from "./scatterTransformer";
 import { hierarchyExtractor } from "./hierarchyTransformers";
 
-export const excelDataProvider = (
+export const dataProvider = (
   type: VisualizationTypesEnum,
   computedRows: Record<string, unknown>[],
   allFileDetails: boolean
@@ -142,7 +142,7 @@ export const jsonDataProvider = (
   allFileDetails: boolean
 ) => {
   let data: VisualizationUpdate = {};
-  if (allFileDetails) {
+  if (!allFileDetails) {
     _.set(data, "data", computedData);
     _.set(data, "type", type);
     return data;

@@ -60,7 +60,7 @@ const excelDateToJSDate = (excelDate: number): string | null => {
 };
 export const calendarTransformer = (
   mapping: Record<string, unknown>,
-  values: Record<string, unknown>,
+  values: unknown[],
   allFileDetails: boolean
 ) => {
   const baseValues = {
@@ -68,7 +68,10 @@ export const calendarTransformer = (
       typeof values[_.toNumber(mapping.dates)] === "string"
         ? reformatDate(values[_.toNumber(mapping.dates)] as string)
         : excelDateToJSDate(values[_.toNumber(mapping.dates)] as number),
-    value: values[_.toNumber(mapping.values)],
+    value:
+      typeof values[_.toNumber(mapping.values)] === "string"
+        ? +(values[_.toNumber(mapping.values)] as string)
+        : values[_.toNumber(mapping.values)],
     category: values[_.toNumber(mapping.categories)],
     properties: values[_.toNumber(mapping.properties)],
   };
@@ -78,7 +81,9 @@ export const calendarTransformer = (
     : { calendar: baseValues };
 };
 
-export const calendarExtractor = (data: Record<string, unknown>[]): CalendarData => {
+export const calendarExtractor = (
+  data: Record<string, unknown>[]
+): CalendarData => {
   const transformedData = data.reduce(
     (result, item) => {
       const calendarData = item.calendar;
@@ -95,6 +100,8 @@ export const calendarExtractor = (data: Record<string, unknown>[]): CalendarData
         if (
           !_.isNil(calendar.category) &&
           !_.isNil(calendar.date) &&
+          !_.isEmpty(calendar.category) &&
+          !_.isEmpty(calendar.date) &&
           !_.isNil(calendar.value)
         ) {
           (result.calendar as CalendarType[]).push(calendar);

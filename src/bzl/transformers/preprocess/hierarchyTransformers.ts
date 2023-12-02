@@ -2,12 +2,13 @@ import _ from "lodash";
 import { visualizationDetailsExtractor } from "../../../utils/helper";
 import { HierarchyNode, HierarchyData } from "types/visualizations";
 const computeChildren = (
-  values: Record<string, unknown>,
+  values: unknown[],
   mapping: Record<string, unknown>
 ): string[] => {
   const children: string[] = [];
   (mapping.children as string).split(",").forEach((row) => {
-    if (typeof values[_.toNumber(row)] === "string") {
+    if (typeof values[_.toNumber(row)] === "string" &&
+    isNaN(_.toNumber(values[_.toNumber(row)]))) {
       children.push(values[_.toNumber(row)] as string);
     }
   });
@@ -15,12 +16,15 @@ const computeChildren = (
 };
 export const hierarchyTransformer = (
   mapping: Record<string, unknown>,
-  values: Record<string, unknown>,
+  values: unknown[],
   allFileDetails: boolean
 ) => {
   const baseValues = {
     name: values[_.toNumber(mapping.names)],
-    value: values[_.toNumber(mapping.values)],
+    value:
+      typeof values[_.toNumber(mapping.values)] === "string"
+        ? +(values[_.toNumber(mapping.values)] as string)
+        : values[_.toNumber(mapping.values)],
     category: values[_.toNumber(mapping.categories)],
     children: computeChildren(values, mapping),
     properties: values[_.toNumber(mapping.properties)],

@@ -6,10 +6,10 @@ import { FileDetails, FileProperties } from "types/files";
 import { VisualizationTypesEnum } from "types/visualizations";
 import {
   jsonDataProvider,
-  excelDataProvider,
+  dataProvider,
 } from "../bzl/transformers/preprocess/dataProvider";
 import { transformerProvider } from "../bzl/transformers/preprocess/transformersProvider";
-
+import readline from "readline";
 const XlsxStreamReader = require("xlsx-stream-reader");
 
 const readJsonFile = (
@@ -104,9 +104,47 @@ const readExcelFile = (
 
     workBookReader.on("end", () => {
       fs.unlinkSync(_.get(file, "filePath"));
-      resolve(
-        excelDataProvider(visualizationType, computedRows, allFileDetails)
-      );
+      resolve(dataProvider(visualizationType, computedRows, allFileDetails));
+    });
+  });
+};
+const readCsvFile = (
+  file: FileProperties,
+  fileDetails: FileDetails,
+  visualizationType: VisualizationTypesEnum,
+  allFileDetails: boolean
+) => {
+  const computedRows: any = [];
+  return new Promise((resolve, reject) => {
+    if (file.type !== "text/csv") {
+      reject(new FileError("The provided file is not CSV format"));
+    }
+    const readStream = fs.createReadStream(file.filePath);
+    const readliner = readline.createInterface({
+      input: readStream,
+      crlfDelay: Infinity,
+    });
+    let includeHeaders = fileDetails && fileDetails.includeHeaders;
+    readliner.on("line", (line) => {
+      if (!includeHeaders) {
+        includeHeaders = true;
+      } else {
+        computedRows.push(
+          transformerProvider(
+            visualizationType,
+            fileDetails.mapping,
+            ['', ...line.split(fileDetails.separator ? fileDetails.separator : ",")],
+            allFileDetails
+          )
+        );
+      }
+    });
+    readliner.on("close", () => {
+      fs.unlinkSync(_.get(file, "filePath"));
+      resolve(dataProvider(visualizationType, computedRows, allFileDetails));
+    });
+    readliner.on("error", (err) => {
+      reject(new FileError(`An error occurred: ${err}`));
     });
   });
 };
@@ -134,6 +172,21 @@ export const jsonFilesToVisualizations = (
   return Promise.map(files, (file) => {
     return Promise.resolve(
       readJsonFile(file, visualizationType, allFileDetails)
+    );
+  }).then((files) => {
+    return files;
+  });
+};
+
+export const csvFilesToVisualizations = (
+  files: FileProperties[],
+  fileDetails: FileDetails,
+  visualizationType: VisualizationTypesEnum,
+  allFileDetails: boolean
+) => {
+  return Promise.map(files, (file) => {
+    return Promise.resolve(
+      readCsvFile(file, fileDetails, visualizationType, allFileDetails)
     );
   }).then((files) => {
     return files;

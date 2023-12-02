@@ -3,16 +3,33 @@ import { visualizationDetailsExtractor } from "../../../utils/helper";
 import { AxisChartData } from "types/visualizations";
 
 const computeValues = (
-  values: Record<string, unknown>,
+  values: unknown[],
   mapping: string
-): { [row: string]: unknown }[] => {
-  return mapping.split(",").map((row) => {
-    return { [row]: values[_.toNumber(row)] ? values[_.toNumber(row)] : null };
-  });
+): { [element: string]: number[] } | undefined => {
+  const indices = mapping
+    .split(",")
+    .map((index) => parseInt(index.trim(), 10))
+    .filter((index) => !isNaN(index) && index >= 0 && index < values.length);
+
+  const keyIndex = indices.find(
+    (index) =>
+      typeof values[index] === "string" && isNaN(+(values[index] as string))
+  );
+
+  if (keyIndex !== undefined) {
+    const key = values[keyIndex] as string;
+    const numericValues = indices
+      .filter((index) => index !== keyIndex)
+      .map((index) => +(values[index] as string));
+
+    return { [key]: numericValues };
+  }
+
+  return undefined; // or handle the case where no valid key is found
 };
 export const axisChartTransformer = (
   mapping: Record<string, unknown>,
-  values: Record<string, unknown>,
+  values: unknown[],
   allFileDetails: boolean
 ) => {
   const baseValues = {
@@ -31,51 +48,29 @@ export const axisChartTransformer = (
 export const axisChartExtractor = (
   data: Record<string, unknown>[]
 ): AxisChartData => {
-  const result: Record<string, unknown> = {};
-  const headers: string[] = [];
-
-  data.forEach((item) => {
-    const itemData = (item.values as Record<string, unknown>).data as Record<
-      string,
-      unknown
-    >[];
-    const itemLength = itemData.length;
-    for (let i = 0; i < itemLength; i++) {
-      const keys = Object.keys(itemData[i]);
-
-      keys.forEach((key: string) => {
-        if (!result[key]) {
-          result[key] = [];
+  const transformedData = data.reduce(
+    (result, item) => {
+      const axisData = item.values;
+      let headersData;
+      const { data, headers } = axisData as Record<string, unknown>;
+      headersData = (result.headers as string[]).find(
+        (h: string) => h === headers
+      );
+      if (_.isNil(headersData)) {
+        headersData = headers as string;
+        if (!_.isNil(headersData) && !_.isEmpty(headersData)) {
+          (result.headers as string[]).push(headersData);
         }
-
-        itemData.forEach((entry) => {
-          const value = entry[key] as number;
-          if (value !== undefined) {
-            (result[key] as number[]).push(value !== null ? value : 0);
-          }
-        });
-      });
-    }
-    const itemHeaders = (item.values as Record<string, unknown>).headers;
-    if (itemHeaders) {
-      headers.push(itemHeaders as string);
-    }
-  });
-  Object.keys(result).forEach((key) => {
-    const stringElement = (result[key] as (string | number)[]).find((el) => {
-      return typeof el === "string";
-    });
-    if (key === null) {
-      result[key] = 0;
-    }
-    if (stringElement) {
-      (result[stringElement] as Record<string, number>[]) = (
-        result[key] as Record<string, number>[]
-      ).filter((el) => Number.isFinite(el));
-      delete result[key];
-    } else {
-      delete result[key];
-    }
-  });
-  return { values: { ...result }, headers } as AxisChartData;
+      }
+      if (!_.isNil(data)) {
+        result.values = {
+          ...(result.values as Record<string, unknown>),
+          ...data as Record<string, unknown>,
+        };
+      }
+      return result;
+    },
+    { headers: [], values: {} }
+  );
+  return transformedData as unknown as AxisChartData;
 };

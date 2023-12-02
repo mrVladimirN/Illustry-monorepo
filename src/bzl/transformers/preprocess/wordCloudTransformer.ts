@@ -4,12 +4,15 @@ import { WordCloudData, WordType } from "types/visualizations";
 
 export const wordCloudTransformer = (
   mapping: Record<string, unknown>,
-  values: Record<string, unknown>,
+  values: unknown[],
   allFileDetails: boolean
 ) => {
   const baseValues = {
     name: values[_.toNumber(mapping.names)],
-    value: values[_.toNumber(mapping.values)],
+    value:
+      typeof values[_.toNumber(mapping.values)] === "string"
+        ? +(values[_.toNumber(mapping.values)] as string)
+        : values[_.toNumber(mapping.values)],
     properties: values[_.toNumber(mapping.properties)],
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
@@ -34,7 +37,12 @@ export const wordsExtractor = (
 
       if (_.isNil(word)) {
         word = { name, value, properties } as WordType;
-        if (!_.isNil(word.name) && !_.isNil(word.value)) {
+        if (
+          !_.isEmpty(word.name) &&
+          !_.isNil(word.name) &&
+          !_.isNil(word.value) &&
+          !_.isNil(word.value)
+        ) {
           (result.words as WordType[]).push(word);
         }
       }
