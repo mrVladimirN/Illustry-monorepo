@@ -5,7 +5,7 @@ declare module "types/files" {
         delimiter?: string;
     }
     export interface FileDetails {
-        fileType: "JSON" | "EXCEL" | "CSV";
+        fileType: "JSON" | "EXCEL" | "CSV" | "XML";
         includeHeaders?: boolean;
         separator?: string;
         mapping?: any;
