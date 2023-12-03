@@ -34,6 +34,7 @@ export enum fileTypes {
   JSON = "JSON",
   EXCEL = "EXCEL",
   CSV = "CSV",
+  XML = "XML",
 }
 export function AddVisualizationForm() {
   const router = useRouter();

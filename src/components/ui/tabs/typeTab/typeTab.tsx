@@ -20,6 +20,7 @@ import {
 import { UseFormReturn } from "react-hook-form";
 import { ExtFile } from "@files-ui/react";
 import { CSVFileFormatter } from "./csvFileFormatFormItem";
+import { XMLFileFormatter } from "./xmlFileFormatFormItem";
 interface TypeTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
   handleFileTypeChange: (value: string) => void;
@@ -66,6 +67,15 @@ export function TypeTab({
               form={form}
             />
           );
+        case fileTypes.XML:
+          return (
+            <XMLFileFormatter
+              acceptedFiles={files}
+              updateFiles={updateFiles}
+              removeFile={removeFile}
+              form={form}
+            />
+          );
         default:
           return null;
       }
@@ -93,7 +103,7 @@ export function TypeTab({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {[fileTypes.JSON, fileTypes.CSV, fileTypes.EXCEL].map(
+                      {[fileTypes.JSON, fileTypes.CSV, fileTypes.EXCEL, fileTypes.XML].map(
                         (option) => (
                           <SelectItem key={option} value={option}>
                             {option}

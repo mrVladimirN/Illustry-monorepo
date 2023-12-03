@@ -9,6 +9,7 @@ import { UseFormReturn } from "react-hook-form";
 import { FormField, FormItem, FormControl, FormMessage } from "../../form";
 import { Checkbox } from "../../checkbox";
 import React from "react";
+import { XMLMappingTab } from "./xmlMappingTab";
 
 interface MappingTabProps {
   selectedFileType: string;
@@ -51,7 +52,26 @@ export function MappingTab({
               </Button>
             </>
           );
-
+        case fileTypes.XML:
+          return (
+            <>
+              <XMLMappingTab
+                form={form}
+                fileDetails={fileDetails}
+                router={router}
+              />
+              <Button className="w-fit mt-[2%]" disabled={isPending}>
+                {isPending && (
+                  <Icons.spinner
+                    className="mr-2 h-4 w-4 animate-spin"
+                    aria-hidden="true"
+                  />
+                )}
+                Add Visualizations
+                <span className="sr-only">Add Visualizations</span>
+              </Button>
+            </>
+          );
         case fileTypes.EXCEL:
         case fileTypes.CSV:
           return (
@@ -60,7 +80,7 @@ export function MappingTab({
                 form={form}
                 router={router}
                 fileDetails={fileDetails}
-                selectedFileType= {selectedFileType}
+                selectedFileType={selectedFileType}
               />
               <Button className="w-fit mt-[2%]" disabled={isPending}>
                 {isPending && (

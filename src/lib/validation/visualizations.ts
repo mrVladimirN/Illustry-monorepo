@@ -59,7 +59,35 @@ export const jsonSchema = commonFileSchema.extend({
   tags: z.string().optional(),
   description: z.string().max(50).optional(),
 });
-
+export const xmlSchema = commonFileSchema.extend({
+  fileType: z.literal("XML"),
+  name: z
+    .string()
+    // .min(1, {
+    //   message: "Must be at least 1 character",
+    // })
+    .optional(),
+  type: z
+    .union([
+      z.literal(visualizationTypesEnum.WORLD_CLOUD),
+      z.literal(visualizationTypesEnum.FORCE_DIRECTED_GRAPH),
+      z.literal(visualizationTypesEnum.SANKEY),
+      z.literal(visualizationTypesEnum.CALENDAR),
+      z.literal(visualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING),
+      z.literal(visualizationTypesEnum.MATRIX),
+      z.literal(visualizationTypesEnum.LINE_CHART),
+      z.literal(visualizationTypesEnum.BAR_CHART),
+      z.literal(visualizationTypesEnum.PIE_CHART),
+      z.literal(visualizationTypesEnum.SCATTER),
+      z.literal(visualizationTypesEnum.TREEMAP),
+      z.literal(visualizationTypesEnum.SUNBURST),
+      z.literal(visualizationTypesEnum.FUNNEL),
+      z.literal(visualizationTypesEnum.TIMELINE),
+    ])
+    .optional(),
+  tags: z.string().optional(),
+  description: z.string().max(50).optional(),
+});
 export const excelSchema = commonFileSchema.extend({
   fileType: z.literal("EXCEL"),
   name: z
@@ -128,4 +156,5 @@ export const visualizationSchema = z.union([
   jsonSchema,
   excelSchema,
   csvSchema,
+  xmlSchema,
 ]);
