@@ -1,5 +1,5 @@
  
-import { Promise } from "bluebird";
+import Bluebird from "bluebird";
 import { ModelInstance } from "../../models/modelInstance";
 import _ from "lodash";
 import validator from "validator";
@@ -95,7 +95,7 @@ export class Visualization {
   }
 
   findOne(filter: ExtendedMongoQuery): Promise<VisualizationType> {
-    return Promise.resolve().then(() => {
+    return Bluebird.resolve().then(() => {
       return this.modelInstance.VisualizationModel.findOne(filter.query);
     });
   }
@@ -145,7 +145,7 @@ export class Visualization {
     if (_.isNil(data.updatedAt)) {
       data.updatedAt = new Date();
     }
-    return Promise.resolve().then(() => {
+    return Bluebird.resolve().then(() => {
       return this.modelInstance.VisualizationModel.findOneAndUpdate(
         filter.query,
         data,
@@ -156,14 +156,14 @@ export class Visualization {
 
   delete(filter: ExtendedMongoQuery): Promise<boolean> {
     return Promise.resolve().then(() => {
-      return Promise.resolve(
+      return Bluebird.resolve(
         this.modelInstance.VisualizationModel.deleteOne(filter.query)
       ).thenReturn(true);
     });
   }
   deleteMany(filter: ExtendedMongoQuery): Promise<boolean> {
     return Promise.resolve().then(() => {
-      return Promise.resolve(
+      return Bluebird.resolve(
         this.modelInstance.VisualizationModel.deleteMany(filter.query)
       ).thenReturn(true);
     });

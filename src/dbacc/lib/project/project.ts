@@ -1,4 +1,4 @@
-import { Promise } from "bluebird";
+import Bluebird from "bluebird";
 import { ModelInstance } from "../../models/modelInstance";
 import _ from "lodash";
 
@@ -86,7 +86,7 @@ export class Project {
   }
 
   findByName(filter: ExtendedMongoQuery): Promise<ProjectType> {
-    return Promise.resolve().then(() => {
+    return Bluebird.resolve().then(() => {
       return this.modelInstance.ProjectModel.findOne(filter.query, {
         __v: 0,
         _id: 0,
@@ -131,7 +131,7 @@ export class Project {
     filter: ExtendedMongoQuery,
     data: ProjectUpdate
   ): Promise<ProjectType> {
-    return Promise.resolve().then(() => {
+    return Bluebird.resolve().then(() => {
       if (!data.isActive) {
         return this.modelInstance.ProjectModel.findOneAndUpdate(
           filter.query,
@@ -160,7 +160,7 @@ export class Project {
   }
 
   delete(filter: ExtendedMongoQuery): Promise<boolean> {
-    return Promise.resolve()
+    return Bluebird.resolve()
       .then(() => {
         return this.modelInstance.ProjectModel.deleteOne(filter.query);
       })

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Promise, reject } from "bluebird";
+import Bluebird from "bluebird";
 import * as fs from "fs";
 import { FileError } from "../errors/fileError";
 import { FileDetails, FileProperties } from "types/files";
@@ -19,7 +19,7 @@ const readJsonFile = (
   visualizationType: VisualizationTypesEnum,
   allFileDetails: boolean
 ) => {
-  return new Promise((resolve, reject) => {
+  return new Bluebird((resolve, reject) => {
     if (file.type !== "application/json") {
       reject(new FileError("The provided file is not JSON format"));
     }
@@ -46,7 +46,7 @@ const readXmlFile = (
   visualizationType: VisualizationTypesEnum,
   allFileDetails: boolean
 ) => {
-  return new Promise((resolve, reject) => {
+  return new Bluebird((resolve, reject) => {
     if (file.type !== "text/xml") {
       reject(new FileError("The provided file is not XML format"));
     }
@@ -88,7 +88,7 @@ const readExcelFile = (
   visualizationType: VisualizationTypesEnum,
   allFileDetails: boolean
 ) => {
-  return new Promise((resolve, reject) => {
+  return new Bluebird((resolve, reject) => {
     if (
       file.type !==
       "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -160,7 +160,7 @@ const readCsvFile = (
   allFileDetails: boolean
 ) => {
   const computedRows: any = [];
-  return new Promise((resolve, reject) => {
+  return new Bluebird((resolve, reject) => {
     if (file.type !== "text/csv") {
       reject(new FileError("The provided file is not CSV format"));
     }
@@ -207,8 +207,8 @@ export const excelFilesToVisualizations = (
   visualizationType: VisualizationTypesEnum,
   allFileDetails: boolean
 ) => {
-  return Promise.map(files, (file) => {
-    return Promise.resolve(
+  return Bluebird.map(files, (file) => {
+    return Bluebird.resolve(
       readExcelFile(file, fileDetails, visualizationType, allFileDetails)
     );
   }).then((files) => {
@@ -221,8 +221,8 @@ export const jsonFilesToVisualizations = (
   visualizationType: VisualizationTypesEnum,
   allFileDetails: boolean
 ) => {
-  return Promise.map(files, (file) => {
-    return Promise.resolve(
+  return Bluebird.map(files, (file) => {
+    return Bluebird.resolve(
       readJsonFile(file, visualizationType, allFileDetails)
     );
   }).then((files) => {
@@ -236,8 +236,8 @@ export const csvFilesToVisualizations = (
   visualizationType: VisualizationTypesEnum,
   allFileDetails: boolean
 ) => {
-  return Promise.map(files, (file) => {
-    return Promise.resolve(
+  return Bluebird.map(files, (file) => {
+    return Bluebird.resolve(
       readCsvFile(file, fileDetails, visualizationType, allFileDetails)
     );
   }).then((files) => {
@@ -249,8 +249,8 @@ export const xmlFilesToVisualizations = (
   visualizationType: VisualizationTypesEnum,
   allFileDetails: boolean
 ) => {
-  return Promise.map(files, (file) => {
-    return Promise.resolve(
+  return Bluebird.map(files, (file) => {
+    return Bluebird.resolve(
       readXmlFile(file, visualizationType, allFileDetails)
     );
   }).then((files) => {

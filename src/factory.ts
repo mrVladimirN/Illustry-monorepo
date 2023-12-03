@@ -2,13 +2,6 @@ import { BZLInstance } from "./bzl";
 import { DbaccInstance } from "./dbacc/lib";
 import mongoose, { ConnectOptions, Connection } from "mongoose";
 require("dotenv").config();
-const connectionOptions: ConnectOptions = {
-  user: process.env.MONGO_USER,
-  pass: process.env.MONGO_PASSWORD,
-};
-const connectionURI: string = process.env.MONGO_URL
-  ? process.env.MONGO_URL
-  : "";
 export class Factory {
   private static _instance: Factory;
   private static _dbaccInstance: DbaccInstance;
@@ -19,7 +12,13 @@ export class Factory {
       throw new Error("Use Factory getInstance() instead");
     }
     const dbConnection = mongoose.createConnection(
-      connectionURI,
+      process.env.NODE_ENV === "test"
+        ? process.env.MONGO_TEST_URL
+          ? process.env.MONGO_TEST_URL
+          : ""
+        : process.env.MONGO_URL
+        ? process.env.MONGO_URL
+        : ""
       // connectionOptions
     );
     Factory._dbaccInstance = new DbaccInstance(dbConnection);

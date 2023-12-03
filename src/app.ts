@@ -1,21 +1,47 @@
-import express from "express";
+import express, { Express } from "express";
 import ProjectRoutes from "./routes/project/project";
+import cors from "cors";
 import VisualizationRoutes from "./routes/visualization/visualization";
+import * as http from "http";
+import mongoose from "mongoose";
 require("dotenv").config();
-const app = express();
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "OPTIONS, GET, POST, PUT, PATCH, DELETE"
-  );
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
-});
-app.use(ProjectRoutes);
-app.use(VisualizationRoutes);
-app.listen(process.env.ILLUSTRY_PORT, () => {
-  return console.log(`server is listening on ${process.env.ILLUSTRY_PORT}`);
-});
+export default class Illustry {
+  private expressApp: Express = express();
+  private httpServer: http.Server | undefined;
+  constructor() {
+    this.expressApp.use(
+      cors({
+        origin: "*",
+        methods: "GET, POST, OPTIONS, PUT, PATH, DELETE",
+        allowedHeaders: [
+          "Access-Control-Allow-Headers",
+          "Content-Type, Authorization",
+        ],
+        credentials: true,
+      })
+    );
+    this.expressApp.use(express.json());
+    this.expressApp.use(ProjectRoutes);
+    this.expressApp.use(VisualizationRoutes);
+  }
+
+  async start(): Promise<void> {
+    return Promise.resolve().then(() => {
+      this.httpServer = this.expressApp.listen(
+        process.env.ILLUSTRY_PORT,
+        () => {
+          console.log(`server is listening on ${process.env.ILLUSTRY_PORT}`);
+        }
+      );
+      this.httpServer.on("error", (error) => {
+        console.error(error);
+      });
+    });
+  }
+  async stop(): Promise<void> {
+    return Promise.resolve().then(async () => {
+      this.httpServer?.close();
+      await mongoose.disconnect();
+    });
+  }
+}

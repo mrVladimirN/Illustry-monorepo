@@ -11,7 +11,6 @@ export class ProjectBZL {
     this.dbaccInstance = dbaccInstance;
   }
 
-  /* Internal */
   create(project: ProjectCreate): Promise<ProjectType> {
     if (_.isNil(project.createdAt)) {
       project.createdAt = new Date();
@@ -24,7 +23,7 @@ export class ProjectBZL {
     });
   }
 
-  findByName(filter: ProjectFilter): Promise<ProjectType> {
+  findByName(filter: ProjectFilter, ): Promise<ProjectType> {
     let newFilter: ExtendedMongoQuery = {};
     if (!_.isNil(filter)) {
       newFilter = this.dbaccInstance.Project.createFilter(filter);

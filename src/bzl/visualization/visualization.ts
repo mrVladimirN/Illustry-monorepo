@@ -18,7 +18,7 @@ import {
   excelFilesToVisualizations,
   jsonFilesToVisualizations,
   csvFilesToVisualizations,
-  xmlFilesToVisualizations
+  xmlFilesToVisualizations,
 } from "../../utils/reader";
 import { visualizationTypeSchema } from "../../validators/allValidators";
 import { generateErrorMessage } from "zod-error";
@@ -85,7 +85,7 @@ export class VisualizationBZL {
     files: FileProperties[],
     allFileDetails: boolean,
     visualizationDetails: VisualizationUpdate,
-    fileDetails: FileDetails
+    fileDetails: FileDetails,
   ): Promise<VisualizationType[]> {
     return Factory.getInstance()
       .getBZL()
@@ -119,13 +119,13 @@ export class VisualizationBZL {
                 fileDetails,
                 visualizationDetails
               );
-              case "XML":
-                return this.xmlFileProcessor(
-                  files,
-                  allFileDetails,
-                  res.projects[0].name,
-                  visualizationDetails
-                );
+            case "XML":
+              return this.xmlFileProcessor(
+                files,
+                allFileDetails,
+                res.projects[0].name,
+                visualizationDetails
+              );
           }
         } else {
           throw new Error("No Active Project");
@@ -209,7 +209,7 @@ export class VisualizationBZL {
         });
       }
       const validVisualization = visualizationTypeSchema.safeParse(ill);
-      
+
       if (!validVisualization.success) {
         const errorMessage = generateErrorMessage(
           validVisualization.error.issues,
