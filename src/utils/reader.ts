@@ -1,16 +1,18 @@
 import _ from "lodash";
-import { Promise } from "bluebird";
+import { Promise, reject } from "bluebird";
 import * as fs from "fs";
 import { FileError } from "../errors/fileError";
 import { FileDetails, FileProperties } from "types/files";
 import { VisualizationTypesEnum } from "types/visualizations";
 import {
   jsonDataProvider,
-  dataProvider,
+  exelOrCsvdataProvider,
+  xmlDataProvider,
 } from "../bzl/transformers/preprocess/dataProvider";
 import { transformerProvider } from "../bzl/transformers/preprocess/transformersProvider";
 import readline from "readline";
 const XlsxStreamReader = require("xlsx-stream-reader");
+import { parseStringPromise } from "xml2js";
 
 const readJsonFile = (
   file: FileProperties,
@@ -39,6 +41,47 @@ const readJsonFile = (
   });
 };
 
+const readXmlFile = (
+  file: FileProperties,
+  visualizationType: VisualizationTypesEnum,
+  allFileDetails: boolean
+) => {
+  return new Promise((resolve, reject) => {
+    if (file.type !== "text/xml") {
+      reject(new FileError("The provided file is not XML format"));
+    }
+    const buffer = fs.createReadStream(file.filePath);
+    let finalText: string = "";
+    buffer.on("error", (err: any) => {
+      reject(new FileError("Problems while uploading the files"));
+    });
+    buffer.on("data", (data: string | Buffer) => {
+      finalText = finalText + data;
+    });
+    buffer.on("end", async () => {
+      try {
+        fs.unlinkSync(_.get(file, "filePath"));
+        const visualization = (await parseStringPromise(finalText)) as Record<
+          string,
+          unknown
+        >;
+        const finalType =
+          visualization &&
+          (visualization.root as Record<string, unknown>) &&
+          ((visualization.root as Record<string, unknown>).type as string[]) &&
+          ((visualization.root as Record<string, unknown>).type as string[])
+            .length > 0
+            ? ((
+                (visualization.root as Record<string, unknown>).type as string[]
+              )[0] as VisualizationTypesEnum)
+            : visualizationType;
+        resolve(xmlDataProvider(finalType, visualization, allFileDetails));
+      } catch (err) {
+        reject(new FileError(`The file could not be parsed because of ${err}`));
+      }
+    });
+  });
+};
 const readExcelFile = (
   file: FileProperties,
   fileDetails: FileDetails,
@@ -104,7 +147,9 @@ const readExcelFile = (
 
     workBookReader.on("end", () => {
       fs.unlinkSync(_.get(file, "filePath"));
-      resolve(dataProvider(visualizationType, computedRows, allFileDetails));
+      resolve(
+        exelOrCsvdataProvider(visualizationType, computedRows, allFileDetails)
+      );
     });
   });
 };
@@ -133,7 +178,12 @@ const readCsvFile = (
           transformerProvider(
             visualizationType,
             fileDetails.mapping,
-            ['', ...line.split(fileDetails.separator ? fileDetails.separator : ",")],
+            [
+              "",
+              ...line.split(
+                fileDetails.separator ? fileDetails.separator : ","
+              ),
+            ],
             allFileDetails
           )
         );
@@ -141,7 +191,9 @@ const readCsvFile = (
     });
     readliner.on("close", () => {
       fs.unlinkSync(_.get(file, "filePath"));
-      resolve(dataProvider(visualizationType, computedRows, allFileDetails));
+      resolve(
+        exelOrCsvdataProvider(visualizationType, computedRows, allFileDetails)
+      );
     });
     readliner.on("error", (err) => {
       reject(new FileError(`An error occurred: ${err}`));
@@ -187,6 +239,19 @@ export const csvFilesToVisualizations = (
   return Promise.map(files, (file) => {
     return Promise.resolve(
       readCsvFile(file, fileDetails, visualizationType, allFileDetails)
+    );
+  }).then((files) => {
+    return files;
+  });
+};
+export const xmlFilesToVisualizations = (
+  files: FileProperties[],
+  visualizationType: VisualizationTypesEnum,
+  allFileDetails: boolean
+) => {
+  return Promise.map(files, (file) => {
+    return Promise.resolve(
+      readXmlFile(file, visualizationType, allFileDetails)
     );
   }).then((files) => {
     return files;

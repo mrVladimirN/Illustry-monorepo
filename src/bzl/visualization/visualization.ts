@@ -1,5 +1,4 @@
 import Bluebird, { Promise } from "bluebird";
-
 import { DbaccInstance } from "../../dbacc/lib";
 import _ from "lodash";
 import { Factory } from "../../factory";
@@ -18,7 +17,8 @@ import { ExtendedMongoQuery } from "types/utils";
 import {
   excelFilesToVisualizations,
   jsonFilesToVisualizations,
-  csvFilesToVisualizations
+  csvFilesToVisualizations,
+  xmlFilesToVisualizations
 } from "../../utils/reader";
 import { visualizationTypeSchema } from "../../validators/allValidators";
 import { generateErrorMessage } from "zod-error";
@@ -119,6 +119,13 @@ export class VisualizationBZL {
                 fileDetails,
                 visualizationDetails
               );
+              case "XML":
+                return this.xmlFileProcessor(
+                  files,
+                  allFileDetails,
+                  res.projects[0].name,
+                  visualizationDetails
+                );
           }
         } else {
           throw new Error("No Active Project");
@@ -214,7 +221,6 @@ export class VisualizationBZL {
       }
     });
   }
-
   private jsonFileProcessor(
     files: FileProperties[],
     allFileDetails: boolean,
@@ -223,6 +229,27 @@ export class VisualizationBZL {
   ): Bluebird<VisualizationType[]> {
     return Promise.resolve(
       jsonFilesToVisualizations(
+        files,
+        visualizationDetails.type as VisualizationTypesEnum,
+        allFileDetails
+      )
+    ).then((illlustrations) => {
+      return this.visualizationDetailsProcessor(
+        illlustrations,
+        allFileDetails,
+        projectName,
+        visualizationDetails
+      );
+    });
+  }
+  private xmlFileProcessor(
+    files: FileProperties[],
+    allFileDetails: boolean,
+    projectName: string,
+    visualizationDetails: VisualizationUpdate
+  ): Bluebird<VisualizationType[]> {
+    return Promise.resolve(
+      xmlFilesToVisualizations(
         files,
         visualizationDetails.type as VisualizationTypesEnum,
         allFileDetails

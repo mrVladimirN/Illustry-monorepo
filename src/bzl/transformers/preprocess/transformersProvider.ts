@@ -1,11 +1,11 @@
 import { VisualizationTypesEnum } from "types/visualizations";
-import { wordCloudTransformer } from "./wordCloudTransformer";
-import { nodeLinkTransformer } from "./nodeLinkTransformers";
-import { calendarTransformer } from "./calendarTransformers";
-import { axisChartTransformer } from "./axisChartTransformer";
-import { pieChartFunnelTransformer } from "./pieChartFunnelTransformer";
-import { scatterTransformer } from "./scatterTransformer";
-import { hierarchyTransformer } from "./hierarchyTransformers";
+import { wordCloudTransformer } from "./transformers/wordCloudTransformer";
+import { axisChartTransformer } from "./transformers/axisChartTransformer";
+import { hierarchyTransformer } from "./transformers/hierarchyTransformers";
+import { calendarTransformer } from "./transformers/calendarTransformers";
+import { nodeLinkTransformer } from "./transformers/nodeLinkTransformers";
+import { pieChartFunnelTransformer } from "./transformers/pieChartFunnelTransformer";
+import { scatterTransformer } from "./transformers/scatterTransformer";
 
 export const transformerProvider = (
   type: VisualizationTypesEnum,

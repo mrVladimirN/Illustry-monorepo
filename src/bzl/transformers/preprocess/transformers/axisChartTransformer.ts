@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { visualizationDetailsExtractor } from "../../../utils/helper";
+import { visualizationDetailsExtractor } from "../../../../utils/helper";
 import { AxisChartData } from "types/visualizations";
 
 const computeValues = (
@@ -45,7 +45,7 @@ export const axisChartTransformer = (
     : { values: baseValues };
 };
 
-export const axisChartExtractor = (
+export const axisChartExtractorCsvOrExcel = (
   data: Record<string, unknown>[]
 ): AxisChartData => {
   const transformedData = data.reduce(
@@ -65,7 +65,7 @@ export const axisChartExtractor = (
       if (!_.isNil(data)) {
         result.values = {
           ...(result.values as Record<string, unknown>),
-          ...data as Record<string, unknown>,
+          ...(data as Record<string, unknown>),
         };
       }
       return result;
@@ -73,4 +73,52 @@ export const axisChartExtractor = (
     { headers: [], values: {} }
   );
   return transformedData as unknown as AxisChartData;
+};
+const axisChartValuesExtractorXml = (values: Record<string, unknown>[]) => {
+  const transformedData = values.map((item) => {
+    const transformedValues: Record<string, number[]> = {};
+
+    // Transform each array of strings to an array of numbers
+    Object.keys(item).forEach((key) => {
+      transformedValues[key] = (item[key] as string[]).map((value: string) =>
+        Number(value)
+      );
+    });
+
+    return {
+      ...transformedValues,
+    };
+  });
+
+  // Return the transformed object inside the array
+  return transformedData[0];
+};
+
+export const axisChartExtractorXml = (
+  xmlData: Record<string, unknown>,
+  allFileDetails: boolean
+) => {
+  const { name, description, tags, type, data, headers, values } =
+    xmlData.root as Record<string, unknown>;
+  const finalData = {
+    data: {
+      headers: allFileDetails
+        ? (data as any[])[0].headers
+        : (headers as Record<string, string>[]),
+      values: allFileDetails
+        ? axisChartValuesExtractorXml((data as any[])[0].values)
+        : axisChartValuesExtractorXml(values as Record<string, unknown>[]),
+    },
+  };
+  return allFileDetails
+    ? {
+        ...finalData,
+        ...{
+          name: (name as string[])[0] as string,
+          description: (description as string[])[0] as string,
+          tags: tags as string[],
+          type: type as string,
+        },
+      }
+    : finalData;
 };

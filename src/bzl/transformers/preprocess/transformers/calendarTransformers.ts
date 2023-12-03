@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { visualizationDetailsExtractor } from "../../../utils/helper";
+import { visualizationDetailsExtractor } from "../../../../utils/helper";
 import { CalendarData, CalendarType } from "types/visualizations";
 
 const reformatDate = (date: string): string | null => {
@@ -81,7 +81,7 @@ export const calendarTransformer = (
     : { calendar: baseValues };
 };
 
-export const calendarExtractor = (
+export const calendarExtractorCsvOrExcel = (
   data: Record<string, unknown>[]
 ): CalendarData => {
   const transformedData = data.reduce(
@@ -113,4 +113,48 @@ export const calendarExtractor = (
     { calendar: [] }
   );
   return transformedData as unknown as CalendarData;
+};
+
+const calendarEventExtractorXml = (
+  calendar: Record<string, unknown>[]
+): CalendarType[] => {
+  return calendar.map((el: Record<string, unknown>) => {
+    return {
+      category: (el.category as string[])[0],
+      date: reformatDate((el.date as string)[0]),
+      value:
+        typeof (el.value as string[])[0] === "string"
+          ? +(el.value as string[])[0]
+          : (el.value as string[])[0],
+      properties:
+        el.properties && (el.properties as Record<string, unknown>[]).length
+          ? (el.properties as string[])[0]
+          : undefined,
+    };
+  }) as unknown as CalendarType[];
+};
+export const calendarExtractorXml = (
+  xmlData: Record<string, unknown>,
+  allFileDetails: boolean
+) => {
+  const { name, description, tags, type, data, calendar } =
+    xmlData.root as Record<string, unknown>;
+  const finalData = {
+    data: {
+      calendar: allFileDetails
+        ? calendarEventExtractorXml((data as any[])[0].calendar)
+        : calendarEventExtractorXml(calendar as Record<string, unknown>[]),
+    },
+  };
+  return allFileDetails
+    ? {
+        ...finalData,
+        ...{
+          name: (name as string[])[0] as string,
+          description: (description as string[])[0] as string,
+          tags: tags as string[],
+          type: type as string,
+        },
+      }
+    : finalData;
 };

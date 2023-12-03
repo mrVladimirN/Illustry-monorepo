@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { visualizationDetailsExtractor } from "../../../utils/helper";
+import { visualizationDetailsExtractor } from "../../../../utils/helper";
 import { HierarchyNode, HierarchyData } from "types/visualizations";
 const computeChildren = (
   values: unknown[],
@@ -7,8 +7,10 @@ const computeChildren = (
 ): string[] => {
   const children: string[] = [];
   (mapping.children as string).split(",").forEach((row) => {
-    if (typeof values[_.toNumber(row)] === "string" &&
-    isNaN(_.toNumber(values[_.toNumber(row)]))) {
+    if (
+      typeof values[_.toNumber(row)] === "string" &&
+      isNaN(_.toNumber(values[_.toNumber(row)]))
+    ) {
       children.push(values[_.toNumber(row)] as string);
     }
   });
@@ -38,7 +40,7 @@ export const hierarchyTransformer = (
     : { nodes: baseValues };
 };
 
-export const hierarchyExtractor = (
+export const hierarchyExtractorCsvOrExcel = (
   data: Record<string, unknown>[]
 ): HierarchyData => {
   const result: HierarchyNode[] = [];
@@ -115,4 +117,47 @@ export const hierarchyExtractor = (
   });
 
   return { nodes: result };
+};
+const hierarchyNodeExtractorXml = (nodes: Record<string, unknown>[]): any => {
+  return nodes.map((el: any) => {
+    return {
+      name: (el.name as string[])[0],
+      category: (el.category as string[])[0],
+      value: +(el.value as string[])[0],
+      properties:
+        el.properties && (el.properties as Record<string, unknown>[]).length
+          ? (el.properties as string[])[0]
+          : undefined,
+      children:
+        el.children && (el.children as Record<string, unknown>[]).length > 0
+          ? hierarchyNodeExtractorXml(el.children as Record<string, unknown>[])
+          : undefined,
+    };
+  });
+};
+
+export const hierarchyExtractorXml = (
+  xmlData: Record<string, unknown>,
+  allFileDetails: boolean
+) => {
+  const { name, description, tags, type, data, nodes, links } =
+    xmlData.root as Record<string, unknown>;
+  const finalData = {
+    data: {
+      nodes: allFileDetails
+        ? hierarchyNodeExtractorXml((data as any[])[0].nodes)
+        : hierarchyNodeExtractorXml(nodes as Record<string, unknown>[]),
+    },
+  };
+  return allFileDetails
+    ? {
+        ...finalData,
+        ...{
+          name: (name as string[])[0] as string,
+          description: (description as string[])[0] as string,
+          tags: tags as string[],
+          type: type as string,
+        },
+      }
+    : finalData;
 };

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { visualizationDetailsExtractor } from "../../../utils/helper";
+import { visualizationDetailsExtractor } from "../../../../utils/helper";
 import { ScatterData, ScatterPoint } from "types/visualizations";
 
 const computeValues = (values: unknown[], mapping: string): number[] => {
@@ -45,7 +45,7 @@ export const scatterTransformer = (
     : { points: baseValues };
 };
 
-export const scatterExtractor = (
+export const scatterExtractorCsvOrExcel = (
   data: Record<string, unknown>[]
 ): ScatterData => {
   const transformedData = data.reduce(
@@ -72,4 +72,45 @@ export const scatterExtractor = (
     { points: [] }
   );
   return transformedData as unknown as ScatterData;
+};
+
+const scatterPointsExtractorXml = (points: Record<string, unknown>[]) => {
+  const transformedData = points.map((el) => {
+    return {
+      category: (el.category as string[])[0],
+      value: (el.value as string[]).map((value: string) => Number(value)),
+      properties:
+        el.properties && (el.properties as Record<string, unknown>[]).length
+          ? (el.properties as string[])[0]
+          : undefined,
+    };
+  });
+
+  // Return the transformed object inside the array
+  return transformedData;
+};
+export const scatterExtractorXml = (
+  xmlData: Record<string, unknown>,
+  allFileDetails: boolean
+) => {
+  const { name, description, tags, type, data, points } =
+    xmlData.root as Record<string, unknown>;
+  const finalData = {
+    data: {
+      points: allFileDetails
+        ? scatterPointsExtractorXml((data as any[])[0].points)
+        : scatterPointsExtractorXml(points as Record<string, string>[]),
+    },
+  };
+  return allFileDetails
+    ? {
+        ...finalData,
+        ...{
+          name: (name as string[])[0] as string,
+          description: (description as string[])[0] as string,
+          tags: tags as string[],
+          type: type as string,
+        },
+      }
+    : finalData;
 };

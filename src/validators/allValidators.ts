@@ -191,7 +191,7 @@ const visualizationCalendarSchema = visualizationDataSchema.extend({
   ]),
   data: calendarDataSchema,
 });
-const visualizationWordCloudSchema = visualizationDataSchema.extend({
+export const visualizationWordCloudSchema = visualizationDataSchema.extend({
   type: z.union([
     z.literal(VisualizationTypesEnum.WORLD_CLOUD),
     z.array(z.literal(VisualizationTypesEnum.WORLD_CLOUD)),

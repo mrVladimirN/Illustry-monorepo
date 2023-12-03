@@ -4,15 +4,37 @@ import {
 } from "types/visualizations";
 import _ from "lodash";
 import { visualizationPropertiesExtractor } from "../../../utils/helper";
-import { nodesLinksExtractor } from "./nodeLinkTransformers";
-import { wordsExtractor } from "./wordCloudTransformer";
-import { calendarExtractor } from "./calendarTransformers";
-import { axisChartExtractor } from "./axisChartTransformer";
-import { pieChartFunnelExtractor } from "./pieChartFunnelTransformer";
-import { scatterExtractor } from "./scatterTransformer";
-import { hierarchyExtractor } from "./hierarchyTransformers";
+import {
+  nodesLinksExtractorCsvOrExcel,
+  nodeLinksExtractorXml,
+} from "./transformers/nodeLinkTransformers";
+import {
+  wordCloudExtractorCsvOrExcel,
+  wordCloudExtractorXml,
+} from "./transformers/wordCloudTransformer";
+import {
+  axisChartExtractorCsvOrExcel,
+  axisChartExtractorXml,
+} from "./transformers/axisChartTransformer";
+import {
+  calendarExtractorCsvOrExcel,
+  calendarExtractorXml,
+} from "./transformers/calendarTransformers";
+import {
+  hierarchyExtractorCsvOrExcel,
+  hierarchyExtractorXml,
+} from "./transformers/hierarchyTransformers";
+import { matrixExtractorXml } from "./transformers/matrixTransformer";
+import {
+  pieChartFunnelExtractorCsvOrExcel,
+  pieChartFunnelExtractorXml,
+} from "./transformers/pieChartFunnelTransformer";
+import {
+  scatterExtractorCsvOrExcel,
+  scatterExtractorXml,
+} from "./transformers/scatterTransformer";
 
-export const dataProvider = (
+export const exelOrCsvdataProvider = (
   type: VisualizationTypesEnum,
   computedRows: Record<string, unknown>[],
   allFileDetails: boolean
@@ -23,14 +45,18 @@ export const dataProvider = (
       if (allFileDetails) {
         const visualizationProperties =
           visualizationPropertiesExtractor(computedRows);
-        _.set(data, "data", wordsExtractor(visualizationProperties.data));
+        _.set(
+          data,
+          "data",
+          wordCloudExtractorCsvOrExcel(visualizationProperties.data)
+        );
         _.set(data, "name", visualizationProperties.name);
         _.set(data, "description", visualizationProperties.description);
         _.set(data, "tags", visualizationProperties.tags);
         _.set(data, "type", type);
         return data;
       } else {
-        _.set(data, "data", wordsExtractor(computedRows));
+        _.set(data, "data", wordCloudExtractorCsvOrExcel(computedRows));
         _.set(data, "type", type);
         return data;
       }
@@ -40,14 +66,18 @@ export const dataProvider = (
       if (allFileDetails) {
         const visualizationProperties =
           visualizationPropertiesExtractor(computedRows);
-        _.set(data, "data", nodesLinksExtractor(visualizationProperties.data));
+        _.set(
+          data,
+          "data",
+          nodesLinksExtractorCsvOrExcel(visualizationProperties.data)
+        );
         _.set(data, "name", visualizationProperties.name);
         _.set(data, "description", visualizationProperties.description);
         _.set(data, "tags", visualizationProperties.tags);
         _.set(data, "type", type);
         return data;
       } else {
-        _.set(data, "data", nodesLinksExtractor(computedRows));
+        _.set(data, "data", nodesLinksExtractorCsvOrExcel(computedRows));
         _.set(data, "type", type);
         return data;
       }
@@ -55,14 +85,18 @@ export const dataProvider = (
       if (allFileDetails) {
         const visualizationProperties =
           visualizationPropertiesExtractor(computedRows);
-        _.set(data, "data", calendarExtractor(visualizationProperties.data));
+        _.set(
+          data,
+          "data",
+          calendarExtractorCsvOrExcel(visualizationProperties.data)
+        );
         _.set(data, "name", visualizationProperties.name);
         _.set(data, "description", visualizationProperties.description);
         _.set(data, "tags", visualizationProperties.tags);
         _.set(data, "type", type);
         return data;
       } else {
-        _.set(data, "data", calendarExtractor(computedRows));
+        _.set(data, "data", calendarExtractorCsvOrExcel(computedRows));
         _.set(data, "type", type);
         return data;
       }
@@ -71,14 +105,18 @@ export const dataProvider = (
       if (allFileDetails) {
         const visualizationProperties =
           visualizationPropertiesExtractor(computedRows);
-        _.set(data, "data", axisChartExtractor(visualizationProperties.data));
+        _.set(
+          data,
+          "data",
+          axisChartExtractorCsvOrExcel(visualizationProperties.data)
+        );
         _.set(data, "name", visualizationProperties.name);
         _.set(data, "description", visualizationProperties.description);
         _.set(data, "tags", visualizationProperties.tags);
         _.set(data, "type", type);
         return data;
       } else {
-        _.set(data, "data", axisChartExtractor(computedRows));
+        _.set(data, "data", axisChartExtractorCsvOrExcel(computedRows));
         _.set(data, "type", type);
         return data;
       }
@@ -90,7 +128,7 @@ export const dataProvider = (
         _.set(
           data,
           "data",
-          pieChartFunnelExtractor(visualizationProperties.data)
+          pieChartFunnelExtractorCsvOrExcel(visualizationProperties.data)
         );
         _.set(data, "name", visualizationProperties.name);
         _.set(data, "description", visualizationProperties.description);
@@ -98,7 +136,7 @@ export const dataProvider = (
         _.set(data, "type", type);
         return data;
       } else {
-        _.set(data, "data", pieChartFunnelExtractor(computedRows));
+        _.set(data, "data", pieChartFunnelExtractorCsvOrExcel(computedRows));
         _.set(data, "type", type);
         return data;
       }
@@ -106,14 +144,18 @@ export const dataProvider = (
       if (allFileDetails) {
         const visualizationProperties =
           visualizationPropertiesExtractor(computedRows);
-        _.set(data, "data", scatterExtractor(visualizationProperties.data));
+        _.set(
+          data,
+          "data",
+          scatterExtractorCsvOrExcel(visualizationProperties.data)
+        );
         _.set(data, "name", visualizationProperties.name);
         _.set(data, "description", visualizationProperties.description);
         _.set(data, "tags", visualizationProperties.tags);
         _.set(data, "type", type);
         return data;
       } else {
-        _.set(data, "data", scatterExtractor(computedRows));
+        _.set(data, "data", scatterExtractorCsvOrExcel(computedRows));
         _.set(data, "type", type);
         return data;
       }
@@ -122,17 +164,23 @@ export const dataProvider = (
       if (allFileDetails) {
         const visualizationProperties =
           visualizationPropertiesExtractor(computedRows);
-        _.set(data, "data", hierarchyExtractor(visualizationProperties.data));
+        _.set(
+          data,
+          "data",
+          hierarchyExtractorCsvOrExcel(visualizationProperties.data)
+        );
         _.set(data, "name", visualizationProperties.name);
         _.set(data, "description", visualizationProperties.description);
         _.set(data, "tags", visualizationProperties.tags);
         _.set(data, "type", type);
         return data;
       } else {
-        _.set(data, "data", hierarchyExtractor(computedRows));
+        _.set(data, "data", hierarchyExtractorCsvOrExcel(computedRows));
         _.set(data, "type", type);
         return data;
       }
+    default:
+      return null;
   }
 };
 
@@ -148,5 +196,37 @@ export const jsonDataProvider = (
     return data;
   } else {
     return computedData;
+  }
+};
+
+export const xmlDataProvider = (
+  type: VisualizationTypesEnum,
+  computedData: Record<string, unknown>,
+  allFileDetails: boolean
+) => {
+  switch (type) {
+    case VisualizationTypesEnum.FORCE_DIRECTED_GRAPH:
+    case VisualizationTypesEnum.SANKEY:
+    case VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
+      return nodeLinksExtractorXml(computedData, allFileDetails);
+    case VisualizationTypesEnum.WORLD_CLOUD:
+      return wordCloudExtractorXml(computedData, allFileDetails);
+    case VisualizationTypesEnum.CALENDAR:
+      return calendarExtractorXml(computedData, allFileDetails);
+    case VisualizationTypesEnum.LINE_CHART:
+    case VisualizationTypesEnum.BAR_CHART:
+      return axisChartExtractorXml(computedData, allFileDetails);
+    case VisualizationTypesEnum.PIE_CHART:
+    case VisualizationTypesEnum.FUNNEL:
+      return pieChartFunnelExtractorXml(computedData, allFileDetails);
+    case VisualizationTypesEnum.SCATTER:
+      return scatterExtractorXml(computedData, allFileDetails);
+    case VisualizationTypesEnum.SUNBURST:
+    case VisualizationTypesEnum.TREEMAP:
+      return hierarchyExtractorXml(computedData, allFileDetails);
+    case VisualizationTypesEnum.MATRIX:
+      return matrixExtractorXml(computedData, allFileDetails);
+    default:
+      return null;
   }
 };
