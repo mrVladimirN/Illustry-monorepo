@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+    <words>
+      <name>Word1</name>
+      <value>390</value>
+    </words>
+    <words>
+      <name>Word2</name>
+      <value>275</value>
+    </words>
+    <words>
+      <name>Word3</name>
+      <value>100</value>
+    </words>
+    <words>
+      <name>Word4</name>
+      <value>1000</value>
+    </words>
+    <words>
+      <name>Word5</name>
+      <value>600</value>
+    </words>
+    <words>
+      <name>Word6</name>
+      <value>146</value>
+    </words>
+    <words>
+      <name>Word7</name>
+      <value>712</value>
+    </words>
+</root>

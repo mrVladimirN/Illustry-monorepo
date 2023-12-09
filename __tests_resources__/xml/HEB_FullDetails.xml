@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+  <name>HEB_FullDetails</name>
+  <description>HEB_FullDetails description</description>
+  <tags>full</tags>
+  <type>hierarchical-edge-bundling</type>
+  <data>
+    <nodes>
+      <category>1</category>
+      <name>Node1</name>
+    </nodes>
+    <nodes>
+      <category>2</category>
+      <name>Node2</name>
+    </nodes>
+    <nodes>
+      <category>3</category>
+      <name>Node3</name>
+    </nodes>
+    <links>
+      <source>Node1</source>
+      <target>Node2</target>
+      <value>1</value>
+    </links>
+    <links>
+      <source>Node2</source>
+      <target>Node3</target>
+      <value>1</value>
+    </links>
+    <links>
+      <source>Node3</source>
+      <target>Node2</target>
+      <value>1</value>
+    </links>
+  </data>
+</root>

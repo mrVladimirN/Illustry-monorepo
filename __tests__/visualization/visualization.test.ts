@@ -17,7 +17,10 @@ const jsonDirectoryPath = path.resolve(
   __dirname,
   "../../__tests_resources__/json/"
 );
-
+const xmlDirectoryPath = path.resolve(
+  __dirname,
+  "../../__tests_resources__/xml/"
+);
 describe("visualizations CRUD", () => {
   beforeAll(async () => {
     const expectedProject: ProjectCreate = {
@@ -26,6 +29,7 @@ describe("visualizations CRUD", () => {
       isActive: true,
     };
     copyDirectory(jsonDirectoryPath, path.resolve(__dirname));
+    copyDirectory(xmlDirectoryPath, path.resolve(__dirname));
     await factory.getBZL().ProjectBZL.create(expectedProject);
   });
   afterAll(async () => {
@@ -1133,7 +1137,6 @@ describe("visualizations CRUD", () => {
     expect(!_.isNil(visualization)).toBe(true);
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
-
   it("It creates a sankey Visualization JSON with only the data details in the JSON", async () => {
     const filePath = path.resolve(__dirname, "./SANKEY_PartialDetails.json");
 
@@ -2027,5 +2030,1391 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
 
-  
+  it("It creates a bar-chart Visualization XML with all the details in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./BarChart_FullDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {};
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationCreate = {
+      data: {
+        headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        values: {
+          Statistic_1: [120, 132, 101, 134, 90, 230, 210],
+          Statistic_2: [220, 182, 191, 234, 290, 330, 310],
+          Statistic_3: [150, 232, 201, 154, 190, 330, 410],
+          Statistic_4: [320, 332, 301, 334, 390, 330, 320],
+        },
+      },
+      name: "BarChart_FullDetails",
+      description: "BarChart_FullDetails description",
+      tags: ["full"],
+      type: [VisualizationTypesEnum.BAR_CHART],
+      projectName: "Test_Project1",
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a calendar Visualization XML with all the details in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./Calendar_FullDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {};
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationCreate = {
+      data: {
+        calendar: [
+          {
+            date: "1939-09-02",
+            value: 1,
+            category: "1",
+          },
+          {
+            date: "1939-09-07",
+            value: 1,
+            category: "2",
+          },
+          {
+            date: "1939-09-17",
+            value: 1,
+            category: "3",
+          },
+          {
+            date: "1939-10-06",
+            value: 1,
+            category: "1",
+          },
+          {
+            date: "1939-10-07",
+            value: 1,
+            category: "1",
+          },
+          {
+            date: "1939-10-14",
+            value: 1,
+            category: "5",
+          },
+          {
+            date: "1939-10-17",
+            value: 1,
+            category: "1",
+          },
+          {
+            date: "1939-10-22",
+            value: 1,
+            category: "6",
+          },
+          {
+            date: "1939-10-28",
+            value: 1,
+            category: "1",
+          },
+          {
+            date: "1939-11-04",
+            value: 1,
+            category: "7",
+          },
+          {
+            date: "1939-11-28",
+            value: 1,
+            category: "3",
+          },
+          {
+            date: "1939-12-05",
+            value: 1,
+            category: "3",
+          },
+          {
+            date: "1939-12-11",
+            value: 1,
+            category: "2",
+          },
+          {
+            date: "1939-12-16",
+            value: 1,
+            category: "2",
+          },
+          {
+            date: "1939-12-23",
+            value: 1,
+            category: "1",
+          },
+        ],
+      },
+      name: "Calendar_FullDetails",
+      description: "Calendar_FullDetails description",
+      tags: ["full"],
+      type: [VisualizationTypesEnum.CALENDAR],
+      projectName: "Test_Project1",
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a forced-directed-graph Visualization XML with all the details in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./FLG_FullDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {};
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationCreate = {
+      data: {
+        nodes: [
+          {
+            category: "1",
+            name: "Node1",
+          },
+          {
+            category: "2",
+            name: "Node2",
+          },
+          {
+            category: "3",
+            name: "Node3",
+          },
+        ],
+        links: [
+          {
+            source: "Node1",
+            target: "Node2",
+            value: 1,
+          },
+          {
+            source: "Node2",
+            target: "Node3",
+            value: 1,
+          },
+          {
+            source: "Node3",
+            target: "Node2",
+            value: 1,
+          },
+        ],
+      },
+      name: "FLG_FullDetails",
+      description: "FLG_FullDetails description",
+      tags: ["full"],
+      type: [VisualizationTypesEnum.FORCE_DIRECTED_GRAPH],
+      projectName: "Test_Project1",
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a funnel Visualization XML with all the details in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./Funnel_FullDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {};
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationCreate = {
+      data: {
+        values: {
+          Statistic_1: 122,
+          Statistic_2: 222,
+          Statistic_3: 510,
+          Statistic_4: 320,
+        },
+      },
+      name: "Funnel_FullDetails",
+      description: "Funnel_FullDetails description",
+      tags: ["full"],
+      type: [VisualizationTypesEnum.FUNNEL],
+      projectName: "Test_Project1",
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a hierarchical-edge-bundling Visualization XML with all the details in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./HEB_FullDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {};
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationCreate = {
+      data: {
+        nodes: [
+          {
+            name: "Node1",
+            category: "1",
+          },
+          {
+            name: "Node2",
+            category: "2",
+          },
+          {
+            name: "Node3",
+            category: "3",
+          },
+        ],
+        links: [
+          {
+            source: "Node1",
+            target: "Node2",
+            value: 1,
+          },
+          {
+            source: "Node2",
+            target: "Node3",
+            value: 1,
+          },
+          {
+            source: "Node3",
+            target: "Node2",
+            value: 1,
+          },
+        ],
+      },
+      name: "HEB_FullDetails",
+      description: "HEB_FullDetails description",
+      tags: ["full"],
+      type: [VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING],
+      projectName: "Test_Project1",
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a line-chart Visualization XML with all the details in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./LineChart_FullDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {};
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationCreate = {
+      data: {
+        headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        values: {
+          Statistic_1: [120, 132, 101, 134, 90, 230, 210],
+          Statistic_2: [220, 182, 191, 234, 290, 330, 310],
+          Statistic_3: [150, 232, 201, 154, 190, 330, 410],
+          Statistic_4: [320, 332, 301, 334, 390, 330, 320],
+        },
+      },
+      name: "LineChart_FullDetails",
+      description: "LineChart_FullDetails description",
+      tags: ["full"],
+      type: [VisualizationTypesEnum.LINE_CHART],
+      projectName: "Test_Project1",
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a pie-chart Visualization XML with all the details in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./PieChart_FullDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {};
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationCreate = {
+      data: {
+        values: {
+          Statistic_1: 122,
+          Statistic_2: 222,
+          Statistic_3: 510,
+          Statistic_4: 320,
+        },
+      },
+      name: "PieChart_FullDetails",
+      description: "PieChart_FullDetails description",
+      tags: ["full"],
+      type: [VisualizationTypesEnum.PIE_CHART],
+      projectName: "Test_Project1",
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a sankey Visualization XML with all the details in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./Sankey_FullDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {};
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationCreate = {
+      data: {
+        nodes: [
+          {
+            name: "Node1",
+            category: "1",
+          },
+          {
+            name: "Node2",
+            category: "2",
+          },
+          {
+            name: "Node3",
+            category: "3",
+          },
+        ],
+        links: [
+          {
+            source: "Node1",
+            target: "Node2",
+            value: 1,
+          },
+          {
+            source: "Node2",
+            target: "Node3",
+            value: 1,
+          },
+        ],
+      },
+      name: "Sankey_FullDetails",
+      description: "Sankey_FullDetails description",
+      tags: ["full"],
+      type: [VisualizationTypesEnum.SANKEY],
+      projectName: "Test_Project1",
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a scatter Visualization XML with all the details in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./Scatter_FullDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {};
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationCreate = {
+      data: {
+        points: [
+          {
+            category: "3",
+            value: [3.275154, 2.957587],
+          },
+          {
+            category: "2",
+            value: [-3.344465, 2.603513],
+          },
+          {
+            category: "2",
+            value: [0.355083, -3.376585],
+          },
+          {
+            category: "1",
+            value: [1.852435, 3.547351],
+          },
+          {
+            category: "1",
+            value: [-2.078973, 2.552013],
+          },
+        ],
+      },
+      name: "Scatter_FullDetails",
+      description: "Scatter_FullDetails description",
+      tags: ["full"],
+      type: [VisualizationTypesEnum.SCATTER],
+      projectName: "Test_Project1",
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a sunburst Visualization XML with all the details in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./Sunburst_FullDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {};
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationCreate = {
+      data: {
+        nodes: [
+          {
+            name: "Node Group 1",
+            category: "1",
+            value: 100,
+            children: [
+              {
+                name: "Node 1",
+                category: "2",
+                value: 40,
+                children: [
+                  {
+                    name: "Node 1.1",
+                    category: "3",
+                    value: 20,
+                  },
+                  {
+                    name: "Node 1.2",
+                    category: "4",
+                    value: 10,
+                  },
+                ],
+              },
+              {
+                name: "Node 1.1",
+                category: "2",
+                value: 30,
+                children: [
+                  {
+                    name: "Node 1.1.1",
+                    category: "5",
+                    value: 15,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "Node group 2",
+            category: "6",
+            value: 50,
+            children: [
+              {
+                name: "Node 2",
+                category: "7",
+                value: 25,
+                children: [
+                  {
+                    name: "Node 2.2",
+                    category: "8",
+                    value: 12,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      name: "Sunburst_FullDetails",
+      description: "Sunburst_FullDetails description",
+      tags: ["full"],
+      type: [VisualizationTypesEnum.SUNBURST],
+      projectName: "Test_Project1",
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a treemap Visualization XML with all the details in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./Treemap_FullDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {};
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationCreate = {
+      data: {
+        nodes: [
+          {
+            name: "Node Group 1",
+            category: "1",
+            value: 100,
+            children: [
+              {
+                name: "Node 1",
+                category: "2",
+                value: 40,
+                children: [
+                  {
+                    name: "Node 1.1",
+                    category: "3",
+                    value: 20,
+                  },
+                  {
+                    name: "Node 1.2",
+                    category: "4",
+                    value: 10,
+                  },
+                ],
+              },
+              {
+                name: "Node 1.1",
+                category: "2",
+                value: 30,
+                children: [
+                  {
+                    name: "Node 1.1.1",
+                    category: "5",
+                    value: 15,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "Node group 2",
+            category: "6",
+            value: 50,
+            children: [
+              {
+                name: "Node 2",
+                category: "7",
+                value: 25,
+                children: [
+                  {
+                    name: "Node 2.2",
+                    category: "8",
+                    value: 12,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      name: "Treemap_FullDetails",
+      description: "Treemap_FullDetails description",
+      tags: ["full"],
+      type: [VisualizationTypesEnum.TREEMAP],
+      projectName: "Test_Project1",
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a word-cloud Visualization XML with all the details in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./Wordcloud_FullDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {};
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationCreate = {
+      data: {
+        words: [
+          {
+            name: "Word1",
+            value: 390,
+          },
+          {
+            name: "Word2",
+            value: 275,
+          },
+          {
+            name: "Word3",
+            value: 100,
+          },
+          {
+            name: "Word4",
+            value: 1000,
+          },
+          {
+            name: "Word5",
+            value: 600,
+          },
+          {
+            name: "Word6",
+            value: 146,
+          },
+          {
+            name: "Word7",
+            value: 712,
+          },
+        ],
+      },
+      name: "Wordcloud_FullDetails",
+      description: "Wordcloud_FullDetails description",
+      tags: ["full"],
+      type: [VisualizationTypesEnum.WORD_CLOUD],
+      projectName: "Test_Project1",
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+
+  it("It creates a bar-chart Visualization XML with only the data in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./BarChart_PartialDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "BarChart_PartialDetails",
+      description: "BarChart_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.BAR_CHART,
+    };
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationCreate = {
+      name: "BarChart_PartialDetails",
+      projectName: "Test_Project1",
+      type: VisualizationTypesEnum.BAR_CHART,
+      data: {
+        headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        values: {
+          Statistic_1: [120, 132, 101, 134, 90, 230, 210],
+          Statistic_2: [220, 182, 191, 234, 290, 330, 310],
+          Statistic_3: [150, 232, 201, 154, 190, 330, 410],
+          Statistic_4: [320, 332, 301, 334, 390, 330, 320],
+        },
+      },
+      description: "BarChart_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a calendar Visualization XML with only the data in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./Calendar_PartialDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "Calendar_PartialDetails",
+      description: "Calendar_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.CALENDAR,
+    };
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization = {
+      name: "Calendar_PartialDetails",
+      projectName: "Test_Project1",
+      type: VisualizationTypesEnum.CALENDAR,
+      data: {
+        calendar: [
+          { category: "1", date: "1939-09-02", value: 1, properties: null },
+          { category: "2", date: "1939-09-07", value: 1, properties: null },
+          { category: "3", date: "1939-09-17", value: 1, properties: null },
+          { category: "1", date: "1939-10-06", value: 1, properties: null },
+          { category: "1", date: "1939-10-07", value: 1, properties: null },
+          { category: "5", date: "1939-10-14", value: 1, properties: null },
+          { category: "1", date: "1939-10-17", value: 1, properties: null },
+          { category: "6", date: "1939-10-22", value: 1, properties: null },
+          { category: "1", date: "1939-10-28", value: 1, properties: null },
+          { category: "7", date: "1939-11-04", value: 1, properties: null },
+          { category: "3", date: "1939-11-28", value: 1, properties: null },
+          { category: "3", date: "1939-12-05", value: 1, properties: null },
+          { category: "2", date: "1939-12-11", value: 1, properties: null },
+          { category: "2", date: "1939-12-16", value: 1, properties: null },
+          { category: "1", date: "1939-12-23", value: 1, properties: null },
+        ],
+      },
+      description: "Calendar_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a forced-directed-graph Visualization XML with only the data in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./FLG_PartialDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "FLG_PartialDetails",
+      description: "FLG_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
+    };
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization = {
+      name: "FLG_PartialDetails",
+      projectName: "Test_Project1",
+      type: VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
+      data: {
+        nodes: [
+          { name: "Node1", category: "1", properties: null },
+          { name: "Node2", category: "2", properties: null },
+          { name: "Node3", category: "3", properties: null },
+        ],
+        links: [
+          { source: "Node1", target: "Node2", value: 1 },
+          { source: "Node2", target: "Node3", value: 1 },
+          { source: "Node3", target: "Node2", value: 1 },
+        ],
+      },
+      description: "FLG_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a funnel Visualization XML with only the data in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./Funnel_PartialDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "Funnel_PartialDetails",
+      description: "Funnel_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.FUNNEL,
+    };
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization = {
+      name: "Funnel_PartialDetails",
+      projectName: "Test_Project1",
+      type: "funnel",
+      data: {
+        values: {
+          Statistic_1: 122,
+          Statistic_2: 222,
+          Statistic_3: 510,
+          Statistic_4: 320,
+        },
+      },
+      description: "Funnel_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a hierarchical-edge-bundling Visualization XML with only the data in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./HEB_PartialDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "HEB_PartialDetails",
+      description: "HEB_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
+    };
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization = {
+      name: "HEB_PartialDetails",
+      projectName: "Test_Project1",
+      type: "hierarchical-edge-bundling",
+      data: {
+        nodes: [
+          { name: "Node1", category: "1", properties: null },
+          { name: "Node2", category: "2", properties: null },
+          { name: "Node3", category: "3", properties: null },
+        ],
+        links: [
+          { source: "Node1", target: "Node2", value: 1 },
+          { source: "Node2", target: "Node3", value: 1 },
+          { source: "Node3", target: "Node2", value: 1 },
+        ],
+      },
+      description: "HEB_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a line-chart Visualization XML with only the data in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./LineChart_PartialDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "LineChart_PartialDetails",
+      description: "LineChart_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.LINE_CHART,
+    };
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization = {
+      name: "LineChart_PartialDetails",
+      projectName: "Test_Project1",
+      type: "line-chart",
+      data: {
+        headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+        values: {
+          Statistic_1: [120, 132, 101, 134, 90, 230, 210],
+          Statistic_2: [220, 182, 191, 234, 290, 330, 310],
+          Statistic_3: [150, 232, 201, 154, 190, 330, 410],
+          Statistic_4: [320, 332, 301, 334, 390, 330, 320],
+        },
+      },
+      description: "LineChart_PartialDetails description",
+      tags: ["full"],
+    };
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a pie-chart Visualization XML with only the data in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./PieChart_PartialDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "PieChart_PartialDetails",
+      description: "PieChart_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.PIE_CHART,
+    };
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization = {
+      name: "PieChart_PartialDetails",
+      projectName: "Test_Project1",
+      type: "pie-chart",
+      data: {
+        values: {
+          Statistic_1: 122,
+          Statistic_2: 222,
+          Statistic_3: 510,
+          Statistic_4: 320,
+        },
+      },
+      description: "PieChart_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a sankey Visualization XML with only the data in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./Sankey_PartialDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "Sankey_PartialDetails",
+      description: "Sankey_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.SANKEY,
+    };
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization = {
+      name: "Sankey_PartialDetails",
+      projectName: "Test_Project1",
+      type: "sankey",
+      data: {
+        nodes: [
+          { name: "Node1", category: "1", properties: null },
+          { name: "Node2", category: "2", properties: null },
+          { name: "Node3", category: "3", properties: null },
+        ],
+        links: [
+          { source: "Node1", target: "Node2", value: 1 },
+          { source: "Node2", target: "Node3", value: 1 },
+        ],
+      },
+      description: "Sankey_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a scatter Visualization XML with only the data in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./Scatter_PartialDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "Scatter_PartialDetails",
+      description: "Scatter_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.SCATTER,
+    };
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization = {
+      name: "Scatter_PartialDetails",
+      projectName: "Test_Project1",
+      type: "scatter",
+      data: {
+        points: [
+          { category: "3", value: [3.275154, 2.957587], properties: null },
+          { category: "2", value: [-3.344465, 2.603513], properties: null },
+          { category: "2", value: [0.355083, -3.376585], properties: null },
+          { category: "1", value: [1.852435, 3.547351], properties: null },
+          { category: "1", value: [-2.078973, 2.552013], properties: null },
+        ],
+      },
+      description: "Scatter_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a sunburst Visualization XML with only the data in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "Sunburst_PartialDetails",
+      description: "Sunburst_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.SUNBURST,
+    };
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization = {
+      name: "Sunburst_PartialDetails",
+      projectName: "Test_Project1",
+      type: "sunburst",
+      data: {
+        nodes: [
+          {
+            name: "Node Group 1",
+            category: "1",
+            value: 100,
+            properties: null,
+            children: [
+              {
+                name: "Node 1",
+                category: "2",
+                value: 40,
+                properties: null,
+                children: [
+                  {
+                    name: "Node 1.1",
+                    category: "3",
+                    value: 20,
+                    properties: null,
+                    children: null,
+                  },
+                  {
+                    name: "Node 1.2",
+                    category: "4",
+                    value: 10,
+                    properties: null,
+                    children: null,
+                  },
+                ],
+              },
+              {
+                name: "Node 1.1",
+                category: "2",
+                value: 30,
+                properties: null,
+                children: [
+                  {
+                    name: "Node 1.1.1",
+                    category: "5",
+                    value: 15,
+                    properties: null,
+                    children: null,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "Node group 2",
+            category: "6",
+            value: 50,
+            properties: null,
+            children: [
+              {
+                name: "Node 2",
+                category: "7",
+                value: 25,
+                properties: null,
+                children: [
+                  {
+                    name: "Node 2.2",
+                    category: "8",
+                    value: 12,
+                    properties: null,
+                    children: null,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      description: "Sunburst_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a treemap Visualization XML with only the data in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./Treemap_PartialDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "Treemap_PartialDetails",
+      description: "Treemap_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.TREEMAP,
+    };
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization = {
+      name: "Treemap_PartialDetails",
+      projectName: "Test_Project1",
+      type: "treemap",
+      data: {
+        nodes: [
+          {
+            name: "Node Group 1",
+            category: "1",
+            value: 100,
+            properties: null,
+            children: [
+              {
+                name: "Node 1",
+                category: "2",
+                value: 40,
+                properties: null,
+                children: [
+                  {
+                    name: "Node 1.1",
+                    category: "3",
+                    value: 20,
+                    properties: null,
+                    children: null,
+                  },
+                  {
+                    name: "Node 1.2",
+                    category: "4",
+                    value: 10,
+                    properties: null,
+                    children: null,
+                  },
+                ],
+              },
+              {
+                name: "Node 1.1",
+                category: "2",
+                value: 30,
+                properties: null,
+                children: [
+                  {
+                    name: "Node 1.1.1",
+                    category: "5",
+                    value: 15,
+                    properties: null,
+                    children: null,
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "Node group 2",
+            category: "6",
+            value: 50,
+            properties: null,
+            children: [
+              {
+                name: "Node 2",
+                category: "7",
+                value: 25,
+                properties: null,
+                children: [
+                  {
+                    name: "Node 2.2",
+                    category: "8",
+                    value: 12,
+                    properties: null,
+                    children: null,
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+      description: "Treemap_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a word-cloud Visualization XML with only the data in the XML", async () => {
+    const filePath = path.resolve(__dirname, "./Wordcloud_PartialDetails.xml");
+
+    const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "Wordcloud_PartialDetails",
+      description: "Wordcloud_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.WORD_CLOUD,
+    };
+    const fileDetails: FileDetails = { fileType: "XML" };
+    const expectedVisualization = {
+      name: "Wordcloud_PartialDetails",
+      projectName: "Test_Project1",
+      type: "word-cloud",
+      data: {
+        words: [
+          { name: "Word1", value: 390, properties: null },
+          { name: "Word2", value: 275, properties: null },
+          { name: "Word3", value: 100, properties: null },
+          { name: "Word4", value: 1000, properties: null },
+          { name: "Word5", value: 600, properties: null },
+          { name: "Word6", value: 146, properties: null },
+          { name: "Word7", value: 712, properties: null },
+        ],
+      },
+      description: "Wordcloud_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
 });

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+    <nodes>
+      <name>Node Group 1</name>
+      <value>100</value>
+      <category>1</category>
+      <children>
+        <name>Node 1</name>
+        <value>40</value>
+        <category>2</category>
+        <children>
+          <name>Node 1.1</name>
+          <value>20</value>
+          <category>3</category>
+        </children>
+        <children>
+          <name>Node 1.2</name>
+          <value>10</value>
+          <category>4</category>
+        </children>
+      </children>
+      <children>
+        <name>Node 1.1</name>
+        <value>30</value>
+        <category>2</category>
+        <children>
+          <name>Node 1.1.1</name>
+          <value>15</value>
+          <category>5</category>
+        </children>
+      </children>
+    </nodes>
+    <nodes>
+      <name>Node group 2</name>
+      <value>50</value>
+      <category>6</category>
+      <children>
+        <name>Node 2</name>
+        <value>25</value>
+        <category>7</category>
+        <children>
+          <name>Node 2.2</name>
+          <value>12</value>
+          <category>8</category>
+        </children>
+      </children>
+    </nodes>
+</root>
