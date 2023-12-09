@@ -168,7 +168,7 @@ declare module "types/visualizations" {
         nodes: HierarchyNode[];
     }
     export const enum VisualizationTypesEnum {
-        WORLD_CLOUD = "word-cloud",
+        WORD_CLOUD = "word-cloud",
         FORCE_DIRECTED_GRAPH = "force-directed-graph",
         SANKEY = "sankey",
         CALENDAR = "calendar",
