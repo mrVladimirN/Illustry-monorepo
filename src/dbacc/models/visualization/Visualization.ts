@@ -29,7 +29,7 @@ export class Visualization {
             VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
             VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
             VisualizationTypesEnum.SANKEY,
-            VisualizationTypesEnum.WORLD_CLOUD,
+            VisualizationTypesEnum.WORD_CLOUD,
           ]),
         },
         tags: [{ type: String, required: false }],

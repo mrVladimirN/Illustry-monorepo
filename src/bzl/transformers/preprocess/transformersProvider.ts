@@ -14,7 +14,7 @@ export const transformerProvider = (
   allFileDetails: boolean
 ) => {
   switch (type) {
-    case VisualizationTypesEnum.WORLD_CLOUD:
+    case VisualizationTypesEnum.WORD_CLOUD:
       return wordCloudTransformer(mapping, values, allFileDetails);
     case VisualizationTypesEnum.FORCE_DIRECTED_GRAPH:
     case VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:

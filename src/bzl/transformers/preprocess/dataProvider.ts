@@ -41,7 +41,7 @@ export const exelOrCsvdataProvider = (
 ) => {
   const data: VisualizationUpdate = {};
   switch (type) {
-    case VisualizationTypesEnum.WORLD_CLOUD:
+    case VisualizationTypesEnum.WORD_CLOUD:
       if (allFileDetails) {
         const visualizationProperties =
           visualizationPropertiesExtractor(computedRows);
@@ -209,7 +209,7 @@ export const xmlDataProvider = (
     case VisualizationTypesEnum.SANKEY:
     case VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
       return nodeLinksExtractorXml(computedData, allFileDetails);
-    case VisualizationTypesEnum.WORLD_CLOUD:
+    case VisualizationTypesEnum.WORD_CLOUD:
       return wordCloudExtractorXml(computedData, allFileDetails);
     case VisualizationTypesEnum.CALENDAR:
       return calendarExtractorXml(computedData, allFileDetails);

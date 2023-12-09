@@ -14,7 +14,8 @@
   "scripts": {
     "clean": "rm -rf ./dist",
     "compile": "tsc -p tsconfig.json",
-    "start:dev": "npm run clean && npm run compile && node ./dist/app-cli.js",
+    "build:ts":"npm run clean && npm run compile",
+    "start:dev": "npm run build:ts && node ./dist/app-cli.js",
     "test": "jest --detectOpenHandles"
   },
   "dependencies": {
@@ -34,7 +35,7 @@
     "zod-error": "^1.5.0"
   },
   "devDependencies": {
-    "@illustry/types": "^0.0.24",
+    "@illustry/types": "^0.0.25",
     "@types/bluebird": "^3.5.42",
     "@types/bunyan": "^1.8.11",
     "@types/cors": "^2.8.17",
