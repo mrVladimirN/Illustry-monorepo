@@ -1,0 +1,35 @@
+{
+    "name": "Sankey_FullDetails",
+    "description": "Sankey_FullDetails description",
+    "tags": ["full"],
+    "type": ["sankey"],
+    "data": {
+      "nodes": [
+        {
+          "category": "1",
+          "name": "Node1"
+        },
+        {
+          "category": "2",
+          "name": "Node2"
+        },
+        {
+          "category": "3",
+          "name": "Node3"
+        }
+      ],
+      "links": [
+        {
+          "source": "Node1",
+          "target": "Node2",
+          "value": 1
+        },
+        {
+          "source": "Node2",
+          "target": "Node3",
+          "value": 1
+        }
+      ]
+    }
+  }
+  

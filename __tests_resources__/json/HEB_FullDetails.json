@@ -1,0 +1,39 @@
+{
+  "name": "HEB_FullDetails",
+  "description": "HEB_FullDetails description",
+  "tags": ["full"],
+  "type": ["hierarchical-edge-bundling"],
+  "data": {
+    "nodes": [
+      {
+        "category": "1",
+        "name": "Node1"
+      },
+      {
+        "category": "2",
+        "name": "Node2"
+      },
+      {
+        "category": "3",
+        "name": "Node3"
+      }
+    ],
+    "links": [
+      {
+        "source": "Node1",
+        "target": "Node2",
+        "value": 1
+      },
+      {
+        "source": "Node2",
+        "target": "Node3",
+        "value": 1
+      },
+      {
+        "source": "Node3",
+        "target": "Node2",
+        "value": 1
+      }
+    ]
+  }
+}

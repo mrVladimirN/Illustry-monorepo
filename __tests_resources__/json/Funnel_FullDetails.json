@@ -1,0 +1,15 @@
+{
+    "name": "Funnel_FullDetails",
+    "description": "Funnel_FullDetails description",
+    "tags": ["full"],
+    "type": ["funnel"],
+    "data": {
+        "values": {
+            "Statistic 1": 122,
+            "Statistic 2": 222,
+            "Statistic 3": 510,
+            "Statistic 4": 320 
+          }
+    }
+  }
+  
