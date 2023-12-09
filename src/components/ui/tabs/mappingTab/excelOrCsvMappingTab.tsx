@@ -37,7 +37,7 @@ export function ExcelOrCsvMappingTab({
   const renderMapping = (type: visualizationTypesEnum) => {
     if (type) {
       switch (type) {
-        case visualizationTypesEnum.WORLD_CLOUD:
+        case visualizationTypesEnum.WORD_CLOUD:
           return (
             <>
               <div className="space-y-4">

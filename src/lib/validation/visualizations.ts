@@ -1,7 +1,7 @@
 import * as z from "zod";
 
 export enum visualizationTypesEnum {
-  WORLD_CLOUD = "word-cloud",
+  WORD_CLOUD = "word-cloud",
   FORCE_DIRECTED_GRAPH = "force-directed-graph",
   SANKEY = "sankey",
   CALENDAR = "calendar",
@@ -40,7 +40,7 @@ export const jsonSchema = commonFileSchema.extend({
     .optional(),
   type: z
     .union([
-      z.literal(visualizationTypesEnum.WORLD_CLOUD),
+      z.literal(visualizationTypesEnum.WORD_CLOUD),
       z.literal(visualizationTypesEnum.FORCE_DIRECTED_GRAPH),
       z.literal(visualizationTypesEnum.SANKEY),
       z.literal(visualizationTypesEnum.CALENDAR),
@@ -69,7 +69,7 @@ export const xmlSchema = commonFileSchema.extend({
     .optional(),
   type: z
     .union([
-      z.literal(visualizationTypesEnum.WORLD_CLOUD),
+      z.literal(visualizationTypesEnum.WORD_CLOUD),
       z.literal(visualizationTypesEnum.FORCE_DIRECTED_GRAPH),
       z.literal(visualizationTypesEnum.SANKEY),
       z.literal(visualizationTypesEnum.CALENDAR),
@@ -98,7 +98,7 @@ export const excelSchema = commonFileSchema.extend({
     .optional(),
   type: z
     .union([
-      z.literal(visualizationTypesEnum.WORLD_CLOUD),
+      z.literal(visualizationTypesEnum.WORD_CLOUD),
       z.literal(visualizationTypesEnum.FORCE_DIRECTED_GRAPH),
       z.literal(visualizationTypesEnum.SANKEY),
       z.literal(visualizationTypesEnum.CALENDAR),
@@ -129,7 +129,7 @@ export const csvSchema = commonFileSchema.extend({
     .optional(),
   type: z
     .union([
-      z.literal(visualizationTypesEnum.WORLD_CLOUD),
+      z.literal(visualizationTypesEnum.WORD_CLOUD),
       z.literal(visualizationTypesEnum.FORCE_DIRECTED_GRAPH),
       z.literal(visualizationTypesEnum.SANKEY),
       z.literal(visualizationTypesEnum.CALENDAR),

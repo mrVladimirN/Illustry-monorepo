@@ -117,7 +117,7 @@ export function AddVisualizationForm() {
       setSelectedFileType(value);
       form.reset({
         fileType: value,
-        type: visualizationTypesEnum.WORLD_CLOUD,
+        type: visualizationTypesEnum.WORD_CLOUD,
         name: "",
         tags: "",
         includeHeaders: false,

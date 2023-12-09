@@ -48,7 +48,7 @@ export function VisualizationType({
                     <SelectValue placeholder="Type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={visualizationTypesEnum.WORLD_CLOUD}>
+                    <SelectItem value={visualizationTypesEnum.WORD_CLOUD}>
                       WordCloud
                     </SelectItem>
                     <SelectItem
