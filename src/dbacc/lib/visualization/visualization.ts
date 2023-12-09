@@ -1,9 +1,14 @@
- 
 import Bluebird from "bluebird";
 import { ModelInstance } from "../../models/modelInstance";
 import _ from "lodash";
 import validator from "validator";
-import { ExtendedVisualizationType, VisualizationCreate, VisualizationFilter, VisualizationType, VisualizationUpdate } from "types/visualizations";
+import {
+  ExtendedVisualizationType,
+  VisualizationCreate,
+  VisualizationFilter,
+  VisualizationType,
+  VisualizationUpdate,
+} from "types/visualizations";
 import { ExtendedMongoQuery, MongoQuery } from "types/utils";
 
 const PAGE_SIZE = 10;
@@ -65,24 +70,24 @@ export class Visualization {
     }
     if ((query["$and"] as Array<object>).length === 0) delete query["$and"];
     const skip =
-    filter && filter.page && filter.page > 1
-      ? filter.per_page
-        ? (filter.page - 1) * filter.per_page
-        : (filter.page - 1) * PAGE_SIZE
-      : 0;
-  let sort = {};
-  if (filter.sort && filter.sort.element) {
-    const sortField = filter.sort.element;
-    const sortOrder = filter.sort.sortOrder === -1 ? -1 : 1;
-    sort = { [sortField]: sortOrder };
+      filter && filter.page && filter.page > 1
+        ? filter.per_page
+          ? (filter.page - 1) * filter.per_page
+          : (filter.page - 1) * PAGE_SIZE
+        : 0;
+    let sort = {};
+    if (filter.sort && filter.sort.element) {
+      const sortField = filter.sort.element;
+      const sortOrder = filter.sort.sortOrder === -1 ? -1 : 1;
+      sort = { [sortField]: sortOrder };
+    }
+    return {
+      query: query,
+      page: skip,
+      sort: sort,
+      per_page: filter.per_page ? filter.per_page : PAGE_SIZE,
+    };
   }
-  return {
-    query: query,
-    page: skip,
-    sort: sort,
-    per_page: filter.per_page ? filter.per_page : PAGE_SIZE,
-  };
-}
 
   create(data: VisualizationCreate): Promise<VisualizationType> {
     return Promise.resolve().then(() => {
@@ -119,17 +124,18 @@ export class Visualization {
         );
       })
       .then(async (res) => {
-        const count = await this.modelInstance.VisualizationModel.countDocuments(
-          filter.query ? filter.query : {}
-        );
+        const count =
+          await this.modelInstance.VisualizationModel.countDocuments(
+            filter.query ? filter.query : {}
+          );
         return {
           visualizations: res,
           pagination: {
             count: count,
             pageCount:
-            count > 0
-              ? count / (filter.per_page ? filter.per_page : PAGE_SIZE)
-              : 1,
+              count > 0
+                ? count / (filter.per_page ? filter.per_page : PAGE_SIZE)
+                : 1,
           },
         };
       });
@@ -145,13 +151,15 @@ export class Visualization {
     if (_.isNil(data.updatedAt)) {
       data.updatedAt = new Date();
     }
-    return Bluebird.resolve().then(() => {
-      return this.modelInstance.VisualizationModel.findOneAndUpdate(
-        filter.query,
-        data,
-        { upsert: true, new: true }
-      );
-    });
+    return Bluebird.resolve()
+      .then(() => {
+        return this.modelInstance.VisualizationModel.findOneAndUpdate(
+          filter.query,
+          data,
+          { upsert: true, new: true }
+        );
+      })
+     
   }
 
   delete(filter: ExtendedMongoQuery): Promise<boolean> {

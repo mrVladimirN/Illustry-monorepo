@@ -1,5 +1,7 @@
 import _ from "lodash";
 import * as url from "url";
+import * as fs from "fs";
+import * as path from "path";
 export const returnResponse = (res: any, err: any, data: any, next: any) => {
   if (res && res.req && res.req.probe) {
     var urlParts = url.parse(res.req.originalUrl) || {};
@@ -23,7 +25,7 @@ export const returnResponse = (res: any, err: any, data: any, next: any) => {
 
 export const visualizationDetailsExtractor = (
   mapping: Record<string, unknown>,
-  values: unknown[],
+  values: unknown[]
 ) => {
   return {
     visualizationName:
@@ -71,4 +73,40 @@ export const visualizationPropertiesExtractor = (
     tags: tags,
   };
   return extractedData;
+};
+
+export const copyDirectory = (src: string, dest: string): void => {
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest);
+  }
+
+  const files: string[] = fs.readdirSync(src);
+
+  files.forEach((file) => {
+    const srcPath: string = path.join(src, file);
+    const destPath: string = path.join(dest, file);
+
+    if (fs.statSync(srcPath).isDirectory()) {
+      copyDirectory(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  });
+};
+export const deleteDirectory = (directoryPath: string): void => {
+  if (fs.existsSync(directoryPath)) {
+    const files = fs.readdirSync(directoryPath);
+
+    for (const file of files) {
+      const filePath = path.join(directoryPath, file);
+
+      if (fs.statSync(filePath).isDirectory()) {
+        deleteDirectory(filePath);
+      } else {
+        fs.unlinkSync(filePath);
+      }
+    }
+
+    fs.rmdirSync(directoryPath);
+  }
 };

@@ -31,49 +31,39 @@ export class VisualizationBZL {
   }
 
   createOrUpdate(
-    Visualization: VisualizationCreate
+    visualization: VisualizationCreate
   ): Promise<VisualizationType> {
-    return Promise.resolve(
-      Factory.getInstance()
-        .getBZL()
-        .ProjectBZL.findByName({ name: Visualization.projectName })
-    )
-      .then((res) => {
-        if (!_.isNil(res) || !_.isEmpty(res)) {
-          if (typeof Visualization.type === "string") {
-            const VisualizationFilter =
-              this.dbaccInstance.Visualization.createFilter({
-                name: Visualization.name,
-                type: Visualization.type,
-                projectName: Visualization.projectName,
-              });
-            return this.dbaccInstance.Visualization.update(
-              VisualizationFilter,
-              Visualization
-            );
-          } else {
-            return Promise.each(Visualization.type, (type) => {
-              const VisualizationFilter =
-                this.dbaccInstance.Visualization.createFilter({
-                  name: Visualization.name,
-                  type: type,
-                  projectName: Visualization.projectName,
-                });
-              const VisualizationUpdate: VisualizationUpdate =
-                _.cloneDeep(Visualization);
-              _.set(VisualizationUpdate, "type", type);
-              return this.dbaccInstance.Visualization.update(
-                VisualizationFilter,
-                VisualizationUpdate
-              );
-            }).then(() => {
-              return Visualization;
+    return Promise.resolve()
+      .then(() => {
+        if (typeof visualization.type === "string") {
+          const visualizationFilter =
+            this.dbaccInstance.Visualization.createFilter({
+              name: visualization.name,
+              type: visualization.type,
+              projectName: visualization.projectName,
             });
-          }
-        } else {
-          throw new NoDataFoundError(
-            `No project with name ${Visualization.projectName} was found`
+          return this.dbaccInstance.Visualization.update(
+            visualizationFilter,
+            visualization
           );
+        } else {
+          return Promise.each(visualization.type, (type) => {
+            const visualizationFilter =
+              this.dbaccInstance.Visualization.createFilter({
+                name: visualization.name,
+                type: type,
+                projectName: visualization.projectName,
+              });
+            const visualizationUpdate: VisualizationUpdate =
+              _.cloneDeep(visualization);
+            _.set(visualizationUpdate, "type", type);
+            return this.dbaccInstance.Visualization.update(
+              visualizationFilter,
+              visualizationUpdate
+            );
+          }).then(() => {
+            return visualization;
+          })
         }
       })
       .catch((err) => {
@@ -85,7 +75,7 @@ export class VisualizationBZL {
     files: FileProperties[],
     allFileDetails: boolean,
     visualizationDetails: VisualizationUpdate,
-    fileDetails: FileDetails,
+    fileDetails: FileDetails
   ): Promise<VisualizationType[]> {
     return Factory.getInstance()
       .getBZL()
@@ -209,7 +199,6 @@ export class VisualizationBZL {
         });
       }
       const validVisualization = visualizationTypeSchema.safeParse(ill);
-
       if (!validVisualization.success) {
         const errorMessage = generateErrorMessage(
           validVisualization.error.issues,
