@@ -1,4 +1,4 @@
-export class ConnectionError extends Error {
+export default class ConnectionError extends Error {
   constructor(msg: string) {
     super(msg);
 

@@ -1,14 +1,14 @@
 import { Connection } from 'mongoose';
-import { ModelInstance } from '../models/modelInstance';
-import { Visualization } from './visualization/visualization';
-import { Project } from './project/project';
+import ModelInstance from '../models/modelInstance';
+import Visualization from './visualization/visualization';
+import Project from './project/project';
 
-export class DbaccInstance {
+export default class DbaccInstance {
   private project!: Project;
 
   private visualization!: Visualization;
 
-  private modelInstance:ModelInstance;
+  private modelInstance: ModelInstance;
 
   constructor(dbConnection: Connection) {
     this.modelInstance = new ModelInstance(dbConnection);
@@ -19,6 +19,8 @@ export class DbaccInstance {
   }
 
   get Visualization(): Visualization {
-    return this.visualization ? this.visualization : new Visualization(this.modelInstance);
+    return this.visualization
+      ? this.visualization
+      : new Visualization(this.modelInstance);
   }
 }

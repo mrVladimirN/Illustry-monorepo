@@ -12,27 +12,28 @@ const reformatDate = (date: string): string | null => {
     const dateComponents = originalDate.split(/[-./]/);
 
     const year = parseInt(
-      dateComponents.find((component) => component.length === 4) as string
+      dateComponents.find((component) => component.length === 4) as string,
+      10
     );
 
     const [component1, component2] = dateComponents.filter(
       (component) => component.length <= 2 && component !== '0000'
     );
 
-    const tryOrdering = (month: number, day: number) => !isNaN(month)
+    const tryOrdering = (month: number, day: number) => !Number.isNaN(month)
       && month > 0
       && month <= 12
-      && !isNaN(day)
+      && !Number.isNaN(day)
       && day > 0
       && day <= 31;
 
-    if (tryOrdering(parseInt(component1), parseInt(component2))) {
+    if (tryOrdering(parseInt(component1, 10), parseInt(component2, 10))) {
       const reformattedDate = `${year}-${String(component1).padStart(
         2,
         '0'
       )}-${String(component2).padStart(2, '0')}`;
       return reformattedDate;
-    } if (tryOrdering(parseInt(component2), parseInt(component1))) {
+    } if (tryOrdering(parseInt(component2, 10), parseInt(component1, 10))) {
       const reformattedDate = `${year}-${String(component2).padStart(
         2,
         '0'
@@ -48,7 +49,7 @@ const excelDateToJSDate = (excelDate: number): string | null => {
   const millisecondsSinceExcelEpoch = daysSinceExcelEpoch * millisecondsPerDay;
   const jsDate = new Date(millisecondsSinceExcelEpoch);
 
-  if (!isNaN(jsDate.getTime())) {
+  if (!Number.isNaN(jsDate.getTime())) {
     const reformattedDate = `${jsDate.getFullYear()}-${String(
       jsDate.getMonth() + 1
     ).padStart(2, '0')}-${String(jsDate.getDate()).padStart(2, '0')}`;
@@ -150,7 +151,9 @@ export const calendarExtractorXml = (
   const finalData = {
     data: {
       calendar: allFileDetails
-        ? calendarEventExtractorXml((data as any[])[0].calendar)
+        ? calendarEventExtractorXml(
+          ((data as Record<string, unknown>[])[0].calendar) as Record<string, unknown>[]
+        )
         : calendarEventExtractorXml(calendar as Record<string, unknown>[])
     }
   };

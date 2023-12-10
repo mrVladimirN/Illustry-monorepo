@@ -9,7 +9,7 @@ import {
   VisualizationUpdate
 } from 'types/visualizations';
 import { FileDetails, FileProperties } from 'types/files';
-import { ProjectFilter } from 'types/project';
+import { ExtendedProjectType, ProjectFilter } from 'types/project';
 import { ExtendedMongoQuery } from 'types/utils';
 import { generateErrorMessage } from 'zod-error';
 import {
@@ -19,12 +19,11 @@ import {
   xmlFilesToVisualizations
 } from '../../utils/reader';
 import { visualizationTypeSchema } from '../../validators/allValidators';
-import { NoDataFoundError } from '../../errors/noDataFoundError';
-import { Factory } from '../../factory';
-import { DbaccInstance } from '../../dbacc/lib';
-import { prettifyZodError } from '../../validators/prettifyError';
+import Factory from '../../factory';
+import DbaccInstance from '../../dbacc/lib';
+import prettifyZodError from '../../validators/prettifyError';
 
-export class VisualizationBZL {
+export default class VisualizationBZL {
   private dbaccInstance: DbaccInstance;
 
   constructor(dbaccInstance: DbaccInstance) {
@@ -75,7 +74,7 @@ export class VisualizationBZL {
     return Factory.getInstance()
       .getBZL()
       .ProjectBZL.browse({ isActive: true } as ProjectFilter)
-      .then((res) => {
+      .then((res: ExtendedProjectType) => {
         if (res && res.projects && res.projects.length > 0) {
           if (!fileDetails) {
             throw new Error('No file details was provided');
@@ -111,12 +110,14 @@ export class VisualizationBZL {
                 res.projects[0].name,
                 visualizationDetails
               );
+            default:
+              throw Error('No correct type was provided');
           }
         } else {
           throw new Error('No Active Project');
         }
       })
-      .catch((err) => {
+      .catch((err: unknown) => {
         throw err;
       });
   }
@@ -127,10 +128,10 @@ export class VisualizationBZL {
       .ProjectBZL.browse({
         isActive: true
       } as ProjectFilter)
-      .then((res) => {
+      .then((res: ExtendedProjectType) => {
         if (res && res.projects) {
           const activeProjectName = res.projects[0].name;
-          filter.projectName = activeProjectName;
+          _.set(filter, 'projectName', activeProjectName);
           let newFilter: ExtendedMongoQuery = {};
           if (!_.isNil(filter)) {
             newFilter = this.dbaccInstance.Visualization.createFilter(filter);
@@ -147,10 +148,10 @@ export class VisualizationBZL {
       .ProjectBZL.browse({
         isActive: true
       } as ProjectFilter)
-      .then((res) => {
+      .then((res:ExtendedProjectType) => {
         if (res && res.projects) {
           const activeProjectName = res.projects[0].name;
-          filter.projectName = activeProjectName;
+          _.set(filter, 'projectName', activeProjectName);
           let newFilter: ExtendedMongoQuery = {};
           if (!_.isNil(filter)) {
             newFilter = this.dbaccInstance.Visualization.createFilter(filter);

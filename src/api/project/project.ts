@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import * as Bluebird from 'bluebird';
 
 import { generateErrorMessage } from 'zod-error';
@@ -11,17 +11,20 @@ import {
 } from 'types/project';
 
 import { VisualizationCreate } from 'types/visualizations';
-import { prettifyZodError } from '../../validators/prettifyError';
-import { Factory } from '../../factory';
+import prettifyZodError from '../../validators/prettifyError';
+import Factory from '../../factory';
 import { returnResponse } from '../../utils/helper';
 import {
-  projectCreateSchema, projectFilterSchema, projectTypeSchema, projectUpdateSchema, visualizationTypeSchema
+  projectCreateSchema,
+  projectFilterSchema,
+  projectUpdateSchema,
+  visualizationTypeSchema
 } from '../../validators/allValidators';
 
 export const create = (
   request: Request,
   response: Response,
-  next: Function
+  next: NextFunction
 ) => {
   const project: ProjectCreate = {
     name: request && request.body && request.body.projectName,
@@ -54,10 +57,10 @@ export const create = (
         ) {
           return Bluebird.Promise.resolve(
             visualizationTypeSchema.safeParse(visualization)
-          ).then((result) => {
-            if (!result.success) {
+          ).then((res) => {
+            if (!res.success) {
               const errorMessage = generateErrorMessage(
-                result.error.issues,
+                res.error.issues,
                 prettifyZodError()
               );
               throw new Error(errorMessage);
@@ -80,7 +83,7 @@ export const create = (
 export const update = (
   request: Request,
   response: Response,
-  next: Function
+  next: NextFunction
 ) => {
   const project: ProjectUpdate = {
     description: request && request.body && request.body.description,
@@ -100,10 +103,10 @@ export const update = (
       } else {
         return Bluebird.Promise.resolve(
           projectFilterSchema.safeParse(projectFilter)
-        ).then((result) => {
-          if (!result.success) {
+        ).then((res) => {
+          if (!res.success) {
             const errorMessage = generateErrorMessage(
-              result.error.issues,
+              res.error.issues,
               prettifyZodError()
             );
             throw new Error(errorMessage);
@@ -121,7 +124,7 @@ export const update = (
 export const findOne = (
   request: Request,
   response: Response,
-  next: Function
+  next: NextFunction
 ) => {
   const projectFilter: ProjectFilter = {
     name: request && request.body && request.body.name
@@ -143,10 +146,11 @@ export const findOne = (
     .asCallback((errGPC: Error, data: ProjectType) => returnResponse(response, errGPC, data, next))
     .catch((err: Error) => returnResponse(response, err, null, next));
 };
+// eslint-disable-next-line no-underscore-dangle
 export const _delete = (
   request: Request,
   response: Response,
-  next: Function
+  next: NextFunction
 ) => {
   const projectFilter: ProjectFilter = {
     name: request && request.body && request.body.name
@@ -169,7 +173,7 @@ export const _delete = (
 export const browse = (
   request: Request,
   response: Response,
-  next: Function
+  next: NextFunction
 ) => {
   const projectFilter: ProjectFilter = {
     name: request && request.body && request.body.name,

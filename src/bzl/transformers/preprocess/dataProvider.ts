@@ -24,7 +24,7 @@ import {
   hierarchyExtractorCsvOrExcel,
   hierarchyExtractorXml
 } from './transformers/hierarchyTransformers';
-import { matrixExtractorXml } from './transformers/matrixTransformer';
+import matrixExtractorXml from './transformers/matrixTransformer';
 import {
   pieChartFunnelExtractorCsvOrExcel,
   pieChartFunnelExtractorXml

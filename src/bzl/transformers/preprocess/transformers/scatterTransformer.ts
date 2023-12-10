@@ -13,7 +13,7 @@ const computeValues = (values: unknown[], mapping: string): number[] => {
       !_.isNil(valueAtIndex)
       && (typeof valueAtIndex === 'number'
         || (typeof valueAtIndex === 'string'
-          && !isNaN(_.toNumber(valueAtIndex))))
+          && !Number.isNaN(_.toNumber(valueAtIndex))))
       && result.length <= 1
     ) {
       result.push(_.toNumber(valueAtIndex));
@@ -84,9 +84,9 @@ const scatterPointsExtractorXml = (points: Record<string, unknown>[]) => {
     category: (el.category as string[])[0],
     value: (el.value as string[]).map((value: string) => Number(value)),
     properties:
-        el.properties && (el.properties as Record<string, unknown>[]).length
-          ? (el.properties as string[])[0]
-          : undefined
+      el.properties && (el.properties as Record<string, unknown>[]).length
+        ? (el.properties as string[])[0]
+        : undefined
   }));
 
   // Return the transformed object inside the array
@@ -102,7 +102,12 @@ export const scatterExtractorXml = (
   const finalData = {
     data: {
       points: allFileDetails
-        ? scatterPointsExtractorXml((data as any[])[0].points)
+        ? scatterPointsExtractorXml(
+            (data as Record<string, unknown>[])[0].points as Record<
+              string,
+              unknown
+            >[]
+        )
         : scatterPointsExtractorXml(points as Record<string, string>[])
     }
   };

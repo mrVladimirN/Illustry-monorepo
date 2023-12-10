@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import _ from 'lodash';
 import Bluebird from 'bluebird';
 import * as fs from 'fs';
@@ -10,8 +11,8 @@ import {
   exelOrCsvdataProvider,
   xmlDataProvider
 } from '../bzl/transformers/preprocess/dataProvider';
-import { transformerProvider } from '../bzl/transformers/preprocess/transformersProvider';
-import { FileError } from '../errors/fileError';
+import transformerProvider from '../bzl/transformers/preprocess/transformersProvider';
+import FileError from '../errors/fileError';
 
 const XlsxStreamReader = require('xlsx-stream-reader');
 
@@ -25,7 +26,7 @@ const readJsonFile = (
   }
   const buffer = fs.createReadStream(file.filePath);
   let finalText: string = '';
-  buffer.on('error', (err: any) => {
+  buffer.on('error', () => {
     reject(new FileError('Problems while uploading the files'));
   });
   buffer.on('data', (data: string | Buffer) => {
@@ -50,7 +51,7 @@ const readXmlFile = (
   }
   const buffer = fs.createReadStream(file.filePath);
   let finalText: string = '';
-  buffer.on('error', (err: any) => {
+  buffer.on('error', () => {
     reject(new FileError('Problems while uploading the files'));
   });
   buffer.on('data', (data: string | Buffer) => {
@@ -91,15 +92,17 @@ const readExcelFile = (
     reject(new FileError('The provided file is not EXCEL format'));
   }
   const workBookReader = new XlsxStreamReader();
-  const computedRows: any = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const computedRows: any[] = [];
 
   const buffer = fs.createReadStream(file.filePath);
   buffer.pipe(workBookReader);
 
-  workBookReader.on('error', (error: any) => {
+  workBookReader.on('error', () => {
     reject(new FileError('Problems while uploading the files'));
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   workBookReader.on('worksheet', (workSheetReader: any) => {
     const sheets = fileDetails && fileDetails.sheets && !_.isEmpty(fileDetails.sheets)
       ? _.toNumber(fileDetails.sheets)
@@ -108,6 +111,7 @@ const readExcelFile = (
       workSheetReader.skip();
       return;
     }
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     workSheetReader.on('row', (row: any) => {
       const includeHeaders = fileDetails && fileDetails.includeHeaders;
       if (!includeHeaders) {
@@ -152,7 +156,8 @@ const readCsvFile = (
   visualizationType: VisualizationTypesEnum,
   allFileDetails: boolean
 ) => {
-  const computedRows: any = [];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const computedRows: any[] = [];
   return new Bluebird((resolve, reject) => {
     if (file.type !== 'text/csv') {
       reject(new FileError('The provided file is not CSV format'));
@@ -201,7 +206,7 @@ export const excelFilesToVisualizations = (
   allFileDetails: boolean
 ) => Bluebird.map(files, (file) => Bluebird.resolve(
   readExcelFile(file, fileDetails, visualizationType, allFileDetails)
-)).then((files) => files);
+)).then((computedFiles) => computedFiles);
 
 export const jsonFilesToVisualizations = (
   files: FileProperties[],
@@ -209,7 +214,7 @@ export const jsonFilesToVisualizations = (
   allFileDetails: boolean
 ) => Bluebird.map(files, (file) => Bluebird.resolve(
   readJsonFile(file, visualizationType, allFileDetails)
-)).then((files) => files);
+)).then((computedFiles) => computedFiles);
 
 export const csvFilesToVisualizations = (
   files: FileProperties[],
@@ -218,11 +223,12 @@ export const csvFilesToVisualizations = (
   allFileDetails: boolean
 ) => Bluebird.map(files, (file) => Bluebird.resolve(
   readCsvFile(file, fileDetails, visualizationType, allFileDetails)
-)).then((files) => files);
+)).then((computedFiles) => computedFiles);
+
 export const xmlFilesToVisualizations = (
   files: FileProperties[],
   visualizationType: VisualizationTypesEnum,
   allFileDetails: boolean
 ) => Bluebird.map(files, (file) => Bluebird.resolve(
   readXmlFile(file, visualizationType, allFileDetails)
-)).then((files) => files);
+)).then((computedFiles) => computedFiles);

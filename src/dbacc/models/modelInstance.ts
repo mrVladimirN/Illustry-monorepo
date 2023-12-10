@@ -1,13 +1,13 @@
 import { Connection, Model } from 'mongoose';
 import { ProjectType } from 'types/project';
 import { VisualizationType } from 'types/visualizations';
-import { Project } from './project/Project';
-import { Visualization } from './visualization/Visualization';
+import Project from './project/Project';
+import Visualization from './visualization/Visualization';
 
-export class ModelInstance {
-  private _projectModel?: Model<ProjectType>;
+export default class ModelInstance {
+  private projectModel?: Model<ProjectType>;
 
-  private _visualizationModel?: Model<VisualizationType>;
+  private visualizationModel?: Model<VisualizationType>;
 
   private readonly connection: Connection;
 
@@ -23,16 +23,16 @@ export class ModelInstance {
   }
 
   get ProjectModel(): Model<ProjectType> {
-    if (!this._projectModel) {
-      this._projectModel = this.project.getModel();
+    if (!this.projectModel) {
+      this.projectModel = this.project.getModel();
     }
-    return this._projectModel;
+    return this.projectModel;
   }
 
   get VisualizationModel(): Model<VisualizationType> {
-    if (!this._visualizationModel) {
-      this._visualizationModel = this.visualization.getModel();
+    if (!this.visualizationModel) {
+      this.visualizationModel = this.visualization.getModel();
     }
-    return this._visualizationModel;
+    return this.visualizationModel;
   }
 }

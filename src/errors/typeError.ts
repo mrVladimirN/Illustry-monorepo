@@ -1,4 +1,4 @@
-export class TypeError extends Error {
+export default class TypeError extends Error {
   constructor(msg: string) {
     super(msg);
 

@@ -1,19 +1,22 @@
-import { Request, Response } from 'express';
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable max-len */
+
+import { NextFunction, Request, Response } from 'express';
 import * as Bluebird from 'bluebird';
 import _ from 'lodash';
 import { generateErrorMessage } from 'zod-error';
 import { FileProperties } from 'types/files';
 import { VisualizationType, VisualizationFilter } from 'types/visualizations';
 import { returnResponse } from '../../utils/helper';
-import { FileError } from '../../errors/fileError';
-import { Factory } from '../../factory';
-import { prettifyZodError } from '../../validators/prettifyError';
+import FileError from '../../errors/fileError';
+import Factory from '../../factory';
+import prettifyZodError from '../../validators/prettifyError';
 import { visualizationFilterSchema } from '../../validators/allValidators';
 
 export const createOrUpdate = (
   request: Request,
   response: Response,
-  next: Function
+  next: NextFunction
 ) => {
   const files = _.get(request, 'files.file');
   if (_.isNil(files)) {
@@ -90,7 +93,7 @@ export const createOrUpdate = (
 export const findOne = (
   request: Request,
   response: Response,
-  next: Function
+  next: NextFunction
 ) => {
   const visualizationFilter: VisualizationFilter = {
     name: request && request.params && request.params.name,
@@ -119,7 +122,7 @@ export const findOne = (
 export const browse = (
   request: Request,
   response: Response,
-  next: Function
+  next: NextFunction
 ) => {
   const visualizationFilter: VisualizationFilter = {
     text: request && request.body && request.body.text,
@@ -150,15 +153,15 @@ export const browse = (
 export const _delete = (
   request: Request,
   response: Response,
-  next: Function
+  next: NextFunction
 ) => {
-  const VisualizationFilter: VisualizationFilter = {
+  const visualizationFilter: VisualizationFilter = {
     name: request && request.body && request.body.name,
     type: request && request.body && request.body.type,
     projectName: request && request.body && request.body.projectName
   };
   return Bluebird.Promise.resolve(
-    visualizationFilterSchema.safeParse(VisualizationFilter)
+    visualizationFilterSchema.safeParse(visualizationFilter)
   )
     .then((result) => {
       if (!result.success) {
@@ -170,7 +173,7 @@ export const _delete = (
       } else {
         return Factory.getInstance()
           .getBZL()
-          .VisualizationBZL.delete(VisualizationFilter);
+          .VisualizationBZL.delete(visualizationFilter);
       }
     })
     .asCallback((errGPC: Error, data: VisualizationType) => returnResponse(response, errGPC, data, next))

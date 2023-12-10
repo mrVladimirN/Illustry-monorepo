@@ -1,7 +1,8 @@
 import { Connection, Model, Schema } from 'mongoose';
+// eslint-disable-next-line import/no-unresolved
 import { ProjectType } from 'types/project';
 
-export class Project {
+export default class Project {
   private readonly connection: Connection;
 
   private projectModel?: Model<ProjectType>;

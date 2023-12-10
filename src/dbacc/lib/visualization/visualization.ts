@@ -9,10 +9,10 @@ import {
   VisualizationUpdate
 } from 'types/visualizations';
 import { ExtendedMongoQuery, MongoQuery } from 'types/utils';
-import { ModelInstance } from '../../models/modelInstance';
+import ModelInstance from '../../models/modelInstance';
 
 const PAGE_SIZE = 10;
-export class Visualization {
+export default class Visualization {
   private modelInstance: ModelInstance;
 
   constructor(modelInstance: ModelInstance) {
@@ -70,6 +70,7 @@ export class Visualization {
       });
     }
     if ((query.$and as Array<object>).length === 0) delete query.$and;
+    // eslint-disable-next-line no-nested-ternary
     const skip = filter && filter.page && filter.page > 1
       ? filter.per_page
         ? (filter.page - 1) * filter.per_page
@@ -91,16 +92,18 @@ export class Visualization {
 
   create(data: VisualizationCreate): Promise<VisualizationType> {
     return Promise.resolve().then(() => {
+      const newData = _.cloneDeep(data);
       if (_.isNil(data.createdAt)) {
-        data.createdAt = new Date();
-        data.updatedAt = new Date();
+        newData.createdAt = new Date();
+        newData.updatedAt = new Date();
       }
-      return this.modelInstance.VisualizationModel.create(data);
+      return this.modelInstance.VisualizationModel.create(newData);
     });
   }
 
   findOne(filter: ExtendedMongoQuery): Promise<VisualizationType> {
-    return Bluebird.resolve().then(() => this.modelInstance.VisualizationModel.findOne(filter.query));
+    return Bluebird.resolve()
+      .then(() => this.modelInstance.VisualizationModel.findOne(filter.query));
   }
 
   browse(filter: ExtendedMongoQuery): Promise<ExtendedVisualizationType> {
@@ -140,18 +143,18 @@ export class Visualization {
     filter: ExtendedMongoQuery,
     data: VisualizationUpdate
   ): Promise<VisualizationType> {
+    const newData = _.cloneDeep(data);
     if (_.isNil(data.createdAt)) {
-      data.createdAt = new Date();
+      newData.createdAt = new Date();
     }
     if (_.isNil(data.updatedAt)) {
-      data.updatedAt = new Date();
+      newData.updatedAt = new Date();
     }
-    return Bluebird.resolve()
-      .then(() => this.modelInstance.VisualizationModel.findOneAndUpdate(
-        filter.query,
-        data,
-        { upsert: true, new: true }
-      ));
+    return Bluebird.resolve().then(() => this.modelInstance.VisualizationModel.findOneAndUpdate(
+      filter.query,
+      data,
+      { upsert: true, new: true }
+    ));
   }
 
   delete(filter: ExtendedMongoQuery): Promise<boolean> {

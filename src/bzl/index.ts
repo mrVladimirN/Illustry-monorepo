@@ -1,8 +1,8 @@
-import { DbaccInstance } from '../dbacc/lib';
-import { VisualizationBZL } from './visualization/visualization';
-import { ProjectBZL } from './project/project';
+import DbaccInstance from '../dbacc/lib';
+import VisualizationBZL from './visualization/visualization';
+import ProjectBZL from './project/project';
 
-export class BZLInstance {
+export default class BZLInstance {
   private dbaccInstance: DbaccInstance;
 
   private projectBZL!: ProjectBZL;

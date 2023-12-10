@@ -58,17 +58,17 @@ const wordCloudWordExtractorXml = (
   words: Record<string, unknown>[]
 ): WordType[] => words.map((el: Record<string, unknown>) => ({
   name:
-        typeof (el.name as string[])[0] === 'string'
-          ? (el.name as string[])[0]
-          : _.toString((el.name as string[])[0]),
+      typeof (el.name as string[])[0] === 'string'
+        ? (el.name as string[])[0]
+        : _.toString((el.name as string[])[0]),
   value:
-        typeof (el.value as string[])[0] === 'string'
-          ? +(el.value as string[])[0]
-          : (el.value as string[])[0],
+      typeof (el.value as string[])[0] === 'string'
+        ? +(el.value as string[])[0]
+        : (el.value as string[])[0],
   properties:
-        el.properties && (el.properties as Record<string, unknown>[]).length
-          ? (el.properties as string[])[0]
-          : undefined
+      el.properties && (el.properties as Record<string, unknown>[]).length
+        ? (el.properties as string[])[0]
+        : undefined
 })) as unknown as WordType[];
 
 export const wordCloudExtractorXml = (
@@ -84,7 +84,12 @@ export const wordCloudExtractorXml = (
   const finalData = {
     data: {
       words: allFileDetails
-        ? wordCloudWordExtractorXml((data as any[])[0].words)
+        ? wordCloudWordExtractorXml(
+            (data as Record<string, unknown>[])[0].words as Record<
+              string,
+              unknown
+            >[]
+        )
         : wordCloudWordExtractorXml(words as Record<string, unknown>[])
     }
   };

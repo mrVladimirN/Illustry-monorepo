@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-unresolved
 import { VisualizationTypesEnum } from 'types/visualizations';
 import { z } from 'zod';
 
@@ -78,6 +79,7 @@ export const pieChartFunnelDataSchema = z.object({
 
 // TreeMap/Sunburst
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const hierarchyNode: any = z.object({
   name: z.string(),
   value: z.number(),

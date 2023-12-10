@@ -1,6 +1,4 @@
 import Bluebird from 'bluebird';
-import _ from 'lodash';
-
 import validator from 'validator';
 import { ExtendedMongoQuery, MongoQuery } from 'types/utils';
 import {
@@ -10,10 +8,10 @@ import {
   ProjectType,
   ProjectUpdate
 } from 'types/project';
-import { ModelInstance } from '../../models/modelInstance';
+import ModelInstance from '../../models/modelInstance';
 
 const PAGE_SIZE = 10;
-export class Project {
+export default class Project {
   private modelInstance: ModelInstance;
 
   constructor(modelInstance: ModelInstance) {
@@ -51,6 +49,7 @@ export class Project {
 
     if ((query.$and as Array<object>).length === 0) delete query.$and;
 
+    // eslint-disable-next-line no-nested-ternary
     const skip = filter && filter.page && filter.page > 1
       ? filter.per_page
         ? (filter.page - 1) * filter.per_page

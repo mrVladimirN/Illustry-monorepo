@@ -1,3 +1,4 @@
 import * as bunyan from 'bunyan';
 
-export const logger = bunyan.createLogger({ name: 'Illustry' });
+const logger = bunyan.createLogger({ name: 'Illustry' });
+export default logger;

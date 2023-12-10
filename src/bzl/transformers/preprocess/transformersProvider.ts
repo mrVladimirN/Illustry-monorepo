@@ -7,7 +7,7 @@ import { nodeLinkTransformer } from './transformers/nodeLinkTransformers';
 import { pieChartFunnelTransformer } from './transformers/pieChartFunnelTransformer';
 import { scatterTransformer } from './transformers/scatterTransformer';
 
-export const transformerProvider = (
+const transformerProvider = (
   type: VisualizationTypesEnum,
   mapping: Record<string, unknown>,
   values: unknown[],
@@ -33,5 +33,7 @@ export const transformerProvider = (
     case VisualizationTypesEnum.SUNBURST:
     case VisualizationTypesEnum.TREEMAP:
       return hierarchyTransformer(mapping, values, allFileDetails);
+    default: return null;
   }
 };
+export default transformerProvider;

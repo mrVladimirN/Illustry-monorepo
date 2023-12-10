@@ -1,8 +1,11 @@
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-param-reassign */
 import _ from 'lodash';
 import * as url from 'url';
 import * as fs from 'fs';
 import * as path from 'path';
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any, consistent-return
 export const returnResponse = (res: any, err: any, data: any, next: any) => {
   if (res && res.req && res.req.probe) {
     const urlParts = url.parse(res.req.originalUrl) || {};

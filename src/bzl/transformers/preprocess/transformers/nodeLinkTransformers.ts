@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 import _ from 'lodash';
 import { Node, Link, NodeLinkData } from 'types/visualizations';
 import { visualizationDetailsExtractor } from '../../../../utils/helper';
@@ -55,7 +57,7 @@ export const nodesLinksExtractorCsvOrExcel = (
         (n: Link) => n.source === source && n.target === target
       );
       if (_.isNil(node)) {
-        const node = { name, category, properties } as Node;
+        node = { name, category, properties } as Node;
         if (
           !_.isNil(node.name)
           && !_.isNil(node.category)
@@ -66,7 +68,7 @@ export const nodesLinksExtractorCsvOrExcel = (
         }
       }
       if (_.isNil(link)) {
-        const link = { source, target, value } as Link;
+        link = { source, target, value } as Link;
 
         if (
           !_.isNil(link.source)
@@ -89,18 +91,18 @@ const linkExtractorXml = (nodes: Record<string, unknown>[]): Node[] => nodes.map
   name: (el.name as string[])[0],
   category: (el.category as string[])[0],
   properties:
-        el.properties && (el.properties as Record<string, unknown>[]).length
-          ? (el.properties as string[])[0]
-          : undefined
+      el.properties && (el.properties as Record<string, unknown>[]).length
+        ? (el.properties as string[])[0]
+        : undefined
 })) as unknown as Node[];
 
 const nodeExtractorXml = (links: Record<string, unknown>[]): Link[] => links.map((el: Record<string, unknown>) => ({
   source: (el.source as string[])[0],
   target: (el.target as string[])[0],
   value:
-        typeof (el.value as string[])[0] === 'string'
-          ? +(el.value as string[])[0]
-          : (el.value as string[])[0]
+      typeof (el.value as string[])[0] === 'string'
+        ? +(el.value as string[])[0]
+        : (el.value as string[])[0]
 })) as unknown as Link[];
 
 export const nodeLinksExtractorXml = (
@@ -113,10 +115,20 @@ export const nodeLinksExtractorXml = (
   const finalData = {
     data: {
       nodes: allFileDetails
-        ? linkExtractorXml((data as any[])[0].nodes)
+        ? linkExtractorXml(
+            (data as Record<string, unknown>[])[0].nodes as Record<
+              string,
+              unknown
+            >[]
+        )
         : linkExtractorXml(nodes as Record<string, unknown>[]),
       links: allFileDetails
-        ? nodeExtractorXml((data as any[])[0].links)
+        ? nodeExtractorXml(
+            (data as Record<string, unknown>[])[0].links as Record<
+              string,
+              unknown
+            >[]
+        )
         : nodeExtractorXml(links as Record<string, unknown>[])
     }
   };

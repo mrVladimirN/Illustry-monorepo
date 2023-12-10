@@ -4,7 +4,9 @@ import * as http from 'http';
 import mongoose from 'mongoose';
 import VisualizationRoutes from './routes/visualization/visualization';
 import ProjectRoutes from './routes/project/project';
+import logger from './config/logger';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
 
 export default class Illustry {
@@ -34,11 +36,11 @@ export default class Illustry {
       this.httpServer = this.expressApp.listen(
         process.env.ILLUSTRY_PORT,
         () => {
-          console.log(`server is listening on ${process.env.ILLUSTRY_PORT}`);
+          logger.info(`server is listening on ${process.env.ILLUSTRY_PORT}`);
         }
       );
       this.httpServer.on('error', (error) => {
-        console.error(error);
+        logger.error(error);
       });
     });
   }

@@ -1,10 +1,14 @@
-import mongoose, { ConnectOptions, Connection } from 'mongoose';
-import { BZLInstance } from './bzl';
-import { DbaccInstance } from './dbacc/lib';
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-use-before-define */
+import mongoose from 'mongoose';
+import BZLInstance from './bzl';
+import DbaccInstance from './dbacc/lib';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 require('dotenv').config();
 
-export class Factory {
+export default class Factory {
   private static _instance: Factory;
 
   private static _dbaccInstance: DbaccInstance;

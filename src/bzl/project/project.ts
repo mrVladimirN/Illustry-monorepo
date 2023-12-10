@@ -1,14 +1,18 @@
 import _ from 'lodash';
 import {
-  ExtendedProjectType, ProjectCreate, ProjectFilter, ProjectType, ProjectUpdate
+  ExtendedProjectType,
+  ProjectCreate,
+  ProjectFilter,
+  ProjectType,
+  ProjectUpdate
 } from 'types/project';
 import { ExtendedMongoQuery } from 'types/utils';
-import { DbaccInstance } from '../../dbacc/lib';
-import { NoDataFoundError } from '../../errors/noDataFoundError';
-import { logger } from '../../config/logger';
-import { DuplicatedElementError } from '../../errors/duplicatedElementError';
+import DbaccInstance from '../../dbacc/lib';
+import NoDataFoundError from '../../errors/noDataFoundError';
+import logger from '../../config/logger';
+import DuplicatedElementError from '../../errors/duplicatedElementError';
 
-export class ProjectBZL {
+export default class ProjectBZL {
   private dbaccInstance: DbaccInstance;
 
   constructor(dbaccInstance: DbaccInstance) {
@@ -16,11 +20,12 @@ export class ProjectBZL {
   }
 
   create(project: ProjectCreate): Promise<ProjectType> {
+    const newProject = _.cloneDeep(project);
     if (_.isNil(project.createdAt)) {
-      project.createdAt = new Date();
-      project.updatedAt = new Date();
+      newProject.createdAt = new Date();
+      newProject.updatedAt = new Date();
     }
-    return this.dbaccInstance.Project.create(project).catch((err) => {
+    return this.dbaccInstance.Project.create(newProject).catch(() => {
       throw new DuplicatedElementError(
         `There already is a project named ${project.name}`
       );
@@ -59,11 +64,12 @@ export class ProjectBZL {
       newFilter = this.dbaccInstance.Project.createFilter(filter);
     }
     return this.findByName(filter).then(() => {
+      const newProject = _.cloneDeep(project);
       if (_.isNil(project.createdAt)) {
-        project.createdAt = new Date();
+        newProject.createdAt = new Date();
       }
       _.set(project, 'updatedAt', new Date());
-      return this.dbaccInstance.Project.update(newFilter, project);
+      return this.dbaccInstance.Project.update(newFilter, newProject);
     });
   }
 

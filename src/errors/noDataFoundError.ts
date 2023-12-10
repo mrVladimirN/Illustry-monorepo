@@ -1,4 +1,4 @@
-export class NoDataFoundError extends Error {
+export default class NoDataFoundError extends Error {
   constructor(msg: string) {
     super(msg);
 

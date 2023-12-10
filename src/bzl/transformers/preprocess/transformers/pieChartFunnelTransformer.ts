@@ -41,9 +41,11 @@ export const pieChartFunnelExtractorCsvOrExcel = (
           !_.isNil(pieChartFunnelData.name)
           && !_.isNil(pieChartFunnelData.value)
         ) {
-          (result.values as Record<string, number>)[
-            pieChartFunnelData.name as string
-          ] = pieChartFunnelData.value as number;
+          _.set(
+            result.values as Record<string, number>,
+            `${pieChartFunnelData.name as string}`,
+            pieChartFunnelData.value as number
+          );
         }
       }
       return result;
@@ -84,7 +86,12 @@ export const pieChartFunnelExtractorXml = (
   const finalData = {
     data: {
       values: allFileDetails
-        ? pieChartFunnelValuesExtractorXml((data as any[])[0].values)
+        ? pieChartFunnelValuesExtractorXml(
+            (data as Record<string, unknown>[])[0].values as Record<
+              string,
+              unknown
+            >[]
+        )
         : pieChartFunnelValuesExtractorXml(values as Record<string, unknown>[])
     }
   };

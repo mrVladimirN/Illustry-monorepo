@@ -1,7 +1,13 @@
 import Illustry from './app';
+import logger from './config/logger';
 
 let illustry: Illustry;
-
+const cleanup = () => {
+  if (illustry) {
+    illustry.stop();
+  }
+  // Perform any other cleanup tasks here
+};
 const startIllustry = async () => {
   illustry = new Illustry();
   await illustry.start();
@@ -15,16 +21,9 @@ const startIllustry = async () => {
 
   // Handle unhandled promise rejections
   process.on('unhandledRejection', (reason, promise) => {
-    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
+    logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
     cleanup();
   });
-};
-
-const cleanup = () => {
-  if (illustry) {
-    illustry.stop();
-  }
-  // Perform any other cleanup tasks here
 };
 
 startIllustry();

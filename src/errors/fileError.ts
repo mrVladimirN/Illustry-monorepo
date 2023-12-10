@@ -1,4 +1,4 @@
-export class FileError extends Error {
+export default class FileError extends Error {
   constructor(msg: string) {
     super(msg);
 

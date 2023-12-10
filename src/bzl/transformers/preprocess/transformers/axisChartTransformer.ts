@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+
 import _ from 'lodash';
 import { AxisChartData } from 'types/visualizations';
 import { visualizationDetailsExtractor } from '../../../../utils/helper';
@@ -9,10 +11,10 @@ const computeValues = (
   const indices = mapping
     .split(',')
     .map((index) => parseInt(index.trim(), 10))
-    .filter((index) => !isNaN(index) && index >= 0 && index < values.length);
+    .filter((index) => !Number.isNaN(index) && index >= 0 && index < values.length);
 
   const keyIndex = indices.find(
-    (index) => typeof values[index] === 'string' && isNaN(+(values[index] as string))
+    (index) => typeof values[index] === 'string' && Number.isNaN(+(values[index] as string))
   );
 
   if (keyIndex !== undefined) {
@@ -48,9 +50,9 @@ export const axisChartTransformer = (
 };
 
 export const axisChartExtractorCsvOrExcel = (
-  data: Record<string, unknown>[]
+  recordedData : Record<string, unknown>[]
 ): AxisChartData => {
-  const transformedData = data.reduce(
+  const transformedData = recordedData.reduce(
     (result, item) => {
       const axisData = item.values;
       let headersData;
@@ -104,10 +106,12 @@ export const axisChartExtractorXml = (
   const finalData = {
     data: {
       headers: allFileDetails
-        ? (data as any[])[0].headers
+        ? (data as Record<string, unknown>[])[0].headers
         : (headers as Record<string, string>[]),
       values: allFileDetails
-        ? axisChartValuesExtractorXml((data as any[])[0].values)
+        ? axisChartValuesExtractorXml(
+          ((data as Record<string, unknown>[])[0].values) as Record<string, unknown>[]
+        )
         : axisChartValuesExtractorXml(values as Record<string, unknown>[])
     }
   };

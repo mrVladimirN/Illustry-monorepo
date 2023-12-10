@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-syntax */
+
 import _ from 'lodash';
 import { HierarchyNode, HierarchyData } from 'types/visualizations';
 import { visualizationDetailsExtractor } from '../../../../utils/helper';
@@ -10,7 +12,7 @@ const computeChildren = (
   (mapping.children as string).split(',').forEach((row) => {
     if (
       typeof values[_.toNumber(row)] === 'string'
-      && isNaN(_.toNumber(values[_.toNumber(row)]))
+      && Number.isNaN(_.toNumber(values[_.toNumber(row)]))
     ) {
       children.push(values[_.toNumber(row)] as string);
     }
@@ -104,7 +106,8 @@ export const hierarchyExtractorCsvOrExcel = (
   };
 
   data.forEach((item) => {
-    const isChild = result.some((group) => (group.children as HierarchyNode[]).some((child) => findItem(child, (item.nodes as HierarchyNode).name)));
+    const isChild = result.some((group) => (group.children as HierarchyNode[])
+      .some((child) => findItem(child, (item.nodes as HierarchyNode).name)));
 
     if (!isChild) {
       const transformedItem = transformItem(item.nodes as HierarchyNode);
@@ -123,18 +126,20 @@ export const hierarchyExtractorCsvOrExcel = (
 
   return { nodes: result };
 };
-const hierarchyNodeExtractorXml = (nodes: Record<string, unknown>[]): any => nodes.map((el: any) => ({
+const hierarchyNodeExtractorXml = (
+  nodes: Record<string, unknown>[]
+): Record<string, unknown>[] => nodes.map((el: Record<string, unknown>) => ({
   name: (el.name as string[])[0],
   category: (el.category as string[])[0],
   value: +(el.value as string[])[0],
   properties:
-        el.properties && (el.properties as Record<string, unknown>[]).length
-          ? (el.properties as string[])[0]
-          : undefined,
+      el.properties && (el.properties as Record<string, unknown>[]).length
+        ? (el.properties as string[])[0]
+        : undefined,
   children:
-        el.children && (el.children as Record<string, unknown>[]).length > 0
-          ? hierarchyNodeExtractorXml(el.children as Record<string, unknown>[])
-          : undefined
+      el.children && (el.children as Record<string, unknown>[]).length > 0
+        ? hierarchyNodeExtractorXml(el.children as Record<string, unknown>[])
+        : undefined
 }));
 
 export const hierarchyExtractorXml = (
@@ -142,12 +147,14 @@ export const hierarchyExtractorXml = (
   allFileDetails: boolean
 ) => {
   const {
-    name, description, tags, type, data, nodes, links
+    name, description, tags, type, data, nodes
   } = xmlData.root as Record<string, unknown>;
   const finalData = {
     data: {
       nodes: allFileDetails
-        ? hierarchyNodeExtractorXml((data as any[])[0].nodes)
+        ? hierarchyNodeExtractorXml(
+          ((data as Record<string, unknown>[])[0].nodes) as Record<string, unknown>[]
+        )
         : hierarchyNodeExtractorXml(nodes as Record<string, unknown>[])
     }
   };

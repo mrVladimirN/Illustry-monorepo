@@ -1,4 +1,4 @@
-export class DuplicatedElementError extends Error {
+export default class DuplicatedElementError extends Error {
   constructor(msg: string) {
     super(msg);
 

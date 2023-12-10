@@ -1,8 +1,9 @@
 import { Connection, Model, Schema } from 'mongoose';
 import _ from 'lodash';
+// eslint-disable-next-line import/no-unresolved
 import { VisualizationType, VisualizationTypesEnum } from 'types/visualizations';
 
-export class Visualization {
+export default class Visualization {
   private readonly connection: Connection;
 
   private VisualizationModel?: Model<VisualizationType>;

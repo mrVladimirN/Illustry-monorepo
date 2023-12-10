@@ -1,6 +1,6 @@
 import { ErrorMessageOptions } from 'zod-error';
 
-export const prettifyZodError = (): ErrorMessageOptions => {
+const prettifyZodError = (): ErrorMessageOptions => {
   const options: ErrorMessageOptions = {
     delimiter: {
       error: ' '
@@ -9,3 +9,5 @@ export const prettifyZodError = (): ErrorMessageOptions => {
   };
   return options;
 };
+
+export default prettifyZodError;
