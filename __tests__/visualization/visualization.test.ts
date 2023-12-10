@@ -10,6 +10,7 @@ import {
   VisualizationType,
   VisualizationTypesEnum,
   VisualizationCreate,
+  ExtendedVisualizationType,
 } from "types/visualizations";
 process.env.NODE_ENV = "test";
 const factory = Factory.getInstance();
@@ -56,6 +57,8 @@ describe("visualizations CRUD", () => {
     await mongoose.disconnect();
   });
   it("It creates a hierarchical-edge-bundling Visualization JSON with all the details in the JSON", async () => {
+    expect.assertions(2);
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./HEB_FullDetails.json");
 
     const files: FileProperties[] = [
@@ -118,6 +121,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a force-directed-graph Visualization JSON with all the details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./FLG_FullDetails.json");
 
     const files: FileProperties[] = [
@@ -181,6 +185,7 @@ describe("visualizations CRUD", () => {
   });
 
   it("It creates a sankey Visualization JSON with all the details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./SANKEY_FullDetails.json");
 
     const files: FileProperties[] = [
@@ -238,6 +243,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a word-cloud Visualization JSON with all the details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Wordcloud_FullDetails.json");
 
     const files: FileProperties[] = [
@@ -299,6 +305,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a calendar Visualization JSON with all the details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Calendar_FullDetails.json");
 
     const files: FileProperties[] = [
@@ -407,6 +414,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a matrix Visualization JSON with all the details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Matrix_FullDetails.json");
 
     const files: FileProperties[] = [
@@ -528,6 +536,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a line-chart Visualization JSON with all the details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./LineChart_FullDetails.json");
 
     const files: FileProperties[] = [
@@ -566,6 +575,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a bar-chart Visualization JSON with all the details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./BarChart_FullDetails.json");
 
     const files: FileProperties[] = [
@@ -604,6 +614,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a pie-chart Visualization JSON with all the details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./PieChart_FullDetails.json");
 
     const files: FileProperties[] = [
@@ -641,6 +652,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a scatter Visualization JSON with all the details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Scatter_FullDetails.json");
 
     const files: FileProperties[] = [
@@ -679,6 +691,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a funnel Visualization JSON with all the details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Funnel_FullDetails.json");
 
     const files: FileProperties[] = [
@@ -716,6 +729,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a treemap Visualization JSON with all the details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Treemap_FullDetails.json");
 
     const files: FileProperties[] = [
@@ -804,6 +818,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a sunburst Visualization JSON with all the details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Sunburst_FullDetails.json");
 
     const files: FileProperties[] = [
@@ -892,6 +907,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a timeline Visualization JSON with all the details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Timeline_FullDetails.json");
 
     const files: FileProperties[] = [
@@ -1014,6 +1030,7 @@ describe("visualizations CRUD", () => {
   });
 
   it("It creates a hierarchical-edge-bundling Visualization JSON with only the data details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./HEB_PartialDetails.json");
 
     const files: FileProperties[] = [
@@ -1081,6 +1098,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a force-directed-graph Visualization JSON with only the data details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./FLG_PartialDetails.json");
 
     const files: FileProperties[] = [
@@ -1148,6 +1166,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a sankey Visualization JSON with only the data details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./SANKEY_PartialDetails.json");
 
     const files: FileProperties[] = [
@@ -1210,6 +1229,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a word-cloud Visualization JSON with only the data details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Wordcloud_PartialDetails.json");
 
     const files: FileProperties[] = [
@@ -1276,6 +1296,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a calendar Visualization JSON with only the data details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Calendar_PartialDetails.json");
 
     const files: FileProperties[] = [
@@ -1389,6 +1410,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a matrix Visualization JSON with only the data details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Matrix_PartialDetails.json");
 
     const files: FileProperties[] = [
@@ -1515,6 +1537,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a line-chart Visualization JSON with only the data details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./LineChart_PartialDetails.json");
 
     const files: FileProperties[] = [
@@ -1558,6 +1581,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a bar-chart Visualization JSON with only the data details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./BarChart_PartialDetails.json");
 
     const files: FileProperties[] = [
@@ -1601,6 +1625,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a pie-chart Visualization JSON with only the data details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./PieChart_PartialDetails.json");
 
     const files: FileProperties[] = [
@@ -1643,6 +1668,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a scatter Visualization JSON with only the data details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Scatter_PartialDetails.json");
 
     const files: FileProperties[] = [
@@ -1686,6 +1712,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a funnel Visualization JSON with only the data details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Funnel_PartialDetails.json");
 
     const files: FileProperties[] = [
@@ -1728,6 +1755,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a treemap Visualization JSON with only the data details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Treemap_PartialDetails.json");
 
     const files: FileProperties[] = [
@@ -1821,6 +1849,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a sunburst Visualization JSON with only the data details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.json");
 
     const files: FileProperties[] = [
@@ -1914,6 +1943,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a timeline Visualization JSON with only the data details in the JSON", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Timeline_PartialDetails.json");
 
     const files: FileProperties[] = [
@@ -2040,6 +2070,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a bar-chart Visualization XML with all the details in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./BarChart_FullDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -2078,6 +2109,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a calendar Visualization XML with all the details in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Calendar_FullDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -2186,6 +2218,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a forced-directed-graph Visualization XML with all the details in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./FLG_FullDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -2248,6 +2281,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a funnel Visualization XML with all the details in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Funnel_FullDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -2285,6 +2319,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a hierarchical-edge-bundling Visualization XML with all the details in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./HEB_FullDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -2347,6 +2382,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a line-chart Visualization XML with all the details in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./LineChart_FullDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -2385,6 +2421,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a pie-chart Visualization XML with all the details in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./PieChart_FullDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -2422,6 +2459,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a sankey Visualization XML with all the details in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Sankey_FullDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -2479,6 +2517,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a scatter Visualization XML with all the details in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Scatter_FullDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -2532,6 +2571,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a sunburst Visualization XML with all the details in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Sunburst_FullDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -2620,6 +2660,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a treemap Visualization XML with all the details in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Treemap_FullDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -2708,6 +2749,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a word-cloud Visualization XML with all the details in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Wordcloud_FullDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -2769,6 +2811,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a matrix Visualization XML with all the details in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Matrix_FullDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -2910,6 +2953,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a bar-chart Visualization XML with only the data in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./BarChart_PartialDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -2952,6 +2996,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a calendar Visualization XML with only the data in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Calendar_PartialDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -3005,6 +3050,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a forced-directed-graph Visualization XML with only the data in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./FLG_PartialDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -3051,6 +3097,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a funnel Visualization XML with only the data in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Funnel_PartialDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -3093,6 +3140,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a hierarchical-edge-bundling Visualization XML with only the data in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./HEB_PartialDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -3139,6 +3187,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a line-chart Visualization XML with only the data in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./LineChart_PartialDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -3181,6 +3230,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a pie-chart Visualization XML with only the data in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./PieChart_PartialDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -3223,6 +3273,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a sankey Visualization XML with only the data in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Sankey_PartialDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -3267,6 +3318,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a scatter Visualization XML with only the data in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Scatter_PartialDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -3310,6 +3362,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a sunburst Visualization XML with only the data in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -3416,6 +3469,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a treemap Visualization XML with only the data in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Treemap_PartialDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -3522,6 +3576,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a word-cloud Visualization XML with only the data in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Wordcloud_PartialDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -3567,6 +3622,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a matrix Visualization XML with only the data in the XML", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Matrix_PartialDetails.xml");
 
     const files: FileProperties[] = [{ filePath: filePath, type: "text/xml" }];
@@ -3715,6 +3771,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a word-cloud Visualization EXCEL with all the details in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Wordcloud_FullDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -3769,6 +3826,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a forced-directed-graph Visualization EXCEL with all the details in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./FLG_FullDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -3831,6 +3889,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a sankey Visualization EXCEL with all the details in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Sankey_FullDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -3913,6 +3972,7 @@ describe("visualizations CRUD", () => {
   });
 
   it("It creates a hierarchical-edge-bundling Visualization EXCEL with all the details in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./HEB_FullDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -3975,6 +4035,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a calendar Visualization EXCEL with all the details in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Calendar_FullDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -4051,6 +4112,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a line-chart Visualization EXCEL with all the details in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./LineChart_FullDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -4107,6 +4169,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a bar-chart Visualization EXCEL with all the details in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./BarChart_FullDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -4163,6 +4226,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a pie-chart Visualization EXCEL with all the details in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./PieChart_FullDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -4218,6 +4282,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a scatter Visualization EXCEL with all the details in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Scatter_FullDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -4290,6 +4355,7 @@ describe("visualizations CRUD", () => {
   });
 
   it("It creates a treemap Visualization EXCEL with all the details in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Treemap_FullDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -4385,6 +4451,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a sunburst Visualization EXCEL with all the details in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Sunburst_FullDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -4480,6 +4547,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a funnel Visualization EXCEL with all the details in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Funnel_FullDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -4536,6 +4604,7 @@ describe("visualizations CRUD", () => {
   });
 
   it("It creates a word-cloud Visualization EXCEL with only the data in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Wordcloud_PartialDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -4590,6 +4659,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a forced-directed-graph Visualization EXCEL with only the data in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./FLG_PartialDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -4652,6 +4722,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a sankey Visualization EXCEL with only the data in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Sankey_PartialDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -4734,6 +4805,7 @@ describe("visualizations CRUD", () => {
   });
 
   it("It creates a hierarchical-edge-bundling Visualization EXCEL with only the data in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./HEB_PartialDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -4796,6 +4868,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a calendar Visualization EXCEL with only the data in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Calendar_PartialDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -4872,6 +4945,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a line-chart Visualization EXCEL with only the data in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./LineChart_PartialDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -4928,6 +5002,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a bar-chart Visualization EXCEL with only the data in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./BarChart_PartialDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -4984,6 +5059,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a pie-chart Visualization EXCEL with only the data in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./PieChart_PartialDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -5040,6 +5116,7 @@ describe("visualizations CRUD", () => {
   });
 
   it("It creates a scatter Visualization EXCEL with only the data in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Scatter_PartialDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -5114,6 +5191,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a treemap Visualization EXCEL with only the data in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Treemap_PartialDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -5210,6 +5288,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a sunburst Visualization EXCEL with only the data in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -5305,6 +5384,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a funnel Visualization EXCEL with only the data in the EXCEL", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Funnel_PartialDetails.xlsx");
 
     const files: FileProperties[] = [
@@ -5360,6 +5440,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a word-cloud Visualization CSV with all the details in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Wordcloud_FullDetails.csv");
 
     const files: FileProperties[] = [
@@ -5414,6 +5495,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a forced-directed-graph Visualization CSV with all the details in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./FLG_FullDetails.csv");
 
     const files: FileProperties[] = [
@@ -5476,6 +5558,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a sankey Visualization CSV with all the details in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Sankey_FullDetails.csv");
 
     const files: FileProperties[] = [
@@ -5558,6 +5641,7 @@ describe("visualizations CRUD", () => {
   });
 
   it("It creates a hierarchical-edge-bundling Visualization CSV with all the details in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./HEB_FullDetails.csv");
 
     const files: FileProperties[] = [
@@ -5620,6 +5704,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a calendar Visualization CSV with all the details in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Calendar_FullDetails.csv");
 
     const files: FileProperties[] = [
@@ -5675,6 +5760,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a line-chart Visualization CSV with all the details in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./LineChart_FullDetails.csv");
 
     const files: FileProperties[] = [
@@ -5731,6 +5817,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a bar-chart Visualization CSV with all the details in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./BarChart_FullDetails.csv");
 
     const files: FileProperties[] = [
@@ -5787,6 +5874,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a pie-chart Visualization CSV with all the details in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./PieChart_FullDetails.csv");
 
     const files: FileProperties[] = [
@@ -5842,6 +5930,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a scatter Visualization CSV with all the details in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Scatter_FullDetails.csv");
 
     const files: FileProperties[] = [
@@ -5914,6 +6003,7 @@ describe("visualizations CRUD", () => {
   });
 
   it("It creates a treemap Visualization CSV with all the details in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Treemap_FullDetails.csv");
 
     const files: FileProperties[] = [
@@ -6009,6 +6099,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a sunburst Visualization CSV with all the details in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Sunburst_FullDetails.csv");
 
     const files: FileProperties[] = [
@@ -6104,6 +6195,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a funnel Visualization CSV with all the details in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Funnel_FullDetails.csv");
 
     const files: FileProperties[] = [
@@ -6160,6 +6252,7 @@ describe("visualizations CRUD", () => {
   });
 
   it("It creates a word-cloud Visualization CSV with only the data in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Wordcloud_PartialDetails.csv");
 
     const files: FileProperties[] = [
@@ -6214,6 +6307,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a forced-directed-graph Visualization CSV with only the data in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./FLG_PartialDetails.csv");
 
     const files: FileProperties[] = [
@@ -6276,6 +6370,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a sankey Visualization CSV with only the data in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Sankey_PartialDetails.csv");
 
     const files: FileProperties[] = [
@@ -6358,6 +6453,7 @@ describe("visualizations CRUD", () => {
   });
 
   it("It creates a hierarchical-edge-bundling Visualization CSV with only the data in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./HEB_PartialDetails.csv");
 
     const files: FileProperties[] = [
@@ -6420,6 +6516,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a calendar Visualization CSV with only the data in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Calendar_PartialDetails.csv");
 
     const files: FileProperties[] = [
@@ -6476,6 +6573,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a line-chart Visualization CSV with only the data in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./LineChart_PartialDetails.csv");
 
     const files: FileProperties[] = [
@@ -6532,6 +6630,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a bar-chart Visualization CSV with only the data in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./BarChart_PartialDetails.csv");
 
     const files: FileProperties[] = [
@@ -6588,6 +6687,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a pie-chart Visualization CSV with only the data in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./PieChart_PartialDetails.csv");
 
     const files: FileProperties[] = [
@@ -6644,6 +6744,7 @@ describe("visualizations CRUD", () => {
   });
 
   it("It creates a scatter Visualization CSV with only the data in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Scatter_PartialDetails.csv");
 
     const files: FileProperties[] = [
@@ -6718,6 +6819,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a treemap Visualization CSV with only the data in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Treemap_PartialDetails.csv");
 
     const files: FileProperties[] = [
@@ -6814,6 +6916,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a sunburst Visualization CSV with only the data in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.csv");
 
     const files: FileProperties[] = [
@@ -6909,6 +7012,7 @@ describe("visualizations CRUD", () => {
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
   });
   it("It creates a funnel Visualization CSV with only the data in the CSV", async () => {
+    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./Funnel_PartialDetails.csv");
 
     const files: FileProperties[] = [
@@ -6962,5 +7066,119 @@ describe("visualizations CRUD", () => {
 
     expect(!_.isNil(visualization)).toBe(true);
     expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+
+  it("It finds one visualization", async () => {
+    expect.assertions(2);
+    const expectedVisualization = {
+      name: "Funnel_PartialDetails",
+      projectName: "Test_Project1",
+      type: "funnel",
+      data: {
+        values: {
+          first: 1,
+          second: 1,
+          third: 1,
+          forth: 1,
+        },
+      },
+      description: "Funnel_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = await factory
+      .getBZL()
+      .VisualizationBZL.findOne({
+        name: "Funnel_PartialDetails",
+        type: "funnel",
+      });
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It browse visualizations with different filters", async () => {
+    expect.assertions(8);
+    const expectedVisualization1 = {
+      name: "Funnel_PartialDetails",
+      type: VisualizationTypesEnum.FUNNEL,
+      description: "Funnel_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization1: ExtendedVisualizationType = await factory
+      .getBZL()
+      .VisualizationBZL.browse({
+        name: "Funnel_PartialDetails",
+        type: VisualizationTypesEnum.FUNNEL,
+      });
+    expect(!_.isNil(visualization1)).toBe(true);
+    expect(
+      _.isMatch(
+        (visualization1.visualizations as VisualizationType[])[0],
+        expectedVisualization1
+      )
+    ).toBe(true);
+    const expectedVisualization2 = {
+      name: "Funnel_PartialDetails",
+      type: VisualizationTypesEnum.FUNNEL,
+      description: "Funnel_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization2: ExtendedVisualizationType = await factory
+      .getBZL()
+      .VisualizationBZL.browse({
+        text: "Funnel_PartialDetails",
+      });
+    expect(!_.isNil(visualization2)).toBe(true);
+    expect(
+      _.isMatch(
+        (visualization2.visualizations as VisualizationType[])[0],
+        expectedVisualization2
+      )
+    ).toBe(true);
+    const visualization3: ExtendedVisualizationType = await factory
+      .getBZL()
+      .VisualizationBZL.browse({
+        text: "randooooom",
+      });
+    expect(!_.isNil(visualization2)).toBe(true);
+    expect(
+      _.isMatch((visualization3.visualizations as VisualizationType[])[0], [])
+    ).toBe(true);
+    const expectedVisualization4 = {
+      name: "BarChart_FullDetails",
+      type: VisualizationTypesEnum.BAR_CHART,
+      description: "BarChart_FullDetails description",
+      tags: ["full"],
+    };
+
+    const visualization4: ExtendedVisualizationType = await factory
+      .getBZL()
+      .VisualizationBZL.browse({
+        sort: {
+          element: "name",
+          sortOrder: 1,
+        },
+      });
+    expect(!_.isNil(visualization4)).toBe(true);
+    expect(
+      _.isMatch(
+        (visualization4.visualizations as VisualizationType[])[0],
+        expectedVisualization4
+      )
+    ).toBe(true);
+  });
+  it("It delets one visualization", async () => {
+    expect.assertions(2);
+    const visualization: boolean = await factory
+      .getBZL()
+      .VisualizationBZL.delete({
+        name: "Funnel_PartialDetails",
+        type: "funnel",
+      });
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(visualization).toBe(true);
   });
 });

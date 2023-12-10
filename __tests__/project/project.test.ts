@@ -136,6 +136,7 @@ describe("project CRUD", () => {
     expect(project.isActive).toBe(false);
     expect(_.isMatch(project, expectedProject)).toBe(true);
   });
+  
   it("browse projects by all filter", async () => {
     expect.assertions(10);
 
@@ -190,5 +191,13 @@ describe("project CRUD", () => {
     expect(
       _.isMatch((projects5.projects as ProjectType[])[0], expectedProject1)
     ).toBe(true);
+  });
+  it("deletes a project", async () => {
+    expect.assertions(2);
+    const project: boolean = await factory
+      .getBZL()
+      .ProjectBZL.delete({ name: "Test_Project2" });
+    expect(!_.isNil(project)).toBe(true);
+    expect(project).toBe(true);
   });
 });
