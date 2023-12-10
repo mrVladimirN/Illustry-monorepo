@@ -1,4 +1,4 @@
-import Illustry from "./app";
+import Illustry from './app';
 
 let illustry: Illustry;
 
@@ -7,15 +7,15 @@ const startIllustry = async () => {
   await illustry.start();
 
   // Add event listeners for cleanup
-  process.on("beforeExit", cleanup);
-  process.on("exit", cleanup);
-  process.on("SIGINT", cleanup); // Handles Ctrl+C
+  process.on('beforeExit', cleanup);
+  process.on('exit', cleanup);
+  process.on('SIGINT', cleanup); // Handles Ctrl+C
 
   // If you need to handle other signals, you can add more event listeners
 
   // Handle unhandled promise rejections
-  process.on("unhandledRejection", (reason, promise) => {
-    console.error("Unhandled Rejection at:", promise, "reason:", reason);
+  process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection at:', promise, 'reason:', reason);
     cleanup();
   });
 };

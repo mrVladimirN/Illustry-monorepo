@@ -1,8 +1,9 @@
-import { Connection, Model, Schema } from "mongoose";
-import { ProjectType } from "types/project";
+import { Connection, Model, Schema } from 'mongoose';
+import { ProjectType } from 'types/project';
 
 export class Project {
   private readonly connection: Connection;
+
   private projectModel?: Model<ProjectType>;
 
   constructor(connection: Connection) {
@@ -13,16 +14,18 @@ export class Project {
     if (!this.projectModel) {
       const ProjectSchema = new Schema<ProjectType>({
         name: { type: String, required: true, unique: true },
-        description: { type: String, required: false, maxLength: 50, default:"" },
+        description: {
+          type: String, required: false, maxLength: 50, default: ''
+        },
         createdAt: { type: Date, required: false },
         updatedAt: { type: Date, required: false },
-        isActive: {type: Boolean, required: true, default: false}
+        isActive: { type: Boolean, required: true, default: false }
       });
-      
-      ProjectSchema.index({ name: "text", description: "text" });
+
+      ProjectSchema.index({ name: 'text', description: 'text' });
 
       this.projectModel = this.connection.model<ProjectType>(
-        "Project",
+        'Project',
         ProjectSchema
       );
     }

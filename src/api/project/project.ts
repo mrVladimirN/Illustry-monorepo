@@ -1,20 +1,22 @@
-import { Request, Response } from "express";
-import * as Bluebird from "bluebird";
+import { Request, Response } from 'express';
+import * as Bluebird from 'bluebird';
 
-import { returnResponse } from "../../utils/helper";
-import { Factory } from "../../factory";
-import { generateErrorMessage } from "zod-error";
-import { prettifyZodError } from "../../validators/prettifyError";
-import _ from "lodash";
+import { generateErrorMessage } from 'zod-error';
+import _ from 'lodash';
 import {
   ProjectCreate,
   ProjectFilter,
   ProjectType,
-  ProjectUpdate,
-} from "types/project";
+  ProjectUpdate
+} from 'types/project';
 
-import { VisualizationCreate } from "types/visualizations";
-import { projectCreateSchema, projectFilterSchema, projectTypeSchema, projectUpdateSchema, visualizationTypeSchema } from "../../validators/allValidators";
+import { VisualizationCreate } from 'types/visualizations';
+import { prettifyZodError } from '../../validators/prettifyError';
+import { Factory } from '../../factory';
+import { returnResponse } from '../../utils/helper';
+import {
+  projectCreateSchema, projectFilterSchema, projectTypeSchema, projectUpdateSchema, visualizationTypeSchema
+} from '../../validators/allValidators';
 
 export const create = (
   request: Request,
@@ -24,7 +26,7 @@ export const create = (
   const project: ProjectCreate = {
     name: request && request.body && request.body.projectName,
     description: request && request.body && request.body.projectDescription,
-    isActive: request && request.body && request.body.isActive,
+    isActive: request && request.body && request.body.isActive
   };
   const visualization: VisualizationCreate = {
     name: request && request.body && request.body.name,
@@ -32,7 +34,7 @@ export const create = (
     type: request && request.body && request.body.type,
     description: request && request.body && request.body.description,
     tags: request && request.body && request.body.tags,
-    data: request && request.body && request.body.data,
+    data: request && request.body && request.body.data
   };
 
   return Bluebird.Promise.resolve(projectCreateSchema.safeParse(project))
@@ -45,10 +47,10 @@ export const create = (
         throw new Error(errorMessage);
       } else {
         if (
-          !_.isNil(visualization) &&
-          !_.isNil(visualization.name) &&
-          !_.isNil(visualization.type) &&
-          !_.isNil(visualization.projectName)
+          !_.isNil(visualization)
+          && !_.isNil(visualization.name)
+          && !_.isNil(visualization.type)
+          && !_.isNil(visualization.projectName)
         ) {
           return Bluebird.Promise.resolve(
             visualizationTypeSchema.safeParse(visualization)
@@ -63,24 +65,17 @@ export const create = (
               return Factory.getInstance()
                 .getBZL()
                 .ProjectBZL.create(project)
-                .then(() => {
-                  return Factory.getInstance()
-                    .getBZL()
-                    .VisualizationBZL.createOrUpdate(visualization);
-                });
+                .then(() => Factory.getInstance()
+                  .getBZL()
+                  .VisualizationBZL.createOrUpdate(visualization));
             }
           });
-        } else {
-          return Factory.getInstance().getBZL().ProjectBZL.create(project);
         }
+        return Factory.getInstance().getBZL().ProjectBZL.create(project);
       }
     })
-    .asCallback((errGPC: Error, data: ProjectType) => {
-      return returnResponse(response, errGPC, data, next);
-    })
-    .catch((err: Error) => {
-      return returnResponse(response, err, null, next);
-    });
+    .asCallback((errGPC: Error, data: ProjectType) => returnResponse(response, errGPC, data, next))
+    .catch((err: Error) => returnResponse(response, err, null, next));
 };
 export const update = (
   request: Request,
@@ -89,10 +84,10 @@ export const update = (
 ) => {
   const project: ProjectUpdate = {
     description: request && request.body && request.body.description,
-    isActive: request && request.body && request.body.isActive,
+    isActive: request && request.body && request.body.isActive
   };
   const projectFilter: ProjectFilter = {
-    name: request && request.body && request.body.name,
+    name: request && request.body && request.body.name
   };
   return Bluebird.Promise.resolve(projectUpdateSchema.safeParse(project))
     .then((result) => {
@@ -120,12 +115,8 @@ export const update = (
         });
       }
     })
-    .asCallback((errGPC: Error, data: ProjectType) => {
-      return returnResponse(response, errGPC, data, next);
-    })
-    .catch((err: Error) => {
-      return returnResponse(response, err, null, next);
-    });
+    .asCallback((errGPC: Error, data: ProjectType) => returnResponse(response, errGPC, data, next))
+    .catch((err: Error) => returnResponse(response, err, null, next));
 };
 export const findOne = (
   request: Request,
@@ -133,7 +124,7 @@ export const findOne = (
   next: Function
 ) => {
   const projectFilter: ProjectFilter = {
-    name: request && request.body && request.body.name,
+    name: request && request.body && request.body.name
   };
   return Bluebird.Promise.resolve(projectFilterSchema.safeParse(projectFilter))
     .then((result) => {
@@ -149,12 +140,8 @@ export const findOne = (
           .ProjectBZL.findByName(projectFilter);
       }
     })
-    .asCallback((errGPC: Error, data: ProjectType) => {
-      return returnResponse(response, errGPC, data, next);
-    })
-    .catch((err: Error) => {
-      return returnResponse(response, err, null, next);
-    });
+    .asCallback((errGPC: Error, data: ProjectType) => returnResponse(response, errGPC, data, next))
+    .catch((err: Error) => returnResponse(response, err, null, next));
 };
 export const _delete = (
   request: Request,
@@ -162,7 +149,7 @@ export const _delete = (
   next: Function
 ) => {
   const projectFilter: ProjectFilter = {
-    name: request && request.body && request.body.name,
+    name: request && request.body && request.body.name
   };
   return Bluebird.Promise.resolve(projectFilterSchema.safeParse(projectFilter))
     .then((result) => {
@@ -176,12 +163,8 @@ export const _delete = (
         return Factory.getInstance().getBZL().ProjectBZL.delete(projectFilter);
       }
     })
-    .asCallback((errGPC: Error, data: ProjectType) => {
-      return returnResponse(response, errGPC, data, next);
-    })
-    .catch((err: Error) => {
-      return returnResponse(response, err, null, next);
-    });
+    .asCallback((errGPC: Error, data: ProjectType) => returnResponse(response, errGPC, data, next))
+    .catch((err: Error) => returnResponse(response, err, null, next));
 };
 export const browse = (
   request: Request,
@@ -193,7 +176,7 @@ export const browse = (
     text: request && request.body && request.body.text,
     page: request && request.body && request.body.page,
     sort: request && request.body && request.body.sort,
-    per_page: request && request.body && request.body.per_page,
+    per_page: request && request.body && request.body.per_page
   };
   return Bluebird.Promise.resolve(projectFilterSchema.safeParse(projectFilter))
     .then((result) => {
@@ -207,10 +190,6 @@ export const browse = (
         return Factory.getInstance().getBZL().ProjectBZL.browse(projectFilter);
       }
     })
-    .asCallback((errGPC: Error, data: ProjectType) => {
-      return returnResponse(response, errGPC, data, next);
-    })
-    .catch((err: Error) => {
-      return returnResponse(response, err, null, next);
-    });
+    .asCallback((errGPC: Error, data: ProjectType) => returnResponse(response, errGPC, data, next))
+    .catch((err: Error) => returnResponse(response, err, null, next));
 };

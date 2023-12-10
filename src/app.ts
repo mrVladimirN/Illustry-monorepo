@@ -1,23 +1,27 @@
-import express, { Express } from "express";
-import ProjectRoutes from "./routes/project/project";
-import cors from "cors";
-import VisualizationRoutes from "./routes/visualization/visualization";
-import * as http from "http";
-import mongoose from "mongoose";
-require("dotenv").config();
+import express, { Express } from 'express';
+import cors from 'cors';
+import * as http from 'http';
+import mongoose from 'mongoose';
+import VisualizationRoutes from './routes/visualization/visualization';
+import ProjectRoutes from './routes/project/project';
+
+require('dotenv').config();
+
 export default class Illustry {
   private expressApp: Express = express();
+
   private httpServer: http.Server | undefined;
+
   constructor() {
     this.expressApp.use(
       cors({
-        origin: "*",
-        methods: "GET, POST, OPTIONS, PUT, PATH, DELETE",
+        origin: '*',
+        methods: 'GET, POST, OPTIONS, PUT, PATH, DELETE',
         allowedHeaders: [
-          "Access-Control-Allow-Headers",
-          "Content-Type, Authorization",
+          'Access-Control-Allow-Headers',
+          'Content-Type, Authorization'
         ],
-        credentials: true,
+        credentials: true
       })
     );
     this.expressApp.use(express.json());
@@ -33,11 +37,12 @@ export default class Illustry {
           console.log(`server is listening on ${process.env.ILLUSTRY_PORT}`);
         }
       );
-      this.httpServer.on("error", (error) => {
+      this.httpServer.on('error', (error) => {
         console.error(error);
       });
     });
   }
+
   async stop(): Promise<void> {
     return Promise.resolve().then(async () => {
       this.httpServer?.close();

@@ -1,14 +1,17 @@
-import { Connection } from "mongoose";
-import { ModelInstance } from "../models/modelInstance";
-import { Visualization } from "./visualization/visualization";
-import { Project } from "./project/project";
+import { Connection } from 'mongoose';
+import { ModelInstance } from '../models/modelInstance';
+import { Visualization } from './visualization/visualization';
+import { Project } from './project/project';
 
 export class DbaccInstance {
   private project!: Project;
+
   private visualization!: Visualization;
-  private modelInstance:ModelInstance
+
+  private modelInstance:ModelInstance;
+
   constructor(dbConnection: Connection) {
-    this.modelInstance = new ModelInstance(dbConnection)
+    this.modelInstance = new ModelInstance(dbConnection);
   }
 
   get Project(): Project {

@@ -1,19 +1,18 @@
-import _ from "lodash";
-import { visualizationDetailsExtractor } from "../../../../utils/helper";
-import { AxisChartData } from "types/visualizations";
+import _ from 'lodash';
+import { AxisChartData } from 'types/visualizations';
+import { visualizationDetailsExtractor } from '../../../../utils/helper';
 
 const computeValues = (
   values: unknown[],
   mapping: string
 ): { [element: string]: number[] } | undefined => {
   const indices = mapping
-    .split(",")
+    .split(',')
     .map((index) => parseInt(index.trim(), 10))
     .filter((index) => !isNaN(index) && index >= 0 && index < values.length);
 
   const keyIndex = indices.find(
-    (index) =>
-      typeof values[index] === "string" && isNaN(+(values[index] as string))
+    (index) => typeof values[index] === 'string' && isNaN(+(values[index] as string))
   );
 
   if (keyIndex !== undefined) {
@@ -35,16 +34,16 @@ export const axisChartTransformer = (
   const baseValues = {
     data: computeValues(values, mapping.data as string),
     headers:
-      typeof values[_.toNumber(mapping.headers)] === "string"
+      typeof values[_.toNumber(mapping.headers)] === 'string'
         ? values[_.toNumber(mapping.headers)]
-        : _.toString(values[_.toNumber(mapping.headers)]),
+        : _.toString(values[_.toNumber(mapping.headers)])
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails
     ? {
-        ...{ values: baseValues },
-        ...visualizationDetails,
-      }
+      ...{ values: baseValues },
+      ...visualizationDetails
+    }
     : { values: baseValues };
 };
 
@@ -68,7 +67,7 @@ export const axisChartExtractorCsvOrExcel = (
       if (!_.isNil(data)) {
         result.values = {
           ...(result.values as Record<string, unknown>),
-          ...(data as Record<string, unknown>),
+          ...(data as Record<string, unknown>)
         };
       }
       return result;
@@ -83,13 +82,11 @@ const axisChartValuesExtractorXml = (values: Record<string, unknown>[]) => {
 
     // Transform each array of strings to an array of numbers
     Object.keys(item).forEach((key) => {
-      transformedValues[key] = (item[key] as string[]).map((value: string) =>
-        Number(value)
-      );
+      transformedValues[key] = (item[key] as string[]).map((value: string) => Number(value));
     });
 
     return {
-      ...transformedValues,
+      ...transformedValues
     };
   });
 
@@ -101,8 +98,9 @@ export const axisChartExtractorXml = (
   xmlData: Record<string, unknown>,
   allFileDetails: boolean
 ) => {
-  const { name, description, tags, type, data, headers, values } =
-    xmlData.root as Record<string, unknown>;
+  const {
+    name, description, tags, type, data, headers, values
+  } = xmlData.root as Record<string, unknown>;
   const finalData = {
     data: {
       headers: allFileDetails
@@ -110,18 +108,18 @@ export const axisChartExtractorXml = (
         : (headers as Record<string, string>[]),
       values: allFileDetails
         ? axisChartValuesExtractorXml((data as any[])[0].values)
-        : axisChartValuesExtractorXml(values as Record<string, unknown>[]),
-    },
+        : axisChartValuesExtractorXml(values as Record<string, unknown>[])
+    }
   };
   return allFileDetails
     ? {
-        ...finalData,
-        ...{
-          name: (name as string[])[0] as string,
-          description: (description as string[])[0] as string,
-          tags: tags as string[],
-          type: type as string,
-        },
+      ...finalData,
+      ...{
+        name: (name as string[])[0] as string,
+        description: (description as string[])[0] as string,
+        tags: tags as string[],
+        type: type as string
       }
+    }
     : finalData;
 };

@@ -1,6 +1,6 @@
-import _ from "lodash";
-import { visualizationDetailsExtractor } from "../../../../utils/helper";
-import { WordCloudData, WordType } from "types/visualizations";
+import _ from 'lodash';
+import { WordCloudData, WordType } from 'types/visualizations';
+import { visualizationDetailsExtractor } from '../../../../utils/helper';
 
 export const wordCloudTransformer = (
   mapping: Record<string, unknown>,
@@ -10,17 +10,17 @@ export const wordCloudTransformer = (
   const baseValues = {
     name: values[_.toNumber(mapping.names)],
     value:
-      typeof values[_.toNumber(mapping.values)] === "string"
+      typeof values[_.toNumber(mapping.values)] === 'string'
         ? +(values[_.toNumber(mapping.values)] as string)
         : values[_.toNumber(mapping.values)],
-    properties: values[_.toNumber(mapping.properties)],
+    properties: values[_.toNumber(mapping.properties)]
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails
     ? {
-        ...{ word: baseValues },
-        ...visualizationDetails,
-      }
+      ...{ word: baseValues },
+      ...visualizationDetails
+    }
     : { word: baseValues };
 };
 
@@ -39,10 +39,10 @@ export const wordCloudExtractorCsvOrExcel = (
       if (_.isNil(word)) {
         word = { name, value, properties } as WordType;
         if (
-          !_.isEmpty(word.name) &&
-          !_.isNil(word.name) &&
-          !_.isNil(word.value) &&
-          !_.isNil(word.value)
+          !_.isEmpty(word.name)
+          && !_.isNil(word.name)
+          && !_.isNil(word.value)
+          && !_.isNil(word.value)
         ) {
           (result.words as WordType[]).push(word);
         }
@@ -56,30 +56,28 @@ export const wordCloudExtractorCsvOrExcel = (
 
 const wordCloudWordExtractorXml = (
   words: Record<string, unknown>[]
-): WordType[] => {
-  return words.map((el: Record<string, unknown>) => {
-    return {
-      name:
-        typeof (el.name as string[])[0] === "string"
+): WordType[] => words.map((el: Record<string, unknown>) => ({
+  name:
+        typeof (el.name as string[])[0] === 'string'
           ? (el.name as string[])[0]
           : _.toString((el.name as string[])[0]),
-      value:
-        typeof (el.value as string[])[0] === "string"
+  value:
+        typeof (el.value as string[])[0] === 'string'
           ? +(el.value as string[])[0]
           : (el.value as string[])[0],
-      properties:
+  properties:
         el.properties && (el.properties as Record<string, unknown>[]).length
           ? (el.properties as string[])[0]
-          : undefined,
-    };
-  }) as unknown as WordType[];
-};
+          : undefined
+})) as unknown as WordType[];
 
 export const wordCloudExtractorXml = (
   xmlData: Record<string, unknown>,
   allFileDetails: boolean
 ) => {
-  const { name, description, tags, type, data, words } = xmlData.root as Record<
+  const {
+    name, description, tags, type, data, words
+  } = xmlData.root as Record<
     string,
     unknown
   >;
@@ -87,18 +85,18 @@ export const wordCloudExtractorXml = (
     data: {
       words: allFileDetails
         ? wordCloudWordExtractorXml((data as any[])[0].words)
-        : wordCloudWordExtractorXml(words as Record<string, unknown>[]),
-    },
+        : wordCloudWordExtractorXml(words as Record<string, unknown>[])
+    }
   };
   return allFileDetails
     ? {
-        ...finalData,
-        ...{
-          name: (name as string[])[0] as string,
-          description: (description as string[])[0] as string,
-          tags: tags as string[],
-          type: type as string,
-        },
+      ...finalData,
+      ...{
+        name: (name as string[])[0] as string,
+        description: (description as string[])[0] as string,
+        tags: tags as string[],
+        type: type as string
       }
+    }
     : finalData;
 };

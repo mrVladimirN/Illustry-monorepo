@@ -1,31 +1,32 @@
-import Bluebird, { Promise } from "bluebird";
-import { DbaccInstance } from "../../dbacc/lib";
-import _ from "lodash";
-import { Factory } from "../../factory";
-import { NoDataFoundError } from "../../errors/noDataFoundError";
+import Bluebird, { Promise } from 'bluebird';
+import _ from 'lodash';
 import {
   ExtendedVisualizationType,
   VisualizationCreate,
   VisualizationFilter,
   VisualizationType,
   VisualizationTypesEnum,
-  VisualizationUpdate,
-} from "types/visualizations";
-import { FileDetails, FileProperties } from "types/files";
-import { ProjectFilter } from "types/project";
-import { ExtendedMongoQuery } from "types/utils";
+  VisualizationUpdate
+} from 'types/visualizations';
+import { FileDetails, FileProperties } from 'types/files';
+import { ProjectFilter } from 'types/project';
+import { ExtendedMongoQuery } from 'types/utils';
+import { generateErrorMessage } from 'zod-error';
 import {
   excelFilesToVisualizations,
   jsonFilesToVisualizations,
   csvFilesToVisualizations,
-  xmlFilesToVisualizations,
-} from "../../utils/reader";
-import { visualizationTypeSchema } from "../../validators/allValidators";
-import { generateErrorMessage } from "zod-error";
-import { prettifyZodError } from "../../validators/prettifyError";
+  xmlFilesToVisualizations
+} from '../../utils/reader';
+import { visualizationTypeSchema } from '../../validators/allValidators';
+import { NoDataFoundError } from '../../errors/noDataFoundError';
+import { Factory } from '../../factory';
+import { DbaccInstance } from '../../dbacc/lib';
+import { prettifyZodError } from '../../validators/prettifyError';
 
 export class VisualizationBZL {
   private dbaccInstance: DbaccInstance;
+
   constructor(dbaccInstance: DbaccInstance) {
     this.dbaccInstance = dbaccInstance;
   }
@@ -35,36 +36,30 @@ export class VisualizationBZL {
   ): Promise<VisualizationType> {
     return Promise.resolve()
       .then(() => {
-        if (typeof visualization.type === "string") {
-          const visualizationFilter =
-            this.dbaccInstance.Visualization.createFilter({
-              name: visualization.name,
-              type: visualization.type,
-              projectName: visualization.projectName,
-            });
+        if (typeof visualization.type === 'string') {
+          const visualizationFilter = this.dbaccInstance.Visualization.createFilter({
+            name: visualization.name,
+            type: visualization.type,
+            projectName: visualization.projectName
+          });
           return this.dbaccInstance.Visualization.update(
             visualizationFilter,
             visualization
           );
-        } else {
-          return Promise.each(visualization.type, (type) => {
-            const visualizationFilter =
-              this.dbaccInstance.Visualization.createFilter({
-                name: visualization.name,
-                type: type,
-                projectName: visualization.projectName,
-              });
-            const visualizationUpdate: VisualizationUpdate =
-              _.cloneDeep(visualization);
-            _.set(visualizationUpdate, "type", type);
-            return this.dbaccInstance.Visualization.update(
-              visualizationFilter,
-              visualizationUpdate
-            );
-          }).then(() => {
-            return visualization;
-          })
         }
+        return Promise.each(visualization.type, (type) => {
+          const visualizationFilter = this.dbaccInstance.Visualization.createFilter({
+            name: visualization.name,
+            type,
+            projectName: visualization.projectName
+          });
+          const visualizationUpdate: VisualizationUpdate = _.cloneDeep(visualization);
+          _.set(visualizationUpdate, 'type', type);
+          return this.dbaccInstance.Visualization.update(
+            visualizationFilter,
+            visualizationUpdate
+          );
+        }).then(() => visualization);
       })
       .catch((err) => {
         throw err;
@@ -83,10 +78,10 @@ export class VisualizationBZL {
       .then((res) => {
         if (res && res.projects && res.projects.length > 0) {
           if (!fileDetails) {
-            throw new Error("No file details was provided");
+            throw new Error('No file details was provided');
           }
           switch (fileDetails.fileType) {
-            case "EXCEL":
+            case 'EXCEL':
               return this.excelFileProcessor(
                 files,
                 allFileDetails,
@@ -94,14 +89,14 @@ export class VisualizationBZL {
                 fileDetails,
                 visualizationDetails
               );
-            case "JSON":
+            case 'JSON':
               return this.jsonFileProcessor(
                 files,
                 allFileDetails,
                 res.projects[0].name,
                 visualizationDetails
               );
-            case "CSV":
+            case 'CSV':
               return this.csvFileProcessor(
                 files,
                 allFileDetails,
@@ -109,7 +104,7 @@ export class VisualizationBZL {
                 fileDetails,
                 visualizationDetails
               );
-            case "XML":
+            case 'XML':
               return this.xmlFileProcessor(
                 files,
                 allFileDetails,
@@ -118,7 +113,7 @@ export class VisualizationBZL {
               );
           }
         } else {
-          throw new Error("No Active Project");
+          throw new Error('No Active Project');
         }
       })
       .catch((err) => {
@@ -130,7 +125,7 @@ export class VisualizationBZL {
     return Factory.getInstance()
       .getBZL()
       .ProjectBZL.browse({
-        isActive: true,
+        isActive: true
       } as ProjectFilter)
       .then((res) => {
         if (res && res.projects) {
@@ -141,9 +136,8 @@ export class VisualizationBZL {
             newFilter = this.dbaccInstance.Visualization.createFilter(filter);
           }
           return this.dbaccInstance.Visualization.findOne(newFilter);
-        } else {
-          throw new Error("No active project");
         }
+        throw new Error('No active project');
       });
   }
 
@@ -151,7 +145,7 @@ export class VisualizationBZL {
     return Factory.getInstance()
       .getBZL()
       .ProjectBZL.browse({
-        isActive: true,
+        isActive: true
       } as ProjectFilter)
       .then((res) => {
         if (res && res.projects) {
@@ -162,9 +156,8 @@ export class VisualizationBZL {
             newFilter = this.dbaccInstance.Visualization.createFilter(filter);
           }
           return this.dbaccInstance.Visualization.browse(newFilter);
-        } else {
-          throw new Error("No active project");
         }
+        throw new Error('No active project');
       });
   }
 
@@ -175,9 +168,7 @@ export class VisualizationBZL {
     }
     return Promise.resolve(
       this.dbaccInstance.Visualization.deleteMany(newFilter)
-    ).then(() => {
-      return true;
-    });
+    ).then(() => true);
   }
 
   private visualizationDetailsProcessor(
@@ -187,7 +178,7 @@ export class VisualizationBZL {
     visualizationDetails: VisualizationUpdate
   ): Bluebird<VisualizationType[]> {
     return Promise.map(illustrations, (ill) => {
-      _.set(ill as unknown as VisualizationCreate, "projectName", projectName);
+      _.set(ill as unknown as VisualizationCreate, 'projectName', projectName);
 
       if (!allFileDetails) {
         _.forEach(Object.keys(visualizationDetails), (key) => {
@@ -210,6 +201,7 @@ export class VisualizationBZL {
       }
     });
   }
+
   private jsonFileProcessor(
     files: FileProperties[],
     allFileDetails: boolean,
@@ -222,15 +214,14 @@ export class VisualizationBZL {
         visualizationDetails.type as VisualizationTypesEnum,
         allFileDetails
       )
-    ).then((illlustrations) => {
-      return this.visualizationDetailsProcessor(
-        illlustrations,
-        allFileDetails,
-        projectName,
-        visualizationDetails
-      );
-    });
+    ).then((illlustrations) => this.visualizationDetailsProcessor(
+      illlustrations,
+      allFileDetails,
+      projectName,
+      visualizationDetails
+    ));
   }
+
   private xmlFileProcessor(
     files: FileProperties[],
     allFileDetails: boolean,
@@ -243,15 +234,14 @@ export class VisualizationBZL {
         visualizationDetails.type as VisualizationTypesEnum,
         allFileDetails
       )
-    ).then((illlustrations) => {
-      return this.visualizationDetailsProcessor(
-        illlustrations,
-        allFileDetails,
-        projectName,
-        visualizationDetails
-      );
-    });
+    ).then((illlustrations) => this.visualizationDetailsProcessor(
+      illlustrations,
+      allFileDetails,
+      projectName,
+      visualizationDetails
+    ));
   }
+
   private excelFileProcessor(
     files: FileProperties[],
     allFileDetails: boolean,
@@ -266,15 +256,14 @@ export class VisualizationBZL {
         visualizationDetails.type as VisualizationTypesEnum,
         allFileDetails
       )
-    ).then((illlustrations) => {
-      return this.visualizationDetailsProcessor(
-        illlustrations,
-        allFileDetails,
-        projectName,
-        visualizationDetails
-      );
-    });
+    ).then((illlustrations) => this.visualizationDetailsProcessor(
+      illlustrations,
+      allFileDetails,
+      projectName,
+      visualizationDetails
+    ));
   }
+
   private csvFileProcessor(
     files: FileProperties[],
     allFileDetails: boolean,
@@ -289,13 +278,11 @@ export class VisualizationBZL {
         visualizationDetails.type as VisualizationTypesEnum,
         allFileDetails
       )
-    ).then((illlustrations) => {
-      return this.visualizationDetailsProcessor(
-        illlustrations,
-        allFileDetails,
-        projectName,
-        visualizationDetails
-      );
-    });
+    ).then((illlustrations) => this.visualizationDetailsProcessor(
+      illlustrations,
+      allFileDetails,
+      projectName,
+      visualizationDetails
+    ));
   }
 }

@@ -1,9 +1,10 @@
-import { Connection, Model, Schema } from "mongoose";
-import _ from "lodash";
-import { VisualizationType, VisualizationTypesEnum } from "types/visualizations";
+import { Connection, Model, Schema } from 'mongoose';
+import _ from 'lodash';
+import { VisualizationType, VisualizationTypesEnum } from 'types/visualizations';
 
 export class Visualization {
   private readonly connection: Connection;
+
   private VisualizationModel?: Model<VisualizationType>;
 
   constructor(connection: Connection) {
@@ -19,7 +20,7 @@ export class Visualization {
           type: String,
           required: false,
           maxLength: 250,
-          default: "",
+          default: ''
         },
         type: {
           type: String,
@@ -29,13 +30,13 @@ export class Visualization {
             VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
             VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
             VisualizationTypesEnum.SANKEY,
-            VisualizationTypesEnum.WORD_CLOUD,
-          ]),
+            VisualizationTypesEnum.WORD_CLOUD
+          ])
         },
         tags: [{ type: String, required: false }],
         data: { type: Schema.Types.Mixed, required: true },
         createdAt: { type: Date, required: false },
-        updatedAt: { type: Date, required: false },
+        updatedAt: { type: Date, required: false }
       });
 
       // Create indexes
@@ -46,7 +47,7 @@ export class Visualization {
       VisualizationSchema.index({ projectName: 1, name: 1 });
       // VisualizationSchema.index({ name: "text", description: "text" });
       this.VisualizationModel = this.connection.model<VisualizationType>(
-        "Visualization",
+        'Visualization',
         VisualizationSchema
       );
     }

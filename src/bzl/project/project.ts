@@ -1,12 +1,16 @@
-import _ from "lodash";
-import { DbaccInstance } from "../../dbacc/lib";
-import { NoDataFoundError } from "../../errors/noDataFoundError";
-import { logger } from "../../config/logger";
-import { DuplicatedElementError } from "../../errors/duplicatedElementError";
-import { ExtendedProjectType, ProjectCreate, ProjectFilter, ProjectType, ProjectUpdate } from "types/project";
-import { ExtendedMongoQuery } from "types/utils";
+import _ from 'lodash';
+import {
+  ExtendedProjectType, ProjectCreate, ProjectFilter, ProjectType, ProjectUpdate
+} from 'types/project';
+import { ExtendedMongoQuery } from 'types/utils';
+import { DbaccInstance } from '../../dbacc/lib';
+import { NoDataFoundError } from '../../errors/noDataFoundError';
+import { logger } from '../../config/logger';
+import { DuplicatedElementError } from '../../errors/duplicatedElementError';
+
 export class ProjectBZL {
   private dbaccInstance: DbaccInstance;
+
   constructor(dbaccInstance: DbaccInstance) {
     this.dbaccInstance = dbaccInstance;
   }
@@ -23,7 +27,7 @@ export class ProjectBZL {
     });
   }
 
-  findByName(filter: ProjectFilter, ): Promise<ProjectType> {
+  findByName(filter: ProjectFilter): Promise<ProjectType> {
     let newFilter: ExtendedMongoQuery = {};
     if (!_.isNil(filter)) {
       newFilter = this.dbaccInstance.Project.createFilter(filter);
@@ -58,7 +62,7 @@ export class ProjectBZL {
       if (_.isNil(project.createdAt)) {
         project.createdAt = new Date();
       }
-      _.set(project, "updatedAt", new Date());
+      _.set(project, 'updatedAt', new Date());
       return this.dbaccInstance.Project.update(newFilter, project);
     });
   }
@@ -69,17 +73,13 @@ export class ProjectBZL {
     if (!_.isNil(filter)) {
       newProjectFilter = this.dbaccInstance.Project.createFilter(filter);
       newVisualizationFilter = this.dbaccInstance.Visualization.createFilter({
-        projectName: filter.name,
+        projectName: filter.name
       });
     }
     return Promise.resolve(this.dbaccInstance.Project.delete(newProjectFilter))
-      .then(() => {
-        return Promise.resolve(
-          this.dbaccInstance.Visualization.deleteMany(newVisualizationFilter)
-        );
-      })
-      .then(() => {
-        return true;
-      });
+      .then(() => Promise.resolve(
+        this.dbaccInstance.Visualization.deleteMany(newVisualizationFilter)
+      ))
+      .then(() => true);
   }
 }

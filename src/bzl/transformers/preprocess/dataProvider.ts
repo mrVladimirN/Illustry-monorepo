@@ -1,38 +1,38 @@
 import {
   VisualizationTypesEnum,
-  VisualizationUpdate,
-} from "types/visualizations";
-import _ from "lodash";
-import { visualizationPropertiesExtractor } from "../../../utils/helper";
+  VisualizationUpdate
+} from 'types/visualizations';
+import _ from 'lodash';
+import { visualizationPropertiesExtractor } from '../../../utils/helper';
 import {
   nodesLinksExtractorCsvOrExcel,
-  nodeLinksExtractorXml,
-} from "./transformers/nodeLinkTransformers";
+  nodeLinksExtractorXml
+} from './transformers/nodeLinkTransformers';
 import {
   wordCloudExtractorCsvOrExcel,
-  wordCloudExtractorXml,
-} from "./transformers/wordCloudTransformer";
+  wordCloudExtractorXml
+} from './transformers/wordCloudTransformer';
 import {
   axisChartExtractorCsvOrExcel,
-  axisChartExtractorXml,
-} from "./transformers/axisChartTransformer";
+  axisChartExtractorXml
+} from './transformers/axisChartTransformer';
 import {
   calendarExtractorCsvOrExcel,
-  calendarExtractorXml,
-} from "./transformers/calendarTransformers";
+  calendarExtractorXml
+} from './transformers/calendarTransformers';
 import {
   hierarchyExtractorCsvOrExcel,
-  hierarchyExtractorXml,
-} from "./transformers/hierarchyTransformers";
-import { matrixExtractorXml } from "./transformers/matrixTransformer";
+  hierarchyExtractorXml
+} from './transformers/hierarchyTransformers';
+import { matrixExtractorXml } from './transformers/matrixTransformer';
 import {
   pieChartFunnelExtractorCsvOrExcel,
-  pieChartFunnelExtractorXml,
-} from "./transformers/pieChartFunnelTransformer";
+  pieChartFunnelExtractorXml
+} from './transformers/pieChartFunnelTransformer';
 import {
   scatterExtractorCsvOrExcel,
-  scatterExtractorXml,
-} from "./transformers/scatterTransformer";
+  scatterExtractorXml
+} from './transformers/scatterTransformer';
 
 export const exelOrCsvdataProvider = (
   type: VisualizationTypesEnum,
@@ -43,142 +43,135 @@ export const exelOrCsvdataProvider = (
   switch (type) {
     case VisualizationTypesEnum.WORD_CLOUD:
       if (allFileDetails) {
-        const visualizationProperties =
-          visualizationPropertiesExtractor(computedRows);
+        const visualizationProperties = visualizationPropertiesExtractor(computedRows);
         _.set(
           data,
-          "data",
+          'data',
           wordCloudExtractorCsvOrExcel(visualizationProperties.data)
         );
-        _.set(data, "name", visualizationProperties.name);
-        _.set(data, "description", visualizationProperties.description);
-        _.set(data, "tags", visualizationProperties.tags);
-        _.set(data, "type", type);
-        return data;
-      } else {
-        _.set(data, "data", wordCloudExtractorCsvOrExcel(computedRows));
-        _.set(data, "type", type);
+        _.set(data, 'name', visualizationProperties.name);
+        _.set(data, 'description', visualizationProperties.description);
+        _.set(data, 'tags', visualizationProperties.tags);
+        _.set(data, 'type', type);
         return data;
       }
+      _.set(data, 'data', wordCloudExtractorCsvOrExcel(computedRows));
+      _.set(data, 'type', type);
+      return data;
+
     case VisualizationTypesEnum.FORCE_DIRECTED_GRAPH:
     case VisualizationTypesEnum.SANKEY:
     case VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
       if (allFileDetails) {
-        const visualizationProperties =
-          visualizationPropertiesExtractor(computedRows);
+        const visualizationProperties = visualizationPropertiesExtractor(computedRows);
         _.set(
           data,
-          "data",
+          'data',
           nodesLinksExtractorCsvOrExcel(visualizationProperties.data)
         );
-        _.set(data, "name", visualizationProperties.name);
-        _.set(data, "description", visualizationProperties.description);
-        _.set(data, "tags", visualizationProperties.tags);
-        _.set(data, "type", type);
-        return data;
-      } else {
-        _.set(data, "data", nodesLinksExtractorCsvOrExcel(computedRows));
-        _.set(data, "type", type);
+        _.set(data, 'name', visualizationProperties.name);
+        _.set(data, 'description', visualizationProperties.description);
+        _.set(data, 'tags', visualizationProperties.tags);
+        _.set(data, 'type', type);
         return data;
       }
+      _.set(data, 'data', nodesLinksExtractorCsvOrExcel(computedRows));
+      _.set(data, 'type', type);
+      return data;
+
     case VisualizationTypesEnum.CALENDAR:
       if (allFileDetails) {
-        const visualizationProperties =
-          visualizationPropertiesExtractor(computedRows);
+        const visualizationProperties = visualizationPropertiesExtractor(computedRows);
         _.set(
           data,
-          "data",
+          'data',
           calendarExtractorCsvOrExcel(visualizationProperties.data)
         );
-        _.set(data, "name", visualizationProperties.name);
-        _.set(data, "description", visualizationProperties.description);
-        _.set(data, "tags", visualizationProperties.tags);
-        _.set(data, "type", type);
-        return data;
-      } else {
-        _.set(data, "data", calendarExtractorCsvOrExcel(computedRows));
-        _.set(data, "type", type);
+        _.set(data, 'name', visualizationProperties.name);
+        _.set(data, 'description', visualizationProperties.description);
+        _.set(data, 'tags', visualizationProperties.tags);
+        _.set(data, 'type', type);
         return data;
       }
+      _.set(data, 'data', calendarExtractorCsvOrExcel(computedRows));
+      _.set(data, 'type', type);
+      return data;
+
     case VisualizationTypesEnum.BAR_CHART:
     case VisualizationTypesEnum.LINE_CHART:
       if (allFileDetails) {
-        const visualizationProperties =
-          visualizationPropertiesExtractor(computedRows);
+        const visualizationProperties = visualizationPropertiesExtractor(computedRows);
         _.set(
           data,
-          "data",
+          'data',
           axisChartExtractorCsvOrExcel(visualizationProperties.data)
         );
-        _.set(data, "name", visualizationProperties.name);
-        _.set(data, "description", visualizationProperties.description);
-        _.set(data, "tags", visualizationProperties.tags);
-        _.set(data, "type", type);
-        return data;
-      } else {
-        _.set(data, "data", axisChartExtractorCsvOrExcel(computedRows));
-        _.set(data, "type", type);
+        _.set(data, 'name', visualizationProperties.name);
+        _.set(data, 'description', visualizationProperties.description);
+        _.set(data, 'tags', visualizationProperties.tags);
+        _.set(data, 'type', type);
         return data;
       }
+      _.set(data, 'data', axisChartExtractorCsvOrExcel(computedRows));
+      _.set(data, 'type', type);
+      return data;
+
     case VisualizationTypesEnum.FUNNEL:
     case VisualizationTypesEnum.PIE_CHART:
       if (allFileDetails) {
-        const visualizationProperties =
-          visualizationPropertiesExtractor(computedRows);
+        const visualizationProperties = visualizationPropertiesExtractor(computedRows);
         _.set(
           data,
-          "data",
+          'data',
           pieChartFunnelExtractorCsvOrExcel(visualizationProperties.data)
         );
-        _.set(data, "name", visualizationProperties.name);
-        _.set(data, "description", visualizationProperties.description);
-        _.set(data, "tags", visualizationProperties.tags);
-        _.set(data, "type", type);
-        return data;
-      } else {
-        _.set(data, "data", pieChartFunnelExtractorCsvOrExcel(computedRows));
-        _.set(data, "type", type);
+        _.set(data, 'name', visualizationProperties.name);
+        _.set(data, 'description', visualizationProperties.description);
+        _.set(data, 'tags', visualizationProperties.tags);
+        _.set(data, 'type', type);
         return data;
       }
+      _.set(data, 'data', pieChartFunnelExtractorCsvOrExcel(computedRows));
+      _.set(data, 'type', type);
+      return data;
+
     case VisualizationTypesEnum.SCATTER:
       if (allFileDetails) {
-        const visualizationProperties =
-          visualizationPropertiesExtractor(computedRows);
+        const visualizationProperties = visualizationPropertiesExtractor(computedRows);
         _.set(
           data,
-          "data",
+          'data',
           scatterExtractorCsvOrExcel(visualizationProperties.data)
         );
-        _.set(data, "name", visualizationProperties.name);
-        _.set(data, "description", visualizationProperties.description);
-        _.set(data, "tags", visualizationProperties.tags);
-        _.set(data, "type", type);
-        return data;
-      } else {
-        _.set(data, "data", scatterExtractorCsvOrExcel(computedRows));
-        _.set(data, "type", type);
+        _.set(data, 'name', visualizationProperties.name);
+        _.set(data, 'description', visualizationProperties.description);
+        _.set(data, 'tags', visualizationProperties.tags);
+        _.set(data, 'type', type);
         return data;
       }
+      _.set(data, 'data', scatterExtractorCsvOrExcel(computedRows));
+      _.set(data, 'type', type);
+      return data;
+
     case VisualizationTypesEnum.TREEMAP:
     case VisualizationTypesEnum.SUNBURST:
       if (allFileDetails) {
-        const visualizationProperties =
-          visualizationPropertiesExtractor(computedRows);
+        const visualizationProperties = visualizationPropertiesExtractor(computedRows);
         _.set(
           data,
-          "data",
+          'data',
           hierarchyExtractorCsvOrExcel(visualizationProperties.data)
         );
-        _.set(data, "name", visualizationProperties.name);
-        _.set(data, "description", visualizationProperties.description);
-        _.set(data, "tags", visualizationProperties.tags);
-        _.set(data, "type", type);
-        return data;
-      } else {
-        _.set(data, "data", hierarchyExtractorCsvOrExcel(computedRows));
-        _.set(data, "type", type);
+        _.set(data, 'name', visualizationProperties.name);
+        _.set(data, 'description', visualizationProperties.description);
+        _.set(data, 'tags', visualizationProperties.tags);
+        _.set(data, 'type', type);
         return data;
       }
+      _.set(data, 'data', hierarchyExtractorCsvOrExcel(computedRows));
+      _.set(data, 'type', type);
+      return data;
+
     default:
       return null;
   }
@@ -189,14 +182,13 @@ export const jsonDataProvider = (
   computedData: Record<string, unknown>,
   allFileDetails: boolean
 ) => {
-  let data: VisualizationUpdate = {};
+  const data: VisualizationUpdate = {};
   if (!allFileDetails) {
-    _.set(data, "data", computedData);
-    _.set(data, "type", type);
+    _.set(data, 'data', computedData);
+    _.set(data, 'type', type);
     return data;
-  } else {
-    return computedData;
   }
+  return computedData;
 };
 
 export const xmlDataProvider = (

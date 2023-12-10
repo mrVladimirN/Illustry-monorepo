@@ -1,10 +1,9 @@
-import _ from "lodash";
-import { visualizationDetailsExtractor } from "../../../../utils/helper";
-import { CalendarData, CalendarType } from "types/visualizations";
+import _ from 'lodash';
+import { CalendarData, CalendarType } from 'types/visualizations';
+import { visualizationDetailsExtractor } from '../../../../utils/helper';
 
 const reformatDate = (date: string): string | null => {
-  const dateRegex =
-    /\b(?:\d{4}[./-]\d{1,2}[./-]\d{1,2}|\d{1,2}[./-]\d{1,2}[./-]\d{4}|\d{1,2}[./-]\d{1,2}[./-]\d{2}|\d{4}-\d{2}-\d{2}|\d{2}-\d{2}-\d{4}|\d{2}-\d{2}-\d{2})\b/;
+  const dateRegex = /\b(?:\d{4}[./-]\d{1,2}[./-]\d{1,2}|\d{1,2}[./-]\d{1,2}[./-]\d{4}|\d{1,2}[./-]\d{1,2}[./-]\d{2}|\d{4}-\d{2}-\d{2}|\d{2}-\d{2}-\d{4}|\d{2}-\d{2}-\d{2})\b/;
 
   const matches = date.match(dateRegex);
 
@@ -17,28 +16,27 @@ const reformatDate = (date: string): string | null => {
     );
 
     const [component1, component2] = dateComponents.filter(
-      (component) => component.length <= 2 && component !== "0000"
+      (component) => component.length <= 2 && component !== '0000'
     );
 
-    const tryOrdering = (month: number, day: number) =>
-      !isNaN(month) &&
-      month > 0 &&
-      month <= 12 &&
-      !isNaN(day) &&
-      day > 0 &&
-      day <= 31;
+    const tryOrdering = (month: number, day: number) => !isNaN(month)
+      && month > 0
+      && month <= 12
+      && !isNaN(day)
+      && day > 0
+      && day <= 31;
 
     if (tryOrdering(parseInt(component1), parseInt(component2))) {
       const reformattedDate = `${year}-${String(component1).padStart(
         2,
-        "0"
-      )}-${String(component2).padStart(2, "0")}`;
+        '0'
+      )}-${String(component2).padStart(2, '0')}`;
       return reformattedDate;
-    } else if (tryOrdering(parseInt(component2), parseInt(component1))) {
+    } if (tryOrdering(parseInt(component2), parseInt(component1))) {
       const reformattedDate = `${year}-${String(component2).padStart(
         2,
-        "0"
-      )}-${String(component1).padStart(2, "0")}`;
+        '0'
+      )}-${String(component1).padStart(2, '0')}`;
       return reformattedDate;
     }
   }
@@ -53,11 +51,10 @@ const excelDateToJSDate = (excelDate: number): string | null => {
   if (!isNaN(jsDate.getTime())) {
     const reformattedDate = `${jsDate.getFullYear()}-${String(
       jsDate.getMonth() + 1
-    ).padStart(2, "0")}-${String(jsDate.getDate()).padStart(2, "0")}`;
+    ).padStart(2, '0')}-${String(jsDate.getDate()).padStart(2, '0')}`;
     return reformattedDate;
-  } else {
-    return null;
   }
+  return null;
 };
 export const calendarTransformer = (
   mapping: Record<string, unknown>,
@@ -66,21 +63,21 @@ export const calendarTransformer = (
 ) => {
   const baseValues = {
     date:
-      typeof values[_.toNumber(mapping.dates)] === "string"
+      typeof values[_.toNumber(mapping.dates)] === 'string'
         ? reformatDate(values[_.toNumber(mapping.dates)] as string)
         : excelDateToJSDate(values[_.toNumber(mapping.dates)] as number),
     value:
-      typeof values[_.toNumber(mapping.values)] === "string"
+      typeof values[_.toNumber(mapping.values)] === 'string'
         ? +(values[_.toNumber(mapping.values)] as string)
         : values[_.toNumber(mapping.values)],
     category:
-      typeof values[_.toNumber(mapping.categories)] === "string"
+      typeof values[_.toNumber(mapping.categories)] === 'string'
         ? values[_.toNumber(mapping.categories)]
         : _.toString(values[_.toNumber(mapping.categories)]),
     properties:
-      typeof values[_.toNumber(mapping.properties)] === "string"
+      typeof values[_.toNumber(mapping.properties)] === 'string'
         ? values[_.toNumber(mapping.properties)]
-        : _.toString(values[_.toNumber(mapping.properties)]),
+        : _.toString(values[_.toNumber(mapping.properties)])
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails
@@ -95,7 +92,9 @@ export const calendarExtractorCsvOrExcel = (
     (result, item) => {
       const calendarData = item.calendar;
       let calendar;
-      const { category, date, value, properties } = calendarData as Record<
+      const {
+        category, date, value, properties
+      } = calendarData as Record<
         string,
         unknown
       >;
@@ -103,13 +102,15 @@ export const calendarExtractorCsvOrExcel = (
         (n: CalendarType) => n.date === date && n.category === category
       );
       if (_.isNil(calendar)) {
-        calendar = { category, date, value, properties } as CalendarType;
+        calendar = {
+          category, date, value, properties
+        } as CalendarType;
         if (
-          !_.isNil(calendar.category) &&
-          !_.isNil(calendar.date) &&
-          !_.isEmpty(calendar.category) &&
-          !_.isEmpty(calendar.date) &&
-          !_.isNil(calendar.value)
+          !_.isNil(calendar.category)
+          && !_.isNil(calendar.date)
+          && !_.isEmpty(calendar.category)
+          && !_.isEmpty(calendar.date)
+          && !_.isNil(calendar.value)
         ) {
           (result.calendar as CalendarType[]).push(calendar);
         }
@@ -124,47 +125,44 @@ export const calendarExtractorCsvOrExcel = (
 
 const calendarEventExtractorXml = (
   calendar: Record<string, unknown>[]
-): CalendarType[] => {
-  return calendar.map((el: Record<string, unknown>) => {
-    return {
-      category:
-        typeof (el.value as string[])[0] === "string"
+): CalendarType[] => calendar.map((el: Record<string, unknown>) => ({
+  category:
+        typeof (el.value as string[])[0] === 'string'
           ? (el.category as string[])[0]
-          : _.toString(typeof (el.value as string[])[0] === "string"),
-      date: reformatDate((el.date as string)[0]),
-      value:
-        typeof (el.value as string[])[0] === "string"
+          : _.toString(typeof (el.value as string[])[0] === 'string'),
+  date: reformatDate((el.date as string)[0]),
+  value:
+        typeof (el.value as string[])[0] === 'string'
           ? +(el.value as string[])[0]
           : (el.value as string[])[0],
-      properties:
+  properties:
         el.properties && (el.properties as Record<string, unknown>[]).length
           ? (el.properties as string[])[0]
-          : undefined,
-    };
-  }) as unknown as CalendarType[];
-};
+          : undefined
+})) as unknown as CalendarType[];
 export const calendarExtractorXml = (
   xmlData: Record<string, unknown>,
   allFileDetails: boolean
 ) => {
-  const { name, description, tags, type, data, calendar } =
-    xmlData.root as Record<string, unknown>;
+  const {
+    name, description, tags, type, data, calendar
+  } = xmlData.root as Record<string, unknown>;
   const finalData = {
     data: {
       calendar: allFileDetails
         ? calendarEventExtractorXml((data as any[])[0].calendar)
-        : calendarEventExtractorXml(calendar as Record<string, unknown>[]),
-    },
+        : calendarEventExtractorXml(calendar as Record<string, unknown>[])
+    }
   };
   return allFileDetails
     ? {
-        ...finalData,
-        ...{
-          name: (name as string[])[0] as string,
-          description: (description as string[])[0] as string,
-          tags: tags as string[],
-          type: type as string,
-        },
+      ...finalData,
+      ...{
+        name: (name as string[])[0] as string,
+        description: (description as string[])[0] as string,
+        tags: tags as string[],
+        type: type as string
       }
+    }
     : finalData;
 };

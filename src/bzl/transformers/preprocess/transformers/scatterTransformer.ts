@@ -1,20 +1,20 @@
-import _ from "lodash";
-import { visualizationDetailsExtractor } from "../../../../utils/helper";
-import { ScatterData, ScatterPoint } from "types/visualizations";
+import _ from 'lodash';
+import { ScatterData, ScatterPoint } from 'types/visualizations';
+import { visualizationDetailsExtractor } from '../../../../utils/helper';
 
 const computeValues = (values: unknown[], mapping: string): number[] => {
   const result: number[] = [];
 
-  mapping.split(",").forEach((row) => {
+  mapping.split(',').forEach((row) => {
     const index = _.toNumber(row);
     const valueAtIndex = values[index];
 
     if (
-      !_.isNil(valueAtIndex) &&
-      (typeof valueAtIndex === "number" ||
-        (typeof valueAtIndex === "string" &&
-          !isNaN(_.toNumber(valueAtIndex)))) &&
-      result.length <= 1
+      !_.isNil(valueAtIndex)
+      && (typeof valueAtIndex === 'number'
+        || (typeof valueAtIndex === 'string'
+          && !isNaN(_.toNumber(valueAtIndex))))
+      && result.length <= 1
     ) {
       result.push(_.toNumber(valueAtIndex));
     }
@@ -34,20 +34,20 @@ export const scatterTransformer = (
   const baseValues = {
     value: computeValues(values, mapping.values as string),
     category:
-      typeof values[_.toNumber(mapping.categories)] === "string"
+      typeof values[_.toNumber(mapping.categories)] === 'string'
         ? values[_.toNumber(mapping.categories)]
         : _.toString(values[_.toNumber(mapping.categories)]),
     properties:
-      typeof values[_.toNumber(mapping.properties)] === "string"
+      typeof values[_.toNumber(mapping.properties)] === 'string'
         ? values[_.toNumber(mapping.properties)]
-        : _.toString(values[_.toNumber(mapping.properties)]),
+        : _.toString(values[_.toNumber(mapping.properties)])
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails
     ? {
-        ...{ points: baseValues },
-        ...visualizationDetails,
-      }
+      ...{ points: baseValues },
+      ...visualizationDetails
+    }
     : { points: baseValues };
 };
 
@@ -62,10 +62,9 @@ export const scatterExtractorCsvOrExcel = (
         unknown
       >;
       scatterData = (result.points as ScatterPoint[]).find(
-        (e: ScatterPoint) =>
-          e.value[0] === (value as unknown[])[0] &&
-          e.value[1] === (value as unknown[])[1] &&
-          e.category === category
+        (e: ScatterPoint) => e.value[0] === (value as unknown[])[0]
+          && e.value[1] === (value as unknown[])[1]
+          && e.category === category
       );
       if (_.isNil(scatterData)) {
         scatterData = { category, value, properties };
@@ -81,16 +80,14 @@ export const scatterExtractorCsvOrExcel = (
 };
 
 const scatterPointsExtractorXml = (points: Record<string, unknown>[]) => {
-  const transformedData = points.map((el) => {
-    return {
-      category: (el.category as string[])[0],
-      value: (el.value as string[]).map((value: string) => Number(value)),
-      properties:
+  const transformedData = points.map((el) => ({
+    category: (el.category as string[])[0],
+    value: (el.value as string[]).map((value: string) => Number(value)),
+    properties:
         el.properties && (el.properties as Record<string, unknown>[]).length
           ? (el.properties as string[])[0]
-          : undefined,
-    };
-  });
+          : undefined
+  }));
 
   // Return the transformed object inside the array
   return transformedData;
@@ -99,24 +96,25 @@ export const scatterExtractorXml = (
   xmlData: Record<string, unknown>,
   allFileDetails: boolean
 ) => {
-  const { name, description, tags, type, data, points } =
-    xmlData.root as Record<string, unknown>;
+  const {
+    name, description, tags, type, data, points
+  } = xmlData.root as Record<string, unknown>;
   const finalData = {
     data: {
       points: allFileDetails
         ? scatterPointsExtractorXml((data as any[])[0].points)
-        : scatterPointsExtractorXml(points as Record<string, string>[]),
-    },
+        : scatterPointsExtractorXml(points as Record<string, string>[])
+    }
   };
   return allFileDetails
     ? {
-        ...finalData,
-        ...{
-          name: (name as string[])[0] as string,
-          description: (description as string[])[0] as string,
-          tags: tags as string[],
-          type: type as string,
-        },
+      ...finalData,
+      ...{
+        name: (name as string[])[0] as string,
+        description: (description as string[])[0] as string,
+        tags: tags as string[],
+        type: type as string
       }
+    }
     : finalData;
 };

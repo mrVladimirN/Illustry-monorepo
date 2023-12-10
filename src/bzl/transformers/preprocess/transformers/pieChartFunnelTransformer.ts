@@ -1,6 +1,6 @@
-import _ from "lodash";
-import { visualizationDetailsExtractor } from "../../../../utils/helper";
-import { PieChartData } from "types/visualizations";
+import _ from 'lodash';
+import { PieChartData } from 'types/visualizations';
+import { visualizationDetailsExtractor } from '../../../../utils/helper';
 
 export const pieChartFunnelTransformer = (
   mapping: Record<string, unknown>,
@@ -9,20 +9,20 @@ export const pieChartFunnelTransformer = (
 ) => {
   const baseValues = {
     name:
-      typeof values[_.toNumber(mapping.names)] === "string"
+      typeof values[_.toNumber(mapping.names)] === 'string'
         ? values[_.toNumber(mapping.names)]
         : _.toString(values[_.toNumber(mapping.names)]),
     value:
-      typeof values[_.toNumber(mapping.values)] === "string"
+      typeof values[_.toNumber(mapping.values)] === 'string'
         ? +(values[_.toNumber(mapping.values)] as string)
-        : values[_.toNumber(mapping.values)],
+        : values[_.toNumber(mapping.values)]
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails
     ? {
-        ...{ values: baseValues },
-        ...visualizationDetails,
-      }
+      ...{ values: baseValues },
+      ...visualizationDetails
+    }
     : { values: baseValues };
 };
 
@@ -33,14 +33,13 @@ export const pieChartFunnelExtractorCsvOrExcel = (
     (result, item) => {
       let pieChartFunnelData;
       const { name, value } = item.values as Record<string, unknown>;
-      pieChartFunnelData =
-        (result.values as Record<string, number>)[name as string] === value ||
-        null;
+      pieChartFunnelData = (result.values as Record<string, number>)[name as string] === value
+        || null;
       if (_.isNil(pieChartFunnelData)) {
         pieChartFunnelData = { name, value };
         if (
-          !_.isNil(pieChartFunnelData.name) &&
-          !_.isNil(pieChartFunnelData.value)
+          !_.isNil(pieChartFunnelData.name)
+          && !_.isNil(pieChartFunnelData.value)
         ) {
           (result.values as Record<string, number>)[
             pieChartFunnelData.name as string
@@ -67,7 +66,7 @@ const pieChartFunnelValuesExtractorXml = (
     });
 
     return {
-      ...transformedValues,
+      ...transformedValues
     };
   });
 
@@ -79,24 +78,25 @@ export const pieChartFunnelExtractorXml = (
   xmlData: Record<string, unknown>,
   allFileDetails: boolean
 ) => {
-  const { name, description, tags, type, data, values } =
-    xmlData.root as Record<string, unknown>;
+  const {
+    name, description, tags, type, data, values
+  } = xmlData.root as Record<string, unknown>;
   const finalData = {
     data: {
       values: allFileDetails
         ? pieChartFunnelValuesExtractorXml((data as any[])[0].values)
-        : pieChartFunnelValuesExtractorXml(values as Record<string, unknown>[]),
-    },
+        : pieChartFunnelValuesExtractorXml(values as Record<string, unknown>[])
+    }
   };
   return allFileDetails
     ? {
-        ...finalData,
-        ...{
-          name: (name as string[])[0] as string,
-          description: (description as string[])[0] as string,
-          tags: tags as string[],
-          type: type as string,
-        },
+      ...finalData,
+      ...{
+        name: (name as string[])[0] as string,
+        description: (description as string[])[0] as string,
+        tags: tags as string[],
+        type: type as string
       }
+    }
     : finalData;
 };

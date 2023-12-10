@@ -1,15 +1,16 @@
-import _ from "lodash";
-import { visualizationDetailsExtractor } from "../../../../utils/helper";
-import { HierarchyNode, HierarchyData } from "types/visualizations";
+import _ from 'lodash';
+import { HierarchyNode, HierarchyData } from 'types/visualizations';
+import { visualizationDetailsExtractor } from '../../../../utils/helper';
+
 const computeChildren = (
   values: unknown[],
   mapping: Record<string, unknown>
 ): string[] => {
   const children: string[] = [];
-  (mapping.children as string).split(",").forEach((row) => {
+  (mapping.children as string).split(',').forEach((row) => {
     if (
-      typeof values[_.toNumber(row)] === "string" &&
-      isNaN(_.toNumber(values[_.toNumber(row)]))
+      typeof values[_.toNumber(row)] === 'string'
+      && isNaN(_.toNumber(values[_.toNumber(row)]))
     ) {
       children.push(values[_.toNumber(row)] as string);
     }
@@ -23,29 +24,29 @@ export const hierarchyTransformer = (
 ) => {
   const baseValues = {
     name:
-      typeof values[_.toNumber(mapping.names)] === "string"
+      typeof values[_.toNumber(mapping.names)] === 'string'
         ? values[_.toNumber(mapping.names)]
         : _.toString(values[_.toNumber(mapping.names)]),
     value:
-      typeof values[_.toNumber(mapping.values)] === "string"
+      typeof values[_.toNumber(mapping.values)] === 'string'
         ? +(values[_.toNumber(mapping.values)] as string)
         : values[_.toNumber(mapping.values)],
     category:
-      typeof values[_.toNumber(mapping.categories)] === "string"
+      typeof values[_.toNumber(mapping.categories)] === 'string'
         ? values[_.toNumber(mapping.categories)]
         : _.toString(values[_.toNumber(mapping.categories)]),
     children: computeChildren(values, mapping),
     properties:
-      typeof values[_.toNumber(mapping.properties)] === "string"
+      typeof values[_.toNumber(mapping.properties)] === 'string'
         ? values[_.toNumber(mapping.properties)]
-        : _.toString(values[_.toNumber(mapping.properties)]),
+        : _.toString(values[_.toNumber(mapping.properties)])
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails
     ? {
-        ...{ nodes: baseValues },
-        ...visualizationDetails,
-      }
+      ...{ nodes: baseValues },
+      ...visualizationDetails
+    }
     : { nodes: baseValues };
 };
 
@@ -59,16 +60,15 @@ export const hierarchyExtractorCsvOrExcel = (
       name: item.name,
       value: item.value,
       category: item.category,
-      properties: item.properties,
+      properties: item.properties
     };
 
     if (item.children && item.children.length > 0) {
       newItem.children = item.children
         .map((childName) => {
           const child = data.find(
-            (d) =>
-              (d.nodes as HierarchyNode).name ===
-              (childName as unknown as string)
+            (d) => (d.nodes as HierarchyNode).name
+              === (childName as unknown as string)
           );
           if (child) {
             return transformItem(child.nodes as HierarchyNode);
@@ -87,8 +87,8 @@ export const hierarchyExtractorCsvOrExcel = (
     if (item.name === targetName) {
       return true;
     }
-    return (item.children &&
-      item.children.some((child) => findItem(child, targetName))) as boolean;
+    return (item.children
+      && item.children.some((child) => findItem(child, targetName))) as boolean;
   };
 
   const findParentGroup = (
@@ -104,11 +104,7 @@ export const hierarchyExtractorCsvOrExcel = (
   };
 
   data.forEach((item) => {
-    const isChild = result.some((group) =>
-      (group.children as HierarchyNode[]).some((child) =>
-        findItem(child, (item.nodes as HierarchyNode).name)
-      )
-    );
+    const isChild = result.some((group) => (group.children as HierarchyNode[]).some((child) => findItem(child, (item.nodes as HierarchyNode).name)));
 
     if (!isChild) {
       const transformedItem = transformItem(item.nodes as HierarchyNode);
@@ -127,46 +123,43 @@ export const hierarchyExtractorCsvOrExcel = (
 
   return { nodes: result };
 };
-const hierarchyNodeExtractorXml = (nodes: Record<string, unknown>[]): any => {
-  return nodes.map((el: any) => {
-    return {
-      name: (el.name as string[])[0],
-      category: (el.category as string[])[0],
-      value: +(el.value as string[])[0],
-      properties:
+const hierarchyNodeExtractorXml = (nodes: Record<string, unknown>[]): any => nodes.map((el: any) => ({
+  name: (el.name as string[])[0],
+  category: (el.category as string[])[0],
+  value: +(el.value as string[])[0],
+  properties:
         el.properties && (el.properties as Record<string, unknown>[]).length
           ? (el.properties as string[])[0]
           : undefined,
-      children:
+  children:
         el.children && (el.children as Record<string, unknown>[]).length > 0
           ? hierarchyNodeExtractorXml(el.children as Record<string, unknown>[])
-          : undefined,
-    };
-  });
-};
+          : undefined
+}));
 
 export const hierarchyExtractorXml = (
   xmlData: Record<string, unknown>,
   allFileDetails: boolean
 ) => {
-  const { name, description, tags, type, data, nodes, links } =
-    xmlData.root as Record<string, unknown>;
+  const {
+    name, description, tags, type, data, nodes, links
+  } = xmlData.root as Record<string, unknown>;
   const finalData = {
     data: {
       nodes: allFileDetails
         ? hierarchyNodeExtractorXml((data as any[])[0].nodes)
-        : hierarchyNodeExtractorXml(nodes as Record<string, unknown>[]),
-    },
+        : hierarchyNodeExtractorXml(nodes as Record<string, unknown>[])
+    }
   };
   return allFileDetails
     ? {
-        ...finalData,
-        ...{
-          name: (name as string[])[0] as string,
-          description: (description as string[])[0] as string,
-          tags: tags as string[],
-          type: type as string,
-        },
+      ...finalData,
+      ...{
+        name: (name as string[])[0] as string,
+        description: (description as string[])[0] as string,
+        tags: tags as string[],
+        type: type as string
       }
+    }
     : finalData;
 };

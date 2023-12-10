@@ -1,14 +1,18 @@
-import { Connection, Model } from "mongoose";
-import { Project } from "./project/Project";
-import { ProjectType } from "types/project";
-import { VisualizationType } from "types/visualizations";
-import { Visualization } from "./visualization/Visualization";
+import { Connection, Model } from 'mongoose';
+import { ProjectType } from 'types/project';
+import { VisualizationType } from 'types/visualizations';
+import { Project } from './project/Project';
+import { Visualization } from './visualization/Visualization';
 
 export class ModelInstance {
   private _projectModel?: Model<ProjectType>;
+
   private _visualizationModel?: Model<VisualizationType>;
+
   private readonly connection: Connection;
+
   private readonly visualization: Visualization;
+
   private readonly project: Project;
 
   constructor(connection: Connection) {
