@@ -1,177 +1,225 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="85" failures="0" errors="0" time="10.394">
-  <testsuite name="visualizations CRUD" errors="0" failures="0" skipped="0" timestamp="2023-12-10T13:54:05" time="8.912" tests="78">
-    <testcase classname="visualizations CRUD It creates a hierarchical-edge-bundling Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a hierarchical-edge-bundling Visualization JSON with all the details in the JSON" time="0.09">
+<testsuites name="jest tests" tests="109" failures="0" errors="0" time="11.816">
+  <testsuite name="visualizations CRUD" errors="0" failures="0" skipped="0" timestamp="2023-12-10T14:21:50" time="10.378" tests="102">
+    <testcase classname="visualizations CRUD It creates a hierarchical-edge-bundling Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a hierarchical-edge-bundling Visualization JSON with all the details in the JSON" time="0.158">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a force-directed-graph Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a force-directed-graph Visualization JSON with all the details in the JSON" time="0.031">
+    <testcase classname="visualizations CRUD It creates a force-directed-graph Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a force-directed-graph Visualization JSON with all the details in the JSON" time="0.029">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a sankey Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a sankey Visualization JSON with all the details in the JSON" time="0.081">
+    <testcase classname="visualizations CRUD It creates a sankey Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a sankey Visualization JSON with all the details in the JSON" time="0.024">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a word-cloud Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a word-cloud Visualization JSON with all the details in the JSON" time="0.047">
+    <testcase classname="visualizations CRUD It creates a word-cloud Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a word-cloud Visualization JSON with all the details in the JSON" time="0.025">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a calendar Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a calendar Visualization JSON with all the details in the JSON" time="0.036">
+    <testcase classname="visualizations CRUD It creates a calendar Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a calendar Visualization JSON with all the details in the JSON" time="0.027">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a matrix Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a matrix Visualization JSON with all the details in the JSON" time="0.028">
+    <testcase classname="visualizations CRUD It creates a matrix Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a matrix Visualization JSON with all the details in the JSON" time="0.034">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a line-chart Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a line-chart Visualization JSON with all the details in the JSON" time="0.023">
+    <testcase classname="visualizations CRUD It creates a line-chart Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a line-chart Visualization JSON with all the details in the JSON" time="0.024">
     </testcase>
     <testcase classname="visualizations CRUD It creates a bar-chart Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a bar-chart Visualization JSON with all the details in the JSON" time="0.024">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a pie-chart Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a pie-chart Visualization JSON with all the details in the JSON" time="0.039">
+    <testcase classname="visualizations CRUD It creates a pie-chart Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a pie-chart Visualization JSON with all the details in the JSON" time="0.035">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a scatter Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a scatter Visualization JSON with all the details in the JSON" time="0.039">
+    <testcase classname="visualizations CRUD It creates a scatter Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a scatter Visualization JSON with all the details in the JSON" time="0.042">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a funnel Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a funnel Visualization JSON with all the details in the JSON" time="0.027">
+    <testcase classname="visualizations CRUD It creates a funnel Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a funnel Visualization JSON with all the details in the JSON" time="0.024">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a treemap Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a treemap Visualization JSON with all the details in the JSON" time="0.027">
+    <testcase classname="visualizations CRUD It creates a treemap Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a treemap Visualization JSON with all the details in the JSON" time="0.025">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a sunburst Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a sunburst Visualization JSON with all the details in the JSON" time="0.029">
+    <testcase classname="visualizations CRUD It creates a sunburst Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a sunburst Visualization JSON with all the details in the JSON" time="0.023">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a timeline Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a timeline Visualization JSON with all the details in the JSON" time="0.033">
+    <testcase classname="visualizations CRUD It creates a timeline Visualization JSON with all the details in the JSON" name="visualizations CRUD It creates a timeline Visualization JSON with all the details in the JSON" time="0.022">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a hierarchical-edge-bundling Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a hierarchical-edge-bundling Visualization JSON with only the data details in the JSON" time="0.023">
+    <testcase classname="visualizations CRUD It creates a hierarchical-edge-bundling Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a hierarchical-edge-bundling Visualization JSON with only the data details in the JSON" time="0.021">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a force-directed-graph Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a force-directed-graph Visualization JSON with only the data details in the JSON" time="0.026">
+    <testcase classname="visualizations CRUD It creates a force-directed-graph Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a force-directed-graph Visualization JSON with only the data details in the JSON" time="0.02">
     </testcase>
     <testcase classname="visualizations CRUD It creates a sankey Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a sankey Visualization JSON with only the data details in the JSON" time="0.02">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a word-cloud Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a word-cloud Visualization JSON with only the data details in the JSON" time="0.022">
+    <testcase classname="visualizations CRUD It creates a word-cloud Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a word-cloud Visualization JSON with only the data details in the JSON" time="0.019">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a calendar Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a calendar Visualization JSON with only the data details in the JSON" time="0.024">
+    <testcase classname="visualizations CRUD It creates a calendar Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a calendar Visualization JSON with only the data details in the JSON" time="0.02">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a matrix Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a matrix Visualization JSON with only the data details in the JSON" time="0.021">
+    <testcase classname="visualizations CRUD It creates a matrix Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a matrix Visualization JSON with only the data details in the JSON" time="0.022">
     </testcase>
     <testcase classname="visualizations CRUD It creates a line-chart Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a line-chart Visualization JSON with only the data details in the JSON" time="0.024">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a bar-chart Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a bar-chart Visualization JSON with only the data details in the JSON" time="0.022">
+    <testcase classname="visualizations CRUD It creates a bar-chart Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a bar-chart Visualization JSON with only the data details in the JSON" time="0.021">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a pie-chart Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a pie-chart Visualization JSON with only the data details in the JSON" time="0.028">
+    <testcase classname="visualizations CRUD It creates a pie-chart Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a pie-chart Visualization JSON with only the data details in the JSON" time="0.02">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a scatter Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a scatter Visualization JSON with only the data details in the JSON" time="0.023">
+    <testcase classname="visualizations CRUD It creates a scatter Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a scatter Visualization JSON with only the data details in the JSON" time="0.041">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a funnel Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a funnel Visualization JSON with only the data details in the JSON" time="0.027">
+    <testcase classname="visualizations CRUD It creates a funnel Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a funnel Visualization JSON with only the data details in the JSON" time="0.032">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a treemap Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a treemap Visualization JSON with only the data details in the JSON" time="0.024">
+    <testcase classname="visualizations CRUD It creates a treemap Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a treemap Visualization JSON with only the data details in the JSON" time="0.021">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a sunburst Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a sunburst Visualization JSON with only the data details in the JSON" time="0.027">
+    <testcase classname="visualizations CRUD It creates a sunburst Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a sunburst Visualization JSON with only the data details in the JSON" time="0.025">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a timeline Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a timeline Visualization JSON with only the data details in the JSON" time="0.024">
+    <testcase classname="visualizations CRUD It creates a timeline Visualization JSON with only the data details in the JSON" name="visualizations CRUD It creates a timeline Visualization JSON with only the data details in the JSON" time="0.034">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a bar-chart Visualization XML with all the details in the XML" name="visualizations CRUD It creates a bar-chart Visualization XML with all the details in the XML" time="0.034">
+    <testcase classname="visualizations CRUD It creates a bar-chart Visualization XML with all the details in the XML" name="visualizations CRUD It creates a bar-chart Visualization XML with all the details in the XML" time="0.077">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a calendar Visualization XML with all the details in the XML" name="visualizations CRUD It creates a calendar Visualization XML with all the details in the XML" time="0.037">
+    <testcase classname="visualizations CRUD It creates a calendar Visualization XML with all the details in the XML" name="visualizations CRUD It creates a calendar Visualization XML with all the details in the XML" time="0.025">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a forced-directed-graph Visualization XML with all the details in the XML" name="visualizations CRUD It creates a forced-directed-graph Visualization XML with all the details in the XML" time="0.02">
+    <testcase classname="visualizations CRUD It creates a forced-directed-graph Visualization XML with all the details in the XML" name="visualizations CRUD It creates a forced-directed-graph Visualization XML with all the details in the XML" time="0.025">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a funnel Visualization XML with all the details in the XML" name="visualizations CRUD It creates a funnel Visualization XML with all the details in the XML" time="0.027">
+    <testcase classname="visualizations CRUD It creates a funnel Visualization XML with all the details in the XML" name="visualizations CRUD It creates a funnel Visualization XML with all the details in the XML" time="0.02">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a hierarchical-edge-bundling Visualization XML with all the details in the XML" name="visualizations CRUD It creates a hierarchical-edge-bundling Visualization XML with all the details in the XML" time="0.023">
+    <testcase classname="visualizations CRUD It creates a hierarchical-edge-bundling Visualization XML with all the details in the XML" name="visualizations CRUD It creates a hierarchical-edge-bundling Visualization XML with all the details in the XML" time="0.026">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a line-chart Visualization XML with all the details in the XML" name="visualizations CRUD It creates a line-chart Visualization XML with all the details in the XML" time="0.034">
+    <testcase classname="visualizations CRUD It creates a line-chart Visualization XML with all the details in the XML" name="visualizations CRUD It creates a line-chart Visualization XML with all the details in the XML" time="0.022">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a pie-chart Visualization XML with all the details in the XML" name="visualizations CRUD It creates a pie-chart Visualization XML with all the details in the XML" time="0.028">
+    <testcase classname="visualizations CRUD It creates a pie-chart Visualization XML with all the details in the XML" name="visualizations CRUD It creates a pie-chart Visualization XML with all the details in the XML" time="0.02">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a sankey Visualization XML with all the details in the XML" name="visualizations CRUD It creates a sankey Visualization XML with all the details in the XML" time="0.027">
+    <testcase classname="visualizations CRUD It creates a sankey Visualization XML with all the details in the XML" name="visualizations CRUD It creates a sankey Visualization XML with all the details in the XML" time="0.022">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a scatter Visualization XML with all the details in the XML" name="visualizations CRUD It creates a scatter Visualization XML with all the details in the XML" time="0.036">
+    <testcase classname="visualizations CRUD It creates a scatter Visualization XML with all the details in the XML" name="visualizations CRUD It creates a scatter Visualization XML with all the details in the XML" time="0.031">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a sunburst Visualization XML with all the details in the XML" name="visualizations CRUD It creates a sunburst Visualization XML with all the details in the XML" time="0.028">
+    <testcase classname="visualizations CRUD It creates a sunburst Visualization XML with all the details in the XML" name="visualizations CRUD It creates a sunburst Visualization XML with all the details in the XML" time="0.023">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a treemap Visualization XML with all the details in the XML" name="visualizations CRUD It creates a treemap Visualization XML with all the details in the XML" time="0.031">
+    <testcase classname="visualizations CRUD It creates a treemap Visualization XML with all the details in the XML" name="visualizations CRUD It creates a treemap Visualization XML with all the details in the XML" time="0.024">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a word-cloud Visualization XML with all the details in the XML" name="visualizations CRUD It creates a word-cloud Visualization XML with all the details in the XML" time="0.024">
+    <testcase classname="visualizations CRUD It creates a word-cloud Visualization XML with all the details in the XML" name="visualizations CRUD It creates a word-cloud Visualization XML with all the details in the XML" time="0.046">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a matrix Visualization XML with all the details in the XML" name="visualizations CRUD It creates a matrix Visualization XML with all the details in the XML" time="0.042">
+    <testcase classname="visualizations CRUD It creates a matrix Visualization XML with all the details in the XML" name="visualizations CRUD It creates a matrix Visualization XML with all the details in the XML" time="0.037">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a bar-chart Visualization XML with only the data in the XML" name="visualizations CRUD It creates a bar-chart Visualization XML with only the data in the XML" time="0.051">
+    <testcase classname="visualizations CRUD It creates a bar-chart Visualization XML with only the data in the XML" name="visualizations CRUD It creates a bar-chart Visualization XML with only the data in the XML" time="0.024">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a calendar Visualization XML with only the data in the XML" name="visualizations CRUD It creates a calendar Visualization XML with only the data in the XML" time="0.028">
+    <testcase classname="visualizations CRUD It creates a calendar Visualization XML with only the data in the XML" name="visualizations CRUD It creates a calendar Visualization XML with only the data in the XML" time="0.024">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a forced-directed-graph Visualization XML with only the data in the XML" name="visualizations CRUD It creates a forced-directed-graph Visualization XML with only the data in the XML" time="0.026">
+    <testcase classname="visualizations CRUD It creates a forced-directed-graph Visualization XML with only the data in the XML" name="visualizations CRUD It creates a forced-directed-graph Visualization XML with only the data in the XML" time="0.02">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a funnel Visualization XML with only the data in the XML" name="visualizations CRUD It creates a funnel Visualization XML with only the data in the XML" time="0.024">
+    <testcase classname="visualizations CRUD It creates a funnel Visualization XML with only the data in the XML" name="visualizations CRUD It creates a funnel Visualization XML with only the data in the XML" time="0.022">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a hierarchical-edge-bundling Visualization XML with only the data in the XML" name="visualizations CRUD It creates a hierarchical-edge-bundling Visualization XML with only the data in the XML" time="0.026">
+    <testcase classname="visualizations CRUD It creates a hierarchical-edge-bundling Visualization XML with only the data in the XML" name="visualizations CRUD It creates a hierarchical-edge-bundling Visualization XML with only the data in the XML" time="0.023">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a line-chart Visualization XML with only the data in the XML" name="visualizations CRUD It creates a line-chart Visualization XML with only the data in the XML" time="0.025">
+    <testcase classname="visualizations CRUD It creates a line-chart Visualization XML with only the data in the XML" name="visualizations CRUD It creates a line-chart Visualization XML with only the data in the XML" time="0.02">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a pie-chart Visualization XML with only the data in the XML" name="visualizations CRUD It creates a pie-chart Visualization XML with only the data in the XML" time="0.027">
+    <testcase classname="visualizations CRUD It creates a pie-chart Visualization XML with only the data in the XML" name="visualizations CRUD It creates a pie-chart Visualization XML with only the data in the XML" time="0.024">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a sankey Visualization XML with only the data in the XML" name="visualizations CRUD It creates a sankey Visualization XML with only the data in the XML" time="0.021">
+    <testcase classname="visualizations CRUD It creates a sankey Visualization XML with only the data in the XML" name="visualizations CRUD It creates a sankey Visualization XML with only the data in the XML" time="0.019">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a scatter Visualization XML with only the data in the XML" name="visualizations CRUD It creates a scatter Visualization XML with only the data in the XML" time="0.026">
+    <testcase classname="visualizations CRUD It creates a scatter Visualization XML with only the data in the XML" name="visualizations CRUD It creates a scatter Visualization XML with only the data in the XML" time="0.021">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a sunburst Visualization XML with only the data in the XML" name="visualizations CRUD It creates a sunburst Visualization XML with only the data in the XML" time="0.025">
+    <testcase classname="visualizations CRUD It creates a sunburst Visualization XML with only the data in the XML" name="visualizations CRUD It creates a sunburst Visualization XML with only the data in the XML" time="0.024">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a treemap Visualization XML with only the data in the XML" name="visualizations CRUD It creates a treemap Visualization XML with only the data in the XML" time="0.025">
+    <testcase classname="visualizations CRUD It creates a treemap Visualization XML with only the data in the XML" name="visualizations CRUD It creates a treemap Visualization XML with only the data in the XML" time="0.021">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a word-cloud Visualization XML with only the data in the XML" name="visualizations CRUD It creates a word-cloud Visualization XML with only the data in the XML" time="0.027">
+    <testcase classname="visualizations CRUD It creates a word-cloud Visualization XML with only the data in the XML" name="visualizations CRUD It creates a word-cloud Visualization XML with only the data in the XML" time="0.023">
     </testcase>
     <testcase classname="visualizations CRUD It creates a matrix Visualization XML with only the data in the XML" name="visualizations CRUD It creates a matrix Visualization XML with only the data in the XML" time="0.022">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a word-cloud Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a word-cloud Visualization EXCEL with all the details in the EXCEL" time="0.129">
+    <testcase classname="visualizations CRUD It creates a word-cloud Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a word-cloud Visualization EXCEL with all the details in the EXCEL" time="0.123">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a forced-directed-graph Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a forced-directed-graph Visualization EXCEL with all the details in the EXCEL" time="0.117">
+    <testcase classname="visualizations CRUD It creates a forced-directed-graph Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a forced-directed-graph Visualization EXCEL with all the details in the EXCEL" time="0.154">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a sankey Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a sankey Visualization EXCEL with all the details in the EXCEL" time="0.098">
+    <testcase classname="visualizations CRUD It creates a sankey Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a sankey Visualization EXCEL with all the details in the EXCEL" time="0.138">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a hierarchical-edge-bundling Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a hierarchical-edge-bundling Visualization EXCEL with all the details in the EXCEL" time="0.101">
+    <testcase classname="visualizations CRUD It creates a hierarchical-edge-bundling Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a hierarchical-edge-bundling Visualization EXCEL with all the details in the EXCEL" time="0.308">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a calendar Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a calendar Visualization EXCEL with all the details in the EXCEL" time="0.11">
+    <testcase classname="visualizations CRUD It creates a calendar Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a calendar Visualization EXCEL with all the details in the EXCEL" time="0.119">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a line-chart Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a line-chart Visualization EXCEL with all the details in the EXCEL" time="0.121">
+    <testcase classname="visualizations CRUD It creates a line-chart Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a line-chart Visualization EXCEL with all the details in the EXCEL" time="0.13">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a bar-chart Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a bar-chart Visualization EXCEL with all the details in the EXCEL" time="0.102">
+    <testcase classname="visualizations CRUD It creates a bar-chart Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a bar-chart Visualization EXCEL with all the details in the EXCEL" time="0.106">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a pie-chart Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a pie-chart Visualization EXCEL with all the details in the EXCEL" time="0.191">
+    <testcase classname="visualizations CRUD It creates a pie-chart Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a pie-chart Visualization EXCEL with all the details in the EXCEL" time="0.108">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a scatter Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a scatter Visualization EXCEL with all the details in the EXCEL" time="0.117">
+    <testcase classname="visualizations CRUD It creates a scatter Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a scatter Visualization EXCEL with all the details in the EXCEL" time="0.108">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a treemap Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a treemap Visualization EXCEL with all the details in the EXCEL" time="0.206">
+    <testcase classname="visualizations CRUD It creates a treemap Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a treemap Visualization EXCEL with all the details in the EXCEL" time="0.111">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a sunburst Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a sunburst Visualization EXCEL with all the details in the EXCEL" time="0.094">
+    <testcase classname="visualizations CRUD It creates a sunburst Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a sunburst Visualization EXCEL with all the details in the EXCEL" time="0.117">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a funnel Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a funnel Visualization EXCEL with all the details in the EXCEL" time="0.095">
+    <testcase classname="visualizations CRUD It creates a funnel Visualization EXCEL with all the details in the EXCEL" name="visualizations CRUD It creates a funnel Visualization EXCEL with all the details in the EXCEL" time="0.133">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a word-cloud Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a word-cloud Visualization EXCEL with only the data in the EXCEL" time="0.102">
+    <testcase classname="visualizations CRUD It creates a word-cloud Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a word-cloud Visualization EXCEL with only the data in the EXCEL" time="0.139">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a forced-directed-graph Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a forced-directed-graph Visualization EXCEL with only the data in the EXCEL" time="0.12">
+    <testcase classname="visualizations CRUD It creates a forced-directed-graph Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a forced-directed-graph Visualization EXCEL with only the data in the EXCEL" time="0.109">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a sankey Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a sankey Visualization EXCEL with only the data in the EXCEL" time="0.101">
+    <testcase classname="visualizations CRUD It creates a sankey Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a sankey Visualization EXCEL with only the data in the EXCEL" time="0.123">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a hierarchical-edge-bundling Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a hierarchical-edge-bundling Visualization EXCEL with only the data in the EXCEL" time="0.134">
+    <testcase classname="visualizations CRUD It creates a hierarchical-edge-bundling Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a hierarchical-edge-bundling Visualization EXCEL with only the data in the EXCEL" time="0.127">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a calendar Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a calendar Visualization EXCEL with only the data in the EXCEL" time="0.099">
+    <testcase classname="visualizations CRUD It creates a calendar Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a calendar Visualization EXCEL with only the data in the EXCEL" time="0.137">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a line-chart Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a line-chart Visualization EXCEL with only the data in the EXCEL" time="0.096">
+    <testcase classname="visualizations CRUD It creates a line-chart Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a line-chart Visualization EXCEL with only the data in the EXCEL" time="0.113">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a bar-chart Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a bar-chart Visualization EXCEL with only the data in the EXCEL" time="0.109">
+    <testcase classname="visualizations CRUD It creates a bar-chart Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a bar-chart Visualization EXCEL with only the data in the EXCEL" time="0.108">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a pie-chart Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a pie-chart Visualization EXCEL with only the data in the EXCEL" time="0.112">
+    <testcase classname="visualizations CRUD It creates a pie-chart Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a pie-chart Visualization EXCEL with only the data in the EXCEL" time="0.103">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a scatter Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a scatter Visualization EXCEL with only the data in the EXCEL" time="0.091">
+    <testcase classname="visualizations CRUD It creates a scatter Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a scatter Visualization EXCEL with only the data in the EXCEL" time="0.121">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a treemap Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a treemap Visualization EXCEL with only the data in the EXCEL" time="0.1">
+    <testcase classname="visualizations CRUD It creates a treemap Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a treemap Visualization EXCEL with only the data in the EXCEL" time="0.119">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a sunburst Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a sunburst Visualization EXCEL with only the data in the EXCEL" time="0.098">
+    <testcase classname="visualizations CRUD It creates a sunburst Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a sunburst Visualization EXCEL with only the data in the EXCEL" time="0.107">
     </testcase>
-    <testcase classname="visualizations CRUD It creates a funnel Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a funnel Visualization EXCEL with only the data in the EXCEL" time="0.104">
+    <testcase classname="visualizations CRUD It creates a funnel Visualization EXCEL with only the data in the EXCEL" name="visualizations CRUD It creates a funnel Visualization EXCEL with only the data in the EXCEL" time="0.114">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a word-cloud Visualization CSV with all the details in the CSV" name="visualizations CRUD It creates a word-cloud Visualization CSV with all the details in the CSV" time="0.022">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a forced-directed-graph Visualization CSV with all the details in the CSV" name="visualizations CRUD It creates a forced-directed-graph Visualization CSV with all the details in the CSV" time="0.019">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a sankey Visualization CSV with all the details in the CSV" name="visualizations CRUD It creates a sankey Visualization CSV with all the details in the CSV" time="0.023">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a hierarchical-edge-bundling Visualization CSV with all the details in the CSV" name="visualizations CRUD It creates a hierarchical-edge-bundling Visualization CSV with all the details in the CSV" time="0.019">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a calendar Visualization CSV with all the details in the CSV" name="visualizations CRUD It creates a calendar Visualization CSV with all the details in the CSV" time="0.021">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a line-chart Visualization CSV with all the details in the CSV" name="visualizations CRUD It creates a line-chart Visualization CSV with all the details in the CSV" time="0.024">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a bar-chart Visualization CSV with all the details in the CSV" name="visualizations CRUD It creates a bar-chart Visualization CSV with all the details in the CSV" time="0.02">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a pie-chart Visualization CSV with all the details in the CSV" name="visualizations CRUD It creates a pie-chart Visualization CSV with all the details in the CSV" time="0.022">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a scatter Visualization CSV with all the details in the CSV" name="visualizations CRUD It creates a scatter Visualization CSV with all the details in the CSV" time="0.029">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a treemap Visualization CSV with all the details in the CSV" name="visualizations CRUD It creates a treemap Visualization CSV with all the details in the CSV" time="0.033">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a sunburst Visualization CSV with all the details in the CSV" name="visualizations CRUD It creates a sunburst Visualization CSV with all the details in the CSV" time="0.03">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a funnel Visualization CSV with all the details in the CSV" name="visualizations CRUD It creates a funnel Visualization CSV with all the details in the CSV" time="0.022">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a word-cloud Visualization CSV with only the data in the CSV" name="visualizations CRUD It creates a word-cloud Visualization CSV with only the data in the CSV" time="0.025">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a forced-directed-graph Visualization CSV with only the data in the CSV" name="visualizations CRUD It creates a forced-directed-graph Visualization CSV with only the data in the CSV" time="0.022">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a sankey Visualization CSV with only the data in the CSV" name="visualizations CRUD It creates a sankey Visualization CSV with only the data in the CSV" time="0.023">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a hierarchical-edge-bundling Visualization CSV with only the data in the CSV" name="visualizations CRUD It creates a hierarchical-edge-bundling Visualization CSV with only the data in the CSV" time="0.02">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a calendar Visualization CSV with only the data in the CSV" name="visualizations CRUD It creates a calendar Visualization CSV with only the data in the CSV" time="0.023">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a line-chart Visualization CSV with only the data in the CSV" name="visualizations CRUD It creates a line-chart Visualization CSV with only the data in the CSV" time="0.024">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a bar-chart Visualization CSV with only the data in the CSV" name="visualizations CRUD It creates a bar-chart Visualization CSV with only the data in the CSV" time="0.02">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a pie-chart Visualization CSV with only the data in the CSV" name="visualizations CRUD It creates a pie-chart Visualization CSV with only the data in the CSV" time="0.025">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a scatter Visualization CSV with only the data in the CSV" name="visualizations CRUD It creates a scatter Visualization CSV with only the data in the CSV" time="0.025">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a treemap Visualization CSV with only the data in the CSV" name="visualizations CRUD It creates a treemap Visualization CSV with only the data in the CSV" time="0.025">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a sunburst Visualization CSV with only the data in the CSV" name="visualizations CRUD It creates a sunburst Visualization CSV with only the data in the CSV" time="0.022">
+    </testcase>
+    <testcase classname="visualizations CRUD It creates a funnel Visualization CSV with only the data in the CSV" name="visualizations CRUD It creates a funnel Visualization CSV with only the data in the CSV" time="0.027">
     </testcase>
   </testsuite>
-  <testsuite name="project CRUD" errors="0" failures="0" skipped="0" timestamp="2023-12-10T13:54:15" time="1.046" tests="7">
-    <testcase classname="project CRUD create a project" name="project CRUD create a project" time="0.067">
+  <testsuite name="project CRUD" errors="0" failures="0" skipped="0" timestamp="2023-12-10T14:22:01" time="1.097" tests="7">
+    <testcase classname="project CRUD create a project" name="project CRUD create a project" time="0.07">
     </testcase>
-    <testcase classname="project CRUD creates the same project twice" name="project CRUD creates the same project twice" time="0.043">
+    <testcase classname="project CRUD creates the same project twice" name="project CRUD creates the same project twice" time="0.046">
     </testcase>
-    <testcase classname="project CRUD update a project with is active true" name="project CRUD update a project with is active true" time="0.034">
+    <testcase classname="project CRUD update a project with is active true" name="project CRUD update a project with is active true" time="0.036">
     </testcase>
-    <testcase classname="project CRUD update a project with is active false" name="project CRUD update a project with is active false" time="0.015">
+    <testcase classname="project CRUD update a project with is active false" name="project CRUD update a project with is active false" time="0.019">
     </testcase>
-    <testcase classname="project CRUD update a non existing project" name="project CRUD update a non existing project" time="0.014">
+    <testcase classname="project CRUD update a non existing project" name="project CRUD update a non existing project" time="0.013">
     </testcase>
-    <testcase classname="project CRUD finds a project by name" name="project CRUD finds a project by name" time="0.011">
+    <testcase classname="project CRUD finds a project by name" name="project CRUD finds a project by name" time="0.007">
     </testcase>
-    <testcase classname="project CRUD browse projects by all filter" name="project CRUD browse projects by all filter" time="0.055">
+    <testcase classname="project CRUD browse projects by all filter" name="project CRUD browse projects by all filter" time="0.062">
     </testcase>
   </testsuite>
 </testsuites>

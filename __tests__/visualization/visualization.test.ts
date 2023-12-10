@@ -25,6 +25,10 @@ const excelDirectoryPath = path.resolve(
   __dirname,
   "../../__tests_resources__/excel/"
 );
+const csvDirectoryPath = path.resolve(
+  __dirname,
+  "../../__tests_resources__/csv/"
+);
 describe("visualizations CRUD", () => {
   beforeAll(async () => {
     const expectedProject: ProjectCreate = {
@@ -35,6 +39,7 @@ describe("visualizations CRUD", () => {
     copyDirectory(jsonDirectoryPath, path.resolve(__dirname));
     copyDirectory(xmlDirectoryPath, path.resolve(__dirname));
     copyDirectory(excelDirectoryPath, path.resolve(__dirname));
+    copyDirectory(csvDirectoryPath, path.resolve(__dirname));
     await factory.getBZL().ProjectBZL.create(expectedProject);
   });
   afterAll(async () => {
@@ -5317,6 +5322,1610 @@ describe("visualizations CRUD", () => {
     };
     const fileDetails: FileDetails = {
       fileType: "EXCEL",
+      includeHeaders: true,
+      mapping: {
+        values: "2",
+        names: "1",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "Funnel_PartialDetails",
+      projectName: "Test_Project1",
+      type: "funnel",
+      data: {
+        values: {
+          first: 1,
+          second: 1,
+          third: 1,
+          forth: 1,
+        },
+      },
+      description: "Funnel_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a word-cloud Visualization CSV with all the details in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./Wordcloud_FullDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {
+      type: VisualizationTypesEnum.WORD_CLOUD,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: false,
+      mapping: {
+        names: "1",
+        values: "2",
+        properties: "3",
+        visualizationName: "4",
+        visualizationDescription: "5",
+        visualizationTags: "6",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      data: {
+        words: [
+          { name: "Word1", value: 390, properties: "prop1" },
+          { name: "Word2", value: 40, properties: "prop2" },
+        ],
+      },
+      name: "Wordcloud_FullDetails",
+      description: "Wordcloud_FullDetails description",
+      tags: ["full"],
+      type: "word-cloud",
+      projectName: "Test_Project1",
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a forced-directed-graph Visualization CSV with all the details in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./FLG_FullDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {
+      type: VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        nodes: "1",
+        categories: "2",
+        properties: "3",
+        visualizationName: "4",
+        visualizationDescription: "5",
+        visualizationTags: "6",
+        sources: "7",
+        targets: "8",
+        values: "9",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "FLG_FullDetails",
+      projectName: "Test_Project1",
+      type: "force-directed-graph",
+      data: {
+        nodes: [
+          { name: "Node1", category: "1", properties: "prop1" },
+          { name: "Node2", category: "2", properties: "prop2" },
+          { name: "Node3", category: "3", properties: "prop3" },
+        ],
+        links: [
+          { source: "Node1", target: "Node2", value: 1 },
+          { source: "Node2", target: "Node3", value: 1 },
+          { source: "Node3", target: "Node2", value: 1 },
+        ],
+      },
+      description: "FLG_FullDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a sankey Visualization CSV with all the details in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./Sankey_FullDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {
+      type: VisualizationTypesEnum.SANKEY,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        nodes: "1",
+        categories: "2",
+        properties: "3",
+        visualizationName: "4",
+        visualizationDescription: "5",
+        visualizationTags: "6",
+        sources: "7",
+        targets: "8",
+        values: "9",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "Sankey_FullDetails",
+      projectName: "Test_Project1",
+      type: "sankey",
+      data: {
+        nodes: [
+          {
+            name: "Node1",
+            category: "1",
+            properties: "prop1",
+          },
+          {
+            name: "Node2",
+            category: "2",
+            properties: "prop2",
+          },
+          {
+            name: "Node3",
+            category: "3",
+            properties: "prop3",
+          },
+        ],
+        links: [
+          {
+            source: "Node1",
+            target: "Node2",
+            value: 1,
+          },
+          {
+            source: "Node2",
+            target: "Node3",
+            value: 1,
+          },
+        ],
+      },
+      description: "Sankey_FullDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+
+  it("It creates a hierarchical-edge-bundling Visualization CSV with all the details in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./HEB_FullDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {
+      type: VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        nodes: "1",
+        categories: "2",
+        properties: "3",
+        visualizationName: "4",
+        visualizationDescription: "5",
+        visualizationTags: "6",
+        sources: "7",
+        targets: "8",
+        values: "9",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "HEB_FullDetails",
+      projectName: "Test_Project1",
+      type: "hierarchical-edge-bundling",
+      data: {
+        nodes: [
+          { name: "Node1", category: "1", properties: "prop1" },
+          { name: "Node2", category: "2", properties: "prop2" },
+          { name: "Node3", category: "3", properties: "prop3" },
+        ],
+        links: [
+          { source: "Node1", target: "Node2", value: 1 },
+          { source: "Node2", target: "Node3", value: 1 },
+          { source: "Node3", target: "Node2", value: 1 },
+        ],
+      },
+      description: "HEB_FullDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a calendar Visualization CSV with all the details in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./Calendar_FullDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {
+      type: VisualizationTypesEnum.CALENDAR,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        dates: "1",
+        values: "2",
+        properties: "3",
+        visualizationName: "4",
+        visualizationDescription: "5",
+        visualizationTags: "6",
+        categories: "7",
+      },
+      sheets: "2",
+    };
+    const expectedVisualization = {
+      name: "Calendar_FullDetails",
+      projectName: "Test_Project1",
+      type: "calendar",
+      data: {
+        calendar: [
+          { category: "1", date: "1997-05-13", value: 1, properties: "prop1" },
+          { category: "2", date: "1997-11-05", value: 2, properties: "prop2" },
+          { category: "3", date: "1997-12-05", value: 3, properties: "prop3" },
+        ],
+      },
+      description: "Calendar_FullDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a line-chart Visualization CSV with all the details in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./LineChart_FullDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {
+      type: VisualizationTypesEnum.LINE_CHART,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        data: "2,3,7,8",
+        headers: "1",
+        visualizationName: "4",
+        visualizationDescription: "5",
+        visualizationTags: "6",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "LineChart_FullDetails",
+      projectName: "Test_Project1",
+      type: "line-chart",
+      data: {
+        headers: ["1", "2", "3", "4"],
+        values: {
+          first: [1, 2, 3],
+          second: [1, 2, 3],
+          third: [1, 2, 3],
+          forth: [1, 2, 3],
+        },
+      },
+      description: "LineChart_FullDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a bar-chart Visualization CSV with all the details in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./BarChart_FullDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {
+      type: VisualizationTypesEnum.BAR_CHART,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        data: "2,3,7,8",
+        headers: "1",
+        visualizationName: "4",
+        visualizationDescription: "5",
+        visualizationTags: "6",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "BarChart_FullDetails",
+      projectName: "Test_Project1",
+      type: "bar-chart",
+      data: {
+        headers: ["1", "2", "3", "4"],
+        values: {
+          first: [1, 2, 3],
+          second: [1, 2, 3],
+          third: [1, 2, 3],
+          forth: [1, 2, 3],
+        },
+      },
+      description: "BarChart_FullDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a pie-chart Visualization CSV with all the details in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./PieChart_FullDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {
+      type: VisualizationTypesEnum.PIE_CHART,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        values: "2",
+        names: "1",
+        visualizationName: "4",
+        visualizationDescription: "5",
+        visualizationTags: "6",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "PieChart_FullDetails",
+      projectName: "Test_Project1",
+      type: "pie-chart",
+      data: {
+        values: {
+          first: 1,
+          second: 1,
+          third: 1,
+          forth: 1,
+        },
+      },
+      description: "PieChart_FullDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a scatter Visualization CSV with all the details in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./Scatter_FullDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {
+      type: VisualizationTypesEnum.SCATTER,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        values: "2,3",
+        categories: "1",
+        visualizationName: "4",
+        visualizationDescription: "5",
+        visualizationTags: "6",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "ScatterChart_FullDetails",
+      projectName: "Test_Project1",
+      type: "scatter",
+      data: {
+        points: [
+          {
+            category: "1",
+            value: [1, 2],
+            properties: "",
+          },
+          {
+            category: "2",
+            value: [1, 2],
+            properties: "",
+          },
+          {
+            category: "3",
+            value: [1, 2],
+            properties: "",
+          },
+          {
+            category: "4",
+            value: [1, 2],
+            properties: "",
+          },
+        ],
+      },
+      description: "ScatterChart_FullDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+
+  it("It creates a treemap Visualization CSV with all the details in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./Treemap_FullDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {
+      type: VisualizationTypesEnum.TREEMAP,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        names: "1",
+        values: "2",
+        categories: "3",
+        visualizationName: "4",
+        visualizationDescription: "5",
+        visualizationTags: "6",
+        children: "7,8",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "TreemapChart_FullDetails",
+      projectName: "Test_Project1",
+      type: "treemap",
+      data: {
+        nodes: [
+          {
+            name: "Node Group 1",
+            value: 1,
+            category: "2",
+            properties: "",
+            children: [
+              {
+                name: "Node 1",
+                value: 1,
+                category: "2",
+                properties: "",
+                children: [
+                  {
+                    name: "Node 1.1",
+                    value: 1,
+                    category: "2",
+                    properties: "",
+                  },
+                  {
+                    name: "Node 1.2",
+                    value: 1,
+                    category: "2",
+                    properties: "",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "Node group 2",
+            value: 2,
+            category: "5",
+            properties: "",
+            children: [
+              {
+                name: "Node 2.2",
+                value: 2,
+                category: "3",
+                properties: "",
+              },
+            ],
+          },
+        ],
+      },
+      description: "TreemapChart_FullDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a sunburst Visualization CSV with all the details in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./Sunburst_FullDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {
+      type: VisualizationTypesEnum.SUNBURST,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        names: "1",
+        values: "2",
+        categories: "3",
+        visualizationName: "4",
+        visualizationDescription: "5",
+        visualizationTags: "6",
+        children: "7,8",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "Sunburst_FullDetails",
+      projectName: "Test_Project1",
+      type: "sunburst",
+      data: {
+        nodes: [
+          {
+            name: "Node Group 1",
+            value: 1,
+            category: "2",
+            properties: "",
+            children: [
+              {
+                name: "Node 1",
+                value: 1,
+                category: "2",
+                properties: "",
+                children: [
+                  {
+                    name: "Node 1.1",
+                    value: 1,
+                    category: "2",
+                    properties: "",
+                  },
+                  {
+                    name: "Node 1.2",
+                    value: 1,
+                    category: "2",
+                    properties: "",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "Node group 2",
+            value: 2,
+            category: "5",
+            properties: "",
+            children: [
+              {
+                name: "Node 2.2",
+                value: 2,
+                category: "3",
+                properties: "",
+              },
+            ],
+          },
+        ],
+      },
+      description: "Sunburst_FullDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a funnel Visualization CSV with all the details in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./Funnel_FullDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = true;
+    const visualizationDetails: VisualizationUpdate = {
+      type: VisualizationTypesEnum.FUNNEL,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        values: "2",
+        names: "1",
+        visualizationName: "4",
+        visualizationDescription: "5",
+        visualizationTags: "6",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "Funnel_FullDetails",
+      projectName: "Test_Project1",
+      type: "funnel",
+      data: {
+        values: {
+          first: 1,
+          second: 1,
+          third: 1,
+          forth: 1,
+        },
+      },
+      description: "Funnel_FullDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+
+  it("It creates a word-cloud Visualization CSV with only the data in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./Wordcloud_PartialDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "Wordcloud_PartialDetails",
+      description: "Wordcloud_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.WORD_CLOUD,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: false,
+      mapping: {
+        names: "1",
+        values: "2",
+        properties: "3",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      data: {
+        words: [
+          { name: "Word1", value: 390, properties: "prop1" },
+          { name: "Word2", value: 40, properties: "prop2" },
+        ],
+      },
+      name: "Wordcloud_PartialDetails",
+      description: "Wordcloud_PartialDetails description",
+      tags: ["full"],
+      type: "word-cloud",
+      projectName: "Test_Project1",
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a forced-directed-graph Visualization CSV with only the data in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./FLG_PartialDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "FLG_PartialDetails",
+      description: "FLG_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        nodes: "1",
+        categories: "2",
+        properties: "3",
+        sources: "7",
+        targets: "8",
+        values: "9",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "FLG_PartialDetails",
+      projectName: "Test_Project1",
+      type: "force-directed-graph",
+      data: {
+        nodes: [
+          { name: "Node1", category: "1", properties: "prop1" },
+          { name: "Node2", category: "2", properties: "prop2" },
+          { name: "Node3", category: "3", properties: "prop3" },
+        ],
+        links: [
+          { source: "Node1", target: "Node2", value: 1 },
+          { source: "Node2", target: "Node3", value: 1 },
+          { source: "Node3", target: "Node2", value: 1 },
+        ],
+      },
+      description: "FLG_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a sankey Visualization CSV with only the data in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./Sankey_PartialDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "Sankey_PartialDetails",
+      description: "Sankey_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.SANKEY,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        nodes: "1",
+        categories: "2",
+        properties: "3",
+        sources: "7",
+        targets: "8",
+        values: "9",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "Sankey_PartialDetails",
+      projectName: "Test_Project1",
+      type: "sankey",
+      data: {
+        nodes: [
+          {
+            name: "Node1",
+            category: "1",
+            properties: "prop1",
+          },
+          {
+            name: "Node2",
+            category: "2",
+            properties: "prop2",
+          },
+          {
+            name: "Node3",
+            category: "3",
+            properties: "prop3",
+          },
+        ],
+        links: [
+          {
+            source: "Node1",
+            target: "Node2",
+            value: 1,
+          },
+          {
+            source: "Node2",
+            target: "Node3",
+            value: 1,
+          },
+        ],
+      },
+      description: "Sankey_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+
+  it("It creates a hierarchical-edge-bundling Visualization CSV with only the data in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./HEB_PartialDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "HEB_PartialDetails",
+      description: "HEB_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        nodes: "1",
+        categories: "2",
+        properties: "3",
+        sources: "7",
+        targets: "8",
+        values: "9",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "HEB_PartialDetails",
+      projectName: "Test_Project1",
+      type: "hierarchical-edge-bundling",
+      data: {
+        nodes: [
+          { name: "Node1", category: "1", properties: "prop1" },
+          { name: "Node2", category: "2", properties: "prop2" },
+          { name: "Node3", category: "3", properties: "prop3" },
+        ],
+        links: [
+          { source: "Node1", target: "Node2", value: 1 },
+          { source: "Node2", target: "Node3", value: 1 },
+          { source: "Node3", target: "Node2", value: 1 },
+        ],
+      },
+      description: "HEB_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a calendar Visualization CSV with only the data in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./Calendar_PartialDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "Calendar_PartialDetails",
+      description: "Calendar_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.CALENDAR,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      separator: ",",
+      includeHeaders: true,
+      mapping: {
+        dates: "1",
+        values: "2",
+        properties: "3",
+        categories: "7",
+      },
+      sheets: "2",
+    };
+    const expectedVisualization = {
+      name: "Calendar_PartialDetails",
+      projectName: "Test_Project1",
+      type: "calendar",
+      data: {
+        calendar: [
+          { category: "1", date: "1997-05-13", value: 1, properties: "prop1" },
+          { category: "2", date: "1997-11-05", value: 2, properties: "prop2" },
+          { category: "3", date: "1997-12-05", value: 3, properties: "prop3" },
+        ],
+      },
+      description: "Calendar_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a line-chart Visualization CSV with only the data in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./LineChart_PartialDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "LineChart_PartialDetails",
+      description: "LineChart_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.LINE_CHART,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        data: "2,3,7,8",
+        headers: "1",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "LineChart_PartialDetails",
+      projectName: "Test_Project1",
+      type: "line-chart",
+      data: {
+        headers: ["1", "2", "3", "4"],
+        values: {
+          first: [1, 2, 3],
+          second: [1, 2, 3],
+          third: [1, 2, 3],
+          forth: [1, 2, 3],
+        },
+      },
+      description: "LineChart_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a bar-chart Visualization CSV with only the data in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./BarChart_PartialDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "BarChart_PartialDetails",
+      description: "BarChart_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.BAR_CHART,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        data: "2,3,7,8",
+        headers: "1",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "BarChart_PartialDetails",
+      projectName: "Test_Project1",
+      type: "bar-chart",
+      data: {
+        headers: ["1", "2", "3", "4"],
+        values: {
+          first: [1, 2, 3],
+          second: [1, 2, 3],
+          third: [1, 2, 3],
+          forth: [1, 2, 3],
+        },
+      },
+      description: "BarChart_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a pie-chart Visualization CSV with only the data in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./PieChart_PartialDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "PieChart_PartialDetails",
+      description: "PieChart_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.PIE_CHART,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        values: "2",
+        names: "1",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "PieChart_PartialDetails",
+      projectName: "Test_Project1",
+      type: "pie-chart",
+      data: {
+        values: {
+          first: 1,
+          second: 1,
+          third: 1,
+          forth: 1,
+        },
+      },
+      description: "PieChart_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+
+  it("It creates a scatter Visualization CSV with only the data in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./Scatter_PartialDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "ScatterChart_PartialDetails",
+      description: "ScatterChart_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.SCATTER,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        values: "2,3",
+        categories: "1",
+        visualizationName: "4",
+        visualizationDescription: "5",
+        visualizationTags: "6",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "ScatterChart_PartialDetails",
+      projectName: "Test_Project1",
+      type: "scatter",
+      data: {
+        points: [
+          {
+            category: "1",
+            value: [1, 2],
+            properties: "",
+          },
+          {
+            category: "2",
+            value: [1, 2],
+            properties: "",
+          },
+          {
+            category: "3",
+            value: [1, 2],
+            properties: "",
+          },
+          {
+            category: "4",
+            value: [1, 2],
+            properties: "",
+          },
+        ],
+      },
+      description: "ScatterChart_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a treemap Visualization CSV with only the data in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./Treemap_PartialDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "Treemap_PartialDetails",
+      description: "Treemap_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.TREEMAP,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        names: "1",
+        values: "2",
+        categories: "3",
+
+        children: "7,8",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "Treemap_PartialDetails",
+      projectName: "Test_Project1",
+      type: "treemap",
+      data: {
+        nodes: [
+          {
+            name: "Node Group 1",
+            value: 1,
+            category: "2",
+            properties: "",
+            children: [
+              {
+                name: "Node 1",
+                value: 1,
+                category: "2",
+                properties: "",
+                children: [
+                  {
+                    name: "Node 1.1",
+                    value: 1,
+                    category: "2",
+                    properties: "",
+                  },
+                  {
+                    name: "Node 1.2",
+                    value: 1,
+                    category: "2",
+                    properties: "",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "Node group 2",
+            value: 2,
+            category: "5",
+            properties: "",
+            children: [
+              {
+                name: "Node 2.2",
+                value: 2,
+                category: "3",
+                properties: "",
+              },
+            ],
+          },
+        ],
+      },
+      description: "Treemap_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a sunburst Visualization CSV with only the data in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "Sunburst_PartialDetails",
+      description: "Sunburst_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.SUNBURST,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
+      includeHeaders: true,
+      mapping: {
+        names: "1",
+        values: "2",
+        categories: "3",
+        children: "7,8",
+      },
+      sheets: "1",
+    };
+    const expectedVisualization = {
+      name: "Sunburst_PartialDetails",
+      projectName: "Test_Project1",
+      type: "sunburst",
+      data: {
+        nodes: [
+          {
+            name: "Node Group 1",
+            value: 1,
+            category: "2",
+            properties: "",
+            children: [
+              {
+                name: "Node 1",
+                value: 1,
+                category: "2",
+                properties: "",
+                children: [
+                  {
+                    name: "Node 1.1",
+                    value: 1,
+                    category: "2",
+                    properties: "",
+                  },
+                  {
+                    name: "Node 1.2",
+                    value: 1,
+                    category: "2",
+                    properties: "",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            name: "Node group 2",
+            value: 2,
+            category: "5",
+            properties: "",
+            children: [
+              {
+                name: "Node 2.2",
+                value: 2,
+                category: "3",
+                properties: "",
+              },
+            ],
+          },
+        ],
+      },
+      description: "Sunburst_PartialDetails description",
+      tags: ["full"],
+    };
+
+    const visualization: VisualizationType = (
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    )[0];
+
+    expect(!_.isNil(visualization)).toBe(true);
+    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+  });
+  it("It creates a funnel Visualization CSV with only the data in the CSV", async () => {
+    const filePath = path.resolve(__dirname, "./Funnel_PartialDetails.csv");
+
+    const files: FileProperties[] = [
+      {
+        filePath: filePath,
+        type: "text/csv",
+      },
+    ];
+    const allFileDetails: boolean = false;
+    const visualizationDetails: VisualizationUpdate = {
+      name: "Funnel_PartialDetails",
+      description: "Funnel_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypesEnum.FUNNEL,
+    };
+    const fileDetails: FileDetails = {
+      fileType: "CSV",
       includeHeaders: true,
       mapping: {
         values: "2",
