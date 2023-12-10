@@ -34,7 +34,10 @@ export const axisChartTransformer = (
 ) => {
   const baseValues = {
     data: computeValues(values, mapping.data as string),
-    headers: values[_.toNumber(mapping.headers)],
+    headers:
+      typeof values[_.toNumber(mapping.headers)] === "string"
+        ? values[_.toNumber(mapping.headers)]
+        : _.toString(values[_.toNumber(mapping.headers)]),
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails

@@ -22,14 +22,23 @@ export const hierarchyTransformer = (
   allFileDetails: boolean
 ) => {
   const baseValues = {
-    name: values[_.toNumber(mapping.names)],
+    name:
+      typeof values[_.toNumber(mapping.names)] === "string"
+        ? values[_.toNumber(mapping.names)]
+        : _.toString(values[_.toNumber(mapping.names)]),
     value:
       typeof values[_.toNumber(mapping.values)] === "string"
         ? +(values[_.toNumber(mapping.values)] as string)
         : values[_.toNumber(mapping.values)],
-    category: values[_.toNumber(mapping.categories)],
+    category:
+      typeof values[_.toNumber(mapping.categories)] === "string"
+        ? values[_.toNumber(mapping.categories)]
+        : _.toString(values[_.toNumber(mapping.categories)]),
     children: computeChildren(values, mapping),
-    properties: values[_.toNumber(mapping.properties)],
+    properties:
+      typeof values[_.toNumber(mapping.properties)] === "string"
+        ? values[_.toNumber(mapping.properties)]
+        : _.toString(values[_.toNumber(mapping.properties)]),
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails

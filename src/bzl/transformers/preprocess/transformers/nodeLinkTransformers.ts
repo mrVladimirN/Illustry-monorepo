@@ -8,11 +8,26 @@ export const nodeLinkTransformer = (
   allFileDetails: boolean
 ) => {
   const baseValues = {
-    name: values[_.toNumber(mapping.nodes)],
-    category: values[_.toNumber(mapping.categories)],
-    properties: values[_.toNumber(mapping.properties)],
-    source: values[_.toNumber(mapping.sources)],
-    target: values[_.toNumber(mapping.targets)],
+    name:
+      typeof values[_.toNumber(mapping.nodes)] === "string"
+        ? values[_.toNumber(mapping.nodes)]
+        : _.toString(values[_.toNumber(mapping.nodes)]),
+    category:
+      typeof values[_.toNumber(mapping.categories)] === "string"
+        ? values[_.toNumber(mapping.categories)]
+        : _.toString(values[_.toNumber(mapping.categories)]),
+    properties:
+      typeof values[_.toNumber(mapping.properties)] === "string"
+        ? values[_.toNumber(mapping.properties)]
+        : _.toString(values[_.toNumber(mapping.properties)]),
+    source:
+      typeof values[_.toNumber(mapping.sources)] === "string"
+        ? values[_.toNumber(mapping.sources)]
+        : _.toString(values[_.toNumber(mapping.sources)]),
+    target:
+      typeof values[_.toNumber(mapping.targets)] === "string"
+        ? values[_.toNumber(mapping.targets)]
+        : _.toString(values[_.toNumber(mapping.targets)]),
     value:
       typeof values[_.toNumber(mapping.values)] === "string"
         ? +(values[_.toNumber(mapping.values)] as string)
@@ -39,7 +54,7 @@ export const nodesLinksExtractorCsvOrExcel = (
         (n: Link) => n.source === source && n.target === target
       );
       if (_.isNil(node)) {
-        node = { name, category, properties } as Node;
+        const node = { name, category, properties } as Node;
         if (
           !_.isNil(node.name) &&
           !_.isNil(node.category) &&
@@ -50,7 +65,7 @@ export const nodesLinksExtractorCsvOrExcel = (
         }
       }
       if (_.isNil(link)) {
-        link = { source, target, value } as Link;
+        const link = { source, target, value } as Link;
 
         if (
           !_.isNil(link.source) &&

@@ -33,8 +33,14 @@ export const scatterTransformer = (
 ) => {
   const baseValues = {
     value: computeValues(values, mapping.values as string),
-    category: values[_.toNumber(mapping.categories)],
-    properties: values[_.toNumber(mapping.properties)],
+    category:
+      typeof values[_.toNumber(mapping.categories)] === "string"
+        ? values[_.toNumber(mapping.categories)]
+        : _.toString(values[_.toNumber(mapping.categories)]),
+    properties:
+      typeof values[_.toNumber(mapping.properties)] === "string"
+        ? values[_.toNumber(mapping.properties)]
+        : _.toString(values[_.toNumber(mapping.properties)]),
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails

@@ -46,10 +46,11 @@ const reformatDate = (date: string): string | null => {
 };
 const excelDateToJSDate = (excelDate: number): string | null => {
   const millisecondsPerDay = 24 * 60 * 60 * 1000;
-  const daysSinceExcelEpoch = excelDate - 1; // Excel epoch starts from 1
+  const daysSinceExcelEpoch = excelDate - 25569; // Adjust for Excel epoch starting from 1900-01-01
   const millisecondsSinceExcelEpoch = daysSinceExcelEpoch * millisecondsPerDay;
   const jsDate = new Date(millisecondsSinceExcelEpoch);
-  if (!_.isNil(jsDate)) {
+
+  if (!isNaN(jsDate.getTime())) {
     const reformattedDate = `${jsDate.getFullYear()}-${String(
       jsDate.getMonth() + 1
     ).padStart(2, "0")}-${String(jsDate.getDate()).padStart(2, "0")}`;
@@ -72,8 +73,14 @@ export const calendarTransformer = (
       typeof values[_.toNumber(mapping.values)] === "string"
         ? +(values[_.toNumber(mapping.values)] as string)
         : values[_.toNumber(mapping.values)],
-    category: values[_.toNumber(mapping.categories)],
-    properties: values[_.toNumber(mapping.properties)],
+    category:
+      typeof values[_.toNumber(mapping.categories)] === "string"
+        ? values[_.toNumber(mapping.categories)]
+        : _.toString(values[_.toNumber(mapping.categories)]),
+    properties:
+      typeof values[_.toNumber(mapping.properties)] === "string"
+        ? values[_.toNumber(mapping.properties)]
+        : _.toString(values[_.toNumber(mapping.properties)]),
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails
@@ -120,7 +127,10 @@ const calendarEventExtractorXml = (
 ): CalendarType[] => {
   return calendar.map((el: Record<string, unknown>) => {
     return {
-      category: (el.category as string[])[0],
+      category:
+        typeof (el.value as string[])[0] === "string"
+          ? (el.category as string[])[0]
+          : _.toString(typeof (el.value as string[])[0] === "string"),
       date: reformatDate((el.date as string)[0]),
       value:
         typeof (el.value as string[])[0] === "string"

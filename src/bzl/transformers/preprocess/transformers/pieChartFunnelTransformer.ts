@@ -8,7 +8,10 @@ export const pieChartFunnelTransformer = (
   allFileDetails: boolean
 ) => {
   const baseValues = {
-    name: values[_.toNumber(mapping.names)],
+    name:
+      typeof values[_.toNumber(mapping.names)] === "string"
+        ? values[_.toNumber(mapping.names)]
+        : _.toString(values[_.toNumber(mapping.names)]),
     value:
       typeof values[_.toNumber(mapping.values)] === "string"
         ? +(values[_.toNumber(mapping.values)] as string)
@@ -60,7 +63,7 @@ const pieChartFunnelValuesExtractorXml = (
 
     // Transform each array of strings to an array of numbers
     Object.keys(el).forEach((key) => {
-      transformedValues[key] = +(el[key] as string[])[0]
+      transformedValues[key] = +(el[key] as string[])[0];
     });
 
     return {

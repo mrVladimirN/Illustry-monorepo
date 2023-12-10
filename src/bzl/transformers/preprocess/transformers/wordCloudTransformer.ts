@@ -54,10 +54,15 @@ export const wordCloudExtractorCsvOrExcel = (
   return transformedData as unknown as WordCloudData;
 };
 
-const wordCloudWordExtractorXml = (words: Record<string, unknown>[]): WordType[] => {
+const wordCloudWordExtractorXml = (
+  words: Record<string, unknown>[]
+): WordType[] => {
   return words.map((el: Record<string, unknown>) => {
     return {
-      name: (el.name as string[])[0],
+      name:
+        typeof (el.name as string[])[0] === "string"
+          ? (el.name as string[])[0]
+          : _.toString((el.name as string[])[0]),
       value:
         typeof (el.value as string[])[0] === "string"
           ? +(el.value as string[])[0]
