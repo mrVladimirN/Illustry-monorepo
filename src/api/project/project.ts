@@ -74,7 +74,7 @@ export const create = (
             }
           });
         }
-        return Factory.getInstance().getBZL().ProjectBZL.create(project);
+        return Bluebird.Promise.resolve(Factory.getInstance().getBZL().ProjectBZL.create(project));
       }
     })
     .asCallback((errGPC: Error, data: ProjectType) => returnResponse(response, errGPC, data, next))
