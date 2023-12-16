@@ -1,3 +1,41 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended",
+    "airbnb-base"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "rules": {
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    "class-methods-use-this": "off",
+    "no-console": "error",
+    "comma-dangle": ["error", "never"],
+    "linebreak-style": "off",
+    "import/no-unresolved": "off"
+    // Add more rules as needed
+  },
+  "overrides": [
+    {
+      "files": ["*.ts", "*.tsx"],
+      "parserOptions": {
+        "project": "./tsconfig.json"
+      },
+      "rules": {
+        // Add TypeScript-specific rules here
+      }
+    }
+  ],
+  "ignorePatterns": ["__tests__", "dist/", "node_modules/"]
 }
