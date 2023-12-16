@@ -26,8 +26,12 @@ export default class Factory {
           : ''
         : process.env.MONGO_URL
           ? process.env.MONGO_URL
-          : ''
-      // connectionOptions
+          : '',
+      {
+        dbName: process.env.NODE_ENV === 'test' ? 'illustrytest' : 'illustry',
+        user: process.env.MONGO_USER,
+        pass: process.env.MONGO_PASSWORD
+      }
     );
     Factory._dbaccInstance = new DbaccInstance(dbConnection);
     Factory._bzlInstance = new BZLInstance(Factory._dbaccInstance);
