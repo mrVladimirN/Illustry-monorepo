@@ -10,16 +10,19 @@
   ],
   "license": "Apache-2.0",
   "author": "Vladimir Nitu",
-  "main": "dist/app.js",
+  "main": "dist/app-cli.js",
   "scripts": {
     "clean": "rm -rf ./dist",
     "compile": "tsc -p tsconfig.json",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "build:ts": " npm run clean && npm run compile && npm run lint:fix",
+    "depcheck": "depcheck",
+    "build:ts": " npm run clean && npm run compile",
     "start:dev": "npm run build:ts && node ./dist/app-cli.js",
+    "start:prod": "node ./build-dist/illustry.js",
     "test": "jest --detectOpenHandles",
-    "webpack": "webpack --config webpack.config.js"
+    "webpack": "webpack --config webpack.config.js",
+    "prepare": "husky install"
   },
   "dependencies": {
     "bluebird": "3.7.2",
@@ -38,6 +41,8 @@
     "zod-error": "1.5.0"
   },
   "devDependencies": {
+    "@commitlint/cli": "18.4.3",
+    "@commitlint/config-conventional": "18.4.3",
     "@illustry/types": "0.0.25",
     "@types/bluebird": "3.5.42",
     "@types/bunyan": "1.8.11",
@@ -51,19 +56,29 @@
     "@types/xml2js": "0.4.14",
     "@typescript-eslint/eslint-plugin": "6.13.2",
     "@typescript-eslint/parser": "6.13.2",
+    "commitlint": "18.4.3",
+    "depcheck": "1.4.7",
     "eslint": "8.55.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-plugin-import": "2.29.0",
     "eslint-plugin-node": "11.1.0",
     "eslint-plugin-promise": "6.1.1",
+    "husky": "8.0.3",
     "jest": "29.7.0",
-    "shebang-loader": "^0.0.1",
-    "terser-webpack-plugin": "^5.3.9",
+    "lint-staged": "15.2.0",
+    "shebang-loader": "0.0.1",
+    "terser-webpack-plugin": "5.3.9",
     "ts-jest": "29.1.1",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.3.2",
-    "webpack": "^5.89.0",
-    "webpack-cli": "^5.1.4"
+    "ts-loader": "9.5.1",
+    "typescript": "5.3.2",
+    "webpack": "5.89.0",
+    "webpack-cli": "5.1.4"
+  },
+  "lint-staged": {
+    "*.{js,ts}": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "jest": {
     "collectCoverage": true,
@@ -80,16 +95,12 @@
     "transform": {
       ".+\\.ts$": "ts-jest"
     },
-    "coverageDirectory": "<rootDir>/coverage",
     "coverageReporters": [
-      "html",
       "text",
-      "text-summary",
-      "cobertura"
+      "text-summary"
     ],
     "reporters": [
-      "default",
-      "jest-junit"
+      "default"
     ],
     "coverageThreshold": {
       "global": {
