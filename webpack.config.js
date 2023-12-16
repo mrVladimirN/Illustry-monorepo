@@ -10,10 +10,10 @@ require('ts-loader');
 
 module.exports = {
   mode: 'production',
-  name: 'illustrybackend',
+  name: 'illustry',
   entry: {
-    illustrybackend: resolve(__dirname, 'src', 'app-cli.ts'),
-    'illustrybackend.min': resolve(__dirname, 'src', 'app-cli.ts')
+    illustry: resolve(__dirname, 'src', 'app-cli.ts'),
+    'illustry.min': resolve(__dirname, 'src', 'app-cli.ts')
   },
   output: {
     path: resolve(__dirname, 'build-dist'),
