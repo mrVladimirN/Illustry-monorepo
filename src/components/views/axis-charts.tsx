@@ -1,66 +1,69 @@
-"use client";
-import * as React from "react";
+'use client';
 
-import { EChartsOption } from "echarts/types/dist/echarts";
+import * as React from 'react';
 
-import { AxisChartData } from "types/visualizations";
+import { EChartsOption } from 'echarts/types/dist/echarts';
+
+import { AxisChartData } from 'types/visualizations';
 import {
   computeLegendColors,
-  constructSeries,
-} from "@/lib/visualizations/chart/helper";
-import { SeriesOption } from "echarts";
-import Legend from "../ui/legend";
-import { with_legend, with_options } from "@/lib/types/utils";
-import { useThemeColors } from "../theme-provider";
-import ReactEcharts from "./generic/echarts";
+  constructSeries
+} from '@/lib/visualizations/chart/helper';
+import { SeriesOption } from 'echarts';
+import { with_legend, with_options } from '@/lib/types/utils';
+import Legend from '../ui/legend';
+import { useThemeColors } from '../theme-provider';
+import ReactEcharts from './generic/echarts';
+
 interface AxisChartProp extends with_legend, with_options {
   data: AxisChartData;
-  type: "line" | "bar";
+  type: 'line' | 'bar';
 }
-const AxisChartView = ({ data, type, legend, options }: AxisChartProp) => {
+const AxisChartView = ({
+  data, type, legend, options
+}: AxisChartProp) => {
   const activeTheme = useThemeColors();
-  const theme =
-    typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
-  const isDarkTheme = theme === "dark";
+  const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
+  const isDarkTheme = theme === 'dark';
   const colors = isDarkTheme
-    ? type === "bar"
+    ? type === 'bar'
       ? activeTheme.barChart.dark.colors
       : activeTheme.barChart.light.colors
-    : type === "line"
-    ? activeTheme.lineChart.dark.colors
-    : activeTheme.lineChart.light.colors;
+    : type === 'line'
+      ? activeTheme.lineChart.dark.colors
+      : activeTheme.lineChart.light.colors;
 
   const { headers, values } = data;
   const option: EChartsOption = {
     tooltip: {
-      trigger: "axis",
+      trigger: 'axis',
       axisPointer: {
-        type: "cross",
+        type: 'cross',
         label: {
-          backgroundColor: "#6a7985",
-        },
-      },
+          backgroundColor: '#6a7985'
+        }
+      }
     },
 
     grid: {
-      left: "3%",
-      right: "4%",
-      bottom: "3%",
-      containLabel: true,
+      left: '3%',
+      right: '4%',
+      bottom: '3%',
+      containLabel: true
     },
     xAxis: [
       {
-        type: "category",
-        boundaryGap: type === "line" ? false : true,
-        data: headers,
-      },
+        type: 'category',
+        boundaryGap: type !== 'line',
+        data: headers
+      }
     ],
     yAxis: [
       {
-        type: "value",
-      },
+        type: 'value'
+      }
     ],
-    series: constructSeries(values, colors, false, type, false) as SeriesOption,
+    series: constructSeries(values, colors, false, type, false) as SeriesOption
   };
   return (
     <div className="relative mt-[4%] flex flex-col items-center">

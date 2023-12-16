@@ -1,21 +1,22 @@
-import { Inputs } from "@/components/form/add-visualization-form";
-import { UseFormReturn } from "react-hook-form";
+import { Inputs } from '@/components/form/add-visualization-form';
+import { UseFormReturn } from 'react-hook-form';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 import {
   FormField,
   FormItem,
   FormLabel,
   FormControl,
-  FormMessage,
-} from "../../form";
+  FormMessage
+} from '../../form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "../../select";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { visualizationTypesEnum } from "@/lib/validation/visualizations";
+  SelectValue
+} from '../../select';
+
 export interface VisualizationTypeProp {
   form: UseFormReturn<Inputs>; // Include the form context
   router: AppRouterInstance;
@@ -25,7 +26,7 @@ export interface VisualizationTypeProp {
 export function VisualizationType({
   form,
   router,
-  exclude,
+  exclude
 }: VisualizationTypeProp) {
   return (
     <>
@@ -38,9 +39,9 @@ export function VisualizationType({
               <FormLabel>Type</FormLabel>
               <FormControl>
                 <Select
-                  value={form.getValues("type")}
+                  value={form.getValues('type')}
                   onValueChange={(value: visualizationTypesEnum) => {
-                    form.setValue("type", value);
+                    form.setValue('type', value);
                     router.refresh();
                   }}
                 >

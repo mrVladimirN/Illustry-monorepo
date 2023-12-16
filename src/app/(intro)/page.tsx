@@ -1,13 +1,13 @@
-import React from "react";
-import { Typewriter } from "@/components/animatedText/Typewriter";
-import Balance from "react-wrap-balancer";
-import { Shell } from "@/components/shells/shell";
-import { buttonVariants } from "@/components/ui/button";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
+import React from 'react';
+import { Typewriter } from '@/components/animatedText/Typewriter';
+import Balance from 'react-wrap-balancer';
+import { Shell } from '@/components/shells/shell';
+import { buttonVariants } from '@/components/ui/button';
+import Link from 'next/link';
+import { cn } from '@/lib/utils';
 
 const Home = () => {
-  const animatedText = ["Understand", "Learn about", "Visualize"];
+  const animatedText = ['Understand', 'Learn about', 'Visualize'];
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
@@ -38,7 +38,7 @@ const Home = () => {
               href="https://google.com"
               className={cn(
                 buttonVariants({
-                  size: "lg",
+                  size: 'lg'
                 })
               )}
             >

@@ -1,25 +1,26 @@
-'use client'
-import * as React from "react";
+'use client';
+
+import * as React from 'react';
 import {
   EChartsOption,
-  WordCloudSeriesOption,
-} from "echarts/types/dist/echarts";
+  WordCloudSeriesOption
+} from 'echarts/types/dist/echarts';
 import {
   computeWords,
-  computePropertiesForToolTip,
-} from "@/lib/visualizations/word-cloud/helper";
-import { WordCloudData } from "types/visualizations";
-import { with_legend, with_options } from "@/lib/types/utils";
-import { useThemeColors } from "../theme-provider";
-import ReactEcharts from "./generic/echarts";
+  computePropertiesForToolTip
+} from '@/lib/visualizations/word-cloud/helper';
+import { WordCloudData } from 'types/visualizations';
+import { with_legend, with_options } from '@/lib/types/utils';
+import { useThemeColors } from '../theme-provider';
+import ReactEcharts from './generic/echarts';
+
 interface WordCloudProp extends with_legend, with_options {
   data: WordCloudData;
 }
-const WordCloudView = ({ data,  legend, options }: WordCloudProp) => {
+const WordCloudView = ({ data, legend, options }: WordCloudProp) => {
   const activeTheme = useThemeColors();
-  const theme =
-    typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
-  const isDarkTheme = theme === "dark";
+  const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
+  const isDarkTheme = theme === 'dark';
   const colors = isDarkTheme
     ? activeTheme.wordcloud.dark.colors
     : activeTheme.wordcloud.light.colors;
@@ -27,30 +28,30 @@ const WordCloudView = ({ data,  legend, options }: WordCloudProp) => {
   const { words } = data;
   const option: EChartsOption = {
     tooltip: {
-      trigger: "item",
-      triggerOn: "mousemove",
-      //@ts-ignore
-      formatter: function (params) {
-        //@ts-ignore
+      trigger: 'item',
+      triggerOn: 'mousemove',
+      // @ts-ignore
+      formatter(params) {
+        // @ts-ignore
         return computePropertiesForToolTip(
-          //@ts-ignore
+          // @ts-ignore
           params.data.properties,
-          //@ts-ignore
+          // @ts-ignore
           params.data.value
         );
-      },
+      }
     },
 
     series: [
       {
-        type: "wordCloud",
-        shape: "circle",
+        type: 'wordCloud',
+        shape: 'circle',
         data: computeWords(words, colors),
         keepAspect: true,
-        left: "center",
-        top: "center",
-        width: "100%",
-        height: "100%",
+        left: 'center',
+        top: 'center',
+        width: '100%',
+        height: '100%',
         right: null,
         bottom: null,
 
@@ -59,15 +60,15 @@ const WordCloudView = ({ data,  legend, options }: WordCloudProp) => {
         gridSize: 8,
 
         emphasis: {
-          focus: "self",
+          focus: 'self',
 
           textStyle: {
             textShadowBlur: 10,
-            textShadowColor: "#333",
-          },
-        },
-      },
-    ] as WordCloudSeriesOption,
+            textShadowColor: '#333'
+          }
+        }
+      }
+    ] as WordCloudSeriesOption
   };
   return (
     <div className="w-full mt-4 h-screens-90 sm:mt-6 lg:mt-8">

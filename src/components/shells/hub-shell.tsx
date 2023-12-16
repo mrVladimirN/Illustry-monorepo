@@ -1,6 +1,5 @@
-import { Suspense } from "react";
-import Fallback from "../ui/fallback";
-import dynamic from "next/dynamic";
+import { Suspense } from 'react';
+import dynamic from 'next/dynamic';
 import {
   CalendarData,
   AxisChartData,
@@ -10,77 +9,78 @@ import {
   ScatterData,
   HierarchyData,
   FunnelData,
-  TimelineData,
-} from "types/visualizations";
-import { PieChartData } from "index";
+  TimelineData
+} from 'types/visualizations';
+import { PieChartData } from 'index';
+import Fallback from '../ui/fallback';
 
 interface HubShellProps {
   data?: VisualizationType;
 }
 const SankeyGraphView = dynamic(
-  () => import("@/components/views/sankey-diagram"),
+  () => import('@/components/views/sankey-diagram'),
   {
-    ssr: false,
+    ssr: false
   }
 );
 const ForcedLayoutGraphView = dynamic(
-  () => import("@/components/views/forced-layout-graph"),
+  () => import('@/components/views/forced-layout-graph'),
   {
-    ssr: false,
+    ssr: false
   }
 );
 const HierarchicalEdgeBundlingView = dynamic(
-  () => import("@/components/views/hierarchical-edge-bundling"),
+  () => import('@/components/views/hierarchical-edge-bundling'),
   {
-    ssr: false,
+    ssr: false
   }
 );
 const CalendarView = dynamic(
-  () => import("@/components/views/calendar-graph"),
+  () => import('@/components/views/calendar-graph'),
   {
-    ssr: false,
+    ssr: false
   }
 );
-const WordCloudView = dynamic(() => import("@/components/views/wordcloud"), {
-  ssr: false,
+const WordCloudView = dynamic(() => import('@/components/views/wordcloud'), {
+  ssr: false
 });
-const MatrixView = dynamic(() => import("@/components/views/matrix/matrix"), {
-  ssr: false,
+const MatrixView = dynamic(() => import('@/components/views/matrix/matrix'), {
+  ssr: false
 });
-const AxisChartView = dynamic(() => import("@/components/views/axis-charts"), {
-  ssr: false,
+const AxisChartView = dynamic(() => import('@/components/views/axis-charts'), {
+  ssr: false
 });
-const ScatterView = dynamic(() => import("@/components/views/scatter"), {
-  ssr: false,
-});
-
-const PieView = dynamic(() => import("@/components/views/pie-chart"), {
-  ssr: false,
+const ScatterView = dynamic(() => import('@/components/views/scatter'), {
+  ssr: false
 });
 
-const TreeMapView = dynamic(() => import("@/components/views/treemap-chart"), {
-  ssr: false,
+const PieView = dynamic(() => import('@/components/views/pie-chart'), {
+  ssr: false
+});
+
+const TreeMapView = dynamic(() => import('@/components/views/treemap-chart'), {
+  ssr: false
 });
 const SunBurstView = dynamic(
-  () => import("@/components/views/sunburst-chart"),
+  () => import('@/components/views/sunburst-chart'),
   {
-    ssr: false,
+    ssr: false
   }
 );
-const FunnelView = dynamic(() => import("@/components/views/funnel-chart"), {
-  ssr: false,
+const FunnelView = dynamic(() => import('@/components/views/funnel-chart'), {
+  ssr: false
 });
 const TimelineView = dynamic(
-  () => import("@/components/views/timeline/timeline"),
+  () => import('@/components/views/timeline/timeline'),
   {
-    ssr: false,
+    ssr: false
   }
 );
 export function HubShell({ data }: HubShellProps) {
   const renderGraph = () => {
     if (data) {
       switch (data.type) {
-        case "hierarchical-edge-bundling":
+        case 'hierarchical-edge-bundling':
           return (
             <Suspense fallback={<Fallback />}>
               <HierarchicalEdgeBundlingView
@@ -90,7 +90,7 @@ export function HubShell({ data }: HubShellProps) {
               />
             </Suspense>
           );
-        case "force-directed-graph":
+        case 'force-directed-graph':
           return (
             <Suspense fallback={<Fallback />}>
               <ForcedLayoutGraphView
@@ -100,7 +100,7 @@ export function HubShell({ data }: HubShellProps) {
               />
             </Suspense>
           );
-        case "sankey":
+        case 'sankey':
           return (
             <Suspense fallback={<Fallback />}>
               <SankeyGraphView
@@ -110,7 +110,7 @@ export function HubShell({ data }: HubShellProps) {
               />
             </Suspense>
           );
-        case "calendar":
+        case 'calendar':
           return (
             <Suspense fallback={<Fallback />}>
               <CalendarView
@@ -120,7 +120,7 @@ export function HubShell({ data }: HubShellProps) {
               />
             </Suspense>
           );
-        case "word-cloud":
+        case 'word-cloud':
           return (
             <Suspense fallback={<Fallback />}>
               <WordCloudView
@@ -130,7 +130,7 @@ export function HubShell({ data }: HubShellProps) {
               />
             </Suspense>
           );
-        case "matrix":
+        case 'matrix':
           return (
             <Suspense fallback={<Fallback />}>
               <MatrixView
@@ -140,7 +140,7 @@ export function HubShell({ data }: HubShellProps) {
               />
             </Suspense>
           );
-        case "line-chart":
+        case 'line-chart':
           return (
             <Suspense fallback={<Fallback />}>
               <AxisChartView
@@ -151,7 +151,7 @@ export function HubShell({ data }: HubShellProps) {
               />
             </Suspense>
           );
-        case "bar-chart":
+        case 'bar-chart':
           return (
             <Suspense fallback={<Fallback />}>
               <AxisChartView
@@ -162,7 +162,7 @@ export function HubShell({ data }: HubShellProps) {
               />
             </Suspense>
           );
-        case "pie-chart":
+        case 'pie-chart':
           return (
             <Suspense fallback={<Fallback />}>
               <PieView
@@ -172,7 +172,7 @@ export function HubShell({ data }: HubShellProps) {
               />
             </Suspense>
           );
-        case "funnel":
+        case 'funnel':
           return (
             <Suspense fallback={<Fallback />}>
               <FunnelView
@@ -182,7 +182,7 @@ export function HubShell({ data }: HubShellProps) {
               />
             </Suspense>
           );
-        case "scatter":
+        case 'scatter':
           return (
             <Suspense fallback={<Fallback />}>
               <ScatterView
@@ -192,7 +192,7 @@ export function HubShell({ data }: HubShellProps) {
               />
             </Suspense>
           );
-        case "treemap":
+        case 'treemap':
           return (
             <Suspense fallback={<Fallback />}>
               <TreeMapView
@@ -202,7 +202,7 @@ export function HubShell({ data }: HubShellProps) {
               />
             </Suspense>
           );
-        case "sunburst":
+        case 'sunburst':
           return (
             <Suspense fallback={<Fallback />}>
               <SunBurstView
@@ -212,7 +212,7 @@ export function HubShell({ data }: HubShellProps) {
               />
             </Suspense>
           );
-        case "timeline":
+        case 'timeline':
           return (
             <Suspense fallback={<Fallback />}>
               <TimelineView

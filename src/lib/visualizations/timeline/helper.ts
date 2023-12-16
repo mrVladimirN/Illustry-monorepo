@@ -1,4 +1,4 @@
-import { TimelineData, TimelineEvent } from "types/visualizations";
+import { TimelineData, TimelineEvent } from 'types/visualizations';
 
 export const computeColors = (types: string[], colors: string[]) => {
   const color: { [key: string]: string } = {};
@@ -13,9 +13,7 @@ export const extractTimelineDataTypes = (data: TimelineData): string[] => {
 
   Object.keys(data).forEach((date) => {
     if (data[date] && data[date]?.events) {
-      const types = data[date]?.events.map((event) => {
-        return event.type;
-      });
+      const types = data[date]?.events.map((event) => event.type);
       timelineDataTypes = timelineDataTypes.concat(types as string[]);
     }
   });
@@ -26,7 +24,7 @@ export const groupEventsByDate = (events: TimelineEvent[]): { [date: string]: Ti
   const groupedEvents: { [date: string]: TimelineEvent[] } = {};
 
   return events.reduce((groupedEvents, event) => {
-    const date = event.date;
+    const { date } = event;
 
     if (!groupedEvents[date]) {
       groupedEvents[date] = [];
@@ -36,5 +34,4 @@ export const groupEventsByDate = (events: TimelineEvent[]): { [date: string]: Ti
 
     return groupedEvents;
   }, groupedEvents);
-}
-
+};

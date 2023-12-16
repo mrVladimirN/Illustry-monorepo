@@ -1,27 +1,28 @@
-import { visualizationTypesEnum } from "@/lib/validation/visualizations";
-import React from "react";
+import { visualizationTypesEnum } from '@/lib/validation/visualizations';
+import React from 'react';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+import { Inputs, fileTypes } from '@/components/form/add-visualization-form';
+import { UseFormReturn } from 'react-hook-form';
 import {
   FormField,
   FormItem,
   FormLabel,
   FormControl,
-  FormMessage,
-} from "../../form";
-import { Input } from "../../input";
-import { Checkbox } from "../../checkbox";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { Inputs, fileTypes } from "@/components/form/add-visualization-form";
-import { UseFormReturn } from "react-hook-form";
-import { ExcelOrCsvWordCloudMapping } from "./excelOrCsvMappings/WordCloudMapping";
-import { VisualizationDetails } from "./visualizationDetails";
-import { ExcelOrCsvVisualizationMapping } from "./excelOrCsvMappings/visualizationDetailsMapping";
-import { ExcelOrCsvNodeLinkMapping } from "./excelOrCsvMappings/NodeLinkMapping";
-import { VisualizationType } from "./visualizationType";
-import { ExcelOrCsvCalendarMapping } from "./excelOrCsvMappings/CalendarMapping";
-import { ExcelOrCsvAxisChartMapping } from "./excelOrCsvMappings/AxisChartMapping";
-import { ExcelOrCsvPieChartFunnelMapping } from "./excelOrCsvMappings/PieChartFunnelMapping";
-import { ExcelOrCsvScatterMapping } from "./excelOrCsvMappings/ScatterMapping";
-import { ExcelOrCsvHierarchyMapping } from "./excelOrCsvMappings/HierarchyMapping";
+  FormMessage
+} from '../../form';
+import { Input } from '../../input';
+import { Checkbox } from '../../checkbox';
+import { ExcelOrCsvWordCloudMapping } from './excelOrCsvMappings/WordCloudMapping';
+import { VisualizationDetails } from './visualizationDetails';
+import { ExcelOrCsvVisualizationMapping } from './excelOrCsvMappings/visualizationDetailsMapping';
+import { ExcelOrCsvNodeLinkMapping } from './excelOrCsvMappings/NodeLinkMapping';
+import { VisualizationType } from './visualizationType';
+import { ExcelOrCsvCalendarMapping } from './excelOrCsvMappings/CalendarMapping';
+import { ExcelOrCsvAxisChartMapping } from './excelOrCsvMappings/AxisChartMapping';
+import { ExcelOrCsvPieChartFunnelMapping } from './excelOrCsvMappings/PieChartFunnelMapping';
+import { ExcelOrCsvScatterMapping } from './excelOrCsvMappings/ScatterMapping';
+import { ExcelOrCsvHierarchyMapping } from './excelOrCsvMappings/HierarchyMapping';
+
 interface ExcelMappingTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
   router: AppRouterInstance;
@@ -120,7 +121,7 @@ export function ExcelOrCsvMappingTab({
     <div className="grid grid-cols-2 gap-5">
       {!fileDetails && <VisualizationDetails form={form} />}
       <VisualizationType form={form} router={router} exclude={true} />
-      {selectedFileType === fileTypes.EXCEL? <div className="col-span-1">
+      {selectedFileType === fileTypes.EXCEL ? <div className="col-span-1">
         <FormField
           control={form.control}
           name="sheets"
@@ -130,11 +131,11 @@ export function ExcelOrCsvMappingTab({
               <FormControl>
                 <Input
                   placeholder="How many sheets to include"
-                  defaultValue={form.getValues("sheets") || "1"}
+                  defaultValue={form.getValues('sheets') || '1'}
                   onChange={(e) => {
                     setTimeout(() => {
-                      const value = e.target.value;
-                      form.setValue("sheets", value);
+                      const { value } = e.target;
+                      form.setValue('sheets', value);
                     }, 100);
                   }}
                 />
@@ -153,11 +154,11 @@ export function ExcelOrCsvMappingTab({
               <FormControl>
                 <Input
                   placeholder="Separator"
-                  defaultValue={form.getValues("separator") || ","}
+                  defaultValue={form.getValues('separator') || ','}
                   onChange={(e) => {
                     setTimeout(() => {
-                      const value = e.target.value;
-                      form.setValue("separator", value);
+                      const { value } = e.target;
+                      form.setValue('separator', value);
                     }, 100);
                   }}
                 />
@@ -200,7 +201,7 @@ export function ExcelOrCsvMappingTab({
               <FormLabel>Mapping</FormLabel>
               <FormControl>
                 {renderMapping(
-                  form.getValues("type") as visualizationTypesEnum
+                  form.getValues('type') as visualizationTypesEnum
                 )}
               </FormControl>
               <FormMessage />

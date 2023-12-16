@@ -1,15 +1,17 @@
-import { Icons } from "@/components/icons";
-import { Button } from "../../button";
-import { TabsContent } from "../../tabs";
-import { ExcelOrCsvMappingTab } from "./excelOrCsvMappingTab";
-import { JSONMappingTab } from "./jsonMappingTab";
-import { Inputs, fileTypes } from "@/components/form/add-visualization-form";
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { UseFormReturn } from "react-hook-form";
-import { FormField, FormItem, FormControl, FormMessage } from "../../form";
-import { Checkbox } from "../../checkbox";
-import React from "react";
-import { XMLMappingTab } from "./xmlMappingTab";
+import { Icons } from '@/components/icons';
+import { Inputs, fileTypes } from '@/components/form/add-visualization-form';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+import { UseFormReturn } from 'react-hook-form';
+import React from 'react';
+import { Button } from '../../button';
+import { TabsContent } from '../../tabs';
+import { ExcelOrCsvMappingTab } from './excelOrCsvMappingTab';
+import { JSONMappingTab } from './jsonMappingTab';
+import {
+  FormField, FormItem, FormControl, FormMessage
+} from '../../form';
+import { Checkbox } from '../../checkbox';
+import { XMLMappingTab } from './xmlMappingTab';
 
 interface MappingTabProps {
   selectedFileType: string;
@@ -21,7 +23,7 @@ export function MappingTab({
   selectedFileType,
   isPending,
   form,
-  router,
+  router
 }: MappingTabProps) {
   const [fileDetails, setFileDetails] = React.useState<boolean>(false);
   const handleFullDetails = (value: boolean) => {

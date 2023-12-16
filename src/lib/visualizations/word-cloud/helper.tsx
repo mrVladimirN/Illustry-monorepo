@@ -1,12 +1,12 @@
-import { WordType } from "types/visualizations";
+import { WordType } from 'types/visualizations';
 
 export const computePropertiesForToolTip = (
   properties: any,
   value?: number | string
 ) => {
-  let prop = "";
+  let prop = '';
 
-  if (typeof properties === "object") {
+  if (typeof properties === 'object') {
     for (const key in properties) {
       if (Object.hasOwnProperty.call(properties, key)) {
         const propValue = properties[key];
@@ -17,10 +17,10 @@ export const computePropertiesForToolTip = (
     if (value) {
       prop += `<div style="font-weight: bold">value:${value}</div>`;
     }
-  } else if (typeof properties === "string") {
+  } else if (typeof properties === 'string') {
     if (value) {
-      prop +=
-        properties + `<div style="font-weight: bold">value:${value}</div>`;
+      prop
+        += `${properties}<div style="font-weight: bold">value:${value}</div>`;
     } else {
       prop += properties;
     }
@@ -61,18 +61,14 @@ const computeColor = (nr: number, meanValue: number, colors: string[]) => {
   }
 };
 export const computeWords = (words: WordType[], colors: string[]) => {
-  const values = words.map((word) => {
-    return word.value;
-  });
+  const values = words.map((word) => word.value);
   const meanValue = calculateMeanValue(values);
 
-  return words.map((word) => {
-    return {
-      ...word,
-      textStyle: {
-        fontWeight: "bold",
-        color: computeColor(word.value, meanValue, colors),
-      },
-    };
-  });
+  return words.map((word) => ({
+    ...word,
+    textStyle: {
+      fontWeight: 'bold',
+      color: computeColor(word.value, meanValue, colors)
+    }
+  }));
 };

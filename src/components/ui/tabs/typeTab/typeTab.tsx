@@ -1,26 +1,27 @@
-import { Inputs, fileTypes } from "@/components/form/add-visualization-form";
+import { Inputs, fileTypes } from '@/components/form/add-visualization-form';
+import { UseFormReturn } from 'react-hook-form';
+import { ExtFile } from '@files-ui/react';
 import {
   FormField,
   FormItem,
   FormLabel,
   FormControl,
-  FormMessage,
-} from "../../form";
-import { ExcelFileFormatter } from "./excelFileFormatFormItem";
-import { JsonFileFormatter } from "./jsonFileFormatFormItem";
-import { TabsContent } from "../../tabs";
+  FormMessage
+} from '../../form';
+import { ExcelFileFormatter } from './excelFileFormatFormItem';
+import { JsonFileFormatter } from './jsonFileFormatFormItem';
+import { TabsContent } from '../../tabs';
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from "../../select";
-import { UseFormReturn } from "react-hook-form";
-import { ExtFile } from "@files-ui/react";
-import { CSVFileFormatter } from "./csvFileFormatFormItem";
-import { XMLFileFormatter } from "./xmlFileFormatFormItem";
+  SelectValue
+} from '../../select';
+import { CSVFileFormatter } from './csvFileFormatFormItem';
+import { XMLFileFormatter } from './xmlFileFormatFormItem';
+
 interface TypeTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
   handleFileTypeChange: (value: string) => void;
@@ -35,7 +36,7 @@ export function TypeTab({
   selectedFileType,
   files,
   updateFiles,
-  removeFile,
+  removeFile
 }: TypeTabProps) {
   const renderFiles = (selectedFileType: string) => {
     if (selectedFileType) {

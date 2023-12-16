@@ -1,5 +1,5 @@
+import { Dropzone, FileMosaic, ExtFile } from '@files-ui/react';
 
-import { Dropzone, FileMosaic, ExtFile } from "@files-ui/react";
 interface FileUploadProps {
   acceptedFiles: ExtFile[];
   updateFiles: (incomingFiles: ExtFile[]) => void;
@@ -12,8 +12,7 @@ export const FileUpload = ({
   updateFiles,
   removeFile,
   fileFormat
-}: FileUploadProps) => {
-  return (
+}: FileUploadProps) => (
     <>
       <Dropzone
         onChange={updateFiles}
@@ -25,5 +24,4 @@ export const FileUpload = ({
         ))}
       </Dropzone>
     </>
-  );
-};
+);

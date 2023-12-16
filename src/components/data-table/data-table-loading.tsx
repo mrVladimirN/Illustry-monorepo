@@ -1,12 +1,12 @@
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+  TableRow
+} from '@/components/ui/table';
 
 interface DataTableLoadingProps {
   columnCount: number
@@ -19,7 +19,7 @@ export function DataTableLoading({
   columnCount,
   rowCount = 10,
   isNewRowCreatable = false,
-  isRowsDeletable = false,
+  isRowsDeletable = false
 }: DataTableLoadingProps) {
   return (
     <div className="w-full space-y-3 overflow-auto">
@@ -84,5 +84,5 @@ export function DataTableLoading({
         </div>
       </div>
     </div>
-  )
+  );
 }

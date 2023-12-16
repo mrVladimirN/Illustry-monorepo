@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { HexColorPicker } from "react-colorful";
+import { HexColorPicker } from 'react-colorful';
 
 interface ColorPickerProps {
   initialColor: string;
@@ -8,8 +8,5 @@ interface ColorPickerProps {
 }
 export const ColorPicker = ({
   initialColor,
-  changeColor,
-}: ColorPickerProps) => {
-  
-  return <HexColorPicker color={initialColor} onChange={changeColor}/>;
-};
+  changeColor
+}: ColorPickerProps) => <HexColorPicker color={initialColor} onChange={changeColor}/>;

@@ -1,4 +1,5 @@
-import { HierarchyNode } from "types/visualizations";
+import { HierarchyNode } from 'types/visualizations';
+
 interface ProcessedNode {
   name: string;
   value:number,
@@ -68,10 +69,10 @@ export const computeNodesHierarchy = (
       value: node.value,
       itemStyle: {
         color: colorMapSchema.get(node.category),
-        borderColor: colorMapSchema.get(node.category),
+        borderColor: colorMapSchema.get(node.category)
       },
       prop: computePropertiesForToolTip(node.properties, node.value),
-      children: [],
+      children: []
     };
 
     if (node.children) {
@@ -87,9 +88,9 @@ const computePropertiesForToolTip = (
   properties: any,
   value?: number | string
 ) => {
-  let prop = "";
+  let prop = '';
 
-  if (typeof properties === "object") {
+  if (typeof properties === 'object') {
     for (const key in properties) {
       if (Object.hasOwnProperty.call(properties, key)) {
         const propValue = properties[key];
@@ -100,10 +101,10 @@ const computePropertiesForToolTip = (
     if (value) {
       prop += `<div style="font-weight: bold">value:${value}</div>`;
     }
-  } else if (typeof properties === "string") {
+  } else if (typeof properties === 'string') {
     if (value) {
-      prop +=
-        properties + `<div style="font-weight: bold">value:${value}</div>`;
+      prop
+        += `${properties}<div style="font-weight: bold">value:${value}</div>`;
     } else {
       prop += properties;
     }
@@ -122,11 +123,11 @@ export const createLevels = (nr: number) => {
     const style = {
       colorSaturation: i === nr ? undefined : [0.3, 0.5],
       itemStyle: {
-        borderColor: i === nr ? "#555" : undefined,
+        borderColor: i === nr ? '#555' : undefined,
         borderColorSaturation: 1 - (i % 10),
         borderWidth,
-        gapWidth,
-      },
+        gapWidth
+      }
     };
     levels.push(style);
   }

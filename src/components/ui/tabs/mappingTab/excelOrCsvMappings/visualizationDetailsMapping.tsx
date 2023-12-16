@@ -1,12 +1,12 @@
-import { Inputs } from "@/components/form/add-visualization-form";
-import { Input } from "@/components/ui/input";
-import { UseFormReturn } from "react-hook-form";
+import { Inputs } from '@/components/form/add-visualization-form';
+import { Input } from '@/components/ui/input';
+import { UseFormReturn } from 'react-hook-form';
 
 interface ExcelOrCsvVisualizationMappingProps {
   form: UseFormReturn<Inputs>; // Include the form context
 }
 export function ExcelOrCsvVisualizationMapping({
-  form,
+  form
 }: ExcelOrCsvVisualizationMappingProps) {
   return (
     <>
@@ -17,8 +17,8 @@ export function ExcelOrCsvVisualizationMapping({
             placeholder="Column number for Visualization Name"
             onChange={(e) => {
               setTimeout(() => {
-                const value = e.target.value;
-                form.setValue("mapping.visualizationName", value);
+                const { value } = e.target;
+                form.setValue('mapping.visualizationName', value);
               }, 100);
             }}
           />
@@ -31,8 +31,8 @@ export function ExcelOrCsvVisualizationMapping({
             placeholder="Column number for Visualization Description"
             onChange={(e) => {
               setTimeout(() => {
-                const value = e.target.value;
-                form.setValue("mapping.visualizationDescription", value);
+                const { value } = e.target;
+                form.setValue('mapping.visualizationDescription', value);
               }, 100);
             }}
           />
@@ -44,8 +44,8 @@ export function ExcelOrCsvVisualizationMapping({
           <Input
             placeholder="Column number for Visualization Tags"
             onChange={(e) => {
-              const value = e.target.value;
-              form.setValue("mapping.visualizationTags", value);
+              const { value } = e.target;
+              form.setValue('mapping.visualizationTags', value);
             }}
           />
         </div>

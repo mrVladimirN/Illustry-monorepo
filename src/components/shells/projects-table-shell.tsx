@@ -1,48 +1,47 @@
-"use client";
+'use client';
 
-import { ColumnDef } from "@tanstack/react-table";
-import * as React from "react";
-import { DataTableColumnHeader } from "../data-table/data-table-column-header";
-import { catchError, formatDate } from "@/lib/utils";
-import { DataTable } from "../data-table/data-table";
-import { Checkbox } from "../ui/checkbox";
+import { ColumnDef } from '@tanstack/react-table';
+import * as React from 'react';
+import { catchError, formatDate } from '@/lib/utils';
+import { DotsHorizontalIcon } from '@radix-ui/react-icons';
+import Link from 'next/link';
+import { toast } from 'sonner';
+import { deleteProject } from '@/app/_actions/project';
+import { ProjectType } from 'types/project';
+import { Button } from '../ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { DotsHorizontalIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
-import { toast } from "sonner";
-import { deleteProject } from "@/app/_actions/project";
-import { ProjectType } from "types/project";
+  DropdownMenuTrigger
+} from '../ui/dropdown-menu';
+import { Checkbox } from '../ui/checkbox';
+import { DataTable } from '../data-table/data-table';
+import { DataTableColumnHeader } from '../data-table/data-table-column-header';
+
 interface ProjectsTableShellProps {
   data?: ProjectType[];
   pageCount?: number;
 }
 export function ProjectsTableShell({
   data,
-  pageCount,
+  pageCount
 }: ProjectsTableShellProps) {
   const [isPending, startTransition] = React.useTransition();
   const [selectedRowNames, setSelectedRowNames] = React.useState<string[]>([]);
   const columns = React.useMemo<ColumnDef<ProjectType, unknown>[]>(
     () => [
       {
-        id: "select",
+        id: 'select',
         header: ({ table }) => (
           <Checkbox
             checked={table.getIsAllPageRowsSelected()}
             onCheckedChange={(value) => {
               table.toggleAllPageRowsSelected(!!value);
               if (data) {
-                setSelectedRowNames((prev) =>
-                  prev.length === data.length ? [] : data.map((row) => row.name)
-                );
+                setSelectedRowNames((prev) => (prev.length === data.length ? [] : data.map((row) => row.name)));
               }
             }}
             aria-label="Select all"
@@ -54,60 +53,56 @@ export function ProjectsTableShell({
             checked={row.getIsSelected()}
             onCheckedChange={(value) => {
               row.toggleSelected(!!value);
-              setSelectedRowNames((prev) =>
-                value
-                  ? [...prev, row.original.name]
-                  : prev.filter((id) => {
-                      return id !== row.original.name;
-                    })
-              );
+              setSelectedRowNames((prev) => (value
+                ? [...prev, row.original.name]
+                : prev.filter((id) => id !== row.original.name)));
             }}
             aria-label="Select row"
             className="translate-y-[2px]"
           />
         ),
         enableSorting: false,
-        enableHiding: false,
+        enableHiding: false
       },
       {
-        accessorKey: "name",
+        accessorKey: 'name',
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title="Name" />
-        ),
+        )
       },
 
       {
-        accessorKey: "description",
+        accessorKey: 'description',
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title="Description" />
-        ),
+        )
       },
       {
-        accessorKey: "createdAt",
+        accessorKey: 'createdAt',
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title="Created At" />
         ),
         cell: ({ cell }) => formatDate(cell.getValue() as Date),
-        enableColumnFilter: false,
+        enableColumnFilter: false
       },
       {
-        accessorKey: "updatedAt",
+        accessorKey: 'updatedAt',
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title="Updated At" />
         ),
         cell: ({ cell }) => formatDate(cell.getValue() as Date),
-        enableColumnFilter: false,
+        enableColumnFilter: false
       },
       {
-        accessorKey: "isActive",
+        accessorKey: 'isActive',
         header: ({ column }) => (
           <DataTableColumnHeader column={column} title="Is Active" />
         ),
-        cell: ({ cell }) => (cell.getValue() ? "active" : "not active"),
-        enableColumnFilter: false,
+        cell: ({ cell }) => (cell.getValue() ? 'active' : 'not active'),
+        enableColumnFilter: false
       },
       {
-        id: "actions",
+        id: 'actions',
         cell: ({ row }) => (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -132,9 +127,9 @@ export function ProjectsTableShell({
                     row.toggleSelected(false);
 
                     toast.promise(deleteProject(row.original.name), {
-                      loading: "Deleting...",
-                      success: () => "Project deleted successfully.",
-                      error: (err: unknown) => catchError(err),
+                      loading: 'Deleting...',
+                      success: () => 'Project deleted successfully.',
+                      error: (err: unknown) => catchError(err)
                     });
                   });
                 }}
@@ -145,8 +140,8 @@ export function ProjectsTableShell({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        ),
-      },
+        )
+      }
     ],
     [data, isPending]
   );
@@ -154,15 +149,15 @@ export function ProjectsTableShell({
     toast.promise(
       Promise.all(selectedRowNames.map((name) => deleteProject(name))),
       {
-        loading: "Deleting...",
+        loading: 'Deleting...',
         success: () => {
           setSelectedRowNames([]);
-          return "Projects deleted successfully.";
+          return 'Projects deleted successfully.';
         },
         error: (err: unknown) => {
           setSelectedRowNames([]);
           return catchError(err);
-        },
+        }
       }
     );
   }

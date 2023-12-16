@@ -1,27 +1,27 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import type { z } from "zod";
-import { catchError } from "@/lib/utils";
-import { projectSchema } from "@/lib/validation/project";
-import { Button } from "@/components/ui/button";
+import * as React from 'react';
+import { useRouter } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import type { z } from 'zod';
+import { catchError } from '@/lib/utils';
+import { projectSchema } from '@/lib/validation/project';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Icons } from "@/components/icons";
-import { createProject } from "@/app/_actions/project";
-import { Checkbox } from "../ui/checkbox";
+  FormMessage
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Icons } from '@/components/icons';
+import { createProject } from '@/app/_actions/project';
+import { Checkbox } from '../ui/checkbox';
 
 type Inputs = z.infer<typeof projectSchema>;
 
@@ -33,10 +33,10 @@ export function AddProjectForm() {
   const form = useForm<Inputs>({
     resolver: zodResolver(projectSchema),
     defaultValues: {
-      name: "",
-      description: "",
-      isActive: false,
-    },
+      name: '',
+      description: '',
+      isActive: false
+    }
   });
 
   function onSubmit(data: Inputs) {
@@ -45,8 +45,8 @@ export function AddProjectForm() {
         await createProject({ ...data });
 
         form.reset();
-        toast.success("Project added successfully.");
-        router.push("/projects");
+        toast.success('Project added successfully.');
+        router.push('/projects');
         router.refresh();
       } catch (err) {
         catchError(err);

@@ -1,9 +1,10 @@
-"use client";
-import React, { useRef, useEffect } from "react";
+'use client';
 
-import "echarts-wordcloud";
+import React, { useRef, useEffect } from 'react';
+
+import 'echarts-wordcloud';
 // Import the echarts core module, which provides the necessary interfaces for using echarts.
-import * as echarts from "echarts/core";
+import * as echarts from 'echarts/core';
 import {
   SankeyChart,
   GraphChart,
@@ -14,8 +15,8 @@ import {
   PieChart,
   TreemapChart,
   SunburstChart,
-  FunnelChart,
-} from "echarts/charts";
+  FunnelChart
+} from 'echarts/charts';
 // Import the tooltip, title, rectangular coordinate system, dataset and transform components
 import {
   TooltipComponent,
@@ -25,23 +26,23 @@ import {
   LegendComponent,
   VisualMapComponent,
   CalendarComponent,
-  ToolboxComponent,
-} from "echarts/components";
+  ToolboxComponent
+} from 'echarts/components';
 
-import { SVGRenderer } from "echarts/renderers";
+import { SVGRenderer } from 'echarts/renderers';
 
 import {
   EChartsOption,
   SetOptionOpts,
-  WordCloudSeriesOption,
-} from "echarts/types/dist/echarts";
+  WordCloudSeriesOption
+} from 'echarts/types/dist/echarts';
 
 export interface ReactEChartsProps<T> {
   option: T;
   className?: string;
   settings?: SetOptionOpts;
   loading?: boolean;
-  theme?: "light" | "dark";
+  theme?: 'light' | 'dark';
   style?: object;
 }
 
@@ -51,7 +52,7 @@ const ReactEcharts = <T extends EChartsOption | WordCloudSeriesOption>({
   settings,
   loading,
   theme,
-  style,
+  style
 }: ReactEChartsProps<T>): JSX.Element => {
   echarts.use([
     GraphChart,
@@ -72,7 +73,7 @@ const ReactEcharts = <T extends EChartsOption | WordCloudSeriesOption>({
     ScatterChart,
     TreemapChart,
     SunburstChart,
-    FunnelChart,
+    FunnelChart
   ]);
 
   const chartRef = useRef<HTMLDivElement>(null);
@@ -89,12 +90,12 @@ const ReactEcharts = <T extends EChartsOption | WordCloudSeriesOption>({
     function resizeChart() {
       chart?.resize();
     }
-    window.addEventListener("resize", resizeChart);
+    window.addEventListener('resize', resizeChart);
 
     // Return cleanup function
     return () => {
       chart?.dispose();
-      window.removeEventListener("resize", resizeChart);
+      window.removeEventListener('resize', resizeChart);
     };
   }, [theme]);
 

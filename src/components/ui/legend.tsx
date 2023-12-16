@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 interface LegendProps {
   legendData: { [key: string]: string };
@@ -13,8 +13,8 @@ const Legend = ({ legendData, maxItemsPerRow }: LegendProps) => {
     <div
       className="flex flex-wrap justify-center items-center"
       style={{
-        flexWrap: "wrap",
-        justifyContent: "flex-start", // Start each new row from the left
+        flexWrap: 'wrap',
+        justifyContent: 'flex-start' // Start each new row from the left
       }}
     >
       {legendItems.map((name, index) => (
@@ -22,7 +22,7 @@ const Legend = ({ legendData, maxItemsPerRow }: LegendProps) => {
           key={index}
           className="flex items-center mx-2"
           style={{
-            flex: `1 0 calc(100% / ${itemsPerRow})`, // Distribute evenly and prevent item from growing
+            flex: `1 0 calc(100% / ${itemsPerRow})` // Distribute evenly and prevent item from growing
           }}
         >
           <div
@@ -31,7 +31,7 @@ const Legend = ({ legendData, maxItemsPerRow }: LegendProps) => {
           ></div>
           <span
             className="ml-1 text-xs sm:text-sm md:text-base max-w-xs overflow-hidden"
-            style={{ whiteSpace: "nowrap" }}
+            style={{ whiteSpace: 'nowrap' }}
           >
             {name}
           </span>

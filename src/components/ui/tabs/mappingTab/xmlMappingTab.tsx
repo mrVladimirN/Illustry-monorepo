@@ -1,8 +1,8 @@
-import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { VisualizationDetails } from "./visualizationDetails";
-import { Inputs } from "@/components/form/add-visualization-form";
-import { UseFormReturn } from "react-hook-form";
-import { VisualizationType } from "./visualizationType";
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+import { Inputs } from '@/components/form/add-visualization-form';
+import { UseFormReturn } from 'react-hook-form';
+import { VisualizationDetails } from './visualizationDetails';
+import { VisualizationType } from './visualizationType';
 
 interface XMLMappingTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
@@ -12,7 +12,7 @@ interface XMLMappingTabProps {
 export function XMLMappingTab({
   fileDetails,
   form,
-  router,
+  router
 }: XMLMappingTabProps) {
   return (
     <>

@@ -1,12 +1,12 @@
-import { Inputs } from "@/components/form/add-visualization-form";
-import { Input } from "@/components/ui/input";
-import { UseFormReturn } from "react-hook-form";
+import { Inputs } from '@/components/form/add-visualization-form';
+import { Input } from '@/components/ui/input';
+import { UseFormReturn } from 'react-hook-form';
 
 interface ExcelOrCsvCalendarMappingProps {
   form: UseFormReturn<Inputs>; // Include the form context
 }
 export function ExcelOrCsvCalendarMapping({
-  form,
+  form
 }: ExcelOrCsvCalendarMappingProps) {
   return (
     <>
@@ -15,11 +15,11 @@ export function ExcelOrCsvCalendarMapping({
         <div className="flex-grow">
           <Input
             placeholder="Column number for Dates"
-            defaultValue={form.getValues("mapping.dates") || ""}
+            defaultValue={form.getValues('mapping.dates') || ''}
             onChange={(e) => {
               setTimeout(() => {
-                const value = e.target.value;
-                form.setValue("mapping.dates", value);
+                const { value } = e.target;
+                form.setValue('mapping.dates', value);
               }, 100);
             }}
           />
@@ -30,11 +30,11 @@ export function ExcelOrCsvCalendarMapping({
         <div className="flex-grow">
           <Input
             placeholder="Column number for Values"
-            defaultValue={form.getValues("mapping.values") || ""}
+            defaultValue={form.getValues('mapping.values') || ''}
             onChange={(e) => {
               setTimeout(() => {
-                const value = e.target.value;
-                form.setValue("mapping.values", value);
+                const { value } = e.target;
+                form.setValue('mapping.values', value);
               }, 100);
             }}
           />
@@ -45,11 +45,11 @@ export function ExcelOrCsvCalendarMapping({
         <div className="flex-grow">
           <Input
             placeholder="Column number for Categories"
-            defaultValue={form.getValues("mapping.categories") || ""}
+            defaultValue={form.getValues('mapping.categories') || ''}
             onChange={(e) => {
               setTimeout(() => {
-                const value = e.target.value;
-                form.setValue("mapping.categories", value);
+                const { value } = e.target;
+                form.setValue('mapping.categories', value);
               }, 100);
             }}
           />
@@ -60,10 +60,10 @@ export function ExcelOrCsvCalendarMapping({
         <div className="flex-grow">
           <Input
             placeholder="Column number for Properties"
-            defaultValue={form.getValues("mapping.properties") || ""}
+            defaultValue={form.getValues('mapping.properties') || ''}
             onChange={(e) => {
-              const value = e.target.value;
-              form.setValue("mapping.properties", value);
+              const { value } = e.target;
+              form.setValue('mapping.properties', value);
             }}
           />
         </div>

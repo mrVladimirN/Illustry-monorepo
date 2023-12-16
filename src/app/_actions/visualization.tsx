@@ -1,68 +1,68 @@
-"use server";
+'use server';
 
-import { makeRequest } from "@/lib/request";
-import { env } from "@/env.mjs";
-import { revalidateTag } from "next/cache";
-import { ExtendedVisualizationType, VisualizationFilter, VisualizationType } from "types/visualizations";
+import { makeRequest } from '@/lib/request';
+import { env } from '@/env.mjs';
+import { revalidateTag } from 'next/cache';
+import { ExtendedVisualizationType, VisualizationFilter, VisualizationType } from 'types/visualizations';
 
 export const browseVisualizations = async (filter?: VisualizationFilter) => {
   let newFilter: VisualizationFilter = {};
   if (filter) {
     newFilter = filter;
   }
-  revalidateTag("visualizations");
+  revalidateTag('visualizations');
   const request = new Request(`${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/visualizations`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(newFilter),
+    body: JSON.stringify(newFilter)
   });
   return await makeRequest<ExtendedVisualizationType>(request, [
-    "visualizations",
+    'visualizations'
   ]);
 };
 
 export const deleteVisualization = async (
   VisualizationFilter: VisualizationFilter
 ) => {
-  revalidateTag("visualizations");
+  revalidateTag('visualizations');
   const request = new Request(`${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/visualization`, {
-    method: "DELETE",
+    method: 'DELETE',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(VisualizationFilter),
+    body: JSON.stringify(VisualizationFilter)
   });
-  return await makeRequest(request, ["visualizations"]);
+  return await makeRequest(request, ['visualizations']);
 };
 
 export const updateVisualization = async (
   VisualizationCreate: VisualizationType
 ) => {
   const request = new Request(`${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/visualization`, {
-    method: "PUT",
+    method: 'PUT',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(VisualizationCreate),
+    body: JSON.stringify(VisualizationCreate)
   });
-  return await makeRequest(request, ["visualizations"]);
+  return await makeRequest(request, ['visualizations']);
 };
 
 export const findOneVisualization = async (
   visualizationFilter: VisualizationFilter
 ) => {
-  revalidateTag("visualizations");
+  revalidateTag('visualizations');
   const request = new Request(
     `${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/visualization/${visualizationFilter.name}`,
     {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json'
       },
-      body: JSON.stringify(visualizationFilter),
+      body: JSON.stringify(visualizationFilter)
     }
   );
-  return await makeRequest<VisualizationType>(request, ["visualizations"]);
+  return await makeRequest<VisualizationType>(request, ['visualizations']);
 };

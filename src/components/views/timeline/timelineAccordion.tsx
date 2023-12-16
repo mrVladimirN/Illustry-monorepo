@@ -2,12 +2,12 @@ import {
   Accordion,
   AccordionContent,
   AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { groupEventsByDate } from "@/lib/visualizations/timeline/helper";
-import React from "react";
-import { TimelineData, TimelineEvent } from "types/visualizations";
-import TimelineDialog from "./timelineDialog";
+  AccordionTrigger
+} from '@/components/ui/accordion';
+import { groupEventsByDate } from '@/lib/visualizations/timeline/helper';
+import React from 'react';
+import { TimelineData, TimelineEvent } from 'types/visualizations';
+import TimelineDialog from './timelineDialog';
 
 export interface TimelineAccordionProps {
   data: TimelineData;
@@ -15,14 +15,13 @@ export interface TimelineAccordionProps {
 }
 const TimelineAccordion = ({
   data,
-  date,
-}: TimelineAccordionProps) => {
-  return (
+  date
+}: TimelineAccordionProps) => (
     <Accordion type="single" collapsible>
-      {data &&
-        data[date] &&
-        data[date]?.events &&
-        Object.keys(
+      {data
+        && data[date]
+        && data[date]?.events
+        && Object.keys(
           groupEventsByDate(data[date]?.events as TimelineEvent[])
         ).map((time) => {
           const events = groupEventsByDate(
@@ -51,7 +50,6 @@ const TimelineAccordion = ({
           );
         })}
     </Accordion>
-  );
-};
+);
 
 export default TimelineAccordion;

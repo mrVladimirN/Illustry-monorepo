@@ -1,5 +1,5 @@
-import * as React from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import * as React from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   flexRender,
   getCoreRowModel,
@@ -13,8 +13,8 @@ import {
   type ColumnFiltersState,
   type PaginationState,
   type SortingState,
-  type VisibilityState,
-} from "@tanstack/react-table";
+  type VisibilityState
+} from '@tanstack/react-table';
 
 import {
   Table,
@@ -22,10 +22,11 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { DataTablePagination } from "@/components/data-table/data-table-pagination";
-import { DataTableToolbar } from "@/components/data-table/data-table-toolbar";
+  TableRow
+} from '@/components/ui/table';
+import { DataTablePagination } from '@/components/data-table/data-table-pagination';
+import { DataTableToolbar } from '@/components/data-table/data-table-toolbar';
+
 interface Option {
   label: string;
   value: string;
@@ -55,17 +56,17 @@ export function DataTable<TData, TValue>({
   pageCount,
   filterableColumns = [],
   newRowLink,
-  deleteRowsAction,
+  deleteRowsAction
 }: DataTableProps<TData, TValue>) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   // Search params
-  const page = searchParams?.get("page") ?? "1";
-  const per_page = searchParams?.get("per_page") ?? "10";
-  const sort = searchParams?.get("sort");
-  const [column, order] = sort?.split(".") ?? [];
+  const page = searchParams?.get('page') ?? '1';
+  const per_page = searchParams?.get('per_page') ?? '10';
+  const sort = searchParams?.get('sort');
+  const [column, order] = sort?.split('.') ?? [];
 
   // Create query string
   const createQueryString = React.useCallback(
@@ -87,23 +88,21 @@ export function DataTable<TData, TValue>({
 
   // Table states
   const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
   );
 
   // Handle server-side pagination
-  const [{ pageIndex, pageSize }, setPagination] =
-    React.useState<PaginationState>({
-      pageIndex: Number(page) - 1,
-      pageSize: Number(per_page),
-    });
+  const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
+    pageIndex: Number(page) - 1,
+    pageSize: Number(per_page)
+  });
 
   const pagination = React.useMemo(
     () => ({
       pageIndex,
-      pageSize,
+      pageSize
     }),
     [pageIndex, pageSize]
   );
@@ -111,7 +110,7 @@ export function DataTable<TData, TValue>({
   React.useEffect(() => {
     setPagination({
       pageIndex: Number(page) - 1,
-      pageSize: Number(per_page),
+      pageSize: Number(per_page)
     });
   }, [page, per_page]);
 
@@ -119,10 +118,10 @@ export function DataTable<TData, TValue>({
     router.push(
       `${pathname}?${createQueryString({
         page: pageIndex + 1,
-        per_page: pageSize,
+        per_page: pageSize
       })}`,
       {
-        scroll: false,
+        scroll: false
       }
     );
 
@@ -132,9 +131,9 @@ export function DataTable<TData, TValue>({
   // Handle server-side sorting
   const [sorting, setSorting] = React.useState<SortingState>([
     {
-      id: column ?? "",
-      desc: order === "desc",
-    },
+      id: column ?? '',
+      desc: order === 'desc'
+    }
   ]);
 
   React.useEffect(() => {
@@ -142,11 +141,11 @@ export function DataTable<TData, TValue>({
       `${pathname}?${createQueryString({
         page,
         sort: sorting[0]?.id
-          ? `${sorting[0]?.id}.${sorting[0]?.desc ? "desc" : "asc"}`
-          : null,
+          ? `${sorting[0]?.id}.${sorting[0]?.desc ? 'desc' : 'asc'}`
+          : null
       })}`,
       {
-        scroll: false,
+        scroll: false
       }
     );
 
@@ -155,20 +154,18 @@ export function DataTable<TData, TValue>({
 
   // Handle server-side filtering
 
-  const filterableColumnFilters = columnFilters.filter((filter) => {
-    return filterableColumns.find((column) => column.id === filter.id);
-  });
+  const filterableColumnFilters = columnFilters.filter((filter) => filterableColumns.find((column) => column.id === filter.id));
 
   React.useEffect(() => {
     for (const column of filterableColumnFilters) {
-      if (typeof column.value === "object" && Array.isArray(column.value)) {
+      if (typeof column.value === 'object' && Array.isArray(column.value)) {
         router.push(
           `${pathname}?${createQueryString({
             page: 1,
-            [column.id]: column.value.join("."),
+            [column.id]: column.value.join('.')
           })}`,
           {
-            scroll: false,
+            scroll: false
           }
         );
       }
@@ -176,16 +173,16 @@ export function DataTable<TData, TValue>({
 
     for (const key of searchParams.keys()) {
       if (
-        filterableColumns.find((column) => column.id === key) &&
-        !filterableColumnFilters.find((column) => column.id === key)
+        filterableColumns.find((column) => column.id === key)
+        && !filterableColumnFilters.find((column) => column.id === key)
       ) {
         router.push(
           `${pathname}?${createQueryString({
             page: 1,
-            [key]: null,
+            [key]: null
           })}`,
           {
-            scroll: false,
+            scroll: false
           }
         );
       }
@@ -202,7 +199,7 @@ export function DataTable<TData, TValue>({
       sorting,
       columnVisibility,
       rowSelection,
-      columnFilters,
+      columnFilters
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -218,7 +215,7 @@ export function DataTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
     manualPagination: true,
     manualSorting: true,
-    manualFiltering: true,
+    manualFiltering: true
   });
   return (
     <div className="w-full space-y-3 overflow-auto">
@@ -233,18 +230,16 @@ export function DataTable<TData, TValue>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
+                {headerGroup.headers.map((header) => (
                     <TableHead key={header.id} className="whitespace-nowrap">
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
                     </TableHead>
-                  );
-                })}
+                ))}
               </TableRow>
             ))}
           </TableHeader>
@@ -253,7 +248,7 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
+                  data-state={row.getIsSelected() && 'selected'}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

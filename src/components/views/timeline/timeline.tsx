@@ -1,15 +1,17 @@
-'use client'
-import React, { useState } from "react";
-import { useInView } from "react-intersection-observer";
-import { TimelineData } from "types/visualizations";
-import { VerticalTimeline } from "react-vertical-timeline-component";
-import "react-vertical-timeline-component/style.min.css";
-import { formatDate } from "@/lib/utils";
-import TimelineElement from "./timelineElement";
-import TimelineAccordion from "./timelineAccordion";
-import { Button } from "@/components/ui/button";
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons";
-import { with_legend, with_options } from "@/lib/types/utils";
+'use client';
+
+import React, { useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { TimelineData } from 'types/visualizations';
+import { VerticalTimeline } from 'react-vertical-timeline-component';
+import 'react-vertical-timeline-component/style.min.css';
+import { formatDate } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
+import { with_legend, with_options } from '@/lib/types/utils';
+import TimelineAccordion from './timelineAccordion';
+import TimelineElement from './timelineElement';
+
 interface TimelineProp extends with_legend, with_options {
   data: TimelineData;
 }
@@ -17,13 +19,12 @@ interface TimelineProp extends with_legend, with_options {
 const TimelineView = ({
   data,
   legend,
-  options,
+  options
 }: TimelineProp) => {
-  const theme =
-    typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
-  const isDarkTheme = theme === "dark";
+  const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
+  const isDarkTheme = theme === 'dark';
   const { ref, inView } = useInView({
-    triggerOnce: true,
+    triggerOnce: true
   });
   const sortedKeys = Object.keys(data).sort();
 
@@ -51,10 +52,9 @@ const TimelineView = ({
       <VerticalTimeline
         layout="1-column-left"
         animate={true}
-        lineColor={!isDarkTheme ? "rgb(245, 245, 245)" : "rgb(66, 66, 66)"}
+        lineColor={!isDarkTheme ? 'rgb(245, 245, 245)' : 'rgb(66, 66, 66)'}
       >
-        {displayedDates.map((date) => {
-          return (
+        {displayedDates.map((date) => (
             <TimelineElement
               date={date}
               isDarkTheme={isDarkTheme}
@@ -69,8 +69,7 @@ const TimelineView = ({
               </span>
               <TimelineAccordion data={data} date={date}></TimelineAccordion>
             </TimelineElement>
-          );
-        })}
+        ))}
       </VerticalTimeline>
       <div className="flex justify-center mt-[5%] mb-[10%]">
         <Button

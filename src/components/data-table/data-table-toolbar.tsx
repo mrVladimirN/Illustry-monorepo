@@ -1,17 +1,18 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import Link from "next/link";
-import { Cross2Icon, PlusCircledIcon, TrashIcon } from "@radix-ui/react-icons";
-import type { Table } from "@tanstack/react-table";
+import * as React from 'react';
+import Link from 'next/link';
+import { Cross2Icon, PlusCircledIcon, TrashIcon } from '@radix-ui/react-icons';
+import type { Table } from '@tanstack/react-table';
 
-import { cn } from "@/lib/utils";
-import { Button, buttonVariants } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { DataTableFacetedFilter } from "@/components/data-table/data-table-faceted-filter";
-import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useDebounce } from "@/hooks/use-debounce";
+import { cn } from '@/lib/utils';
+import { Button, buttonVariants } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { DataTableFacetedFilter } from '@/components/data-table/data-table-faceted-filter';
+import { DataTableViewOptions } from '@/components/data-table/data-table-view-options';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useDebounce } from '@/hooks/use-debounce';
+
 interface SearchButtonProps {
   containerStyles: string;
 }
@@ -52,11 +53,11 @@ export function DataTableToolbar<TData>({
   table,
   filterableColumns = [],
   newRowLink,
-  deleteRowsAction,
+  deleteRowsAction
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
   const [isPending, startTransition] = React.useTransition();
-  const [text, setText] = React.useState<string>("");
+  const [text, setText] = React.useState<string>('');
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -89,34 +90,33 @@ export function DataTableToolbar<TData>({
             router.push(
               `${pathname}?${createQueryString({
                 page: 1,
-                text: debouncedText.length > 0 ? debouncedText : null,
+                text: debouncedText.length > 0 ? debouncedText : null
               })}`,
               {
-                scroll: false,
+                scroll: false
               }
             );
           }}
           className="flex items-center space-x-2" // Added flex container
         >
           <Input
-            placeholder={`Filter ...`}
+            placeholder={'Filter ...'}
             value={text}
             onChange={(event) => setText(event.target.value)}
             className="h-8 w-[150px] lg:w-[250px]"
           />
           <SearchButton containerStyles="ml-[5%]" />
         </form>
-        {filterableColumns.length > 0 &&
-          filterableColumns.map(
-            (column) =>
-              table.getColumn(column.id ? String(column.id) : "") && (
+        {filterableColumns.length > 0
+          && filterableColumns.map(
+            (column) => table.getColumn(column.id ? String(column.id) : '') && (
                 <DataTableFacetedFilter
                   key={String(column.id)}
-                  column={table.getColumn(column.id ? String(column.id) : "")}
+                  column={table.getColumn(column.id ? String(column.id) : '')}
                   title={column.title}
                   options={column.options}
                 />
-              )
+            )
           )}
         {isFiltered && (
           <Button
@@ -155,9 +155,9 @@ export function DataTableToolbar<TData>({
             <div
               className={cn(
                 buttonVariants({
-                  variant: "outline",
-                  size: "sm",
-                  className: "h-8",
+                  variant: 'outline',
+                  size: 'sm',
+                  className: 'h-8'
                 })
               )}
             >

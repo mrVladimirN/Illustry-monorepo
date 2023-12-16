@@ -7,15 +7,14 @@ interface DefaultThemesProps {
 
 const DefaultThemesAccordion: React.FC<DefaultThemesProps> = ({
   colorPalette,
-  handleApplyTheme,
-}) => {
-  return (
+  handleApplyTheme
+}) => (
     <div className="grid grid-cols-2 gap-4">
       {Object.keys(colorPalette).map((schemeName, index) => (
         <div
           key={index}
           className="flex flex-wrap border border-gray-300 rounded cursor-pointer justify-between"
-          onClick={() => {return handleApplyTheme(schemeName)}}
+          onClick={() => handleApplyTheme(schemeName)}
         >
           {colorPalette[schemeName]?.map((color, index) => (
             <div
@@ -27,7 +26,6 @@ const DefaultThemesAccordion: React.FC<DefaultThemesProps> = ({
         </div>
       ))}
     </div>
-  );
-};
+);
 
 export default DefaultThemesAccordion;

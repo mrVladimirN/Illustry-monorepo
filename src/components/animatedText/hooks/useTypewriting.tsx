@@ -1,6 +1,9 @@
-'use client'
-import { useCallback, useEffect, useRef, useReducer } from "react";
-import { reducer } from "../reducer";
+'use client';
+
+import {
+  useCallback, useEffect, useRef, useReducer
+} from 'react';
+import { reducer } from '../reducer';
 
 export type TypewriterProps = {
   /** Callback Function that is triggered when loops are completed. available if loop is > `0` */
@@ -35,7 +38,7 @@ export type TypewriterHelper = {
 };
 
 export const useTypewriter = ({
-  words = ["Hello World!", "This is", "a simple Typewriter"],
+  words = ['Hello World!', 'This is', 'a simple Typewriter'],
   loop = 1,
   typeSpeed = 80,
   deleteSpeed = 50,
@@ -43,12 +46,12 @@ export const useTypewriter = ({
   onLoopDone,
   onType,
   onDelete,
-  onDelay,
+  onDelay
 }: TypewriterProps): [string, TypewriterHelper] => {
   const [{ speed, text, count }, dispatch] = useReducer(reducer, {
     speed: typeSpeed,
-    text: "",
-    count: 0,
+    text: '',
+    count: 0
   });
 
   // Refs
@@ -63,11 +66,11 @@ export const useTypewriter = ({
     const fullWord = words[index];
 
     if (!isDelete.current && fullWord) {
-      dispatch({ type: "TYPE", payload: fullWord, speed: typeSpeed });
+      dispatch({ type: 'TYPE', payload: fullWord, speed: typeSpeed });
       isType.current = true;
 
       if (text === fullWord) {
-        dispatch({ type: "DELAY", payload: delaySpeed });
+        dispatch({ type: 'DELAY', payload: delaySpeed });
         isType.current = false;
         isDelay.current = true;
 
@@ -84,13 +87,11 @@ export const useTypewriter = ({
           }
         }
       }
-    } else {
-      if (fullWord) {
-        dispatch({ type: "DELETE", payload: fullWord, speed: deleteSpeed });
-        if (text === "") {
-          isDelete.current = false;
-          dispatch({ type: "COUNT" });
-        }
+    } else if (fullWord) {
+      dispatch({ type: 'DELETE', payload: fullWord, speed: deleteSpeed });
+      if (text === '') {
+        isDelete.current = false;
+        dispatch({ type: 'COUNT' });
       }
     }
 
@@ -115,7 +116,7 @@ export const useTypewriter = ({
     text,
     onType,
     onDelete,
-    onDelay,
+    onDelay
   ]);
 
   useEffect(() => {
@@ -140,7 +141,7 @@ export const useTypewriter = ({
       isType: isType.current,
       isDelay: isDelay.current,
       isDelete: isDelete.current,
-      isDone: isDone.current,
-    },
+      isDone: isDone.current
+    }
   ];
 };

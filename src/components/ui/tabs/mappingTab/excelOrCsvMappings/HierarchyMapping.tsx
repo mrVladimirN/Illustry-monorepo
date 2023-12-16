@@ -1,12 +1,12 @@
-import { Inputs } from "@/components/form/add-visualization-form";
-import { Input } from "@/components/ui/input";
-import { UseFormReturn } from "react-hook-form";
+import { Inputs } from '@/components/form/add-visualization-form';
+import { Input } from '@/components/ui/input';
+import { UseFormReturn } from 'react-hook-form';
 
 interface ExcelOrCsvHierarchyMappingProps {
   form: UseFormReturn<Inputs>; // Include the form context
 }
 export function ExcelOrCsvHierarchyMapping({
-  form,
+  form
 }: ExcelOrCsvHierarchyMappingProps) {
   return (
     <>
@@ -15,10 +15,10 @@ export function ExcelOrCsvHierarchyMapping({
         <div className="flex-grow">
           <Input
             placeholder="Column number for Names"
-            defaultValue={form.getValues("mapping.names") || ""}
+            defaultValue={form.getValues('mapping.names') || ''}
             onChange={(e) => {
-              const value = e.target.value;
-              form.setValue("mapping.names", value);
+              const { value } = e.target;
+              form.setValue('mapping.names', value);
             }}
           />
         </div>
@@ -28,10 +28,10 @@ export function ExcelOrCsvHierarchyMapping({
         <div className="flex-grow">
           <Input
             placeholder="Column number for Values"
-            defaultValue={form.getValues("mapping.values") || ""}
+            defaultValue={form.getValues('mapping.values') || ''}
             onChange={(e) => {
-              const value = e.target.value;
-              form.setValue("mapping.values", value);
+              const { value } = e.target;
+              form.setValue('mapping.values', value);
             }}
           />
         </div>
@@ -41,10 +41,10 @@ export function ExcelOrCsvHierarchyMapping({
         <div className="flex-grow">
           <Input
             placeholder="Column number for Categories"
-            defaultValue={form.getValues("mapping.categories") || ""}
+            defaultValue={form.getValues('mapping.categories') || ''}
             onChange={(e) => {
-              const value = e.target.value;
-              form.setValue("mapping.categories", value);
+              const { value } = e.target;
+              form.setValue('mapping.categories', value);
             }}
           />
         </div>
@@ -54,10 +54,10 @@ export function ExcelOrCsvHierarchyMapping({
         <div className="flex-grow">
           <Input
             placeholder="Column number for Properties"
-            defaultValue={form.getValues("mapping.properties") || ""}
+            defaultValue={form.getValues('mapping.properties') || ''}
             onChange={(e) => {
-              const value = e.target.value;
-              form.setValue("mapping.properties", value);
+              const { value } = e.target;
+              form.setValue('mapping.properties', value);
             }}
           />
         </div>
@@ -67,17 +67,17 @@ export function ExcelOrCsvHierarchyMapping({
         <div className="flex-grow">
           <Input
             placeholder="Column numbers for Children, coma separated"
-            defaultValue={form.getValues("mapping.children") || ""}
+            defaultValue={form.getValues('mapping.children') || ''}
             onChange={(e) => {
               setTimeout(() => {
-                const value = e.target.value;
-                form.setValue("mapping.children", value);
+                const { value } = e.target;
+                form.setValue('mapping.children', value);
               }, 100);
             }}
           />
         </div>
       </div>
-     
+
     </>
   );
 }

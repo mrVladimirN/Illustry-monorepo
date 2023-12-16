@@ -1,16 +1,17 @@
-"use client";
-import React, { useEffect, useRef, useState } from "react";
-import { select } from "d3";
-import { NodeLinkData, Node } from "types/visualizations";
+'use client';
+
+import React, { useEffect, useRef, useState } from 'react';
+import { select } from 'd3';
+import { NodeLinkData, Node } from 'types/visualizations';
 import {
   addStyleTooltipWithHover,
   categoryMap,
   createHeadersAndPropertiesString,
   sortColumns,
-  sortRows,
-} from "@/lib/visualizations/node-link/helper";
-import { with_legend, with_options } from "@/lib/types/utils";
-import { useThemeColors } from "@/components/theme-provider";
+  sortRows
+} from '@/lib/visualizations/node-link/helper';
+import { with_legend, with_options } from '@/lib/types/utils';
+import { useThemeColors } from '@/components/theme-provider';
 
 interface MatrixProp extends with_legend, with_options {
   data: NodeLinkData;
@@ -19,9 +20,8 @@ interface MatrixProp extends with_legend, with_options {
 const MatrixView = ({ data, legend, options }: MatrixProp) => {
   const tableRef = useRef<HTMLDivElement>(null);
   const activeTheme = useThemeColors();
-  const theme =
-    typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
-  const isDarkTheme = theme === "dark";
+  const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
+  const isDarkTheme = theme === 'dark';
   const colors = isDarkTheme
     ? activeTheme.heb.dark.colors
     : activeTheme.heb.light.colors;
@@ -35,7 +35,7 @@ const MatrixView = ({ data, legend, options }: MatrixProp) => {
     }
 
     return () => {
-      select("showData").remove();
+      select('showData').remove();
     };
   }, [data, JSON.stringify(colors)]);
 
@@ -44,16 +44,15 @@ const MatrixView = ({ data, legend, options }: MatrixProp) => {
     const categoriesKeys: string[] = Object.keys(categories);
 
     if (categoriesKeys.length !== 2) {
-      throw new Error("categories object must have exactly 2 keys");
+      throw new Error('categories object must have exactly 2 keys');
     }
 
-    const tableString =
-      ` <table id ="myTable" style= "border-spacing: 0;width: 100%;border: 1px solid #ddd ; margin-top:5%">` +
+    const tableString = ` <table id ="myTable" style= "border-spacing: 0;width: 100%;border: 1px solid #ddd ; margin-top:5%">${
       createHeadersAndPropertiesString(
         categories[categoriesKeys[0] as string] as Node[],
         categories[categoriesKeys[1] as string] as Node[],
         data.links
-      );
+      )}`;
     return tableString;
   };
   return <div ref={tableRef}></div>;

@@ -1,25 +1,25 @@
-"use client";
-import { EChartsOption } from "echarts";
-import React from "react";
-import { HierarchyData } from "types/visualizations";
+'use client';
+
+import { EChartsOption } from 'echarts';
+import React from 'react';
+import { HierarchyData } from 'types/visualizations';
 import {
   computeCategories,
-  computeNodesHierarchy,
-} from "@/lib/visualizations/hierarchy-charts/helper";
-import Legend from "../ui/legend";
-import { computeLegendColors } from "@/lib/visualizations/calendar/helper";
-import { with_legend, with_options } from "@/lib/types/utils";
-import { useThemeColors } from "../theme-provider";
-import ReactEcharts from "./generic/echarts";
+  computeNodesHierarchy
+} from '@/lib/visualizations/hierarchy-charts/helper';
+import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
+import { with_legend, with_options } from '@/lib/types/utils';
+import Legend from '../ui/legend';
+import { useThemeColors } from '../theme-provider';
+import ReactEcharts from './generic/echarts';
 
 interface SunburstViewProp extends with_legend, with_options {
   data: HierarchyData;
 }
 const SunburstView = ({ data, legend, options }: SunburstViewProp) => {
   const activeTheme = useThemeColors();
-  const theme =
-    typeof window !== "undefined" ? localStorage.getItem("theme") : "light";
-  const isDarkTheme = theme === "dark";
+  const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
+  const isDarkTheme = theme === 'dark';
   const colors = isDarkTheme
     ? activeTheme.sunburst.dark.colors
     : activeTheme.sunburst.light.colors;
@@ -28,20 +28,20 @@ const SunburstView = ({ data, legend, options }: SunburstViewProp) => {
   const categories = computeCategories(nodes);
   const option: EChartsOption = {
     tooltip: {
-      trigger: "item",
-      triggerOn: "mousemove",
-      //@ts-ignore
-      formatter: function (params) {
-        //@ts-ignore
+      trigger: 'item',
+      triggerOn: 'mousemove',
+      // @ts-ignore
+      formatter(params) {
+        // @ts-ignore
         return params.data.prop;
-      },
+      }
     },
     series: [
       {
-        type: "sunburst",
-        data: computeNodesHierarchy(nodes, categories, colors),
-      },
-    ],
+        type: 'sunburst',
+        data: computeNodesHierarchy(nodes, categories, colors)
+      }
+    ]
   };
   return (
     <div className="relative mt-[4%] flex flex-col items-center">

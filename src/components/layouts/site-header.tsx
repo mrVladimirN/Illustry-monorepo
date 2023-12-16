@@ -1,6 +1,6 @@
-import { siteConfig } from "@/config/site";
-import { MainNav } from "./main-nav";
-import { MobileNav } from "./mobile-nav";
+import { siteConfig } from '@/config/site';
+import { MainNav } from './main-nav';
+import { MobileNav } from './mobile-nav';
 
 export function SiteHeader() {
   return (

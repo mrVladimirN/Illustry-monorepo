@@ -1,8 +1,10 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../tabs";
-import { ColorPicker } from "../colorPicker";
-import { RefObject } from "react";
-import { useThemeColors } from "@/components/theme-provider";
-import { Icons } from "@/components/icons";
+import { RefObject } from 'react';
+import { useThemeColors } from '@/components/theme-provider';
+import { Icons } from '@/components/icons';
+import { ColorPicker } from '../colorPicker';
+import {
+  Tabs, TabsContent, TabsList, TabsTrigger
+} from '../tabs';
 
 interface GenericThemesProps {
   activeColorPickerIndex: number | null;
@@ -28,11 +30,11 @@ const GenericThemesAccordion = ({
   colorPickerRef,
   visualization,
   handleColorDelete,
-  handleColorAdd,
+  handleColorAdd
 }: GenericThemesProps) => {
   // State to hold input values and their validation statuses
   const activeTheme = useThemeColors();
-  //@ts-ignore
+  // @ts-ignore
   const activeVisualization = activeTheme[visualization];
   const darkColorsLength = activeVisualization.dark.colors.length;
   return (
@@ -53,14 +55,12 @@ const GenericThemesAccordion = ({
                       activeColorPickerIndex
                     ] as string
                   }
-                  changeColor={(newColor) => {
-                    return handleColorChange(
-                      newColor,
-                      activeColorPickerIndex,
-                      visualization,
-                      "light"
-                    );
-                  }}
+                  changeColor={(newColor) => handleColorChange(
+                    newColor,
+                    activeColorPickerIndex,
+                    visualization,
+                    'light'
+                  )}
                 />
               </div>
             )}
@@ -87,33 +87,33 @@ const GenericThemesAccordion = ({
             <div className="flex items-center">
               <div
                 className={`w-4 h-4 ml-2 mr-1 border border-gray-300 rounded flex items-center justify-center cursor-pointer ${
-                  darkColorsLength >= 10 ? "opacity-50 pointer-events-none" : ""
+                  darkColorsLength >= 10 ? 'opacity-50 pointer-events-none' : ''
                 }`}
                 onClick={() => {
                   if (darkColorsLength < 10) {
-                    return handleColorAdd(visualization, "light");
+                    return handleColorAdd(visualization, 'light');
                   }
                 }}
               >
                 <Icons.add
                   className={`text-gray-500 w-3 h-3 ${
-                    darkColorsLength >= 10 ? "opacity-50" : ""
+                    darkColorsLength >= 10 ? 'opacity-50' : ''
                   }`}
                 />
               </div>
               <div
                 className={`w-4 h-4 border border-gray-300 rounded flex items-center justify-center cursor-pointer ${
-                  darkColorsLength < 4 ? "opacity-50 pointer-events-none" : ""
+                  darkColorsLength < 4 ? 'opacity-50 pointer-events-none' : ''
                 }`}
                 onClick={() => {
                   if (darkColorsLength >= 4) {
-                    return handleColorDelete(visualization, "light");
+                    return handleColorDelete(visualization, 'light');
                   }
                 }}
               >
                 <Icons.remove
                   className={`text-gray-500 w-3 h-3 ${
-                    darkColorsLength < 4 ? "opacity-50" : ""
+                    darkColorsLength < 4 ? 'opacity-50' : ''
                   }`}
                 />
               </div>
@@ -135,14 +135,12 @@ const GenericThemesAccordion = ({
                       activeColorPickerIndex
                     ] as string
                   }
-                  changeColor={(newColor) => {
-                    return handleColorChange(
-                      newColor,
-                      activeColorPickerIndex,
-                      visualization,
-                      "dark"
-                    );
-                  }}
+                  changeColor={(newColor) => handleColorChange(
+                    newColor,
+                    activeColorPickerIndex,
+                    visualization,
+                    'dark'
+                  )}
                 />
               </div>
             )}
@@ -169,33 +167,33 @@ const GenericThemesAccordion = ({
             <div className="flex items-center">
               <div
                 className={`w-4 h-4 ml-2 mr-1 border border-gray-300 rounded flex items-center justify-center cursor-pointer ${
-                  darkColorsLength >= 10 ? "opacity-50 pointer-events-none" : ""
+                  darkColorsLength >= 10 ? 'opacity-50 pointer-events-none' : ''
                 }`}
                 onClick={() => {
                   if (darkColorsLength < 10) {
-                    return handleColorAdd(visualization, "dark");
+                    return handleColorAdd(visualization, 'dark');
                   }
                 }}
               >
                 <Icons.add
                   className={`text-gray-500 w-3 h-3 ${
-                    darkColorsLength >= 10 ? "opacity-50" : ""
+                    darkColorsLength >= 10 ? 'opacity-50' : ''
                   }`}
                 />
               </div>
               <div
                 className={`w-4 h-4 border border-gray-300 rounded flex items-center justify-center cursor-pointer ${
-                  darkColorsLength < 4 ? "opacity-50 pointer-events-none" : ""
+                  darkColorsLength < 4 ? 'opacity-50 pointer-events-none' : ''
                 }`}
                 onClick={() => {
                   if (darkColorsLength >= 4) {
-                    return handleColorDelete(visualization, "dark");
+                    return handleColorDelete(visualization, 'dark');
                   }
                 }}
               >
                 <Icons.remove
                   className={`text-gray-500 w-3 h-3 ${
-                    darkColorsLength < 4 ? "opacity-50" : ""
+                    darkColorsLength < 4 ? 'opacity-50' : ''
                   }`}
                 />
               </div>

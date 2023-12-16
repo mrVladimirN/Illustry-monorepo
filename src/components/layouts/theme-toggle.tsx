@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useTheme } from "next-themes";
+import { useTheme } from 'next-themes';
 
-import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/icons";
-import { useRouter } from "next/navigation";
+import { Button } from '@/components/ui/button';
+import { Icons } from '@/components/icons';
+import { useRouter } from 'next/navigation';
 
 export function ThemeToggle() {
   const { setTheme, theme } = useTheme();
@@ -17,7 +17,7 @@ export function ThemeToggle() {
       size="icon"
       onClick={() => {
         router.refresh();
-        return setTheme(theme === "light" ? "dark" : "light");
+        return setTheme(theme === 'light' ? 'dark' : 'light');
       }}
     >
       <Icons.sun

@@ -1,4 +1,4 @@
-import { DataTableLoading } from "@/components/data-table/data-table-loading"
+import { DataTableLoading } from '@/components/data-table/data-table-loading';
 
 export default function ProjectLoading() {
   return (
@@ -7,5 +7,5 @@ export default function ProjectLoading() {
       isNewRowCreatable={true}
       isRowsDeletable={true}
     />
-  )
+  );
 }

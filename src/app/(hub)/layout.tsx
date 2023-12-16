@@ -1,4 +1,4 @@
-import { SiteHeader } from "@/components/layouts/site-header";
+import { SiteHeader } from '@/components/layouts/site-header';
 
 interface IntroLayoutProps {
   children: React.ReactNode;

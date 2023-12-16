@@ -1,27 +1,27 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import { useRouter } from "next/navigation";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import type { z } from "zod";
-import { catchError } from "@/lib/utils";
-import { projectUpdateSchema } from "@/lib/validation/project";
-import { Button } from "@/components/ui/button";
+import * as React from 'react';
+import { useRouter } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { toast } from 'sonner';
+import type { z } from 'zod';
+import { catchError } from '@/lib/utils';
+import { projectUpdateSchema } from '@/lib/validation/project';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
-import { Icons } from "@/components/icons";
-import { updateProject } from "@/app/_actions/project";
-import { Checkbox } from "../ui/checkbox";
-import { ProjectUpdate } from "types/project";
+  FormMessage
+} from '@/components/ui/form';
+import { Textarea } from '@/components/ui/textarea';
+import { Icons } from '@/components/icons';
+import { updateProject } from '@/app/_actions/project';
+import { ProjectUpdate } from 'types/project';
+import { Checkbox } from '../ui/checkbox';
 
 type Inputs = z.infer<typeof projectUpdateSchema>;
 
@@ -36,9 +36,9 @@ export function UpdateProjectForm({ project }: UpdateProjectFormProps) {
   const form = useForm<Inputs>({
     resolver: zodResolver(projectUpdateSchema),
     defaultValues: {
-      description: project && project.description ? project.description : "",
-      isActive: project && project.isActive ? project.isActive : false,
-    },
+      description: project && project.description ? project.description : '',
+      isActive: project && project.isActive ? project.isActive : false
+    }
   });
 
   function onSubmit(data: Inputs) {
@@ -48,8 +48,8 @@ export function UpdateProjectForm({ project }: UpdateProjectFormProps) {
           await updateProject({ name: project.name, ...data } as ProjectUpdate);
 
           form.reset();
-          toast.success("Project updated successfully.");
-          router.push("/projects");
+          toast.success('Project updated successfully.');
+          router.push('/projects');
           router.refresh();
         }
       } catch (err) {

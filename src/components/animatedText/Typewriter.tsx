@@ -1,6 +1,7 @@
-'use client'
-import { Cursor, CursorProps } from "./Cursor";
-import { TypewriterProps, useTypewriter } from "./hooks/useTypewriting";
+'use client';
+
+import { Cursor, CursorProps } from './Cursor';
+import { TypewriterProps, useTypewriter } from './hooks/useTypewriting';
 
 type ComponentProps = {
   /** Show / Hide the cursor */
@@ -18,13 +19,13 @@ export const Typewriter = ({
   deleteSpeed = 50,
   delaySpeed = 1500,
   cursor = false,
-  cursorStyle = "|",
-  cursorColor = "inherit",
+  cursorStyle = '|',
+  cursorColor = 'inherit',
   cursorBlinking = true,
   onLoopDone,
   onType,
   onDelay,
-  onDelete,
+  onDelete
 }: ComponentProps): JSX.Element => {
   const [text] = useTypewriter({
     words,
@@ -35,7 +36,7 @@ export const Typewriter = ({
     onLoopDone,
     onType,
     onDelay,
-    onDelete,
+    onDelete
   });
 
   return (

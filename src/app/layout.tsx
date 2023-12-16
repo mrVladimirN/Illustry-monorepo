@@ -1,39 +1,39 @@
-import type { Metadata } from "next";
-import { env } from "@/env.mjs";
+import type { Metadata } from 'next';
+import { env } from '@/env.mjs';
 
-import "./globals.css";
+import './globals.css';
 
-import { siteConfig } from "@/config/site";
-import { fontMono, fontSans } from "@/lib/fonts";
-import { cn } from "@/lib/utils";
-import { Toaster } from "@/components/ui/toaster";
+import { siteConfig } from '@/config/site';
+import { fontMono, fontSans } from '@/lib/fonts';
+import { cn } from '@/lib/utils';
+import { Toaster } from '@/components/ui/toaster';
 import {
   ThemeColorsProvider,
-  ThemeProvider,
-} from "@/components/theme-provider";
+  ThemeProvider
+} from '@/components/theme-provider';
 
 export const metadata: Metadata = {
   metadataBase: new URL(env.NEXT_PUBLIC_BACKEND_PUBLIC_URL),
   title: {
     default: siteConfig.name,
-    template: `%s - ${siteConfig.name}`,
+    template: `%s - ${siteConfig.name}`
   },
   description: siteConfig.description,
   keywords: [
-    "Next.js",
-    "React",
-    "Tailwind CSS",
-    "Server Components",
-    "Server Actions",
-    "VisualizationHub",
+    'Next.js',
+    'React',
+    'Tailwind CSS',
+    'Server Components',
+    'Server Actions',
+    'VisualizationHub'
   ],
   authors: [
     {
-      name: "Vladimir",
-      url: "https://github.com/mrVladimirN",
-    },
+      name: 'Vladimir',
+      url: 'https://github.com/mrVladimirN'
+    }
   ],
-  creator: "mrVladimirN",
+  creator: 'mrVladimirN'
 };
 
 interface RootLayoutProps {
@@ -47,7 +47,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <head />
         <body
           className={cn(
-            "min-h-screen bg-background font-sans antialiased",
+            'min-h-screen bg-background font-sans antialiased',
             fontSans.variable,
             fontMono.variable
           )}

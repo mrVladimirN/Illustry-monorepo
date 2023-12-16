@@ -1,17 +1,18 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
+import * as React from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { siteConfig } from '@/config/site';
+import { cn } from '@/lib/utils';
 
-import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Icons } from "@/components/icons";
-import { useState } from "react";
-import { ThemeToggle } from "./theme-toggle";
+import { Button } from '@/components/ui/button';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Icons } from '@/components/icons';
+import { useState } from 'react';
+import { ThemeToggle } from './theme-toggle';
+
 interface NavItem {
   title: string;
   href?: string;
@@ -66,7 +67,7 @@ export function MobileNav({ items }: MobileNavProps) {
             {items?.map((item) => (
               <MobileLink
                 key={item.title}
-                href={item.href ? item.href : "/"}
+                href={item.href ? item.href : '/'}
                 pathname={pathname}
                 setIsOpen={setIsOpen}
                 disabled={item.disabled}
@@ -97,15 +98,15 @@ function MobileLink({
   href,
   disabled,
   pathname,
-  setIsOpen,
+  setIsOpen
 }: MobileLinkProps) {
   return (
     <Link
       href={href}
       className={cn(
-        "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+        'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
         pathname === href,
-        disabled && "pointer-events-none opacity-60"
+        disabled && 'pointer-events-none opacity-60'
       )}
       onClick={() => setIsOpen(false)}
     >

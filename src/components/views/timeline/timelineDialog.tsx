@@ -1,20 +1,19 @@
-import { Badge } from "@/components/ui/badge";
+import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import React from "react";
-import { TimelineEvent } from "types/visualizations";
+  DialogTrigger
+} from '@/components/ui/dialog';
+import React from 'react';
+import { TimelineEvent } from 'types/visualizations';
 
 export interface TimelineDialogProps {
   event: TimelineEvent;
 }
-const TimelineDialog = ({ event }: TimelineDialogProps) => {
-  return (
+const TimelineDialog = ({ event }: TimelineDialogProps) => (
     <Dialog>
       <DialogTrigger>{event.summary}</DialogTrigger>
       <DialogContent>
@@ -45,7 +44,6 @@ const TimelineDialog = ({ event }: TimelineDialogProps) => {
         )}
       </DialogContent>
     </Dialog>
-  );
-};
+);
 
 export default TimelineDialog;

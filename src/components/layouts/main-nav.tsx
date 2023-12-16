@@ -1,20 +1,21 @@
-"use client";
+'use client';
 
-import * as React from "react";
-import Link from "next/link";
+import * as React from 'react';
+import Link from 'next/link';
 
-import { siteConfig } from "@/config/site";
-import { cn } from "@/lib/utils";
+import { siteConfig } from '@/config/site';
+import { cn } from '@/lib/utils';
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
-} from "@/components/ui/navigation-menu";
-import { Icons } from "@/components/icons";
-import { ThemeToggle } from "./theme-toggle";
+  navigationMenuTriggerStyle
+} from '@/components/ui/navigation-menu';
+import { Icons } from '@/components/icons';
+import { ThemeToggle } from './theme-toggle';
+
 interface NavItem {
   title: string;
   href?: string;
@@ -66,7 +67,7 @@ export function MainNav({ items }: MainNavProps) {
           {items
             ?.filter((item) => item.title !== items[0]?.title)
             .map((item) => (
-              <Link key={item.title} href={item.href ? item.href : "/"} legacyBehavior passHref>
+              <Link key={item.title} href={item.href ? item.href : '/'} legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                   <NavigationMenuItem key={item.title}>
                     <NavigationMenuTrigger className="h-auto capitalize">
@@ -86,17 +87,18 @@ export function MainNav({ items }: MainNavProps) {
 }
 
 const ListItem = React.forwardRef<
-  React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
->(({ className, title, children, href, ...props }, ref) => {
-  return (
+  React.ElementRef<'a'>,
+  React.ComponentPropsWithoutRef<'a'>
+>(({
+  className, title, children, href, ...props
+}, ref) => (
     <li>
       <NavigationMenuLink asChild>
         <Link
           ref={ref}
           href={String(href)}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
             className
           )}
           {...props}
@@ -108,6 +110,5 @@ const ListItem = React.forwardRef<
         </Link>
       </NavigationMenuLink>
     </li>
-  );
-});
-ListItem.displayName = "ListItem";
+));
+ListItem.displayName = 'ListItem';

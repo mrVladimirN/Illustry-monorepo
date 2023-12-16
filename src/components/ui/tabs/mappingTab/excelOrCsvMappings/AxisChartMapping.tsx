@@ -1,12 +1,12 @@
-import { Inputs } from "@/components/form/add-visualization-form";
-import { Input } from "@/components/ui/input";
-import { UseFormReturn } from "react-hook-form";
+import { Inputs } from '@/components/form/add-visualization-form';
+import { Input } from '@/components/ui/input';
+import { UseFormReturn } from 'react-hook-form';
 
 interface ExcelOrCsvAxisChartMappingProps {
   form: UseFormReturn<Inputs>; // Include the form context
 }
 export function ExcelOrCsvAxisChartMapping({
-  form,
+  form
 }: ExcelOrCsvAxisChartMappingProps) {
   return (
     <>
@@ -15,11 +15,11 @@ export function ExcelOrCsvAxisChartMapping({
         <div className="flex-grow">
           <Input
             placeholder="Column numbers for Data, coma separated"
-            defaultValue={form.getValues("mapping.data") || ""}
+            defaultValue={form.getValues('mapping.data') || ''}
             onChange={(e) => {
               setTimeout(() => {
-                const value = e.target.value;
-                form.setValue("mapping.data", value);
+                const { value } = e.target;
+                form.setValue('mapping.data', value);
               }, 100);
             }}
           />
@@ -30,10 +30,10 @@ export function ExcelOrCsvAxisChartMapping({
         <div className="flex-grow">
           <Input
             placeholder="Column number for Headers"
-            defaultValue={form.getValues("mapping.headers") || ""}
+            defaultValue={form.getValues('mapping.headers') || ''}
             onChange={(e) => {
-              const value = e.target.value;
-              form.setValue("mapping.headers", value);
+              const { value } = e.target;
+              form.setValue('mapping.headers', value);
             }}
           />
         </div>
