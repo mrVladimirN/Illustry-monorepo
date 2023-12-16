@@ -24,8 +24,7 @@ After the env is provided run one of the following commands:
 Run the following commands:
 ```shell
 docker build -t illustry .
-docker run -e MONGO_USER=<your_personal_mongo_user> 
--e MONGO_PASSWORD=<your_personal_mongo_password> -p 7000:7000 illustry
+docker-compose up -d
 ```
 
 # Contributing
