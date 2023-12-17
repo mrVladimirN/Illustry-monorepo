@@ -152,7 +152,7 @@ export default class Visualization {
     }
     return Bluebird.resolve().then(() => this.modelInstance.VisualizationModel.findOneAndUpdate(
       filter.query,
-      data,
+      newData,
       { upsert: true, new: true }
     ));
   }
