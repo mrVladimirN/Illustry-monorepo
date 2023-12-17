@@ -4,9 +4,11 @@
   "private": true,
   "scripts": {
     "depcheck": "depcheck",
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
+    "clean": "rm -rf ./next",
+    "start:dev": "next dev",
+    "build:ts": "npm run clean && next build",
+    "start:prod": "next start",
+    "prepare": "husky install",
     "lint": "next lint",
     "lint:fix": "next lint --fix"
   },
