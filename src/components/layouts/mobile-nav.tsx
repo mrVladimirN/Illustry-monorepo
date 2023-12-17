@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { siteConfig } from '@/config/site';
@@ -10,8 +9,10 @@ import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Icons } from '@/components/icons';
-import { useState } from 'react';
-import { ThemeToggle } from './theme-toggle';
+import {
+  Dispatch, ReactNode, SetStateAction, useState
+} from 'react';
+import ThemeToggle from './theme-toggle';
 
 interface NavItem {
   title: string;
@@ -23,19 +24,48 @@ interface NavItem {
   description?: string;
 }
 
-export interface NavItemWithChildren extends NavItem {
+interface NavItemWithChildren extends NavItem {
   items: NavItemWithChildren[];
 }
 
-export interface NavItemWithOptionalChildren extends NavItem {
+interface NavItemWithOptionalChildren extends NavItem {
   items?: NavItemWithChildren[];
 }
-export type MainNavItem = NavItemWithOptionalChildren;
+type MainNavItem = NavItemWithOptionalChildren;
 interface MobileNavProps {
   items?: MainNavItem[];
 }
 
-export function MobileNav({ items }: MobileNavProps) {
+interface MobileLinkProps {
+  children?: ReactNode;
+  href: string;
+  disabled?: boolean;
+  pathname: string;
+  setIsOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+function MobileLink({
+  children,
+  href,
+  disabled,
+  pathname,
+  setIsOpen
+}: MobileLinkProps) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
+        pathname === href,
+        disabled && 'pointer-events-none opacity-60'
+      )}
+      onClick={() => setIsOpen(false)}
+    >
+      {children}
+    </Link>
+  );
+}
+function MobileNav({ items }: MobileNavProps) {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   return (
@@ -75,9 +105,7 @@ export function MobileNav({ items }: MobileNavProps) {
                 {item.title}
               </MobileLink>
             ))}
-            <div className="my-4 h-[calc(100vh-8rem)] pb-10">
               <ThemeToggle />
-            </div>
           </div>
         </ScrollArea>
       </SheetContent>
@@ -85,32 +113,4 @@ export function MobileNav({ items }: MobileNavProps) {
   );
 }
 
-interface MobileLinkProps {
-  children?: React.ReactNode;
-  href: string;
-  disabled?: boolean;
-  pathname: string;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-function MobileLink({
-  children,
-  href,
-  disabled,
-  pathname,
-  setIsOpen
-}: MobileLinkProps) {
-  return (
-    <Link
-      href={href}
-      className={cn(
-        'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
-        pathname === href,
-        disabled && 'pointer-events-none opacity-60'
-      )}
-      onClick={() => setIsOpen(false)}
-    >
-      {children}
-    </Link>
-  );
-}
+export default MobileNav;

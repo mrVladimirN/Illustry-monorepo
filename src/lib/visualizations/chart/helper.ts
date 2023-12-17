@@ -12,7 +12,7 @@ export const constructSeries = (
     type: string;
     stack: string | undefined;
     color: string | undefined;
-    areaStyle?: {};
+    areaStyle?: object;
     emphasis: { focus: string };
     data: number[] | undefined;
   }[] = [];

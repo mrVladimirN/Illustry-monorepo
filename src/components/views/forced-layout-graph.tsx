@@ -1,6 +1,6 @@
-'use client';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import * as React from 'react';
+'use client';
 
 import { EChartsOption } from 'echarts/types/dist/echarts';
 import {
@@ -10,18 +10,17 @@ import {
 } from '@/lib/visualizations/node-link/helper';
 import { NodeLinkData } from 'types/visualizations';
 import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
-import { with_legend, with_options } from '@/lib/types/utils';
+import { WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface ForcedLayoutGraphProp extends with_legend, with_options {
+interface ForcedLayoutGraphProp extends WithLegend, WithOptions {
   data: NodeLinkData;
 }
 const ForcedLayoutGraphView = ({
   data,
-  legend,
-  options
+  legend
 }: ForcedLayoutGraphProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';

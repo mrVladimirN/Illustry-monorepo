@@ -1,5 +1,5 @@
 import { findOneVisualization } from '@/app/_actions/visualization';
-import { HubShell } from '@/components/shells/hub-shell';
+import HubShell from '@/components/shells/hub-shell';
 import { env } from '@/env.mjs';
 import { Metadata } from 'next';
 import { VisualizationFilter } from 'types/visualizations';

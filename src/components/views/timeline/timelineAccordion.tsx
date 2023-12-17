@@ -5,7 +5,7 @@ import {
   AccordionTrigger
 } from '@/components/ui/accordion';
 import { groupEventsByDate } from '@/lib/visualizations/timeline/helper';
-import React from 'react';
+
 import { TimelineData, TimelineEvent } from 'types/visualizations';
 import TimelineDialog from './timelineDialog';
 

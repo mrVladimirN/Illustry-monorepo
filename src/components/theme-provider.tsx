@@ -1,19 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 'use client';
 
-import * as React from 'react';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import type { ThemeProviderProps } from 'next-themes/dist/types';
-import { createContext } from 'react';
+import {
+  Dispatch, createContext, ReactNode, useReducer, useEffect, useContext
+} from 'react';
 import { cloneDeep } from '@/lib/utils';
 import { DeepPartial } from 'types/utils';
 
-interface OptionAction {
-  type: 'apply';
-  modifiedData?: DeepPartial<ThemeColors>;
-}
-interface AuxProps {
-  children: React.ReactNode;
-}
 export interface ThemeColors {
   calendar: {
     dark: {
@@ -112,6 +108,14 @@ export interface ThemeColors {
     };
   };
 }
+interface OptionAction {
+  type: 'apply';
+  modifiedData?: DeepPartial<ThemeColors>;
+}
+interface AuxProps {
+  children: ReactNode;
+}
+
 export const initialThemeColors: ThemeColors = {
   calendar: {
     dark: {
@@ -405,7 +409,7 @@ export const initialThemeColors: ThemeColors = {
 
 const ThemeColorsContext = createContext<ThemeColors>(initialThemeColors);
 const ThemeDispatchContext = createContext<
-  React.Dispatch<OptionAction> | undefined
+  Dispatch<OptionAction> | undefined
 >(undefined);
 const themeColorsReducer = (
   data: ThemeColors,
@@ -414,14 +418,14 @@ const themeColorsReducer = (
   if (action.type === 'apply' && action.modifiedData) {
     const newData: ThemeColors = cloneDeep(data);
     // Iterate through properties of action.modifiedData
-    for (const key in action.modifiedData) {
+    Object.entries(action.modifiedData).forEach(([key]) => {
       if (key in newData) {
         newData[key as keyof ThemeColors] = {
           ...newData[key as keyof ThemeColors],
           ...(action.modifiedData as any)[key] // Using any type assertion here
         };
       }
-    }
+    });
 
     return newData;
   }
@@ -434,12 +438,12 @@ export function ThemeColorsProvider({ children }: AuxProps) {
     const storedTheme = localStorage.getItem('colorTheme');
     initialTheme = storedTheme ? JSON.parse(storedTheme) : initialThemeColors;
   }
-  const [themeProv, dispatchDataProv] = React.useReducer(
+  const [themeProv, dispatchDataProv] = useReducer(
     themeColorsReducer,
     initialTheme
   );
   // Add a useEffect to update localStorage whenever themeProv changes
-  React.useEffect(() => {
+  useEffect(() => {
     localStorage.setItem('colorTheme', JSON.stringify(themeProv));
   }, [themeProv]);
   return (
@@ -451,10 +455,10 @@ export function ThemeColorsProvider({ children }: AuxProps) {
   );
 }
 export function useThemeColors() {
-  return React.useContext(ThemeColorsContext);
+  return useContext(ThemeColorsContext);
 }
 export function useThemeColorsDispach() {
-  return React.useContext(ThemeDispatchContext);
+  return useContext(ThemeDispatchContext);
 }
 
 export function ThemeProvider({ children, ...props }: ThemeProviderProps) {

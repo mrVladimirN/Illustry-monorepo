@@ -9,6 +9,7 @@ export type TypewriterProps = {
   /** Callback Function that is triggered when loops are completed. available if loop is > `0` */
   onLoopDone?: () => void;
   /** Callback Function that is triggered while typing with `typed` words count passed */
+  // eslint-disable-next-line no-unused-vars
   onType?: (count: number) => void;
   /** Callback Function that is triggered while deleting */
   onDelete?: () => void;

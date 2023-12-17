@@ -1,6 +1,6 @@
 import { Shell } from '@/components/shells/shell';
 
-export function SiteFooter() {
+function SiteFooter() {
   return (
     <footer className="w-full border-t bg-background">
       <Shell as="div">
@@ -16,3 +16,5 @@ export function SiteFooter() {
     </footer>
   );
 }
+
+export default SiteFooter;

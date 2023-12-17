@@ -2,7 +2,7 @@
 
 import { Toaster as RadToaster } from 'sonner';
 
-export function Toaster() {
+function Toaster() {
   return (
     <RadToaster
       position="bottom-right"
@@ -16,3 +16,4 @@ export function Toaster() {
     />
   );
 }
+export default Toaster;

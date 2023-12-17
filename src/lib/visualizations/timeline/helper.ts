@@ -23,10 +23,10 @@ export const extractTimelineDataTypes = (data: TimelineData): string[] => {
 export const groupEventsByDate = (events: TimelineEvent[]): { [date: string]: TimelineEvent[] } => {
   const groupedEvents: { [date: string]: TimelineEvent[] } = {};
 
-  return events.reduce((groupedEvents, event) => {
+  return events.reduce((groupedEv, event) => {
     const { date } = event;
 
-    if (!groupedEvents[date]) {
+    if (!groupedEv[date]) {
       groupedEvents[date] = [];
     }
 

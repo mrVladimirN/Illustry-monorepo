@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-cycle
 import { Inputs } from '@/components/form/add-visualization-form';
 import { UseFormReturn } from 'react-hook-form';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
@@ -17,13 +18,13 @@ import {
   SelectValue
 } from '../../select';
 
-export interface VisualizationTypeProp {
+interface VisualizationTypeProp {
   form: UseFormReturn<Inputs>; // Include the form context
   router: AppRouterInstance;
   exclude?: boolean;
 }
 
-export function VisualizationType({
+function VisualizationType({
   form,
   router,
   exclude
@@ -34,7 +35,7 @@ export function VisualizationType({
         <FormField
           control={form.control}
           name="type"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
               <FormLabel>Type</FormLabel>
               <FormControl>
@@ -110,3 +111,5 @@ export function VisualizationType({
     </>
   );
 }
+
+export default VisualizationType;

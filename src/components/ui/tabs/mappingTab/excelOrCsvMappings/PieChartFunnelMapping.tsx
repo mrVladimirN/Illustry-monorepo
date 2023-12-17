@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-cycle
 import { Inputs } from '@/components/form/add-visualization-form';
 import { Input } from '@/components/ui/input';
 import { UseFormReturn } from 'react-hook-form';
@@ -5,7 +6,7 @@ import { UseFormReturn } from 'react-hook-form';
 interface ExcelOrCsvPieChartFunnelMappingProps {
   form: UseFormReturn<Inputs>; // Include the form context
 }
-export function ExcelOrCsvPieChartFunnelMapping({
+function ExcelOrCsvPieChartFunnelMapping({
   form
 }: ExcelOrCsvPieChartFunnelMappingProps) {
   return (
@@ -45,3 +46,5 @@ export function ExcelOrCsvPieChartFunnelMapping({
     </>
   );
 }
+
+export default ExcelOrCsvPieChartFunnelMapping;

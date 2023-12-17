@@ -1,24 +1,26 @@
 'use client';
 
-import * as React from 'react';
-import Link from 'next/link';
-import { Cross2Icon, PlusCircledIcon, TrashIcon } from '@radix-ui/react-icons';
+import { Cross2Icon } from '@radix-ui/react-icons';
 import type { Table } from '@tanstack/react-table';
 
-import { cn } from '@/lib/utils';
-import { Button, buttonVariants } from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { DataTableFacetedFilter } from '@/components/data-table/data-table-faceted-filter';
-import { DataTableViewOptions } from '@/components/data-table/data-table-view-options';
+import DataTableFacetedFilter from '@/components/data-table/data-table-faceted-filter';
+import DataTableViewOptions from '@/components/data-table/data-table-view-options';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useDebounce } from '@/hooks/use-debounce';
+import useDebounce from '@/hooks/use-debounce';
+import Image from 'next/image';
+import {
+  ComponentType, MouseEventHandler, useCallback, useState, useTransition
+} from 'react';
+import ActionButton from '../ui/table-action-button';
 
 interface SearchButtonProps {
   containerStyles: string;
 }
 const SearchButton = ({ containerStyles }: SearchButtonProps) => (
   <button type="submit" className={`-ml-3 z-10 ${containerStyles}`}>
-    <img
+    <Image
       src="/magnifying-glass.svg"
       alt="magnifying glass"
       width={40}
@@ -27,18 +29,18 @@ const SearchButton = ({ containerStyles }: SearchButtonProps) => (
     />
   </button>
 );
-interface Option {
+export interface Option {
   label: string;
   value: string;
-  icon?: React.ComponentType<{ className?: string }>;
+  icon?: ComponentType<{ className?: string }>;
 }
 
-interface DataTableSearchableColumn<TData> {
+export interface DataTableSearchableColumn<TData> {
   id: keyof TData;
   title: string;
 }
 
-interface DataTableFilterableColumn<TData>
+export interface DataTableFilterableColumn<TData>
   extends DataTableSearchableColumn<TData> {
   options: Option[];
 }
@@ -46,35 +48,36 @@ interface DataTableToolbarProps<TData> {
   table: Table<TData>;
   filterableColumns?: DataTableFilterableColumn<TData>[];
   newRowLink?: string;
-  deleteRowsAction?: React.MouseEventHandler<HTMLButtonElement>;
+  deleteRowsAction?: MouseEventHandler<HTMLButtonElement>;
 }
 
-export function DataTableToolbar<TData>({
+function DataTableToolbar<TData>({
   table,
   filterableColumns = [],
   newRowLink,
   deleteRowsAction
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
-  const [isPending, startTransition] = React.useTransition();
-  const [text, setText] = React.useState<string>('');
+  const [isPending, startTransition] = useTransition();
+  const [text, setText] = useState<string>('');
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const debouncedText = useDebounce(text, 500);
 
   // Create query string
-  const createQueryString = React.useCallback(
+  const createQueryString = useCallback(
     (params: Record<string, string | number | null>) => {
       const newSearchParams = new URLSearchParams(searchParams?.toString());
 
-      for (const [key, value] of Object.entries(params)) {
+      Object.keys(params).forEach((key) => {
+        const value = params[key];
         if (value === null) {
           newSearchParams.delete(key);
         } else {
           newSearchParams.set(key, String(value));
         }
-      }
+      });
 
       return newSearchParams.toString();
     },
@@ -132,42 +135,17 @@ export function DataTableToolbar<TData>({
         )}
       </div>
       <div className="flex items-center space-x-2">
-        {deleteRowsAction && table.getSelectedRowModel().rows.length > 0 ? (
-          <Button
-            suppressHydrationWarning
-            aria-label="Delete selected rows"
-            variant="outline"
-            size="sm"
-            className="h-8"
-            onClick={(event) => {
-              startTransition(() => {
-                table.toggleAllPageRowsSelected(false);
-                deleteRowsAction(event);
-              });
-            }}
-            disabled={isPending}
-          >
-            <TrashIcon className="mr-2 h-4 w-4" aria-hidden="true" />
-            Delete
-          </Button>
-        ) : newRowLink ? (
-          <Link aria-label="Create new row" href={newRowLink}>
-            <div
-              className={cn(
-                buttonVariants({
-                  variant: 'outline',
-                  size: 'sm',
-                  className: 'h-8'
-                })
-              )}
-            >
-              <PlusCircledIcon className="mr-2 h-4 w-4" aria-hidden="true" />
-              New
-            </div>
-          </Link>
-        ) : null}
+        <ActionButton
+          deleteRowsAction={deleteRowsAction}
+          table={table}
+          isPending={isPending}
+          newRowLink={newRowLink}
+          startTransition = {startTransition}
+        />
         <DataTableViewOptions table={table} />
       </div>
     </div>
   );
 }
+
+export default DataTableToolbar;

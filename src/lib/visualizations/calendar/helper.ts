@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CalendarType } from 'types/visualizations';
 
 export const computeCategoriesCalendar = (calendarData: CalendarType[]) => [
@@ -20,6 +21,7 @@ export const computeLegendColors = (categories: string[], colors: string[]) => {
   });
   return color;
 };
+// eslint-disable-next-line max-len
 export const computeElementsCalendar = (element: CalendarType) => [element.date, element.value ? element.value : 1, element.category];
 
 export const computePropertiesForToolTip = (
@@ -29,12 +31,12 @@ export const computePropertiesForToolTip = (
   let prop = '';
   if (properties) {
     if (typeof properties === 'object') {
-      for (const key in properties) {
+      Object.entries(properties).forEach(([key]) => {
         if (Object.hasOwnProperty.call(properties, key)) {
           const propValue = properties[key];
           prop += `<div style="font-weight: bold">${key}:${propValue}</div>`;
         }
-      }
+      });
     } else if (typeof properties === 'string') {
       prop += properties;
     }
@@ -62,6 +64,7 @@ export const computeCalendar = (
     const eventYear = eventDate.getFullYear();
 
     if (eventYear && !group[eventYear]) {
+      // eslint-disable-next-line no-param-reassign
       group[eventYear] = [];
       group[eventYear]?.push(computeElementsCalendar(event));
     } else {
@@ -70,7 +73,7 @@ export const computeCalendar = (
     return group;
   }, {});
   const series = Object.entries(groupedByYears).map(
-    ([year, events], index) => ({
+    ([, events], index) => ({
       type: 'heatmap',
       coordinateSystem: 'calendar',
       calendarIndex: index,

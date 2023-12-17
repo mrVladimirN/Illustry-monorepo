@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { TimelineData } from 'types/visualizations';
 import { VerticalTimeline } from 'react-vertical-timeline-component';
@@ -8,18 +8,16 @@ import 'react-vertical-timeline-component/style.min.css';
 import { formatDate } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
-import { with_legend, with_options } from '@/lib/types/utils';
+import { WithLegend, WithOptions } from '@/lib/types/utils';
 import TimelineAccordion from './timelineAccordion';
 import TimelineElement from './timelineElement';
 
-interface TimelineProp extends with_legend, with_options {
+interface TimelineProp extends WithLegend, WithOptions {
   data: TimelineData;
 }
 
 const TimelineView = ({
-  data,
-  legend,
-  options
+  data
 }: TimelineProp) => {
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';

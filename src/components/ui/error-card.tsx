@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Link from 'next/link';
 
 import { cn } from '@/lib/utils';
@@ -12,8 +11,9 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { Icons } from '@/components/icons';
+import { ComponentPropsWithoutRef } from 'react';
 
-interface ErrorCardProps extends React.ComponentPropsWithoutRef<typeof Card> {
+interface ErrorCardProps extends ComponentPropsWithoutRef<typeof Card> {
   icon?: keyof typeof Icons
   title: string
   description: string
@@ -21,7 +21,7 @@ interface ErrorCardProps extends React.ComponentPropsWithoutRef<typeof Card> {
   retryLinkText?: string
 }
 
-export function ErrorCard({
+function ErrorCard({
   icon,
   title,
   description,
@@ -62,3 +62,5 @@ export function ErrorCard({
     </Card>
   );
 }
+
+export default ErrorCard;

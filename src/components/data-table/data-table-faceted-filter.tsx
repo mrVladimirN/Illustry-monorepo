@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons';
 import { type Column } from '@tanstack/react-table';
 
@@ -19,24 +18,25 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@/components/ui/popover';
-import { Separator } from '@/components/ui/separator';
+import Separator from '@/components/ui/separator';
+import { ComponentType } from 'react';
 
 interface Option {
   label: string;
   value: string;
-  icon?: React.ComponentType<{ className?: string }>;
+  icon?: ComponentType<{ className?: string }>;
 }
-interface DataTableFacetedFilter<TData, TValue> {
+interface DataTableFacetedFilterProps<TData, TValue> {
   column?: Column<TData, TValue>
   title?: string
   options: Option[]
 }
 
-export function DataTableFacetedFilter<TData, TValue>({
+function DataTableFacetedFilter<TData, TValue>({
   column,
   title,
   options
-}: DataTableFacetedFilter<TData, TValue>) {
+}: DataTableFacetedFilterProps<TData, TValue>) {
   const selectedValues = new Set(column?.getFilterValue() as string[]);
 
   return (
@@ -149,3 +149,5 @@ export function DataTableFacetedFilter<TData, TValue>({
     </Popover>
   );
 }
+
+export default DataTableFacetedFilter;

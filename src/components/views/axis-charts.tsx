@@ -1,7 +1,5 @@
 'use client';
 
-import * as React from 'react';
-
 import { EChartsOption } from 'echarts/types/dist/echarts';
 
 import { AxisChartData } from 'types/visualizations';
@@ -10,28 +8,34 @@ import {
   constructSeries
 } from '@/lib/visualizations/chart/helper';
 import { SeriesOption } from 'echarts';
-import { with_legend, with_options } from '@/lib/types/utils';
+import { WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface AxisChartProp extends with_legend, with_options {
+interface AxisChartProp extends WithLegend, WithOptions {
   data: AxisChartData;
   type: 'line' | 'bar';
 }
 const AxisChartView = ({
-  data, type, legend, options
+  data, type, legend
 }: AxisChartProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';
-  const colors = isDarkTheme
-    ? type === 'bar'
-      ? activeTheme.barChart.dark.colors
-      : activeTheme.barChart.light.colors
-    : type === 'line'
-      ? activeTheme.lineChart.dark.colors
-      : activeTheme.lineChart.light.colors;
+  let colors;
+
+  if (isDarkTheme) {
+    if (type === 'bar') {
+      colors = activeTheme.barChart.dark.colors;
+    } else if (type === 'line') {
+      colors = activeTheme.lineChart.dark.colors;
+    }
+  } else if (type === 'bar') {
+    colors = activeTheme.barChart.light.colors;
+  } else if (type === 'line') {
+    colors = activeTheme.lineChart.light.colors;
+  }
 
   const { headers, values } = data;
   const option: EChartsOption = {
@@ -63,11 +67,11 @@ const AxisChartView = ({
         type: 'value'
       }
     ],
-    series: constructSeries(values, colors, false, type, false) as SeriesOption
+    series: constructSeries(values, colors as string[], false, type, false) as SeriesOption
   };
   return (
     <div className="relative mt-[4%] flex flex-col items-center">
-      {legend && <Legend legendData={computeLegendColors(data, colors)} />}
+      {legend && <Legend legendData={computeLegendColors(data, colors as string[])} />}
       <div className="w-full mt-4 h-[80vh]">
         <ReactEcharts option={option} className="w-full h-full" />
       </div>

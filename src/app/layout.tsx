@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import { env } from '@/env.mjs';
-
+import { ReactNode } from 'react';
 import './globals.css';
 
 import { siteConfig } from '@/config/site';
 import { fontMono, fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
-import { Toaster } from '@/components/ui/toaster';
+import Toaster from '@/components/ui/toaster';
 import {
   ThemeColorsProvider,
   ThemeProvider
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 };
 
 interface RootLayoutProps {
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export default function RootLayout({ children }: RootLayoutProps) {

@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable no-param-reassign */
 import { HierarchyNode } from 'types/visualizations';
 
 interface ProcessedNode {
@@ -7,7 +9,7 @@ interface ProcessedNode {
     color?: string;
     borderColor?: string;
   };
-  prop: any; // You can define a type for this property
+  prop: object; // You can define a type for this property
   children: ProcessedNode[];
 }
 // TreeMap/Sunburst
@@ -54,36 +56,6 @@ export const computeCategories = (arr: HierarchyNode[]): string[] => {
 
   return Array.from(uniqueCategories); // Convert Set to an array
 };
-export const computeNodesHierarchy = (
-  nodes: HierarchyNode[],
-  categories: string[],
-  colors: string[]
-) => {
-  const colorMapSchema = new Map<string, string>();
-  categories.forEach((cat, index) => {
-    colorMapSchema.set(cat, colors[index] as string);
-  });
-  const processNode = (node: HierarchyNode) => {
-    const processedNode: ProcessedNode = {
-      name: node.name,
-      value: node.value,
-      itemStyle: {
-        color: colorMapSchema.get(node.category),
-        borderColor: colorMapSchema.get(node.category)
-      },
-      prop: computePropertiesForToolTip(node.properties, node.value),
-      children: []
-    };
-
-    if (node.children) {
-      processedNode.children = node.children.map(processNode); // Recursively process children
-    }
-
-    return processedNode;
-  };
-
-  return nodes.map(processNode);
-};
 const computePropertiesForToolTip = (
   properties: any,
   value?: number | string
@@ -91,12 +63,12 @@ const computePropertiesForToolTip = (
   let prop = '';
 
   if (typeof properties === 'object') {
-    for (const key in properties) {
+    Object.entries(properties).forEach(([key]) => {
       if (Object.hasOwnProperty.call(properties, key)) {
         const propValue = properties[key];
         prop += `<div style="font-weight: bold">${key}:${propValue}</div>`;
       }
-    }
+    });
 
     if (value) {
       prop += `<div style="font-weight: bold">value:${value}</div>`;
@@ -114,9 +86,42 @@ const computePropertiesForToolTip = (
 
   return prop;
 };
+
+export const computeNodesHierarchy = (
+  nodes: HierarchyNode[],
+  categories: string[],
+  colors: string[]
+) => {
+  const colorMapSchema = new Map<string, string>();
+  categories.forEach((cat, index) => {
+    colorMapSchema.set(cat, colors[index] as string);
+  });
+  const processNode = (node: HierarchyNode) => {
+    const processedNode: ProcessedNode = {
+      name: node.name,
+      value: node.value,
+      itemStyle: {
+        color: colorMapSchema.get(node.category),
+        borderColor: colorMapSchema.get(node.category)
+      },
+      prop: computePropertiesForToolTip(node.properties, node.value) as unknown as object,
+      children: []
+    };
+
+    if (node.children) {
+      processedNode.children = node.children.map(processNode); // Recursively process children
+    }
+
+    return processedNode;
+  };
+
+  return nodes.map(processNode);
+};
+
 export const createLevels = (nr: number) => {
   const levels = [];
 
+  // eslint-disable-next-line no-plusplus
   for (let i = nr; i > 0; i--) {
     const borderWidth = 2 * i;
     const gapWidth = 2 * i;

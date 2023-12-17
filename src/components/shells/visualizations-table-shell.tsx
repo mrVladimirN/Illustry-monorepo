@@ -1,16 +1,20 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import * as React from 'react';
+
 import { catchError, formatDate } from '@/lib/utils';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { deleteVisualization } from '@/app/_actions/visualization';
-import { VisualizationType, VisualizationTypesEnum } from 'types/visualizations';
-import { DataTableColumnHeader } from '../data-table/data-table-column-header';
-import { DataTable } from '../data-table/data-table';
-import { Checkbox } from '../ui/checkbox';
+import {
+  VisualizationType,
+  VisualizationTypesEnum
+} from 'types/visualizations';
+import { useMemo, useState, useTransition } from 'react';
+import DataTableColumnHeader from '../data-table/data-table-column-header';
+import DataTable from '../data-table/data-table';
+import Checkbox from '../ui/checkbox';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,15 +30,15 @@ interface VisualizationsTableShellProps {
   data?: VisualizationType[];
   pageCount?: number;
 }
-export function VisualizationsTableShell({
+function VisualizationsTableShell({
   data,
   pageCount
 }: VisualizationsTableShellProps) {
-  const [isPending, startTransition] = React.useTransition();
-  const [selectedRowProperties, setSelectedRowProperties] = React.useState<
+  const [isPending, startTransition] = useTransition();
+  const [selectedRowProperties, setSelectedRowProperties] = useState<
     { name: string; type: VisualizationTypesEnum }[]
   >([]);
-  const columns = React.useMemo<ColumnDef<VisualizationType, unknown>[]>(
+  const columns = useMemo<ColumnDef<VisualizationType, unknown>[]>(
     () => [
       {
         id: 'select',
@@ -45,12 +49,14 @@ export function VisualizationsTableShell({
               table.toggleAllPageRowsSelected(!!value);
               if (data) {
                 setSelectedRowProperties(
-                  (prev: { name: string; type: VisualizationTypesEnum }[]) => (prev.length === data.length
+                  (p: { name: string; type: VisualizationTypesEnum }[]) => (p.length === data.length
                     ? []
-                    : data.map((row) => ({ name: row.name, type: row.type } as {
-                            name: string;
-                            type: VisualizationTypesEnum;
-                          })))
+                    : data.map(
+                      (row) => ({ name: row.name, type: row.type } as {
+                              name: string;
+                              type: VisualizationTypesEnum;
+                            })
+                    ))
                 );
               }
             }}
@@ -72,10 +78,10 @@ export function VisualizationsTableShell({
                           type: row.original.type
                         } as { name: string; type: VisualizationTypesEnum }
                   ]
-                  : prev.filter((id) => (
-                    id.name !== row.original.name
+                  : prev.filter(
+                    (id) => id.name !== row.original.name
                           && id.type !== row.original.type
-                  )))
+                  ))
               );
             }}
             aria-label="Select row"
@@ -166,7 +172,11 @@ export function VisualizationsTableShell({
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-[160px]">
               <DropdownMenuItem asChild>
-                <Link href={`/visualizationhub?name=${row.original.name}&type=${row.original.type}`}>View</Link>
+                <Link
+                  href={`/visualizationhub?name=${row.original.name}&type=${row.original.type}`}
+                >
+                  View
+                </Link>
               </DropdownMenuItem>
 
               <DropdownMenuSeparator />
@@ -233,3 +243,5 @@ export function VisualizationsTableShell({
     />
   );
 }
+
+export default VisualizationsTableShell;

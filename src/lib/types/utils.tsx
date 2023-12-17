@@ -1,7 +1,7 @@
-export interface with_legend {
+export interface WithLegend {
     legend: boolean
 }
 
-export interface with_options {
+export interface WithOptions {
     options: boolean
 }

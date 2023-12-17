@@ -1,13 +1,14 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-import * as React from 'react';
+
 import { catchError, formatDate } from '@/lib/utils';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { deleteProject } from '@/app/_actions/project';
 import { ProjectType } from 'types/project';
+import { useMemo, useState, useTransition } from 'react';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -17,21 +18,18 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger
 } from '../ui/dropdown-menu';
-import { Checkbox } from '../ui/checkbox';
-import { DataTable } from '../data-table/data-table';
-import { DataTableColumnHeader } from '../data-table/data-table-column-header';
+import Checkbox from '../ui/checkbox';
+import DataTable from '../data-table/data-table';
+import DataTableColumnHeader from '../data-table/data-table-column-header';
 
 interface ProjectsTableShellProps {
   data?: ProjectType[];
   pageCount?: number;
 }
-export function ProjectsTableShell({
-  data,
-  pageCount
-}: ProjectsTableShellProps) {
-  const [isPending, startTransition] = React.useTransition();
-  const [selectedRowNames, setSelectedRowNames] = React.useState<string[]>([]);
-  const columns = React.useMemo<ColumnDef<ProjectType, unknown>[]>(
+function ProjectsTableShell({ data, pageCount }: ProjectsTableShellProps) {
+  const [isPending, startTransition] = useTransition();
+  const [selectedRowNames, setSelectedRowNames] = useState<string[]>([]);
+  const columns = useMemo<ColumnDef<ProjectType, unknown>[]>(
     () => [
       {
         id: 'select',
@@ -41,6 +39,7 @@ export function ProjectsTableShell({
             onCheckedChange={(value) => {
               table.toggleAllPageRowsSelected(!!value);
               if (data) {
+                // eslint-disable-next-line max-len
                 setSelectedRowNames((prev) => (prev.length === data.length ? [] : data.map((row) => row.name)));
               }
             }}
@@ -172,3 +171,5 @@ export function ProjectsTableShell({
     />
   );
 }
+
+export default ProjectsTableShell;

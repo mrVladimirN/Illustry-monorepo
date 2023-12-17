@@ -26,7 +26,7 @@ export function cloneDeep<T>(source: T): T {
 export function isValidHexaCode(str:string) {
   // Regex to check valid
   // hexadecimalColor_code
-  const regex = new RegExp(/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/);
+  const regex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
 
   // if str
   // is empty return false
@@ -36,7 +36,7 @@ export function isValidHexaCode(str:string) {
 
   // Return true if the str
   // matched the ReGex
-  if (regex.test(str) == true) {
+  if (regex.test(str) === true) {
     return 'true';
   }
 

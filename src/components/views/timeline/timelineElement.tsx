@@ -1,11 +1,11 @@
-import React from 'react';
+import { ReactNode } from 'react';
 import { VerticalTimelineElement } from 'react-vertical-timeline-component';
 
 export interface TimelineElementProps {
     date: string,
     isDarkTheme:boolean,
     inView: boolean,
-    children: React.ReactNode
+    children: ReactNode
 }
 const TimelineElement = ({
   date, isDarkTheme, inView, children

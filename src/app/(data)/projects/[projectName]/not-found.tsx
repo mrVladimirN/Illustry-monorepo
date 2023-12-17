@@ -1,5 +1,5 @@
 import { Shell } from '@/components/shells/shell';
-import { ErrorCard } from '@/components/ui/error-card';
+import ErrorCard from '@/components/ui/error-card';
 
 export default function ProductNotFound() {
   return (

@@ -1,6 +1,6 @@
 'use server';
 
-import { makeRequest } from '@/lib/request';
+import makeRequest from '@/lib/request';
 import { env } from '@/env.mjs';
 import { revalidateTag } from 'next/cache';
 import {
@@ -21,7 +21,7 @@ export const browseProjects = async (filter?: ProjectFilter) => {
     },
     body: JSON.stringify(newFilter)
   });
-  return await makeRequest<ExtendedProjectType>(request, ['projects']);
+  return makeRequest<ExtendedProjectType>(request, ['projects']);
 };
 
 export const deleteProject = async (projectName: string) => {
@@ -35,7 +35,7 @@ export const deleteProject = async (projectName: string) => {
       name: projectName
     })
   });
-  return await makeRequest<boolean>(request, ['projects']);
+  return makeRequest<boolean>(request, ['projects']);
 };
 
 export const updateProject = async (project: ProjectUpdate) => {
@@ -48,7 +48,7 @@ export const updateProject = async (project: ProjectUpdate) => {
     body: JSON.stringify(project)
   });
 
-  return await makeRequest<ProjectType>(request, ['projects']);
+  return makeRequest<ProjectType>(request, ['projects']);
 };
 
 export const createProject = async (project: ProjectCreate) => {
@@ -64,7 +64,7 @@ export const createProject = async (project: ProjectCreate) => {
     },
     body: JSON.stringify(newProject)
   });
-  return await makeRequest<ProjectType>(request, ['projects']);
+  return makeRequest<ProjectType>(request, ['projects']);
 };
 
 export const findOneProject = async (projectName: string) => {
@@ -78,5 +78,5 @@ export const findOneProject = async (projectName: string) => {
       body: JSON.stringify({ name: projectName })
     }
   );
-  return await makeRequest<ProjectType>(request, ['projects']);
+  return makeRequest<ProjectType>(request, ['projects']);
 };

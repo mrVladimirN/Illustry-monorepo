@@ -1,4 +1,3 @@
-export type SiteConfig = typeof siteConfig;
 export const siteConfig = {
   name: 'Illustry',
   description: 'An open source visualization hub',
@@ -289,3 +288,4 @@ export const siteConfig = {
     ]
   }
 };
+export type SiteConfig = typeof siteConfig;

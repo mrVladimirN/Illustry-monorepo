@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { WordType } from 'types/visualizations';
 
 export const computePropertiesForToolTip = (
@@ -6,13 +7,13 @@ export const computePropertiesForToolTip = (
 ) => {
   let prop = '';
 
-  if (typeof properties === 'object') {
-    for (const key in properties) {
+  if (typeof properties === 'object' && properties !== null) {
+    Object.entries(properties).forEach(([key]) => {
       if (Object.hasOwnProperty.call(properties, key)) {
         const propValue = properties[key];
         prop += `<div style="font-weight: bold">${key}:${propValue}</div>`;
       }
-    }
+    });
 
     if (value) {
       prop += `<div style="font-weight: bold">value:${value}</div>`;
@@ -59,6 +60,7 @@ const computeColor = (nr: number, meanValue: number, colors: string[]) => {
   if (percent > 100) {
     return colors[4];
   }
+  return '';
 };
 export const computeWords = (words: WordType[], colors: string[]) => {
   const values = words.map((word) => word.value);

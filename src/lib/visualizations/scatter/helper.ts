@@ -1,4 +1,4 @@
-import { ScatterData, ScatterPoint } from 'types/visualizations';
+import { ScatterPoint } from 'types/visualizations';
 
 export const computeCategoriesScatter = (points: ScatterPoint[]) => [
   ...new Set(
@@ -14,4 +14,5 @@ export const computeColors = (categories: string[], colors: string[]) => {
   return color;
 };
 
+// eslint-disable-next-line max-len
 export const computePoints = (points:ScatterPoint[]) => points.map((point) => [...point.value, point.category]);

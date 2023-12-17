@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import { useRef, useEffect, JSX } from 'react';
 
 import 'echarts-wordcloud';
 // Import the echarts core module, which provides the necessary interfaces for using echarts.
@@ -103,8 +103,9 @@ const ReactEcharts = <T extends EChartsOption | WordCloudSeriesOption>({
     // Update chart
     let chart: echarts.ECharts | undefined;
     if (chartRef.current !== null) {
-      const chart = echarts.getInstanceByDom(chartRef.current);
+      chart = echarts.getInstanceByDom(chartRef.current);
       chart?.setOption(option as EChartsOption, settings);
+      // eslint-disable-next-line no-unused-expressions
       loading === true ? chart?.showLoading() : chart?.hideLoading();
     }
   }, [option, settings, theme, loading]);

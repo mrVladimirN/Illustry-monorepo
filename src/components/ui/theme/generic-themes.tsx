@@ -1,7 +1,9 @@
-import { RefObject } from 'react';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable no-unused-vars */
+import { Dispatch, RefObject, SetStateAction } from 'react';
 import { useThemeColors } from '@/components/theme-provider';
 import { Icons } from '@/components/icons';
-import { ColorPicker } from '../colorPicker';
+import ColorPicker from '../colorPicker';
 import {
   Tabs, TabsContent, TabsList, TabsTrigger
 } from '../tabs';
@@ -15,8 +17,8 @@ interface GenericThemesProps {
     theme: string
   ) => void;
   colorPickerRef: RefObject<HTMLDivElement>;
-  setActiveColorPickerIndex: React.Dispatch<
-    React.SetStateAction<number | null>
+  setActiveColorPickerIndex: Dispatch<
+    SetStateAction<number | null>
   >;
   visualization: string;
   handleColorDelete: (visualization: string, theme: string) => void;
@@ -55,7 +57,7 @@ const GenericThemesAccordion = ({
                       activeColorPickerIndex
                     ] as string
                   }
-                  changeColor={(newColor) => handleColorChange(
+                  changeColor={(newColor:string) => handleColorChange(
                     newColor,
                     activeColorPickerIndex,
                     visualization,
@@ -93,6 +95,7 @@ const GenericThemesAccordion = ({
                   if (darkColorsLength < 10) {
                     return handleColorAdd(visualization, 'light');
                   }
+                  return null;
                 }}
               >
                 <Icons.add
@@ -109,6 +112,7 @@ const GenericThemesAccordion = ({
                   if (darkColorsLength >= 4) {
                     return handleColorDelete(visualization, 'light');
                   }
+                  return null;
                 }}
               >
                 <Icons.remove
@@ -135,7 +139,7 @@ const GenericThemesAccordion = ({
                       activeColorPickerIndex
                     ] as string
                   }
-                  changeColor={(newColor) => handleColorChange(
+                  changeColor={(newColor:string) => handleColorChange(
                     newColor,
                     activeColorPickerIndex,
                     visualization,
@@ -173,6 +177,7 @@ const GenericThemesAccordion = ({
                   if (darkColorsLength < 10) {
                     return handleColorAdd(visualization, 'dark');
                   }
+                  return null;
                 }}
               >
                 <Icons.add
@@ -189,6 +194,7 @@ const GenericThemesAccordion = ({
                   if (darkColorsLength >= 4) {
                     return handleColorDelete(visualization, 'dark');
                   }
+                  return null;
                 }}
               >
                 <Icons.remove

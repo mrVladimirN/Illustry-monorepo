@@ -76,7 +76,7 @@ const TimelineView = dynamic(
     ssr: false
   }
 );
-export function HubShell({ data }: HubShellProps) {
+function HubShell({ data }: HubShellProps) {
   const renderGraph = () => {
     if (data) {
       switch (data.type) {
@@ -226,7 +226,10 @@ export function HubShell({ data }: HubShellProps) {
           return null;
       }
     }
+    return null;
   };
 
   return <div>{renderGraph()}</div>;
 }
+
+export default HubShell;

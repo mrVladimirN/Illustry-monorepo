@@ -20,7 +20,7 @@ interface DataTablePaginationProps<TData> {
   pageSizeOptions?: number[];
 }
 
-export function DataTablePagination<TData>({
+function DataTablePagination<TData>({
   table,
   pageSizeOptions = [10, 20, 30, 40, 50]
 }: DataTablePaginationProps<TData>) {
@@ -105,3 +105,5 @@ export function DataTablePagination<TData>({
     </div>
   );
 }
+
+export default DataTablePagination;

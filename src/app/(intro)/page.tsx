@@ -1,5 +1,4 @@
-import React from 'react';
-import { Typewriter } from '@/components/animatedText/Typewriter';
+import Typewriter from '@/components/animatedText/Typewriter';
 import Balance from 'react-wrap-balancer';
 import { Shell } from '@/components/shells/shell';
 import { buttonVariants } from '@/components/ui/button';

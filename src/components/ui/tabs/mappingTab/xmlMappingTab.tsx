@@ -1,15 +1,16 @@
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+// eslint-disable-next-line import/no-cycle
 import { Inputs } from '@/components/form/add-visualization-form';
 import { UseFormReturn } from 'react-hook-form';
-import { VisualizationDetails } from './visualizationDetails';
-import { VisualizationType } from './visualizationType';
+import VisualizationDetails from './visualizationDetails';
+import VisualizationType from './visualizationType';
 
 interface XMLMappingTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
   router: AppRouterInstance;
   fileDetails: boolean;
 }
-export function XMLMappingTab({
+function XMLMappingTab({
   fileDetails,
   form,
   router
@@ -18,7 +19,7 @@ export function XMLMappingTab({
     <>
       {fileDetails ? (
         <p className="text-green-500">
-          XML files don't need a special mapping
+          XML files don&apos;t need a special mapping
         </p>
       ) : (
         <>
@@ -29,3 +30,5 @@ export function XMLMappingTab({
     </>
   );
 }
+
+export default XMLMappingTab;

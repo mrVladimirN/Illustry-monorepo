@@ -1,11 +1,13 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+
+import { FC } from 'react';
 
 interface DefaultThemesProps {
   colorPalette: { [key: string]: string[] };
   handleApplyTheme: (schemeName: string) => void;
 }
 
-const DefaultThemesAccordion: React.FC<DefaultThemesProps> = ({
+const DefaultThemesAccordion: FC<DefaultThemesProps> = ({
   colorPalette,
   handleApplyTheme
 }) => (
@@ -16,9 +18,9 @@ const DefaultThemesAccordion: React.FC<DefaultThemesProps> = ({
           className="flex flex-wrap border border-gray-300 rounded cursor-pointer justify-between"
           onClick={() => handleApplyTheme(schemeName)}
         >
-          {colorPalette[schemeName]?.map((color, index) => (
+          {colorPalette[schemeName]?.map((color, i) => (
             <div
-              key={index}
+              key={i}
               style={{ backgroundColor: color }}
               className="w-4 h-4 m-1 border border-gray-300 rounded flex items-center justify-center"
             ></div>

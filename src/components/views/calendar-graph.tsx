@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 'use client';
 
-import * as React from 'react';
 import { EChartsOption, SeriesOption } from 'echarts/types/dist/echarts';
 import {
   computeCalendar,
@@ -11,15 +12,15 @@ import {
 } from '@/lib/visualizations/calendar/helper';
 import { CalendarOption } from 'echarts/types/dist/shared';
 import { CalendarData, CalendarType } from 'types/visualizations';
-import { with_legend, with_options } from '@/lib/types/utils';
+import { WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface CalendarGraphProp extends with_legend, with_options {
+interface CalendarGraphProp extends WithLegend, WithOptions {
   data: CalendarData;
 }
-const CalendarGraphView = ({ data, legend, options }: CalendarGraphProp) => {
+const CalendarGraphView = ({ data, legend }: CalendarGraphProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';
@@ -40,6 +41,7 @@ const CalendarGraphView = ({ data, legend, options }: CalendarGraphProp) => {
         if (params && params.data && params.data.length) {
           const element = (calendar as CalendarType[]).find((el) =>
             // @ts-ignore
+            // eslint-disable-next-line implicit-arrow-linebreak
             el.date === params.data[0]);
           if (element) {
             if (element.properties) {

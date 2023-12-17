@@ -4,9 +4,12 @@ import { HexColorPicker } from 'react-colorful';
 
 interface ColorPickerProps {
   initialColor: string;
+  // eslint-disable-next-line no-unused-vars
   changeColor: ((newColor: string) => void) | undefined;
 }
-export const ColorPicker = ({
+const ColorPicker = ({
   initialColor,
   changeColor
 }: ColorPickerProps) => <HexColorPicker color={initialColor} onChange={changeColor}/>;
+
+export default ColorPicker;

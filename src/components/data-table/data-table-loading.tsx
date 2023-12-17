@@ -1,4 +1,4 @@
-import { Skeleton } from '@/components/ui/skeleton';
+import Skeleton from '@/components/ui/skeleton';
 import {
   Table,
   TableBody,
@@ -9,18 +9,29 @@ import {
 } from '@/components/ui/table';
 
 interface DataTableLoadingProps {
-  columnCount: number
-  rowCount?: number
-  isNewRowCreatable?: boolean
-  isRowsDeletable?: boolean
+  columnCount: number;
+  rowCount?: number;
+  isNewRowCreatable?: boolean;
+  isRowsDeletable?: boolean;
 }
 
-export function DataTableLoading({
+function DataTableLoading({
   columnCount,
   rowCount = 10,
   isNewRowCreatable = false,
   isRowsDeletable = false
 }: DataTableLoadingProps) {
+  const handleDeleteSkeleton = (
+    rowsDeletable: boolean,
+    newRowCreatable: boolean
+  ) => {
+    let skeleton = null;
+    if (rowsDeletable || newRowCreatable) {
+      skeleton = <Skeleton className="h-7 w-[70px]" />;
+    }
+    return skeleton;
+  };
+
   return (
     <div className="w-full space-y-3 overflow-auto">
       <div className="flex w-full items-center justify-between space-x-2 overflow-auto p-1">
@@ -29,11 +40,7 @@ export function DataTableLoading({
           <Skeleton className="h-7 w-[70px] border-dashed" />
         </div>
         <div className="flex items-center space-x-2">
-          {isRowsDeletable ? (
-            <Skeleton className="h-7 w-[70px]" />
-          ) : isNewRowCreatable ? (
-            <Skeleton className="h-7 w-[70px]" />
-          ) : null}
+          {handleDeleteSkeleton(isNewRowCreatable, isRowsDeletable)}
           <Skeleton className="ml-auto hidden h-7 w-[70px] lg:flex" />
         </div>
       </div>
@@ -42,8 +49,8 @@ export function DataTableLoading({
           <TableHeader>
             {Array.from({ length: 1 }).map((_, i) => (
               <TableRow key={i} className="hover:bg-transparent">
-                {Array.from({ length: columnCount }).map((_, i) => (
-                  <TableHead key={i}>
+                {Array.from({ length: columnCount }).map((e, index) => (
+                  <TableHead key={index}>
                     <Skeleton className="h-6 w-full" />
                   </TableHead>
                 ))}
@@ -53,8 +60,8 @@ export function DataTableLoading({
           <TableBody>
             {Array.from({ length: rowCount }).map((_, i) => (
               <TableRow key={i} className="hover:bg-transparent">
-                {Array.from({ length: columnCount }).map((_, i) => (
-                  <TableCell key={i}>
+                {Array.from({ length: columnCount }).map((e, index) => (
+                  <TableCell key={index}>
                     <Skeleton className="h-6 w-full" />
                   </TableCell>
                 ))}
@@ -86,3 +93,5 @@ export function DataTableLoading({
     </div>
   );
 }
+
+export default DataTableLoading;

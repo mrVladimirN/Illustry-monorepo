@@ -1,3 +1,11 @@
+/* eslint-disable no-plusplus */
+/* eslint-disable no-return-assign */
+/* eslint-disable no-multi-assign */
+/* eslint-disable no-unused-expressions */
+/* eslint-disable prefer-destructuring */
+/* eslint-disable no-sequences */
+/* eslint-disable no-param-reassign */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link, Node } from 'types/visualizations';
 
 // HEB transformers
@@ -15,7 +23,36 @@ export const computeCategoriesSankey = (nodes: Node[]) => [
     nodes.map((node) => node.category)
   )
 ];
+const computePropertiesForToolTip = (
+  properties: any,
+  value?: number | string
+) => {
+  let prop = '';
 
+  if (typeof properties === 'object') {
+    Object.entries(properties).forEach(([key]) => {
+      if (Object.hasOwnProperty.call(properties, key)) {
+        const propValue = properties[key];
+        prop += `<div style="font-weight: bold">${key}:${propValue}</div>`;
+      }
+    });
+
+    if (value) {
+      prop += `<div style="font-weight: bold">value:${value}</div>`;
+    }
+  } else if (typeof properties === 'string') {
+    if (value) {
+      prop
+        += `${properties}<div style="font-weight: bold">value:${value}</div>`;
+    } else {
+      prop += properties;
+    }
+  } else if (value) {
+    prop += `<div style="font-weight: bold">value:${value}</div>`;
+  }
+
+  return prop;
+};
 export const computeNodesSankey = (
   nodes: Node[],
   categories: string[],
@@ -35,43 +72,12 @@ export const computeNodesSankey = (
   }));
 };
 
-export const computeLinksSankey = (links: Link[]) => links.map((link, index) => ({
+export const computeLinksSankey = (links: Link[]) => links.map((link) => ({
   source: link.source,
   target: link.target,
   value: link.value,
   prop: computePropertiesForToolTip(link.properties, link.value)
 }));
-
-const computePropertiesForToolTip = (
-  properties: any,
-  value?: number | string
-) => {
-  let prop = '';
-
-  if (typeof properties === 'object') {
-    for (const key in properties) {
-      if (Object.hasOwnProperty.call(properties, key)) {
-        const propValue = properties[key];
-        prop += `<div style="font-weight: bold">${key}:${propValue}</div>`;
-      }
-    }
-
-    if (value) {
-      prop += `<div style="font-weight: bold">value:${value}</div>`;
-    }
-  } else if (typeof properties === 'string') {
-    if (value) {
-      prop
-        += `${properties}<div style="font-weight: bold">value:${value}</div>`;
-    } else {
-      prop += properties;
-    }
-  } else if (value) {
-    prop += `<div style="font-weight: bold">value:${value}</div>`;
-  }
-
-  return prop;
-};
 
 // FLG transformers
 
@@ -81,11 +87,6 @@ export const computeCategoriesFLG = (nodes: Node[], colors: string[]) => [
   )
 ].map((node, index) => ({ name: node, itemStyle: { color: colors[index] } }));
 
-export const constructLegendTextColor = (
-  categories: {
-    name: string;
-  }[]
-) => {};
 export const computeNodesFLG = (
   nodes: Node[],
   categories: {
@@ -102,7 +103,7 @@ export const computeNodesFLG = (
   };
 });
 
-export const computeLinksFLG = (links: Link[], nodes: Node[]) => links.map((link, index) => {
+export const computeLinksFLG = (links: Link[], nodes: Node[]) => links.map((link) => {
   const source = nodes.findIndex((node) => node.name === link.source);
   const target = nodes.findIndex((node) => node.name === link.target);
   return {
@@ -170,6 +171,7 @@ function createLinks(nodes: HierarchyNode<any>[], links: Link[]) {
   });
   // For each import, construct a link from the source to target node.
   links.forEach((lnk) => {
+    // eslint-disable-next-line no-underscore-dangle
     let _import;
     if (lnk.source === null || lnk.source === undefined) {
       _import = map[lnk.source].path(map[lnk.target]);
@@ -273,8 +275,8 @@ export const onLinkMouseOver = (
   l.target.target = true;
   link
     .filter((lnk: any) => l === lnk)
-    .style('stroke-opacity', (lnk: any) => 1)
-    .style('stroke-width', (lnk: any) => '3px')
+    .style('stroke-opacity', () => 1)
+    .style('stroke-width', () => '3px')
     .raise();
 
   node
@@ -292,6 +294,7 @@ export const onLinkMouseOver = (
       if (n.target || n.source) {
         return 700;
       }
+      return 0;
     });
   tooltip.html(`Selected value: ${l.value}`);
   return tooltip.style('visibility', 'visible').style('opacity', 1);
@@ -315,11 +318,13 @@ export const onNodeMouseOver = (
       if (l.target === d) {
         return (l.source.source = true);
       }
+      return (l.source.source = false);
     })
     .classed('link--source', (l: any) => {
       if (l.source === d) {
         return (l.target.target = true);
       }
+      return (l.target.target = false);
     })
     .filter((l: any) => l.target === d || l.source === d)
     .style('stroke', (l: any) => {
@@ -334,11 +339,13 @@ export const onNodeMouseOver = (
       if (l.target === d || l.source === d) {
         return 1;
       }
+      return 0;
     })
     .style('stroke-width', (l: any) => {
       if (l.target === d || l.source === d) {
         return '3px';
       }
+      return '0px';
     })
     .raise();
 
@@ -359,6 +366,7 @@ export const onNodeMouseOver = (
       if (n.target || n.source || d === n) {
         return 700;
       }
+      return 0;
     });
 };
 
@@ -410,13 +418,13 @@ const constructPropertiesMatrix = (
       let tooltip = '';
       properties.forEach((prop) => {
         if (typeof prop === 'object') {
-          for (const key in prop) {
+          Object.entries(properties).forEach(([key]) => {
             if (key.includes('style')) {
               style += constructMatrixStyle(prop[key]);
             } else {
               tooltip += constructMatrixTooltip(prop[key]);
             }
-          }
+          });
         }
       });
       finalConstruction += constructMatrixToolTipAndStyle(
@@ -498,29 +506,6 @@ const populateRightPropertiesString = (group2: Node[], label: string) => {
 function getTextContent(td: HTMLElement) {
   return td.lastChild?.textContent ? td.lastChild?.textContent : '';
 }
-export const sortColumns = () => {
-  const sortable = document.querySelectorAll('.sortableCol');
-  sortable.forEach((s: any, sIndex) => {
-    s.addEventListener('click', (event: any) => {
-      // Get the current sorting direction from the data attribute
-      const currentDir = s.getAttribute('right-data-sort-direction');
-      let newDir;
-
-      // Toggle the sorting direction
-      if (currentDir === 'asc') {
-        newDir = 'desc';
-      } else {
-        newDir = 'asc';
-      }
-
-      // Update the data attribute with the new sorting direction
-      s.setAttribute('right-data-sort-direction', newDir);
-
-      // Call sortUpperTable with the column index (sIndex + 1) and the new sorting direction
-      sortUpperTable(sIndex + 1, newDir);
-    });
-  });
-};
 
 function getSwappedIndexes(arr: number[], dir: string) {
   // Create an array of indices and sort it based on the values in 'arr'
@@ -533,6 +518,7 @@ function getSwappedIndexes(arr: number[], dir: string) {
   });
   return indices;
 }
+
 const sortUpperTable = (n: number, newDir: string) => {
   const table = document.getElementById('myTable') as HTMLElement;
   const rows = table.getElementsByTagName('TR');
@@ -545,9 +531,9 @@ const sortUpperTable = (n: number, newDir: string) => {
     : [];
   if (rowsElements && rowsElements.length > 0) {
     const rowsValues = rowsElements.map((el) => {
-      const element = isNaN(parseInt(getTextContent(el) as string))
+      const element = Number.isNaN(parseInt(getTextContent(el) as string, 10))
         ? 0
-        : parseInt(getTextContent(el) as string);
+        : Number.parseInt(getTextContent(el) as string, 10);
       return element;
     });
     const newIndexMap = getSwappedIndexes(rowsValues, newDir);
@@ -581,6 +567,30 @@ const sortUpperTable = (n: number, newDir: string) => {
     }
   }
 };
+export const sortColumns = () => {
+  const sortable = document.querySelectorAll('.sortableCol');
+  sortable.forEach((s: any, sIndex) => {
+    s.addEventListener('click', () => {
+      // Get the current sorting direction from the data attribute
+      const currentDir = s.getAttribute('right-data-sort-direction');
+      let newDir;
+
+      // Toggle the sorting direction
+      if (currentDir === 'asc') {
+        newDir = 'desc';
+      } else {
+        newDir = 'asc';
+      }
+
+      // Update the data attribute with the new sorting direction
+      s.setAttribute('right-data-sort-direction', newDir);
+
+      // Call sortUpperTable with the column index (sIndex + 1) and the new sorting direction
+      sortUpperTable(sIndex + 1, newDir);
+    });
+  });
+};
+
 const sortLowerTable = (n: number, newDir: string) => {
   const table = document.getElementById('myTable') as HTMLElement;
   const sortedRows = Array.from(table.getElementsByClassName('sortus'));
@@ -593,12 +603,12 @@ const sortLowerTable = (n: number, newDir: string) => {
     const element1Text = getTextContent(element1 as HTMLElement);
     const element2Text = getTextContent(element2 as HTMLElement);
 
-    const element1Value = isNaN(parseInt(element1Text as string))
+    const element1Value = Number.isNaN(Number.parseInt(element1Text as string, 10))
       ? 0
-      : parseInt(element1Text as string);
-    const element2Value = isNaN(parseInt(element2Text as string))
+      : Number.parseInt(element1Text as string, 10);
+    const element2Value = Number.isNaN(Number.parseInt(element2Text as string, 10))
       ? 0
-      : parseInt(element2Text as string);
+      : Number.parseInt(element2Text as string, 10);
 
     if (newDir === 'asc') {
       return element1Value - element2Value;
@@ -638,7 +648,7 @@ export const addStyleTooltipWithHover = () => {
 export const sortRows = () => {
   const sortable = document.querySelectorAll('.sortableRow');
   sortable.forEach((s: any, sIndex) => {
-    s.addEventListener('click', (event: any) => {
+    s.addEventListener('click', () => {
       // Get the current sorting direction from the data attribute
       const currentDir = s.getAttribute('left-data-sort-direction');
       let newDir;
@@ -686,6 +696,35 @@ const createRightPropertiesString = (
   });
   return finalProduct.join('');
 };
+
+const populateLinks = (
+  group1Name: string,
+  group2Name: string,
+  links: Link[]
+) => {
+  let finalProduct = '';
+
+  const foundLink = links.find((link) => (
+    (link.source === group1Name && link.target === group2Name)
+      || (link.target === group1Name && link.source === group2Name)
+  ));
+  if (foundLink) {
+    finalProduct += constructPropertiesMatrix(
+      'td',
+      foundLink.value,
+      foundLink.properties,
+      ['right-sortable-items', 'left-sortable-items']
+    );
+  } else {
+    finalProduct += constructPropertiesMatrix('td', '', undefined, [
+      'right-sortable-items',
+      'left-sortable-items'
+    ]);
+  }
+
+  return finalProduct;
+};
+
 const createLeftPropertiesString = (
   group1: Node[],
   group2: Node[],
@@ -719,33 +758,6 @@ const createLeftPropertiesString = (
     });
     finalProduct += '</tr>';
   });
-  return finalProduct;
-};
-const populateLinks = (
-  group1Name: string,
-  group2Name: string,
-  links: Link[]
-) => {
-  let finalProduct = '';
-
-  const foundLink = links.find((link) => (
-    (link.source === group1Name && link.target === group2Name)
-      || (link.target === group1Name && link.source === group2Name)
-  ));
-  if (foundLink) {
-    finalProduct += constructPropertiesMatrix(
-      'td',
-      foundLink.value,
-      foundLink.properties,
-      ['right-sortable-items', 'left-sortable-items']
-    );
-  } else {
-    finalProduct += constructPropertiesMatrix('td', '', undefined, [
-      'right-sortable-items',
-      'left-sortable-items'
-    ]);
-  }
-
   return finalProduct;
 };
 

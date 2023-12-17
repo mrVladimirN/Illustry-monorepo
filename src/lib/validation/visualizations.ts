@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
 import * as z from 'zod';
 
+// eslint-disable-next-line no-shadow
 export enum visualizationTypesEnum {
   WORD_CLOUD = 'word-cloud',
   FORCE_DIRECTED_GRAPH = 'force-directed-graph',

@@ -1,8 +1,8 @@
-import { SiteFooter } from '@/components/layouts/site-footer';
-import { SiteHeader } from '@/components/layouts/site-header';
+import SiteHeader from '@/components/layouts/site-header';
+import { ReactNode } from 'react';
 
 interface IntroLayoutProps {
-  children: React.ReactNode
+  children: ReactNode
 }
 
 export default async function IntroLayout({ children }: IntroLayoutProps) {

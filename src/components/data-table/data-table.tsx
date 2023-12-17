@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
   flexRender,
@@ -24,13 +23,16 @@ import {
   TableHeader,
   TableRow
 } from '@/components/ui/table';
-import { DataTablePagination } from '@/components/data-table/data-table-pagination';
-import { DataTableToolbar } from '@/components/data-table/data-table-toolbar';
+import DataTablePagination from '@/components/data-table/data-table-pagination';
+import DataTableToolbar from '@/components/data-table/data-table-toolbar';
+import {
+  ComponentType, MouseEventHandler, useCallback, useEffect, useMemo, useState
+} from 'react';
 
 interface Option {
   label: string;
   value: string;
-  icon?: React.ComponentType<{ className?: string }>;
+  icon?: ComponentType<{ className?: string }>;
 }
 
 interface DataTableSearchableColumn<TData> {
@@ -48,9 +50,9 @@ interface DataTableProps<TData, TValue> {
   pageCount: number;
   filterableColumns?: DataTableFilterableColumn<TData>[];
   newRowLink?: string;
-  deleteRowsAction?: React.MouseEventHandler<HTMLButtonElement>;
+  deleteRowsAction?: MouseEventHandler<HTMLButtonElement>;
 }
-export function DataTable<TData, TValue>({
+function DataTable<TData, TValue>({
   columns,
   data,
   pageCount,
@@ -64,22 +66,23 @@ export function DataTable<TData, TValue>({
 
   // Search params
   const page = searchParams?.get('page') ?? '1';
-  const per_page = searchParams?.get('per_page') ?? '10';
+  const perPage = searchParams?.get('per_page') ?? '10';
   const sort = searchParams?.get('sort');
   const [column, order] = sort?.split('.') ?? [];
 
   // Create query string
-  const createQueryString = React.useCallback(
+  const createQueryString = useCallback(
     (params: Record<string, string | number | null>) => {
       const newSearchParams = new URLSearchParams(searchParams?.toString());
 
-      for (const [key, value] of Object.entries(params)) {
+      Object.keys(params).forEach((key) => {
+        const value = params[key];
         if (value === null) {
           newSearchParams.delete(key);
         } else {
           newSearchParams.set(key, String(value));
         }
-      }
+      });
 
       return newSearchParams.toString();
     },
@@ -87,19 +90,19 @@ export function DataTable<TData, TValue>({
   );
 
   // Table states
-  const [rowSelection, setRowSelection] = React.useState({});
-  const [columnVisibility, setColumnVisibility] = React.useState<VisibilityState>({});
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
+  const [rowSelection, setRowSelection] = useState({});
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(
     []
   );
 
   // Handle server-side pagination
-  const [{ pageIndex, pageSize }, setPagination] = React.useState<PaginationState>({
+  const [{ pageIndex, pageSize }, setPagination] = useState<PaginationState>({
     pageIndex: Number(page) - 1,
-    pageSize: Number(per_page)
+    pageSize: Number(perPage)
   });
 
-  const pagination = React.useMemo(
+  const pagination = useMemo(
     () => ({
       pageIndex,
       pageSize
@@ -107,14 +110,14 @@ export function DataTable<TData, TValue>({
     [pageIndex, pageSize]
   );
 
-  React.useEffect(() => {
+  useEffect(() => {
     setPagination({
       pageIndex: Number(page) - 1,
-      pageSize: Number(per_page)
+      pageSize: Number(perPage)
     });
-  }, [page, per_page]);
+  }, [page, perPage]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     router.push(
       `${pathname}?${createQueryString({
         page: pageIndex + 1,
@@ -129,14 +132,14 @@ export function DataTable<TData, TValue>({
   }, [pageIndex, pageSize]);
 
   // Handle server-side sorting
-  const [sorting, setSorting] = React.useState<SortingState>([
+  const [sorting, setSorting] = useState<SortingState>([
     {
       id: column ?? '',
       desc: order === 'desc'
     }
   ]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     router.push(
       `${pathname}?${createQueryString({
         page,
@@ -154,39 +157,36 @@ export function DataTable<TData, TValue>({
 
   // Handle server-side filtering
 
-  const filterableColumnFilters = columnFilters.filter((filter) => filterableColumns.find((column) => column.id === filter.id));
+  // eslint-disable-next-line max-len
+  const filterableColumnFilters = columnFilters.filter((filter) => filterableColumns.find((c) => c.id === filter.id));
 
-  React.useEffect(() => {
-    for (const column of filterableColumnFilters) {
-      if (typeof column.value === 'object' && Array.isArray(column.value)) {
+  useEffect(() => {
+    filterableColumnFilters.forEach((col) => {
+      if (typeof col.value === 'object' && Array.isArray(col.value)) {
         router.push(
           `${pathname}?${createQueryString({
             page: 1,
-            [column.id]: column.value.join('.')
+            [col.id]: col.value.join('.')
           })}`,
           {
             scroll: false
           }
         );
       }
-    }
-
-    for (const key of searchParams.keys()) {
-      if (
-        filterableColumns.find((column) => column.id === key)
-        && !filterableColumnFilters.find((column) => column.id === key)
-      ) {
-        router.push(
-          `${pathname}?${createQueryString({
-            page: 1,
-            [key]: null
-          })}`,
-          {
-            scroll: false
-          }
-        );
+    });
+    searchParams.forEach((value, key) => {
+      const isFilterableColumn = filterableColumns.find((curColumn) => curColumn.id === key);
+      const isFilterableColumnFilter = filterableColumnFilters.find((cur) => cur.id === key);
+      if (isFilterableColumn && !isFilterableColumnFilter) {
+        const params = {
+          page: 1,
+          [key]: null
+        };
+        router.push(`${pathname}?${createQueryString(params)}`, {
+          scroll: false
+        });
       }
-    }
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterableColumnFilters]);
 
@@ -231,14 +231,14 @@ export function DataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
-                    <TableHead key={header.id} className="whitespace-nowrap">
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    </TableHead>
+                  <TableHead key={header.id} className="whitespace-nowrap">
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
+                  </TableHead>
                 ))}
               </TableRow>
             ))}
@@ -277,3 +277,5 @@ export function DataTable<TData, TValue>({
     </div>
   );
 }
+
+export default DataTable;

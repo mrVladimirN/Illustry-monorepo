@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { Inputs } from '@/components/form/add-visualization-form';
 import { Input } from '@/components/ui/input';
 import { UseFormReturn } from 'react-hook-form';
@@ -5,7 +6,7 @@ import { UseFormReturn } from 'react-hook-form';
 interface ExcelOrCsvAxisChartMappingProps {
   form: UseFormReturn<Inputs>; // Include the form context
 }
-export function ExcelOrCsvAxisChartMapping({
+function ExcelOrCsvAxisChartMapping({
   form
 }: ExcelOrCsvAxisChartMappingProps) {
   return (
@@ -41,3 +42,5 @@ export function ExcelOrCsvAxisChartMapping({
     </>
   );
 }
+
+export default ExcelOrCsvAxisChartMapping;

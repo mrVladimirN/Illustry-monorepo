@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-cycle
 import { Inputs } from '@/components/form/add-visualization-form';
 import { UseFormReturn } from 'react-hook-form';
 import {
@@ -10,10 +11,10 @@ import {
 import { Input } from '../../input';
 import { Textarea } from '../../textarea';
 
-export interface VisualizationDetailsProp {
+interface VisualizationDetailsProp {
   form: UseFormReturn<Inputs>; // Include the form context
 }
-export function VisualizationDetails({
+function VisualizationDetails({
   form
 }: VisualizationDetailsProp) {
   return (
@@ -22,7 +23,7 @@ export function VisualizationDetails({
         <FormField
           control={form.control}
           name="name"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
@@ -46,7 +47,7 @@ export function VisualizationDetails({
         <FormField
           control={form.control}
           name="tags"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
               <FormLabel>Tags</FormLabel>
               <FormControl>
@@ -70,7 +71,7 @@ export function VisualizationDetails({
         <FormField
           control={form.control}
           name="description"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
               <FormLabel>Description</FormLabel>
               <FormControl>
@@ -94,3 +95,4 @@ export function VisualizationDetails({
     </>
   );
 }
+export default VisualizationDetails;

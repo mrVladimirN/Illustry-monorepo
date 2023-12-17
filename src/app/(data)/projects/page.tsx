@@ -1,8 +1,7 @@
-import React from 'react';
 import { env } from '@/env.mjs';
 import { Metadata } from 'next';
 import { browseProjects } from '@/app/_actions/project';
-import { ProjectsTableShell } from '@/components/shells/projects-table-shell';
+import ProjectsTableShell from '@/components/shells/projects-table-shell';
 import { ProjectFilter } from 'types/project';
 
 export const metadata: Metadata = {
@@ -18,13 +17,13 @@ interface ProjectsProps {
 }
 const Projects = async ({ searchParams }: ProjectsProps) => {
   const {
-    page, text, per_page, sort
+    page, text, per_page: perPage, sort
   } = searchParams;
 
   const projects = await browseProjects({
     page: page ? Number(page) : 1,
     text,
-    per_page: per_page ? Number(per_page) : 10,
+    per_page: perPage ? Number(perPage) : 10,
     sort: sort
       ? {
         sortOrder: (sort as string).split('.')[1] === 'asc' ? 1 : -1,

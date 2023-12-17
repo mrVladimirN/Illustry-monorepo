@@ -5,7 +5,7 @@ import {
   EyeNoneIcon
 } from '@radix-ui/react-icons';
 import { type Column } from '@tanstack/react-table';
-
+import { HTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,12 +17,12 @@ import {
 } from '@/components/ui/dropdown-menu';
 
 interface DataTableColumnHeaderProps<TData, TValue>
-  extends React.HTMLAttributes<HTMLDivElement> {
-  column: Column<TData, TValue>
-  title: string
+  extends HTMLAttributes<HTMLDivElement> {
+  column: Column<TData, TValue>;
+  title: string;
 }
 
-export function DataTableColumnHeader<TData, TValue>({
+function DataTableColumnHeader<TData, TValue>({
   column,
   title,
   className
@@ -30,32 +30,38 @@ export function DataTableColumnHeader<TData, TValue>({
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
   }
+  const handleSorted = (columnProps: Column<TData, TValue>) => {
+    let areaLabelSortedColumn = 'Not sorted. Click to sort ascending.';
+    let arrowSortedColumn = (
+      <CaretSortIcon className="ml-2 h-4 w-4" aria-hidden="true" />
+    );
 
+    if (columnProps.getIsSorted() === 'desc') {
+      areaLabelSortedColumn = 'Sorted descending. Click to sort ascending.';
+      arrowSortedColumn = (
+        <ArrowDownIcon className="ml-2 h-4 w-4" aria-hidden="true" />
+      );
+    } else if (columnProps.getIsSorted() === 'asc') {
+      areaLabelSortedColumn = 'Sorted ascending. Click to sort descending.';
+      arrowSortedColumn = (
+        <ArrowUpIcon className="ml-2 h-4 w-4" aria-hidden="true" />
+      );
+    }
+    return { areaLabelSortedColumn, arrowSortedColumn };
+  };
   return (
     <div className={cn('flex items-center space-x-2', className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-          suppressHydrationWarning
-            aria-label={
-              column.getIsSorted() === 'desc'
-                ? 'Sorted descending. Click to sort ascending.'
-                : column.getIsSorted() === 'asc'
-                  ? 'Sorted ascending. Click to sort descending.'
-                  : 'Not sorted. Click to sort ascending.'
-            }
+            suppressHydrationWarning
+            aria-label={handleSorted(column).areaLabelSortedColumn}
             variant="ghost"
             size="sm"
             className="-ml-3 h-8 data-[state=open]:bg-accent"
           >
             <span>{title}</span>
-            {column.getIsSorted() === 'desc' ? (
-              <ArrowDownIcon className="ml-2 h-4 w-4" aria-hidden="true" />
-            ) : column.getIsSorted() === 'asc' ? (
-              <ArrowUpIcon className="ml-2 h-4 w-4" aria-hidden="true" />
-            ) : (
-              <CaretSortIcon className="ml-2 h-4 w-4" aria-hidden="true" />
-            )}
+            {handleSorted(column).arrowSortedColumn}
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start">
@@ -95,3 +101,5 @@ export function DataTableColumnHeader<TData, TValue>({
     </div>
   );
 }
+
+export default DataTableColumnHeader;

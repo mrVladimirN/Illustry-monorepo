@@ -1,5 +1,6 @@
 'use client';
 
+import { JSX } from 'react';
 import { Cursor, CursorProps } from './Cursor';
 import { TypewriterProps, useTypewriter } from './hooks/useTypewriting';
 
@@ -12,7 +13,7 @@ type ComponentProps = {
 /**
  * A Simple React Component for adding a nice Typewriter effect to your project.
  */
-export const Typewriter = ({
+const Typewriter = ({
   words = [],
   loop = 1,
   typeSpeed = 80,
@@ -52,3 +53,5 @@ export const Typewriter = ({
     </>
   );
 };
+
+export default Typewriter;

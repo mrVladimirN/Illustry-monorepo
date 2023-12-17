@@ -1,3 +1,4 @@
+// eslint-disable-next-line import/no-cycle
 import { Inputs } from '@/components/form/add-visualization-form';
 import { Input } from '@/components/ui/input';
 import { UseFormReturn } from 'react-hook-form';
@@ -5,7 +6,7 @@ import { UseFormReturn } from 'react-hook-form';
 interface ExcelOrCsvScatterMappingProps {
   form: UseFormReturn<Inputs>; // Include the form context
 }
-export function ExcelOrCsvScatterMapping({ form }: ExcelOrCsvScatterMappingProps) {
+function ExcelOrCsvScatterMapping({ form }: ExcelOrCsvScatterMappingProps) {
   return (
     <>
       <div className="flex items-center space-x-4">
@@ -54,3 +55,5 @@ export function ExcelOrCsvScatterMapping({ form }: ExcelOrCsvScatterMappingProps
     </>
   );
 }
+
+export default ExcelOrCsvScatterMapping;

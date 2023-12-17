@@ -1,6 +1,8 @@
+/* eslint-disable import/no-cycle */
+/* eslint-disable no-unused-vars */
+
 'use client';
 
-import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -22,14 +24,16 @@ import {
   VisualizationTypesEnum,
   VisualizationUpdate
 } from 'types/visualizations';
+import { useState, useTransition } from 'react';
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
-import { MappingTab } from '../ui/tabs/mappingTab/mappingTab';
-import { TypeTab } from '../ui/tabs/typeTab/typeTab';
+import MappingTab from '../ui/tabs/mappingTab/mappingTab';
+import TypeTab from '../ui/tabs/typeTab/typeTab';
 
 export type Inputs = z.infer<typeof visualizationSchema>;
 export type ExcelType = z.infer<typeof excelSchema>;
 export type JSONType = z.infer<typeof jsonSchema>;
 export type CSVType = z.infer<typeof csvSchema>;
+// eslint-disable-next-line no-shadow
 export enum fileTypes {
   JSON = 'JSON',
   EXCEL = 'EXCEL',
@@ -38,9 +42,9 @@ export enum fileTypes {
 }
 export function AddVisualizationForm() {
   const router = useRouter();
-  const [files, setFiles] = React.useState<ExtFile[]>([]);
-  const [isPending, startTransition] = React.useTransition();
-  const [selectedFileType, setSelectedFileType] = React.useState<string>(
+  const [files, setFiles] = useState<ExtFile[]>([]);
+  const [isPending, startTransition] = useTransition();
+  const [selectedFileType, setSelectedFileType] = useState<string>(
     fileTypes.JSON
   );
 
@@ -48,7 +52,7 @@ export function AddVisualizationForm() {
     setFiles(incomingFiles);
   };
 
-  const removeFile = (id: string) => {
+  const removeFile = (id: string | number | undefined) => {
     setFiles(files.filter((x) => x.id !== id));
   };
 

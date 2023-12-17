@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+// eslint-disable-next-line import/no-cycle
 import { Inputs, fileTypes } from '@/components/form/add-visualization-form';
 import { UseFormReturn } from 'react-hook-form';
 import { ExtFile } from '@files-ui/react';
@@ -8,8 +10,8 @@ import {
   FormControl,
   FormMessage
 } from '../../form';
-import { ExcelFileFormatter } from './excelFileFormatFormItem';
-import { JsonFileFormatter } from './jsonFileFormatFormItem';
+import ExcelFileFormatter from './excelFileFormatFormItem';
+import JsonFileFormatter from './jsonFileFormatFormItem';
 import { TabsContent } from '../../tabs';
 import {
   Select,
@@ -19,18 +21,19 @@ import {
   SelectTrigger,
   SelectValue
 } from '../../select';
-import { CSVFileFormatter } from './csvFileFormatFormItem';
-import { XMLFileFormatter } from './xmlFileFormatFormItem';
+import CSVFileFormatter from './csvFileFormatFormItem';
+import XMLFileFormatter from './xmlFileFormatFormItem';
 
 interface TypeTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
+  // eslint-disable-next-line no-unused-vars
   handleFileTypeChange: (value: string) => void;
   selectedFileType: string;
   files: ExtFile[];
   updateFiles: (files: ExtFile[]) => void;
-  removeFile: (id: string) => void;
+  removeFile: (id: string | number | undefined) => void;
 }
-export function TypeTab({
+function TypeTab({
   form,
   handleFileTypeChange,
   selectedFileType,
@@ -38,9 +41,9 @@ export function TypeTab({
   updateFiles,
   removeFile
 }: TypeTabProps) {
-  const renderFiles = (selectedFileType: string) => {
-    if (selectedFileType) {
-      switch (selectedFileType) {
+  const renderFiles = (fileType: string) => {
+    if (fileType) {
+      switch (fileType) {
         case fileTypes.JSON:
           return (
             <JsonFileFormatter
@@ -81,6 +84,7 @@ export function TypeTab({
           return null;
       }
     }
+    return null;
   };
   return (
     <TabsContent className="w-50%" value="type">
@@ -125,3 +129,4 @@ export function TypeTab({
     </TabsContent>
   );
 }
+export default TypeTab;

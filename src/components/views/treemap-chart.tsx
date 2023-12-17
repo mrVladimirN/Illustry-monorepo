@@ -1,7 +1,9 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 'use client';
 
 import { EChartsOption } from 'echarts';
-import React from 'react';
+
 import { HierarchyData } from 'types/visualizations';
 import {
   computeMaxDepth,
@@ -12,15 +14,15 @@ import {
   computeUniqueValues
 } from '@/lib/visualizations/hierarchy-charts/helper';
 import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
-import { with_legend, with_options } from '@/lib/types/utils';
+import { WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface TreeMapProp extends with_legend, with_options {
+interface TreeMapProp extends WithLegend, WithOptions {
   data: HierarchyData;
 }
-const TreeMapView = ({ data, legend, options }: TreeMapProp) => {
+const TreeMapView = ({ data, legend }: TreeMapProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';

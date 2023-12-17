@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
@@ -21,13 +20,14 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Icons } from '@/components/icons';
 import { createProject } from '@/app/_actions/project';
-import { Checkbox } from '../ui/checkbox';
+import { useTransition } from 'react';
+import Checkbox from '../ui/checkbox';
 
 type Inputs = z.infer<typeof projectSchema>;
 
-export function AddProjectForm() {
+function AddProjectForm() {
   const router = useRouter();
-  const [isPending, startTransition] = React.useTransition();
+  const [isPending, startTransition] = useTransition();
 
   // react-hook-form
   const form = useForm<Inputs>({
@@ -60,6 +60,7 @@ export function AddProjectForm() {
       <Form {...form}>
         <form
           className="grid w-full max-w-xl gap-5"
+          // eslint-disable-next-line no-void
           onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
         >
           <FormField
@@ -123,3 +124,5 @@ export function AddProjectForm() {
     </div>
   );
 }
+
+export default AddProjectForm;

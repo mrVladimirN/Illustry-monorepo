@@ -1,17 +1,19 @@
 import { Icons } from '@/components/icons';
+// eslint-disable-next-line import/no-cycle
 import { Inputs, fileTypes } from '@/components/form/add-visualization-form';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
 import { UseFormReturn } from 'react-hook-form';
-import React from 'react';
+
+import { useState } from 'react';
 import { Button } from '../../button';
 import { TabsContent } from '../../tabs';
-import { ExcelOrCsvMappingTab } from './excelOrCsvMappingTab';
-import { JSONMappingTab } from './jsonMappingTab';
+import ExcelOrCsvMappingTab from './excelOrCsvMappingTab';
+import JSONMappingTab from './jsonMappingTab';
 import {
   FormField, FormItem, FormControl, FormMessage
 } from '../../form';
-import { Checkbox } from '../../checkbox';
-import { XMLMappingTab } from './xmlMappingTab';
+import Checkbox from '../../checkbox';
+import XMLMappingTab from './xmlMappingTab';
 
 interface MappingTabProps {
   selectedFileType: string;
@@ -19,27 +21,27 @@ interface MappingTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
   router: AppRouterInstance;
 }
-export function MappingTab({
+function MappingTab({
   selectedFileType,
   isPending,
   form,
   router
 }: MappingTabProps) {
-  const [fileDetails, setFileDetails] = React.useState<boolean>(false);
+  const [fileDetails, setFileDetails] = useState<boolean>(false);
   const handleFullDetails = (value: boolean) => {
     if (value !== fileDetails) {
       setFileDetails(value);
     }
   };
-  const renderMapping = (selectedFileType: string, fileDetails: boolean) => {
-    if (selectedFileType) {
-      switch (selectedFileType) {
+  const renderMapping = (fType: string, fDetails: boolean) => {
+    if (fType) {
+      switch (fType) {
         case fileTypes.JSON:
           return (
             <>
               <JSONMappingTab
                 form={form}
-                fileDetails={fileDetails}
+                fileDetails={fDetails}
                 router={router}
               />
               <Button className="w-fit mt-[2%]" disabled={isPending}>
@@ -59,7 +61,7 @@ export function MappingTab({
             <>
               <XMLMappingTab
                 form={form}
-                fileDetails={fileDetails}
+                fileDetails={fDetails}
                 router={router}
               />
               <Button className="w-fit mt-[2%]" disabled={isPending}>
@@ -81,8 +83,8 @@ export function MappingTab({
               <ExcelOrCsvMappingTab
                 form={form}
                 router={router}
-                fileDetails={fileDetails}
-                selectedFileType={selectedFileType}
+                fileDetails={fDetails}
+                selectedFileType={fType}
               />
               <Button className="w-fit mt-[2%]" disabled={isPending}>
                 {isPending && (
@@ -100,6 +102,7 @@ export function MappingTab({
           return null;
       }
     }
+    return null;
   };
   return (
     <TabsContent className="w-50%" value="mapping">
@@ -135,3 +138,4 @@ export function MappingTab({
     </TabsContent>
   );
 }
+export default MappingTab;

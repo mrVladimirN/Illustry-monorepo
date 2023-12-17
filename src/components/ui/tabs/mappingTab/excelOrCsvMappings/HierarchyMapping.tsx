@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { Inputs } from '@/components/form/add-visualization-form';
 import { Input } from '@/components/ui/input';
 import { UseFormReturn } from 'react-hook-form';
@@ -5,7 +6,7 @@ import { UseFormReturn } from 'react-hook-form';
 interface ExcelOrCsvHierarchyMappingProps {
   form: UseFormReturn<Inputs>; // Include the form context
 }
-export function ExcelOrCsvHierarchyMapping({
+function ExcelOrCsvHierarchyMapping({
   form
 }: ExcelOrCsvHierarchyMappingProps) {
   return (
@@ -81,3 +82,5 @@ export function ExcelOrCsvHierarchyMapping({
     </>
   );
 }
+
+export default ExcelOrCsvHierarchyMapping;

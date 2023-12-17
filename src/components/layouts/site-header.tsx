@@ -1,8 +1,8 @@
 import { siteConfig } from '@/config/site';
-import { MainNav } from './main-nav';
-import { MobileNav } from './mobile-nav';
+import MainNav from './main-nav';
+import MobileNav from './mobile-nav';
 
-export function SiteHeader() {
+function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="container flex h-16 items-center">
@@ -14,3 +14,5 @@ export function SiteHeader() {
     </header>
   );
 }
+
+export default SiteHeader;

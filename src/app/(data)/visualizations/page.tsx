@@ -1,8 +1,7 @@
-import React from 'react';
 import { env } from '@/env.mjs';
 import { Metadata } from 'next';
 import { browseVisualizations } from '@/app/_actions/visualization';
-import { VisualizationsTableShell } from '@/components/shells/visualizations-table-shell';
+import VisualizationsTableShell from '@/components/shells/visualizations-table-shell';
 import { VisualizationFilter } from 'types/visualizations';
 
 export const metadata: Metadata = {
@@ -18,12 +17,12 @@ interface VisualizationsProps {
 }
 const Visualizations = async ({ searchParams }: VisualizationsProps) => {
   const {
-    page, text, per_page, sort
+    page, text, per_page: perPage, sort
   } = searchParams;
   const visualizations = await browseVisualizations({
     page: page ? Number(page) : 1,
     text,
-    per_page: per_page ? Number(per_page) : 10,
+    per_page: perPage ? Number(perPage) : 10,
     sort: sort
       ? {
         sortOrder: (sort as string).split('.')[1] === 'asc' ? 1 : -1,

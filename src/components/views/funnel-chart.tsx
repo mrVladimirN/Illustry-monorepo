@@ -1,21 +1,20 @@
 'use client';
 
-import * as React from 'react';
 import { EChartsOption } from 'echarts/types/dist/echarts';
 import { FunnelData } from 'types/visualizations';
 import {
   computeLegendColors,
   computeValues
 } from '@/lib/visualizations/pieFunnel/helper';
-import { with_legend, with_options } from '@/lib/types/utils';
+import { WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface FunnelProp extends with_legend, with_options {
+interface FunnelProp extends WithLegend, WithOptions {
   data: FunnelData;
 }
-const FunnelView = ({ data, legend, options }: FunnelProp) => {
+const FunnelView = ({ data, legend }: FunnelProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';

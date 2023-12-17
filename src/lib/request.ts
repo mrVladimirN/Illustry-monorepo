@@ -1,4 +1,5 @@
-export const makeRequest = <T>(
+/* eslint-disable no-console */
+const makeRequest = <T>(
   request: RequestInfo,
   tags: string[]
 ): Promise<T> => fetch(request, {
@@ -16,3 +17,5 @@ export const makeRequest = <T>(
     .catch((err) => {
       console.debug(err.message);
     });
+
+export default makeRequest;

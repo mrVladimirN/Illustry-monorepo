@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 'use client';
 
-import * as React from 'react';
 import { EChartsOption } from 'echarts/types/dist/echarts';
 import {
   computeCategoriesSankey,
@@ -9,18 +10,17 @@ import {
 } from '@/lib/visualizations/node-link/helper';
 import { NodeLinkData } from 'types/visualizations';
 import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
-import { with_legend, with_options } from '@/lib/types/utils';
+import { WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface SankeyGraphProp extends with_legend, with_options {
+interface SankeyGraphProp extends WithLegend, WithOptions {
   data: NodeLinkData;
 }
 const SankeyGraphView = ({
   data,
-  legend,
-  options
+  legend
 }: SankeyGraphProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';

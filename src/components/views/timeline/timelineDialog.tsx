@@ -7,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
-import React from 'react';
+
 import { TimelineEvent } from 'types/visualizations';
 
 export interface TimelineDialogProps {

@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import Link from 'next/link';
 
 import { siteConfig } from '@/config/site';
@@ -14,7 +13,8 @@ import {
   navigationMenuTriggerStyle
 } from '@/components/ui/navigation-menu';
 import { Icons } from '@/components/icons';
-import { ThemeToggle } from './theme-toggle';
+import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
+import ThemeToggle from './theme-toggle';
 
 interface NavItem {
   title: string;
@@ -26,19 +26,19 @@ interface NavItem {
   description?: string;
 }
 
-export interface NavItemWithChildren extends NavItem {
+interface NavItemWithChildren extends NavItem {
   items: NavItemWithChildren[];
 }
 
-export interface NavItemWithOptionalChildren extends NavItem {
+interface NavItemWithOptionalChildren extends NavItem {
   items?: NavItemWithChildren[];
 }
-export type MainNavItem = NavItemWithOptionalChildren;
+type MainNavItem = NavItemWithOptionalChildren;
 interface MainNavProps {
   items?: MainNavItem[];
 }
 
-export function MainNav({ items }: MainNavProps) {
+function MainNav({ items }: MainNavProps) {
   return (
     <div className="hidden gap-6 lg:flex">
       <Link
@@ -86,9 +86,9 @@ export function MainNav({ items }: MainNavProps) {
   );
 }
 
-const ListItem = React.forwardRef<
-  React.ElementRef<'a'>,
-  React.ComponentPropsWithoutRef<'a'>
+const ListItem = forwardRef<
+  ElementRef<'a'>,
+  ComponentPropsWithoutRef<'a'>
 >(({
   className, title, children, href, ...props
 }, ref) => (
@@ -112,3 +112,5 @@ const ListItem = React.forwardRef<
     </li>
 ));
 ListItem.displayName = 'ListItem';
+
+export default MainNav;

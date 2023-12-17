@@ -1,5 +1,3 @@
-import React from 'react';
-
 interface LegendProps {
   legendData: { [key: string]: string };
   maxItemsPerRow?: number; // Define the maximum number of items per row

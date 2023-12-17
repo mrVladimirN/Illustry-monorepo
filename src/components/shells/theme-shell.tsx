@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 'use client';
 
 import { DeepPartial } from 'types/utils';
@@ -88,7 +90,7 @@ interface ShowDiagramState {
   sunburst: boolean;
   funnel: boolean;
 }
-export function ThemeShell() {
+function ThemeShell() {
   const colorPalette: { [key: string]: string[] } = {
     FreshMeadow: [
       '#5DBE6E',
@@ -202,10 +204,10 @@ export function ThemeShell() {
     funnel: false
   });
   const colorPickerRef = useRef<HTMLDivElement>(null);
-  const handleOutsideClick = (event: any) => {
+  const handleOutsideClick = (event: MouseEvent) => {
     if (
       colorPickerRef.current
-      && !colorPickerRef.current.contains(event.target)
+      && !colorPickerRef.current.contains(((event as MouseEvent).target as Node))
     ) {
       setActiveColorPickerIndex(null);
     }
@@ -710,3 +712,5 @@ export function ThemeShell() {
     </div>
   );
 }
+
+export default ThemeShell;

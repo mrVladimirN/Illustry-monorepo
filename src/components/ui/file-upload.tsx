@@ -1,13 +1,14 @@
+/* eslint-disable no-unused-vars */
 import { Dropzone, FileMosaic, ExtFile } from '@files-ui/react';
 
 interface FileUploadProps {
   acceptedFiles: ExtFile[];
   updateFiles: (incomingFiles: ExtFile[]) => void;
-  removeFile: (id: string) => void;
+  removeFile: (id: string | number | undefined) => void;
   fileFormat: string
 }
 
-export const FileUpload = ({
+const FileUpload = ({
   acceptedFiles,
   updateFiles,
   removeFile,
@@ -19,9 +20,11 @@ export const FileUpload = ({
         value={acceptedFiles}
         accept= {fileFormat}
       >
-        {acceptedFiles.map((file: any) => (
+        {acceptedFiles.map((file: ExtFile) => (
           <FileMosaic key={file.id} {...file} onDelete={removeFile} info />
         ))}
       </Dropzone>
     </>
 );
+
+export default FileUpload;

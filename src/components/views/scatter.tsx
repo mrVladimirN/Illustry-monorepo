@@ -1,6 +1,5 @@
 'use client';
 
-import * as React from 'react';
 import { EChartsOption } from 'echarts/types/dist/echarts';
 
 import { ScatterData } from 'types/visualizations';
@@ -10,15 +9,15 @@ import {
   computePoints
 } from '@/lib/visualizations/scatter/helper';
 import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
-import { with_legend, with_options } from '@/lib/types/utils';
+import { WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface ScatterProp extends with_legend, with_options {
+interface ScatterProp extends WithLegend, WithOptions {
   data: ScatterData;
 }
-const ScatterView = ({ data, legend, options }: ScatterProp) => {
+const ScatterView = ({ data, legend }: ScatterProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';

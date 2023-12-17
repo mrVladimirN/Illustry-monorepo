@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+
 'use client';
 
-import * as React from 'react';
 import {
   EChartsOption,
   WordCloudSeriesOption
@@ -10,14 +11,14 @@ import {
   computePropertiesForToolTip
 } from '@/lib/visualizations/word-cloud/helper';
 import { WordCloudData } from 'types/visualizations';
-import { with_legend, with_options } from '@/lib/types/utils';
+import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface WordCloudProp extends with_legend, with_options {
+interface WordCloudProp extends WithLegend, WithOptions {
   data: WordCloudData;
 }
-const WordCloudView = ({ data, legend, options }: WordCloudProp) => {
+const WordCloudView = ({ data }: WordCloudProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';

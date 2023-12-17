@@ -1,15 +1,16 @@
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+// eslint-disable-next-line import/no-cycle
 import { Inputs } from '@/components/form/add-visualization-form';
 import { UseFormReturn } from 'react-hook-form';
-import { VisualizationDetails } from './visualizationDetails';
-import { VisualizationType } from './visualizationType';
+import VisualizationDetails from './visualizationDetails';
+import VisualizationType from './visualizationType';
 
 interface JSONMappingTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
   router: AppRouterInstance;
   fileDetails: boolean;
 }
-export function JSONMappingTab({
+function JSONMappingTab({
   fileDetails,
   form,
   router
@@ -18,7 +19,7 @@ export function JSONMappingTab({
     <>
       {fileDetails ? (
         <p className="text-green-500">
-          JSON files don't need a special mapping
+          JSON files don&apos;t need a special mapping
         </p>
       ) : (
         <>
@@ -29,3 +30,5 @@ export function JSONMappingTab({
     </>
   );
 }
+
+export default JSONMappingTab;

@@ -1,6 +1,7 @@
 import { visualizationTypesEnum } from '@/lib/validation/visualizations';
-import React from 'react';
+
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+// eslint-disable-next-line import/no-cycle
 import { Inputs, fileTypes } from '@/components/form/add-visualization-form';
 import { UseFormReturn } from 'react-hook-form';
 import {
@@ -11,17 +12,17 @@ import {
   FormMessage
 } from '../../form';
 import { Input } from '../../input';
-import { Checkbox } from '../../checkbox';
-import { ExcelOrCsvWordCloudMapping } from './excelOrCsvMappings/WordCloudMapping';
-import { VisualizationDetails } from './visualizationDetails';
-import { ExcelOrCsvVisualizationMapping } from './excelOrCsvMappings/visualizationDetailsMapping';
-import { ExcelOrCsvNodeLinkMapping } from './excelOrCsvMappings/NodeLinkMapping';
-import { VisualizationType } from './visualizationType';
-import { ExcelOrCsvCalendarMapping } from './excelOrCsvMappings/CalendarMapping';
-import { ExcelOrCsvAxisChartMapping } from './excelOrCsvMappings/AxisChartMapping';
-import { ExcelOrCsvPieChartFunnelMapping } from './excelOrCsvMappings/PieChartFunnelMapping';
-import { ExcelOrCsvScatterMapping } from './excelOrCsvMappings/ScatterMapping';
-import { ExcelOrCsvHierarchyMapping } from './excelOrCsvMappings/HierarchyMapping';
+import Checkbox from '../../checkbox';
+import ExcelOrCsvWordCloudMapping from './excelOrCsvMappings/WordCloudMapping';
+import VisualizationDetails from './visualizationDetails';
+import ExcelOrCsvVisualizationMapping from './excelOrCsvMappings/visualizationDetailsMapping';
+import ExcelOrCsvNodeLinkMapping from './excelOrCsvMappings/NodeLinkMapping';
+import VisualizationType from './visualizationType';
+import ExcelOrCsvCalendarMapping from './excelOrCsvMappings/CalendarMapping';
+import ExcelOrCsvAxisChartMapping from './excelOrCsvMappings/AxisChartMapping';
+import ExcelOrCsvPieChartFunnelMapping from './excelOrCsvMappings/PieChartFunnelMapping';
+import ExcelOrCsvScatterMapping from './excelOrCsvMappings/ScatterMapping';
+import ExcelOrCsvHierarchyMapping from './excelOrCsvMappings/HierarchyMapping';
 
 interface ExcelMappingTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
@@ -29,7 +30,7 @@ interface ExcelMappingTabProps {
   fileDetails: boolean;
   selectedFileType: fileTypes;
 }
-export function ExcelOrCsvMappingTab({
+function ExcelOrCsvMappingTab({
   form,
   router,
   fileDetails,
@@ -116,6 +117,7 @@ export function ExcelOrCsvMappingTab({
           );
       }
     }
+    return null;
   };
   return (
     <div className="grid grid-cols-2 gap-5">
@@ -125,7 +127,7 @@ export function ExcelOrCsvMappingTab({
         <FormField
           control={form.control}
           name="sheets"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
               <FormLabel>Sheets number</FormLabel>
               <FormControl>
@@ -148,7 +150,7 @@ export function ExcelOrCsvMappingTab({
         <FormField
           control={form.control}
           name="separator"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
               <FormLabel>Separator</FormLabel>
               <FormControl>
@@ -196,7 +198,7 @@ export function ExcelOrCsvMappingTab({
         <FormField
           control={form.control}
           name="mapping"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
               <FormLabel>Mapping</FormLabel>
               <FormControl>
@@ -212,3 +214,5 @@ export function ExcelOrCsvMappingTab({
     </div>
   );
 }
+
+export default ExcelOrCsvMappingTab;

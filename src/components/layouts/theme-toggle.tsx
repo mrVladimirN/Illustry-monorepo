@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
 import { useRouter } from 'next/navigation';
 
-export function ThemeToggle() {
+function ThemeToggle() {
   const { setTheme, theme } = useTheme();
   const router = useRouter();
 
@@ -32,3 +32,4 @@ export function ThemeToggle() {
     </Button>
   );
 }
+export default ThemeToggle;

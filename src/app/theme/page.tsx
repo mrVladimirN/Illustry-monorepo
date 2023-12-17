@@ -1,4 +1,4 @@
-import { ThemeShell } from '@/components/shells/theme-shell';
+import ThemeShell from '@/components/shells/theme-shell';
 import { env } from '@/env.mjs';
 import { Metadata } from 'next';
 
