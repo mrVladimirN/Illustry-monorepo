@@ -13,7 +13,7 @@ import {
 } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_BACKEND_PUBLIC_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: {
     default: siteConfig.name,
     template: `%s - ${siteConfig.name}`

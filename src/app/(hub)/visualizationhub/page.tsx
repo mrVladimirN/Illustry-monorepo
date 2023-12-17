@@ -5,7 +5,7 @@ import { Metadata } from 'next';
 import { VisualizationFilter } from 'types/visualizations';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_BACKEND_PUBLIC_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: 'Visualizations',
   description: 'Manage your Visualizations'
 };

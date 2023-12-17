@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Icons } from '@/components/icons';
 // eslint-disable-next-line import/no-cycle
 import { Inputs, fileTypes } from '@/components/form/add-visualization-form';
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
 import { UseFormReturn } from 'react-hook-form';
 
 import { useState } from 'react';
@@ -19,7 +19,7 @@ interface MappingTabProps {
   selectedFileType: string;
   isPending: boolean;
   form: UseFormReturn<Inputs>; // Include the form context
-  router: AppRouterInstance;
+  router: any;
 }
 function MappingTab({
   selectedFileType,

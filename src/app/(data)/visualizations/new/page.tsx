@@ -3,7 +3,7 @@ import { env } from '@/env.mjs';
 import { AddVisualizationForm } from '@/components/form/add-visualization-form';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_BACKEND_PUBLIC_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: 'New Visualization',
   description: 'Add some visualizations'
 };

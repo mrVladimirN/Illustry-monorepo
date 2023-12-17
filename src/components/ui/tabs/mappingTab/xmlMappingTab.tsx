@@ -1,4 +1,4 @@
-import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context';
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // eslint-disable-next-line import/no-cycle
 import { Inputs } from '@/components/form/add-visualization-form';
 import { UseFormReturn } from 'react-hook-form';
@@ -7,7 +7,7 @@ import VisualizationType from './visualizationType';
 
 interface XMLMappingTabProps {
   form: UseFormReturn<Inputs>; // Include the form context
-  router: AppRouterInstance;
+  router: any;
   fileDetails: boolean;
 }
 function XMLMappingTab({

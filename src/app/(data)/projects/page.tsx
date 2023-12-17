@@ -5,7 +5,7 @@ import ProjectsTableShell from '@/components/shells/projects-table-shell';
 import { ProjectFilter } from 'types/project';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_BACKEND_PUBLIC_URL),
+  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: 'Projects',
   description: 'Manage your projects'
 };

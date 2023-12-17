@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable import/no-cycle */
 /* eslint-disable no-unused-vars */
 
@@ -120,7 +121,7 @@ export function AddVisualizationForm() {
     if (value !== selectedFileType) {
       setSelectedFileType(value);
       form.reset({
-        fileType: value,
+        fileType: value as any,
         type: visualizationTypesEnum.WORD_CLOUD,
         name: '',
         tags: '',
