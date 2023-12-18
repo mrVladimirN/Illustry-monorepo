@@ -4,9 +4,7 @@
 import mongoose from 'mongoose';
 import BZLInstance from './bzl';
 import DbaccInstance from './dbacc/lib';
-
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-require('dotenv').config();
+import 'dotenv/config';
 
 export default class Factory {
   private static _instance: Factory;

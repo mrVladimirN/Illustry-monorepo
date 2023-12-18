@@ -2,12 +2,12 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import * as http from 'http';
 import mongoose from 'mongoose';
+import _ from 'lodash';
 import VisualizationRoutes from './routes/visualization/visualization';
 import ProjectRoutes from './routes/project/project';
 import logger from './config/logger';
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-require('dotenv').config();
+import 'dotenv/config';
 
 export default class Illustry {
   private expressApp: Express = express();
@@ -34,7 +34,8 @@ export default class Illustry {
   async start(): Promise<void> {
     return Promise.resolve().then(() => {
       this.httpServer = this.expressApp.listen(
-        process.env.ILLUSTRY_PORT,
+        _.toNumber(process.env.ILLUSTRY_PORT),
+        '0.0.0.0',
         () => {
           logger.info(`server is listening on ${process.env.ILLUSTRY_PORT}`);
         }
