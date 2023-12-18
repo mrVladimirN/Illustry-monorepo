@@ -24,7 +24,7 @@ After the env is provided run one of the following commands:
 Run the following commands:
 ```shell
 docker build -t illustrybackend .
-docker run -p 3000:3000 
+docker run -p 7000:7000 
 ```
 
 # Contributing
