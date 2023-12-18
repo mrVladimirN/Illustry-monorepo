@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type { z } from 'zod';
 import { catchError } from '@/lib/utils';
-import { env } from '@/env.mjs';
+import 'dotenv/config';
 import { Form } from '@/components/ui/form';
 import { ExtFile } from '@files-ui/react';
 import {
@@ -26,6 +26,7 @@ import {
   VisualizationUpdate
 } from 'types/visualizations';
 import { useState, useTransition } from 'react';
+import { createOrUpdateVisualization } from '@/app/_actions/visualization';
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import MappingTab from '../ui/tabs/mappingTab/mappingTab';
 import TypeTab from '../ui/tabs/typeTab/typeTab';
@@ -91,17 +92,7 @@ export function AddVisualizationForm() {
           files.forEach((f) => {
             formData.append('file', f.file as File);
           });
-          const res = await fetch(
-            `${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/visualization`,
-            {
-              method: 'POST',
-              body: formData
-            }
-          );
-          if (!res.ok) {
-            throw new Error('Request failed');
-          }
-          await res.json();
+          await createOrUpdateVisualization(formData);
           form.reset();
           setFiles([]); // Clear the files
           toast.success('Visualizations added successfully.');

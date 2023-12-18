@@ -1,11 +1,9 @@
-import { env } from '@/env.mjs';
 import { Metadata } from 'next';
 import { browseVisualizations } from '@/app/_actions/visualization';
 import VisualizationsTableShell from '@/components/shells/visualizations-table-shell';
 import { VisualizationFilter } from 'types/visualizations';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: 'Visualizations',
   description: 'Manage your Visualizations'
 };

@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { env } from '@/env.mjs';
 import { ReactNode } from 'react';
 import './globals.css';
 
@@ -13,7 +12,6 @@ import {
 } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: {
     default: siteConfig.name,
     template: `%s - ${siteConfig.name}`

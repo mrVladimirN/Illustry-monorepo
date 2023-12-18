@@ -1,11 +1,9 @@
 import type { Metadata } from 'next';
-import { env } from '@/env.mjs';
 
 import UpdateProjectForm from '@/components/form/update-project-form';
 import { findOneProject } from '@/app/_actions/project';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(env.NEXT_PUBLIC_APP_URL),
   title: 'Update Project',
   description: 'Update a product'
 };

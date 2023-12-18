@@ -1,7 +1,7 @@
 'use server';
 
 import makeRequest from '@/lib/request';
-import { env } from '@/env.mjs';
+import 'dotenv/config';
 import { revalidateTag } from 'next/cache';
 import {
   ExtendedVisualizationType,
@@ -16,7 +16,7 @@ export const browseVisualizations = async (filter?: VisualizationFilter) => {
   }
   revalidateTag('visualizations');
   const request = new Request(
-    `${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/visualizations`,
+    `${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_URL as string}/api/visualizations`,
     {
       method: 'POST',
       headers: {
@@ -33,7 +33,7 @@ export const deleteVisualization = async (
 ) => {
   revalidateTag('visualizations');
   const request = new Request(
-    `${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/visualization`,
+    `${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_URL as string}/api/visualization`,
     {
       method: 'DELETE',
       headers: {
@@ -42,23 +42,20 @@ export const deleteVisualization = async (
       body: JSON.stringify(visualizationFilter)
     }
   );
-  return makeRequest(request, ['visualizations']);
+  return makeRequest<boolean>(request, ['visualizations']);
 };
 
-export const updateVisualization = async (
-  VisualizationCreate: VisualizationType
+export const createOrUpdateVisualization = async (
+  form: FormData
 ) => {
   const request = new Request(
-    `${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/visualization`,
+    `${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_URL as string}/api/visualization`,
     {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(VisualizationCreate)
+      method: 'POST',
+      body: form
     }
   );
-  return makeRequest(request, ['visualizations']);
+  return makeRequest<VisualizationType>(request, ['visualizations']);
 };
 
 export const findOneVisualization = async (
@@ -66,7 +63,7 @@ export const findOneVisualization = async (
 ) => {
   revalidateTag('visualizations');
   const request = new Request(
-    `${env.NEXT_PUBLIC_BACKEND_PUBLIC_URL}/api/visualization/${visualizationFilter.name}`,
+    `${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_URL as string}/api/visualization/${visualizationFilter.name}`,
     {
       method: 'POST',
       headers: {
