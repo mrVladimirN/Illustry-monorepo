@@ -40,9 +40,19 @@ import { Textarea } from '../ui/textarea';
 import Separator from '../ui/separator';
 import Fallback from '../ui/fallback';
 import { ShowDiagramState } from './theme-shell';
-import MatrixView from '../views/matrix/matrix';
-import TimelineView from '../views/timeline/timeline';
 
+const MatrixView = dynamic(
+  () => import('@/components/views/matrix'),
+  {
+    ssr: false
+  }
+);
+const TimelineView = dynamic(
+  () => import('@/components/views/timeline'),
+  {
+    ssr: false
+  }
+);
 const SankeyGraphView = dynamic(
   () => import('@/components/views/sankey-diagram'),
   {

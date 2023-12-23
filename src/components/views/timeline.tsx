@@ -9,8 +9,8 @@ import { formatDate } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
-import TimelineAccordion from './timelineAccordion';
-import TimelineElement from './timelineElement';
+import TimelineAccordion from './timeline/timelineAccordion';
+import TimelineElement from './timeline/timelineElement';
 
 interface TimelineProp extends WithLegend, WithOptions {
   data: TimelineData;

@@ -44,7 +44,7 @@ const CalendarView = dynamic(
 const WordCloudView = dynamic(() => import('@/components/views/wordcloud'), {
   ssr: false
 });
-const MatrixView = dynamic(() => import('@/components/views/matrix/matrix'), {
+const MatrixView = dynamic(() => import('@/components/views/matrix'), {
   ssr: false
 });
 const AxisChartView = dynamic(() => import('@/components/views/axis-charts'), {
@@ -71,7 +71,7 @@ const FunnelView = dynamic(() => import('@/components/views/funnel-chart'), {
   ssr: false
 });
 const TimelineView = dynamic(
-  () => import('@/components/views/timeline/timeline'),
+  () => import('@/components/views/timeline'),
   {
     ssr: false
   }
