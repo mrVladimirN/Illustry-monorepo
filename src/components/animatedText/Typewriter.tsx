@@ -5,14 +5,10 @@ import { Cursor, CursorProps } from './Cursor';
 import { TypewriterProps, useTypewriter } from './hooks/useTypewriting';
 
 type ComponentProps = {
-  /** Show / Hide the cursor */
   cursor?: boolean;
 } & TypewriterProps &
   CursorProps;
 
-/**
- * A Simple React Component for adding a nice Typewriter effect to your project.
- */
 const Typewriter = ({
   words = [],
   loop = 1,
