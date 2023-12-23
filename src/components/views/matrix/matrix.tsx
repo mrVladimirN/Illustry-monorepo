@@ -19,7 +19,6 @@ interface MatrixProp extends WithLegend, WithOptions {
 const createMatrix = (d: NodeLinkData) => {
   const categories = categoryMap(d.nodes);
   const categoriesKeys: string[] = Object.keys(categories);
-
   if (categoriesKeys.length !== 2) {
     throw new Error('categories object must have exactly 2 keys');
   }

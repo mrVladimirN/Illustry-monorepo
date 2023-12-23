@@ -372,12 +372,12 @@ export const onNodeMouseOver = (
 
 // Matrix
 
-const constructMatrixTooltip = (obj: object) => `<span class="tooltip" style=" width: 10%; background-color: rgba(235, 0, 0, 0.703); color: #fff; text-align: center; border-radius: 6px; padding: 5px 0; position: absolute; z-index: 1;">${Object.entries(
+const constructMatrixTooltip = (obj: object) => `<span class="tooltip" style=" width: 10%; background-color: rgba(235, 0, 0, 0.703); color: #fff; text-align: center; border-radius: 6px; padding: 5px 0; position: absolute; z-index: 1;">${obj && Object.entries(
   obj
 )
   .map(([k, v]) => `${k}:${v}</br>`)
   .join(' ')}</span>`;
-const constructMatrixStyle = (object: object) => `${Object.entries(object)
+const constructMatrixStyle = (object: object) => `${object && Object.entries(object)
   .map(([k, v]) => `${k}:${v}`)
   .join(';')};width:10%;text-align:center; border: 1px solid #ddd ;`;
 

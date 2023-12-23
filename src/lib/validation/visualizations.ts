@@ -160,3 +160,118 @@ export const visualizationSchema = z.union([
   csvSchema,
   xmlSchema
 ]);
+
+const numberSchema = z.number();
+const stringSchema = z.string();
+
+// Word-cloud
+const wordTypeSchema = z.object({
+  name: stringSchema,
+  value: numberSchema,
+  properties: z.union([z.any(), z.array(z.any()), z.string()]).optional()
+});
+
+export const wordCloudDataSchema = z.object({
+  words: z.array(wordTypeSchema)
+});
+
+// Calendar
+const calendarTypeSchema = z.object({
+  date: stringSchema,
+  value: numberSchema,
+  category: stringSchema,
+  properties: z.union([z.any(), z.array(z.any()), z.string()]).optional()
+});
+
+export const calendarDataSchema = z.object({
+  calendar: z.array(calendarTypeSchema)
+});
+
+// Node-Link (force-directed-graph, sankey, hierarchical-edge-bundling)
+const labelsSchema = z.object({
+  name: stringSchema,
+  value: numberSchema,
+  properties: z.union([z.any(), z.array(z.any()), z.string()]).optional()
+});
+const nodeSchema = z.object({
+  name: stringSchema,
+  category: stringSchema,
+  labels: z.array(labelsSchema).optional(),
+  properties: z.union([z.any(), z.array(z.any()), z.string()]).optional()
+});
+
+const linkSchema = z.object({
+  source: stringSchema,
+  target: stringSchema,
+  value: numberSchema,
+  properties: z.union([z.any(), z.array(z.any()), z.string()]).optional()
+});
+
+export const nodeLinkDataSchema = z.object({
+  nodes: z.array(nodeSchema),
+  links: z.array(linkSchema)
+});
+
+// AxisChart
+
+export const axisChartDataSchema = z.object({
+  headers: z.array(stringSchema),
+  values: z.record(z.array(z.number()).min(1))
+});
+
+// Scatter
+export const scatterDataSchema = z.object({
+  points: z.array(
+    z.object({
+      value: z.tuple([z.number(), z.number()]),
+      category: z.string()
+    })
+  )
+});
+
+// PieChart/Funnel
+export const pieChartFunnelDataSchema = z.object({
+  values: z.record(z.number()),
+  properties: z.union([z.any(), z.array(z.any()), z.string()]).optional()
+});
+
+// TreeMap/Sunburst
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const hierarchyNode: any = z.object({
+  name: z.string(),
+  value: z.number(),
+  category: z.string(),
+  properties: z.union([z.any(), z.array(z.any()), z.string()]).optional(),
+  children: z.array(z.lazy(() => hierarchyNode)).optional()
+});
+
+export const hierarchySchema = z.object({
+  nodes: z.array(hierarchyNode)
+});
+
+// TimeLine
+
+const timelineEventTagSchema = z.object({
+  name: z.string()
+});
+
+const timelineEventSchema = z.object({
+  summary: z.string(),
+  date: z.string(),
+  type: z.string(),
+  author: z.string(),
+  tags: z.array(timelineEventTagSchema).optional(),
+  description: z.string().optional()
+});
+
+export const timelineDataSchema = z.record(
+  z.object({
+    summary: z
+      .object({
+        title: z.string().optional()
+      })
+      .optional(),
+    events: z.array(timelineEventSchema)
+  })
+);

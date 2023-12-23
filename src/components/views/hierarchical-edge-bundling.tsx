@@ -2,7 +2,7 @@
 
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   select, cluster, lineRadial, curveBundle
 } from 'd3';
@@ -25,16 +25,20 @@ interface HierarchicalEdgeBundlingGraphProp extends WithLegend, WithOptions {
   data: NodeLinkData;
 }
 
-const createHedge = (graph: NodeLinkData, c: string[]) => {
+const createHedge = (
+  graph: NodeLinkData,
+  c: string[],
+  width: number | null,
+  height: number | null
+) => {
   const colorin = c[0];
   const colorout = c[1];
 
   const tooltip = createToolTip();
 
-  const radius = window.innerHeight / 2;
+  const radius = (height || window.innerHeight) / 2;
   const innerRadius = radius - 200;
   const newCluster = cluster().size([360, innerRadius]);
-
   const line = lineRadial()
     .curve(curveBundle.beta(0.85))
     .radius((d: any) => d.y)
@@ -43,8 +47,8 @@ const createHedge = (graph: NodeLinkData, c: string[]) => {
   const svg = select('#viz')
     .append('svg')
     .attr('id', 'hedgeBundleSvg')
-    .attr('width', window.innerHeight)
-    .attr('height', window.innerHeight - 10)
+    .attr('width', width || window.innerWidth)
+    .attr('height', height || window.innerHeight - 10)
     .attr('class', 'edge-bundle')
     .append('g')
     .attr('transform', `translate(${radius},${radius})`);
@@ -89,6 +93,8 @@ const createHedge = (graph: NodeLinkData, c: string[]) => {
 const HierarchicalEdgeBundlingGraphView = ({
   data
 }: HierarchicalEdgeBundlingGraphProp) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';
@@ -97,20 +103,27 @@ const HierarchicalEdgeBundlingGraphView = ({
     : activeTheme.heb.light.colors;
 
   useEffect(() => {
-    createHedge(data, colors);
+    const container = containerRef.current;
+    if (container) {
+      const containerWidth = container.offsetWidth;
+      const containerHeight = container.offsetHeight;
+      select('#hedgeBundleSvg').remove();
+      createHedge(data, colors, containerWidth, containerHeight);
+    }
     return () => {
       select('#hedgeBundleSvg').remove();
       select('.my-tooltip').remove();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, JSON.stringify(colors)]);
 
   return (
     <>
       <div
+        ref={containerRef}
         id="viz"
         className="w-full h-90vh flex justify-center items-center"
-        style={{ height: '90vh' }} // Adjust the height based on your requirements
+        style={{ height: '90vh' }}
       />
       <div id="tooltip"></div>
     </>

@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-'use client';
-
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
 

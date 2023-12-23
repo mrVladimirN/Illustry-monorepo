@@ -76,7 +76,7 @@ const SunBurstView = dynamic(
 const FunnelView = dynamic(() => import('@/components/views/funnel-chart'), {
   ssr: false
 });
-interface ShowDiagramState {
+export interface ShowDiagramState {
   heb: boolean;
   sankey: boolean;
   calendar: boolean;
@@ -89,100 +89,11 @@ interface ShowDiagramState {
   treeMap: boolean;
   sunburst: boolean;
   funnel: boolean;
+  timeline?: boolean;
+  matrix?: boolean;
 }
 function ThemeShell() {
-  const colorPalette: { [key: string]: string[] } = {
-    FreshMeadow: [
-      '#5DBE6E',
-      '#4C8BF5',
-      '#F0AC40',
-      '#D73D6C',
-      '#1D7A8A',
-      '#B65911',
-      '#84BA5B'
-    ],
-    OceanBreeze: [
-      '#348AA7',
-      '#54968F',
-      '#8AB8A8',
-      '#EFC050',
-      '#45B29D',
-      '#F07A18',
-      '#D9544D'
-    ],
-    SunsetVibes: [
-      '#FF6B6B',
-      '#FFE66D',
-      '#6B5B95',
-      '#70C1B3',
-      '#F9A03F',
-      '#F7CAC9',
-      '#92A8D1'
-    ],
-    EnchantedForest: [
-      '#00539C',
-      '#89BD9E',
-      '#5DBE6E',
-      '#FF9933',
-      '#EFC88B',
-      '#5A7247',
-      '#360745'
-    ],
-    CityLights: [
-      '#F6D55C',
-      '#3CAEA3',
-      '#ED553B',
-      '#20639B',
-      '#173F5F',
-      '#3B5998',
-      '#F05D23'
-    ],
-    VintageHues: [
-      '#DE8A5A',
-      '#9A8B4F',
-      '#005792',
-      '#3C1053',
-      '#7A306C',
-      '#8D5B4C',
-      '#C98344'
-    ],
-    DreamyPastels: [
-      '#FFD700',
-      '#FF9A8B',
-      '#87CEFA',
-      '#D4AF37',
-      '#98FB98',
-      '#B19CD9',
-      '#FFC0CB'
-    ],
-    TropicalParadise: [
-      '#F2AA4C',
-      '#0077B6',
-      '#90BE6D',
-      '#DA627D',
-      '#5E60CE',
-      '#577590',
-      '#6A0572'
-    ],
-    MidnightMagic: [
-      '#23022E',
-      '#65187A',
-      '#8A3B6B',
-      '#2C5F2D',
-      '#1D262A',
-      '#4C2C69',
-      '#51344D'
-    ],
-    EarthyTones: [
-      '#BC8B66',
-      '#393D3F',
-      '#63707D',
-      '#48484A',
-      '#6B4226',
-      '#C4C8C5',
-      '#3A3D40'
-    ]
-  };
+  const colorPalette: { [key: string]: string[] } = siteConfig.colorPallets;
   const activeTheme = useThemeColors();
 
   const themeDispatch = useThemeColorsDispach();
@@ -201,7 +112,9 @@ function ThemeShell() {
     pieChart: false,
     treeMap: false,
     sunburst: false,
-    funnel: false
+    funnel: false,
+    matrix: false,
+    timeline: false
   });
   const colorPickerRef = useRef<HTMLDivElement>(null);
   const handleOutsideClick = (event: MouseEvent) => {
