@@ -104,6 +104,7 @@ const SunBurstView = dynamic(
 const FunnelView = dynamic(() => import('@/components/views/funnel-chart'), {
   ssr: false
 });
+
 function PlaygroundShell() {
   const [showDiagram, setShowDiagram] = useState<ShowDiagramState>({
     sankey: false,
@@ -300,36 +301,6 @@ function PlaygroundShell() {
 
   return (
     <>
-      <div className="md:hidden">
-        <div className="container flex flex-col items-start justify-between space-y-2 py-4">
-          <h2 className="text-lg font-semibold">Playground</h2>
-          <div className="flex w-full space-x-2">
-            <PresetSelector
-              presets={siteConfig.visualizations}
-              setShowDiagram={setShowDiagram}
-              setTextareaValue={
-                setTextareaValue as Dispatch<SetStateAction<string>>
-              }
-            />
-            {/* <Button type="submit" onClick={saveCanvasAsPNG}>
-              Save
-            </Button> */}
-          </div>
-          <Separator />
-          <div className="container py-6">
-            <Textarea
-              defaultValue={textareaValue}
-              onChange={handleTextareaChange}
-              className="w-full  flex-1 p-4 border-gray-300 bg-gray-50 rounded-3xl dark:border-gray-700 dark:bg-gray-800 md:min-h-[700px] lg:min-h-[700px]"
-            />
-            <div className="flex items-center space-x-2 mt-4">
-              <Button onClick={handleSubmit}>Submit</Button>
-            </div>
-          </div>
-          {createVisualizations()}
-        </div>
-      </div>
-
       <div className="hidden flex-col md:flex">
         <div className="container flex flex-col items-start justify-between space-y-2 py-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16">
           <h2 className="text-lg font-semibold">Playground</h2>
@@ -340,6 +311,7 @@ function PlaygroundShell() {
               setTextareaValue={
                 setTextareaValue as Dispatch<SetStateAction<string>>
               }
+                    setIsSubmitable ={setIsSubmitable}
             />
             <div className="hidden space-x-2 md:flex">
               {/* <CodeViewer /> */}

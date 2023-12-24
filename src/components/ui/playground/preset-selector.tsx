@@ -24,12 +24,14 @@ interface PresetSelectorProps extends PopoverProps {
   presets: VisualizationPresentation[];
   setShowDiagram: Dispatch<SetStateAction<ShowDiagramState>>;
   setTextareaValue: Dispatch<SetStateAction<string>>;
+  setIsSubmitable: Dispatch<SetStateAction<boolean>>;
 }
 
 function PresetSelector({
   presets,
   setShowDiagram,
   setTextareaValue,
+  setIsSubmitable,
   ...props
 }: PresetSelectorProps) {
   const [open, setOpen] = useState(false);
@@ -150,6 +152,7 @@ function PresetSelector({
                     toShowDiagram(preset.name)?.name as keyof ShowDiagramState
                   );
                   setTextareaValue(toShowDiagram(preset.name)?.value as string);
+                  setIsSubmitable(false);
                 }}
               >
                 {preset.name}
