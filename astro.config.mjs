@@ -18,12 +18,12 @@ export default defineConfig({
 				  tag: 'link',
 				  attrs: {
 					rel: 'icon',
-					href:'/src/assets/icon.ico',
+					href:'icon.ico',
 					sizes: '32x32',
 				  },
 				},
 			  ],
-			favicon: '/src/assets/icon.ico',
+			favicon: 'icon.ico',
 			social: {
 				github: 'https://github.com/mrVladimirN/IllustryDocs',
 				linkedin: 'https://www.linkedin.com/in/vladimir-nitu-antonie-763b45172/'
