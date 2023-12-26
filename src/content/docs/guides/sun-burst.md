@@ -43,4 +43,4 @@ export interface HierarchyData {
 
 ## Sun Burst Example
 
-![Sun Burst Example](/IllustryDocs/src/assets/sun-burst.gif)
+![Sun Burst Example](/IllustryDocs/sun-burst.gif)

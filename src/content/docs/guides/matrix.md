@@ -48,4 +48,4 @@ export interface NodeLinkData {
 
 ## Matrix Example
 
-![Matrix Example](/IllustryDocs/src/assets/matrix.gif)
+![Matrix Example](/IllustryDocs/matrix.gif)

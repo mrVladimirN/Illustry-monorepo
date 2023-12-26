@@ -70,4 +70,4 @@ export interface TimelineData {
 
 ## Timeline Example
 
-![Timeline Example](/IllustryDocs/src/assets/tree-map.gif)
+![Timeline Example](/IllustryDocs/tree-map.gif)

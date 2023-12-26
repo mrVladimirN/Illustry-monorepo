@@ -39,4 +39,4 @@ export interface WordCloudData {
 
 ## Word Cloud Example
 
-![Word Cloud Example](/IllustryDocs/src/assets/word-cloud.gif)
+![Word Cloud Example](/IllustryDocs/word-cloud.gif)

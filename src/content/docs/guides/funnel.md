@@ -37,4 +37,4 @@ export interface FunnelData {
 
 ## Funnel Example
 
-![Funnel Example](/IllustryDocs/src/assets/funnel.gif)
+![Funnel Example](/IllustryDocs/funnel.gif)

@@ -35,4 +35,4 @@ export interface AxisChartData {
 
 ## Line Chart Example
 
-![Line Chart Example](/IllustryDocs/src/assets/line-chart.gif)
+![Line Chart Example](/IllustryDocs/line-chart.gif)

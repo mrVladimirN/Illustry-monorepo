@@ -48,4 +48,4 @@ export interface NodeLinkData {
 
 ## Hierarchical Edge Bundling Example
 
-![Hierarchical Edge Bundling Example](/IllustryDocs/src/assets/hierarchical-edge-bundling.gif)
+![Hierarchical Edge Bundling Example](/IllustryDocs/hierarchical-edge-bundling.gif)

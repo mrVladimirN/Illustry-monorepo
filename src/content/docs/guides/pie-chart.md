@@ -33,4 +33,4 @@ export interface PieChartData {
 
 ## Pie Chart Example
 
-![Pie Chart Example](/IllustryDocs/src/assets/pie-chart.gif)
+![Pie Chart Example](/IllustryDocs/pie-chart.gif)
