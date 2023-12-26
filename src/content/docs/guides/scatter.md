@@ -39,4 +39,4 @@ export interface ScatterData {
 
 ## Scatter Plot Example
 
-![Scatter Plot Example](/src/assets/scatter.gif)
+![Scatter Plot Example](/IllustryDocs/src/assets/scatter.gif)

@@ -48,4 +48,4 @@ export interface NodeLinkData {
 
 ## Sankey Diagram Example
 
-![Sankey Diagram Example](/src/assets/sankey.gif)
+![Sankey Diagram Example](/IllustryDocs/src/assets/sankey.gif)

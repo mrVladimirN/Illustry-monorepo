@@ -43,4 +43,4 @@ export interface CalendarData {
 
 ## Calendar Example
 
-![Calendar Example](/src/assets/calendar.gif)
+![Calendar Example](/IllustryDocs/src/assets/calendar.gif)

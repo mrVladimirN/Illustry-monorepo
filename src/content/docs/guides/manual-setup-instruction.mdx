@@ -18,8 +18,8 @@ Before installing Illustry Frontend, ensure that you have the following prerequi
 A file named `.env` is needed at the root of the project containing the following fields:
 
 ```
-MONGO_URL=mongodb://127.0.0.1:27017/illustry
-MONGO_TEST_URL=mongodb://127.0.0.1:27017/illustrytest
+MONGO_URL=mongodb:/127.0.0.1:27017/illustry
+MONGO_TEST_URL=mongodb:/127.0.0.1:27017/illustrytest
 MONGO_USER=<your_personal_mongo_user>
 MONGO_PASSWORD=<your_personal_mongo_password>
 ILLUSTRY_PORT=7000 
@@ -65,7 +65,7 @@ docker run -p 7000:7000
 A file named `.env` is needed at the root of the project containing the following fields:
 
 ```
-NEXT_PUBLIC_BACKEND_PUBLIC_URL: http://0.0.0.0:7000
+NEXT_PUBLIC_BACKEND_PUBLIC_URL: http:/0.0.0.0:7000
 ```
 Run the following commands: 
 
@@ -99,5 +99,5 @@ yarn && yarn build:ts && yarn start:dev
 Run the following commands:
 ```shell
 docker build -t illustryfrontend .
-docker run -p 3000:3000 -e NEXT_PUBLIC_BACKEND_PUBLIC_URL=http://ilustrybackend:7000 illustryfrontend
+docker run -p 3000:3000 -e NEXT_PUBLIC_BACKEND_PUBLIC_URL=http:/ilustrybackend:7000 illustryfrontend
 ```

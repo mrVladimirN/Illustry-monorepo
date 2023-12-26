@@ -26,4 +26,4 @@ The Illustry Data Playground provides a real-time visualization of your JSON dat
 
 ## Practical example
 
-![Playground](/src/assets/playground.gif)
+![Playground](/IllustryDocs/src/assets/playground.gif)
