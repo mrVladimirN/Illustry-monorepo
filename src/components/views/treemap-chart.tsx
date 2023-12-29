@@ -3,15 +3,9 @@
 'use client';
 
 import { EChartsOption } from 'echarts';
-
-import { HierarchyData } from 'types/visualizations';
+import { HierarchyNode } from 'types/visualizations';
 import {
-  computeMaxDepth,
-  createLevels,
-  computeCategories,
-  computeNodesHierarchy,
-  calculateMeanValue,
-  computeUniqueValues
+  computeNodesHierarchy
 } from '@/lib/visualizations/hierarchy-charts/helper';
 import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
@@ -20,9 +14,23 @@ import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
 interface TreeMapProp extends WithLegend, WithOptions {
-  data: HierarchyData;
+  categories: string[];
+  maxDepth: number;
+  meanValue: number;
+  levels: {
+    colorSaturation: number[] | undefined;
+    itemStyle: {
+        borderColor: string | undefined;
+        borderColorSaturation: number;
+        borderWidth: number;
+        gapWidth: number;
+    };
+}[]
+nodes: HierarchyNode[]
 }
-const TreeMapView = ({ data, legend }: TreeMapProp) => {
+const TreeMapView = ({
+  nodes, categories, maxDepth, meanValue, levels, legend
+}: TreeMapProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';
@@ -30,9 +38,6 @@ const TreeMapView = ({ data, legend }: TreeMapProp) => {
     ? activeTheme.treeMap.dark.colors
     : activeTheme.treeMap.light.colors;
 
-  const { nodes } = data;
-  const categories = computeCategories(nodes);
-  const maxDepth = computeMaxDepth(nodes);
   const option: EChartsOption = {
     tooltip: {
       trigger: 'item',
@@ -46,10 +51,10 @@ const TreeMapView = ({ data, legend }: TreeMapProp) => {
     series: [
       {
         type: 'treemap',
-        visibleMin: calculateMeanValue(computeUniqueValues(nodes)),
+        visibleMin: meanValue,
         data: computeNodesHierarchy(nodes, categories, colors),
         leafDepth: maxDepth,
-        levels: createLevels(2)
+        levels
       }
     ]
   };

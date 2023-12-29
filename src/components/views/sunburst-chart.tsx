@@ -4,9 +4,8 @@
 
 import { EChartsOption } from 'echarts';
 
-import { HierarchyData } from 'types/visualizations';
+import { HierarchyNode } from 'types/visualizations';
 import {
-  computeCategories,
   computeNodesHierarchy
 } from '@/lib/visualizations/hierarchy-charts/helper';
 import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
@@ -16,9 +15,10 @@ import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
 interface SunburstViewProp extends WithLegend, WithOptions {
-  data: HierarchyData;
+  nodes: HierarchyNode[];
+  categories: string[]
 }
-const SunburstView = ({ data, legend }: SunburstViewProp) => {
+const SunburstView = ({ nodes, categories, legend }: SunburstViewProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';
@@ -26,8 +26,6 @@ const SunburstView = ({ data, legend }: SunburstViewProp) => {
     ? activeTheme.sunburst.dark.colors
     : activeTheme.sunburst.light.colors;
 
-  const { nodes } = data;
-  const categories = computeCategories(nodes);
   const option: EChartsOption = {
     tooltip: {
       trigger: 'item',

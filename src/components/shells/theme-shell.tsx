@@ -6,7 +6,6 @@ import { DeepPartial } from 'types/utils';
 import {
   Suspense, useEffect, useRef, useState
 } from 'react';
-import dynamic from 'next/dynamic';
 import { siteConfig } from '@/config/site';
 import { ScatterData, HierarchyData } from 'types/visualizations';
 import {
@@ -24,58 +23,18 @@ import DefaultThemesAccordion from '../ui/theme/default-themes';
 import GenericThemesAccordion from '../ui/theme/generic-themes';
 import { ScrollArea } from '../ui/scroll-area';
 import Fallback from '../ui/fallback';
+import SankeyGraphShellView from './sankey-shell';
+import WordCloudShellView from './wordcloud-shell';
+import TreeMapShellView from './treemap-shell';
+import SunBurstShellView from './sunburst-shell';
+import ScatterShellView from './scatter-shell';
+import PieChartShellView from './piechart-shell';
+import ForcedLayoutGraphShellView from './flg-shell';
+import CalendarGraphShellView from './calendar-shell';
+import FunnelShellView from './funnel-shell';
+import AxisChartsShellView from './axis-shell';
+import HierarchicalEdgeBundlingShellView from './heb-shell';
 
-const SankeyGraphView = dynamic(
-  () => import('@/components/views/sankey-diagram'),
-  {
-    ssr: false
-  }
-);
-
-const ForcedLayoutGraphView = dynamic(
-  () => import('@/components/views/forced-layout-graph'),
-  {
-    ssr: false
-  }
-);
-const HierarchicalEdgeBundlingView = dynamic(
-  () => import('@/components/views/hierarchical-edge-bundling'),
-  {
-    ssr: false
-  }
-);
-const CalendarView = dynamic(
-  () => import('@/components/views/calendar-graph'),
-  {
-    ssr: false
-  }
-);
-
-const WordCloudView = dynamic(() => import('@/components/views/wordcloud'), {
-  ssr: false
-});
-
-const AxisChartView = dynamic(() => import('@/components/views/axis-charts'), {
-  ssr: false
-});
-const PieView = dynamic(() => import('@/components/views/pie-chart'), {
-  ssr: false
-});
-const ScatterView = dynamic(() => import('@/components/views/scatter'), {
-  ssr: false
-});
-const TreeMapView = dynamic(() => import('@/components/views/treemap-chart'), {
-  ssr: false
-});
-const SunBurstView = dynamic(
-  () => import('@/components/views/sunburst-chart'),
-  {
-    ssr: false
-  }
-);
-const FunnelView = dynamic(() => import('@/components/views/funnel-chart'), {
-  ssr: false
-});
 export interface ShowDiagramState {
   heb: boolean;
   sankey: boolean;
@@ -490,19 +449,17 @@ function ThemeShell() {
       </ScrollArea>
       {showDiagram.sankey && (
         <div className="flex-grow p-4">
-          <Suspense fallback={<Fallback />}>
-            <SankeyGraphView
+            <SankeyGraphShellView
               data={siteConfig.nodeLink}
               legend={false}
               options={false}
             />
-          </Suspense>
         </div>
       )}
       {showDiagram.calendar && (
         <div className="flex-grow p-4">
           <Suspense fallback={<Fallback />}>
-            <CalendarView
+            <CalendarGraphShellView
               data={{ calendar: siteConfig.calendar }}
               legend={false}
               options={false}
@@ -513,7 +470,7 @@ function ThemeShell() {
       {showDiagram.flg && (
         <div className="flex-grow p-4">
           <Suspense fallback={<Fallback />}>
-            <ForcedLayoutGraphView
+            <ForcedLayoutGraphShellView
               data={siteConfig.nodeLink}
               legend={false}
               options={false}
@@ -524,7 +481,7 @@ function ThemeShell() {
       {showDiagram.wordCloud && (
         <div className="flex-grow p-4">
           <Suspense fallback={<Fallback />}>
-            <WordCloudView
+            <WordCloudShellView
               data={{ words: siteConfig.words }}
               legend={false}
               options={false}
@@ -535,7 +492,7 @@ function ThemeShell() {
       {showDiagram.heb && (
         <div className="flex-grow p-4">
           <Suspense fallback={<Fallback />}>
-            <HierarchicalEdgeBundlingView
+            <HierarchicalEdgeBundlingShellView
               data={siteConfig.nodeLink}
               legend={false}
               options={false}
@@ -546,7 +503,7 @@ function ThemeShell() {
       {showDiagram.lineChart && (
         <div className="flex-grow p-4">
           <Suspense fallback={<Fallback />}>
-            <AxisChartView
+            <AxisChartsShellView
               data={siteConfig.axisChart}
               legend={false}
               options={false}
@@ -558,7 +515,7 @@ function ThemeShell() {
       {showDiagram.barChart && (
         <div className="flex-grow p-4">
           <Suspense fallback={<Fallback />}>
-            <AxisChartView
+            <AxisChartsShellView
               data={siteConfig.axisChart}
               legend={false}
               options={false}
@@ -570,7 +527,7 @@ function ThemeShell() {
       {showDiagram.pieChart && (
         <div className="flex-grow p-4">
           <Suspense fallback={<Fallback />}>
-            <PieView
+            <PieChartShellView
               data={siteConfig.pieChart}
               legend={false}
               options={false}
@@ -581,7 +538,7 @@ function ThemeShell() {
       {showDiagram.funnel && (
         <div className="flex-grow p-4">
           <Suspense fallback={<Fallback />}>
-            <FunnelView
+            <FunnelShellView
               data={siteConfig.funnel}
               legend={false}
               options={false}
@@ -592,7 +549,7 @@ function ThemeShell() {
       {showDiagram.scatter && (
         <div className="flex-grow p-4">
           <Suspense fallback={<Fallback />}>
-            <ScatterView
+            <ScatterShellView
               data={siteConfig.scatter as ScatterData}
               legend={false}
               options={false}
@@ -603,7 +560,7 @@ function ThemeShell() {
       {showDiagram.treeMap && (
         <div className="flex-grow p-4">
           <Suspense fallback={<Fallback />}>
-            <TreeMapView
+            <TreeMapShellView
               data={siteConfig.hierarchy as HierarchyData}
               legend={false}
               options={false}
@@ -614,7 +571,7 @@ function ThemeShell() {
       {showDiagram.sunburst && (
         <div className="flex-grow p-4">
           <Suspense fallback={<Fallback />}>
-            <SunBurstView
+            <SunBurstShellView
               data={siteConfig.hierarchy as HierarchyData}
               legend={false}
               options={false}

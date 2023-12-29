@@ -28,7 +28,6 @@ const computePropertiesForToolTip = (
   value?: number | string
 ) => {
   let prop = '';
-
   if (typeof properties === 'object') {
     Object.entries(properties).forEach(([key]) => {
       if (Object.hasOwnProperty.call(properties, key)) {

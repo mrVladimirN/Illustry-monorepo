@@ -4,11 +4,9 @@
 
 import { EChartsOption } from 'echarts/types/dist/echarts';
 import {
-  computeCategoriesSankey,
-  computeLinksSankey,
   computeNodesSankey
 } from '@/lib/visualizations/node-link/helper';
-import { NodeLinkData } from 'types/visualizations';
+import { Link, Node } from 'types/visualizations';
 import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
@@ -16,10 +14,14 @@ import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
 interface SankeyGraphProp extends WithLegend, WithOptions {
-  data: NodeLinkData;
+links: Link[],
+nodes: Node[],
+categories: string[],
 }
 const SankeyGraphView = ({
-  data,
+  links,
+  nodes,
+  categories,
   legend
 }: SankeyGraphProp) => {
   const activeTheme = useThemeColors();
@@ -29,8 +31,6 @@ const SankeyGraphView = ({
     ? activeTheme.sankey.dark.colors
     : activeTheme.sankey.light.colors;
 
-  const { nodes, links } = data;
-  const categories: string[] = computeCategoriesSankey(nodes);
   const option: EChartsOption = {
     tooltip: {
       trigger: 'item',
@@ -57,7 +57,7 @@ const SankeyGraphView = ({
         },
         nodeAlign: 'right',
         data: computeNodesSankey(nodes, categories, colors),
-        links: computeLinksSankey(links),
+        links,
         lineStyle: {
           color: 'source',
           curveness: 0.5

@@ -10,15 +10,15 @@ import {
   computeWords,
   computePropertiesForToolTip
 } from '@/lib/visualizations/word-cloud/helper';
-import { WordCloudData } from 'types/visualizations';
+import { WordType } from 'types/visualizations';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
 interface WordCloudProp extends WithLegend, WithOptions {
-  data: WordCloudData;
+  words: WordType[];
 }
-const WordCloudView = ({ data }: WordCloudProp) => {
+const WordCloudView = ({ words }: WordCloudProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';
@@ -26,7 +26,6 @@ const WordCloudView = ({ data }: WordCloudProp) => {
     ? activeTheme.wordcloud.dark.colors
     : activeTheme.wordcloud.light.colors;
 
-  const { words } = data;
   const option: EChartsOption = {
     tooltip: {
       trigger: 'item',

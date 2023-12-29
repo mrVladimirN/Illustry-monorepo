@@ -50,14 +50,13 @@ export const computePropertiesForToolTip = (
 
 export const computeCalendar = (
   calendarData: CalendarType[],
-  isDarkTheme: boolean
+  textColor: string
 ) => {
   const years = [
     ...new Set(
       calendarData.map((cal) => new Date(cal.date).getFullYear())
     )
   ];
-  const textColor = isDarkTheme ? '#888' : '#333';
 
   const groupedByYears = calendarData.reduce((group: any, event) => {
     const eventDate = new Date(event.date);

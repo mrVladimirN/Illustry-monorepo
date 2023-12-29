@@ -8,7 +8,6 @@ import {
   Suspense,
   useState
 } from 'react';
-import dynamic from 'next/dynamic';
 import {
   AxisChartData,
   CalendarData,
@@ -40,70 +39,19 @@ import { Textarea } from '../ui/textarea';
 import Separator from '../ui/separator';
 import Fallback from '../ui/fallback';
 import { ShowDiagramState } from './theme-shell';
-
-const MatrixView = dynamic(
-  () => import('@/components/views/matrix'),
-  {
-    ssr: false
-  }
-);
-const TimelineView = dynamic(
-  () => import('@/components/views/timeline'),
-  {
-    ssr: false
-  }
-);
-const SankeyGraphView = dynamic(
-  () => import('@/components/views/sankey-diagram'),
-  {
-    ssr: false
-  }
-);
-
-const ForcedLayoutGraphView = dynamic(
-  () => import('@/components/views/forced-layout-graph'),
-  {
-    ssr: false
-  }
-);
-const HierarchicalEdgeBundlingView = dynamic(
-  () => import('@/components/views/hierarchical-edge-bundling'),
-  {
-    ssr: false
-  }
-);
-const CalendarView = dynamic(
-  () => import('@/components/views/calendar-graph'),
-  {
-    ssr: false
-  }
-);
-
-const WordCloudView = dynamic(() => import('@/components/views/wordcloud'), {
-  ssr: false
-});
-
-const AxisChartView = dynamic(() => import('@/components/views/axis-charts'), {
-  ssr: false
-});
-const PieView = dynamic(() => import('@/components/views/pie-chart'), {
-  ssr: false
-});
-const ScatterView = dynamic(() => import('@/components/views/scatter'), {
-  ssr: false
-});
-const TreeMapView = dynamic(() => import('@/components/views/treemap-chart'), {
-  ssr: false
-});
-const SunBurstView = dynamic(
-  () => import('@/components/views/sunburst-chart'),
-  {
-    ssr: false
-  }
-);
-const FunnelView = dynamic(() => import('@/components/views/funnel-chart'), {
-  ssr: false
-});
+import SankeyGraphShellView from './sankey-shell';
+import WordCloudShellView from './wordcloud-shell';
+import TreeMapShellView from './treemap-shell';
+import SunBurstShellView from './sunburst-shell';
+import ScatterShellView from './scatter-shell';
+import PieChartShellView from './piechart-shell';
+import ForcedLayoutGraphShellView from './flg-shell';
+import CalendarGraphShellView from './calendar-shell';
+import FunnelShellView from './funnel-shell';
+import AxisChartsShellView from './axis-shell';
+import TimelineShellView from './timeline-shell';
+import MatrixShellView from './matrix-shell';
+import HierarchicalEdgeBundlingShellView from './heb-shell';
 
 function PlaygroundShell() {
   const [showDiagram, setShowDiagram] = useState<ShowDiagramState>({
@@ -193,7 +141,7 @@ function PlaygroundShell() {
             <div key={key} className="w-full h-full">
               <Suspense fallback={<Fallback />}>
                 {key === 'barChart' && isSubmitable && (
-                  <AxisChartView
+                  <AxisChartsShellView
                     data={JSON.parse(textareaValue as string) as AxisChartData}
                     legend={false}
                     options={false}
@@ -201,7 +149,7 @@ function PlaygroundShell() {
                   />
                 )}
                 {key === 'lineChart' && isSubmitable && (
-                  <AxisChartView
+                  <AxisChartsShellView
                     data={JSON.parse(textareaValue as string) as AxisChartData}
                     legend={false}
                     options={false}
@@ -209,84 +157,84 @@ function PlaygroundShell() {
                   />
                 )}
                 {key === 'sankey' && isSubmitable && (
-                  <SankeyGraphView
+                  <SankeyGraphShellView
                     data={JSON.parse(textareaValue as string) as NodeLinkData}
                     legend={false}
                     options={false}
                   />
                 )}
                 {key === 'heb' && isSubmitable && (
-                  <HierarchicalEdgeBundlingView
+                  <HierarchicalEdgeBundlingShellView
                     data={siteConfig.nodeLink}
                     legend={false}
                     options={false}
                   />
                 )}
                 {key === 'flg' && isSubmitable && (
-                  <ForcedLayoutGraphView
+                  <ForcedLayoutGraphShellView
                     data={JSON.parse(textareaValue as string) as NodeLinkData}
                     legend={false}
                     options={false}
                   />
                 )}
                 {key === 'matrix' && isSubmitable && (
-                  <MatrixView
+                  <MatrixShellView
                     data={JSON.parse(textareaValue as string) as NodeLinkData}
                     legend={false}
                     options={false}
                   />
                 )}
                 {key === 'wordCloud' && isSubmitable && (
-                  <WordCloudView
+                  <WordCloudShellView
                     data={JSON.parse(textareaValue as string) as WordCloudData}
                     legend={false}
                     options={false}
                   />
                 )}
                 {key === 'funnel' && isSubmitable && (
-                  <FunnelView
+                  <FunnelShellView
                     data={JSON.parse(textareaValue as string) as FunnelData}
                     legend={false}
                     options={false}
                   />
                 )}
                 {key === 'pieChart' && isSubmitable && (
-                  <PieView
+                  <PieChartShellView
                     data={JSON.parse(textareaValue as string) as FunnelData}
                     legend={false}
                     options={false}
                   />
                 )}
                 {key === 'scatter' && isSubmitable && (
-                  <ScatterView
+                  <ScatterShellView
                     data={JSON.parse(textareaValue as string) as ScatterData}
                     legend={false}
                     options={false}
                   />
                 )}
                 {key === 'sunburst' && isSubmitable && (
-                  <SunBurstView
+                  <SunBurstShellView
                     data={JSON.parse(textareaValue as string) as HierarchyData}
                     legend={false}
                     options={false}
                   />
                 )}
                 {key === 'timeline' && isSubmitable && (
-                  <TimelineView
+                  <TimelineShellView
                     data={JSON.parse(textareaValue as string) as TimelineData}
                     legend={false}
                     options={false}
                   />
                 )}
                 {key === 'treeMap' && isSubmitable && (
-                  <TreeMapView
+                  <TreeMapShellView
                     data={JSON.parse(textareaValue as string) as HierarchyData}
                     legend={false}
                     options={false}
                   />
                 )}
                 {key === 'calendar' && isSubmitable && (
-                  <CalendarView
+                  <CalendarGraphShellView
                     data={JSON.parse(textareaValue as string) as CalendarData}
                     legend={false}
                     options={false}

@@ -2,11 +2,8 @@
 
 import { EChartsOption } from 'echarts/types/dist/echarts';
 
-import { ScatterData } from 'types/visualizations';
 import {
-  computeCategoriesScatter,
-  computeColors,
-  computePoints
+  computeColors
 } from '@/lib/visualizations/scatter/helper';
 import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
@@ -15,9 +12,10 @@ import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
 interface ScatterProp extends WithLegend, WithOptions {
-  data: ScatterData;
+  points: (string | number)[][];
+  categories: string[];
 }
-const ScatterView = ({ data, legend }: ScatterProp) => {
+const ScatterView = ({ points, categories, legend }: ScatterProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';
@@ -26,8 +24,6 @@ const ScatterView = ({ data, legend }: ScatterProp) => {
     : activeTheme.scatter.light.colors;
 
   const textColor = isDarkTheme ? '#888' : '#333';
-  const { points } = data;
-  const categories = computeCategoriesScatter(points);
   const option: EChartsOption = {
     tooltip: {
       formatter: '<b>({c})</b>',
@@ -83,7 +79,7 @@ const ScatterView = ({ data, legend }: ScatterProp) => {
         emphasis: {
           focus: 'series'
         },
-        data: computePoints(points)
+        data: points
       }
     ]
   };

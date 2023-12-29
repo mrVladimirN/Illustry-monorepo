@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import dynamic from 'next/dynamic';
 import {
   CalendarData,
   AxisChartData,
@@ -13,69 +12,24 @@ import {
 } from 'types/visualizations';
 import { PieChartData } from 'index';
 import Fallback from '../ui/fallback';
+import SankeyGraphShellView from './sankey-shell';
+import WordCloudShellView from './wordcloud-shell';
+import TreeMapShellView from './treemap-shell';
+import SunBurstShellView from './sunburst-shell';
+import ScatterShellView from './scatter-shell';
+import PieChartShellView from './piechart-shell';
+import ForcedLayoutGraphShellView from './flg-shell';
+import CalendarGraphShellView from './calendar-shell';
+import FunnelShellView from './funnel-shell';
+import AxisChartsShellView from './axis-shell';
+import TimelineShellView from './timeline-shell';
+import MatrixShellView from './matrix-shell';
+import HierarchicalEdgeBundlingShellView from './heb-shell';
 
 interface HubShellProps {
   data?: VisualizationType;
 }
-const SankeyGraphView = dynamic(
-  () => import('@/components/views/sankey-diagram'),
-  {
-    ssr: false
-  }
-);
-const ForcedLayoutGraphView = dynamic(
-  () => import('@/components/views/forced-layout-graph'),
-  {
-    ssr: false
-  }
-);
-const HierarchicalEdgeBundlingView = dynamic(
-  () => import('@/components/views/hierarchical-edge-bundling'),
-  {
-    ssr: false
-  }
-);
-const CalendarView = dynamic(
-  () => import('@/components/views/calendar-graph'),
-  {
-    ssr: false
-  }
-);
-const WordCloudView = dynamic(() => import('@/components/views/wordcloud'), {
-  ssr: false
-});
-const MatrixView = dynamic(() => import('@/components/views/matrix'), {
-  ssr: false
-});
-const AxisChartView = dynamic(() => import('@/components/views/axis-charts'), {
-  ssr: false
-});
-const ScatterView = dynamic(() => import('@/components/views/scatter'), {
-  ssr: false
-});
 
-const PieView = dynamic(() => import('@/components/views/pie-chart'), {
-  ssr: false
-});
-
-const TreeMapView = dynamic(() => import('@/components/views/treemap-chart'), {
-  ssr: false
-});
-const SunBurstView = dynamic(
-  () => import('@/components/views/sunburst-chart'),
-  {
-    ssr: false
-  }
-);
-const FunnelView = dynamic(() => import('@/components/views/funnel-chart'), {
-  ssr: false
-});
-const TimelineView = dynamic(
-  () => import('@/components/views/timeline'),
-  {
-    ssr: false
-  }
-);
 function HubShell({ data }: HubShellProps) {
   const renderGraph = () => {
     if (data) {
@@ -83,7 +37,7 @@ function HubShell({ data }: HubShellProps) {
         case 'hierarchical-edge-bundling':
           return (
             <Suspense fallback={<Fallback />}>
-              <HierarchicalEdgeBundlingView
+              <HierarchicalEdgeBundlingShellView
                 data={data.data as NodeLinkData}
                 legend={true}
                 options={true}
@@ -93,7 +47,7 @@ function HubShell({ data }: HubShellProps) {
         case 'force-directed-graph':
           return (
             <Suspense fallback={<Fallback />}>
-              <ForcedLayoutGraphView
+              <ForcedLayoutGraphShellView
                 data={data.data as NodeLinkData}
                 legend={true}
                 options={true}
@@ -103,17 +57,17 @@ function HubShell({ data }: HubShellProps) {
         case 'sankey':
           return (
             <Suspense fallback={<Fallback />}>
-              <SankeyGraphView
+               <SankeyGraphShellView
                 data={data.data as NodeLinkData}
                 legend={true}
                 options={true}
               />
-            </Suspense>
+              </Suspense>
           );
         case 'calendar':
           return (
             <Suspense fallback={<Fallback />}>
-              <CalendarView
+              <CalendarGraphShellView
                 data={data.data as CalendarData}
                 legend={true}
                 options={true}
@@ -123,7 +77,7 @@ function HubShell({ data }: HubShellProps) {
         case 'word-cloud':
           return (
             <Suspense fallback={<Fallback />}>
-              <WordCloudView
+              <WordCloudShellView
                 data={data.data as WordCloudData}
                 legend={true}
                 options={true}
@@ -133,7 +87,7 @@ function HubShell({ data }: HubShellProps) {
         case 'matrix':
           return (
             <Suspense fallback={<Fallback />}>
-              <MatrixView
+              <MatrixShellView
                 data={data.data as NodeLinkData}
                 legend={true}
                 options={true}
@@ -143,7 +97,7 @@ function HubShell({ data }: HubShellProps) {
         case 'line-chart':
           return (
             <Suspense fallback={<Fallback />}>
-              <AxisChartView
+              <AxisChartsShellView
                 data={data.data as AxisChartData}
                 legend={true}
                 options={true}
@@ -154,7 +108,7 @@ function HubShell({ data }: HubShellProps) {
         case 'bar-chart':
           return (
             <Suspense fallback={<Fallback />}>
-              <AxisChartView
+              <AxisChartsShellView
                 data={data.data as AxisChartData}
                 legend={true}
                 options={true}
@@ -165,7 +119,7 @@ function HubShell({ data }: HubShellProps) {
         case 'pie-chart':
           return (
             <Suspense fallback={<Fallback />}>
-              <PieView
+              <PieChartShellView
                 data={data.data as PieChartData}
                 legend={true}
                 options={true}
@@ -175,7 +129,7 @@ function HubShell({ data }: HubShellProps) {
         case 'funnel':
           return (
             <Suspense fallback={<Fallback />}>
-              <FunnelView
+              <FunnelShellView
                 data={data.data as FunnelData}
                 legend={true}
                 options={true}
@@ -185,7 +139,7 @@ function HubShell({ data }: HubShellProps) {
         case 'scatter':
           return (
             <Suspense fallback={<Fallback />}>
-              <ScatterView
+              <ScatterShellView
                 data={data.data as ScatterData}
                 legend={true}
                 options={true}
@@ -195,7 +149,7 @@ function HubShell({ data }: HubShellProps) {
         case 'treemap':
           return (
             <Suspense fallback={<Fallback />}>
-              <TreeMapView
+              <TreeMapShellView
                 data={data.data as HierarchyData}
                 legend={true}
                 options={true}
@@ -205,7 +159,7 @@ function HubShell({ data }: HubShellProps) {
         case 'sunburst':
           return (
             <Suspense fallback={<Fallback />}>
-              <SunBurstView
+              <SunBurstShellView
                 data={data.data as HierarchyData}
                 legend={true}
                 options={true}
@@ -215,7 +169,7 @@ function HubShell({ data }: HubShellProps) {
         case 'timeline':
           return (
             <Suspense fallback={<Fallback />}>
-              <TimelineView
+              <TimelineShellView
                 data={data.data as TimelineData}
                 legend={true}
                 options={true}
