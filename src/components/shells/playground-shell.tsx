@@ -146,6 +146,7 @@ function PlaygroundShell() {
                     legend={false}
                     options={false}
                     type={'bar'}
+                    filter={false}
                   />
                 )}
                 {key === 'lineChart' && isSubmitable && (
@@ -154,6 +155,7 @@ function PlaygroundShell() {
                     legend={false}
                     options={false}
                     type={'line'}
+                    filter={false}
                   />
                 )}
                 {key === 'sankey' && isSubmitable && (

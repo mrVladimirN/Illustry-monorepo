@@ -5,3 +5,7 @@ export interface WithLegend {
 export interface WithOptions {
     options: boolean
 }
+
+export interface WithFilter {
+    filter:boolean
+}

@@ -102,6 +102,7 @@ function HubShell({ data }: HubShellProps) {
                 legend={true}
                 options={true}
                 type="line"
+                filter={true}
               />
             </Suspense>
           );
@@ -113,6 +114,7 @@ function HubShell({ data }: HubShellProps) {
                 legend={true}
                 options={true}
                 type="bar"
+                filter={true}
               />
             </Suspense>
           );

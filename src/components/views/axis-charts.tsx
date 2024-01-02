@@ -17,14 +17,11 @@ interface AxisChartProp extends WithLegend, WithOptions {
   data: AxisChartData;
   type: 'line' | 'bar';
 }
-const AxisChartView = ({
-  data, type, legend
-}: AxisChartProp) => {
+const AxisChartView = ({ data, type, legend }: AxisChartProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';
   let colors;
-
   if (isDarkTheme) {
     if (type === 'bar') {
       colors = activeTheme.barChart.dark.colors;
@@ -67,15 +64,25 @@ const AxisChartView = ({
         type: 'value'
       }
     ],
-    series: constructSeries(values, colors as string[], false, type, false) as SeriesOption
+    series: constructSeries(
+      values,
+      colors as string[],
+      false,
+      type,
+      false
+    ) as SeriesOption
   };
   return (
-    <div className="relative mt-[4%] flex flex-col items-center">
-      {legend && <Legend legendData={computeLegendColors(data, colors as string[])} />}
-      <div className="w-full mt-4 h-[80vh]">
-        <ReactEcharts option={option} className="w-full h-full" />
+    <>
+      <div className="relative mt-[4%] flex flex-col items-center">
+        {legend && (
+          <Legend legendData={computeLegendColors(data, colors as string[])} />
+        )}
+        <div className="w-full mt-4 h-[80vh]">
+          <ReactEcharts option={option} className="w-full h-full" />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 export default AxisChartView;

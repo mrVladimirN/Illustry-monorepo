@@ -508,6 +508,7 @@ function ThemeShell() {
               legend={false}
               options={false}
               type={'line'}
+              filter={false}
             />
           </Suspense>
         </div>
@@ -520,6 +521,7 @@ function ThemeShell() {
               legend={false}
               options={false}
               type={'bar'}
+              filter={false}
             />
           </Suspense>
         </div>
