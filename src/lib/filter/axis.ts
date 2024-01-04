@@ -1,6 +1,6 @@
 import { AxisChartData } from 'types/visualizations';
 
-export const axisWords = ['headers', 'data', 'values'];
+export const axisWords = ['headers', 'values'];
 
 function getMatchingIndices(initialArray: string[], filterArray: string[]) {
   const matchingIndices = [];
@@ -42,72 +42,45 @@ function evaluateCondition(value: string | number, condition: string) {
   }
 }
 const applyValuesFilter = (
-  dataFilter: string,
   valuesFilter: string,
   validValuesPosition: number[],
   defaultData: AxisChartData
 ) => {
-  const includedData: string[] = [];
-  const excludedData: string[] = [];
-
   try {
-    const matchesData = dataFilter.match(/data\s*([!=]+)\s*\[([^\]]+)\]/g);
-
-    if (matchesData) {
-      matchesData.forEach((match) => {
-        const matchResult = match.match(
-          /data\s*([!=]+)\s*\[([^\]]+)\]/
-        );
+    let valuesOperations: string[] = [];
+    const matchesValues = valuesFilter.match(/values\s*([><=!]*)\s*(\d+)/g);
+    if (matchesValues) {
+      valuesOperations = matchesValues.map((match) => {
+        const matchResult = match.match((/values\s*([><=!]*)\s*(\d+)/));
         if (matchResult) {
           const [, operator, values] = matchResult;
-          const filterData = (values as string)
-            .replace(/'/g, '')
-            .split(/\s*,\s*/)
-            .filter(Boolean);
-
-          if (operator === '=') {
-            includedData.push(...filterData);
-          } else if (operator === '!=') {
-            excludedData.push(...filterData);
-          }
+          const filterValue = (values as string).trim();
+          return `${operator}${filterValue}`;
         }
+        return '';
       });
-      let valuesOperations: string[] = [];
-      const matchesValues = valuesFilter.match(/values\s*([><=!]*)\s*(\d+)/g);
-      if (matchesValues) {
-        valuesOperations = matchesValues.map((match) => {
-          const matchResult = match.match((/values\s*([><=!]*)\s*(\d+)/));
-          if (matchResult) {
-            const [, operator, values] = matchResult;
-            const filterValue = (values as string).trim();
-            return `${operator}${filterValue}`;
-          }
-          return '';
-        });
-      }
-      const filteredValues = Object.fromEntries(
-        Object.entries(defaultData.values)
-          .filter(([key]) => (includedData.length && includedData.includes(key))
-            || (excludedData.length && !excludedData.includes(key)))
-          .map(([key, values]) => {
-            const filteredArray = values
-              .filter((_value, valueIndex) => validValuesPosition.includes(valueIndex))
-              .map((_value) => {
+    }
+    const filteredValues = Object.fromEntries(
+      Object.entries(defaultData.values)
+        .map(([key, values]) => {
+          const filteredArray = values
+            .filter((_value, valueIndex) => validValuesPosition.includes(valueIndex))
+            .map((_value) => {
+              if (valuesOperations.length > 0) {
                 if (valuesOperations.every((condition) => evaluateCondition(_value, condition))) {
                   return _value;
                 }
                 return 0;
-              });
-            return [key, filteredArray];
-          })
-      );
-
-      return filteredValues;
-    }
+              }
+              return _value;
+            });
+          return [key, filteredArray];
+        })
+    );
+    return filteredValues;
   } catch (error) {
     return defaultData.values;
   }
-  return {};
 };
 
 const applyHeadersFilter = (headersFilter: string, defaultData: AxisChartData): string[] => {
@@ -115,6 +88,9 @@ const applyHeadersFilter = (headersFilter: string, defaultData: AxisChartData): 
   const excludedHeaders: string[] = [];
 
   try {
+    if (headersFilter === '') {
+      throw Error('No headersFilter');
+    }
     const matches = headersFilter.match(/headers\s*([!=]+)\s*\[([^\]]+)\]/g);
 
     if (matches) {
@@ -151,24 +127,15 @@ export const applyAxisFilter = (expressions:string[], defaultData: AxisChartData
     values: {}
   };
   let headersFilter: string = '';
-  let dataFilter: string = '';
   let valuesFilter: string = '';
   expressions.forEach((expression, index) => {
     const hasHeaders = expression.includes('headers');
-    const hasDataFilter = expression.includes('data');
     const hasValuesFilter = expression.includes('values');
     if (hasHeaders) {
       if (index === 0) {
         headersFilter = expression;
       } else {
         headersFilter = `${headersFilter}&&${expression}`;
-      }
-    }
-    if (hasDataFilter) {
-      if (index === 0) {
-        dataFilter = expression;
-      } else {
-        dataFilter = `${dataFilter}&&${expression}`;
       }
     }
     if (hasValuesFilter) {
@@ -186,7 +153,6 @@ export const applyAxisFilter = (expressions:string[], defaultData: AxisChartData
     newData.headers
   );
   newData.values = applyValuesFilter(
-    dataFilter,
     valuesFilter,
     validValuesPosition,
     defaultData
