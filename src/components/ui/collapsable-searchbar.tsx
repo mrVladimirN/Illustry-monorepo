@@ -7,24 +7,28 @@ import {
   SetStateAction,
   useState
 } from 'react';
-import { AxisChartData } from 'types/visualizations';
 import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 import { parseFilter } from '@/lib/filter/generic';
 import { axisWords } from '@/lib/filter/axis';
 import { catchError } from '@/lib/utils';
+import { AxisChartData, CalendarType } from 'types/visualizations';
+import { calendarWords } from '@/lib/filter/calendar';
 import { Button } from './button';
 
-interface CollapsableSearchBarProps {
-  data: AxisChartData;
-  setFilteredData: Dispatch<SetStateAction<AxisChartData>>;
+interface CollapsableSearchBarProps<T> {
+  data: T;
+  setFilteredData: Dispatch<SetStateAction<T>>;
   type: visualizationTypesEnum;
 }
 
-const CollapsableSearchBar = ({
-  data,
-  setFilteredData,
-  type
-}: CollapsableSearchBarProps) => {
+const CollapsableSearchBar = <T extends AxisChartData | {
+  categories: string[];
+  calendar: CalendarType[];
+}> ({
+    data,
+    setFilteredData,
+    type
+  }: CollapsableSearchBarProps<T>) => {
   const [initialData] = useState(() => data);
   const [searchValue, setSearchValue] = useState('');
   const [isInputClicked, setIsInputClicked] = useState(false);
@@ -42,7 +46,24 @@ const CollapsableSearchBar = ({
       case visualizationTypesEnum.LINE_CHART:
       case visualizationTypesEnum.BAR_CHART:
         try {
-          setFilteredData(parseFilter(searchValue, data, axisWords, type));
+          setFilteredData(parseFilter(
+            searchValue,
+            data,
+            axisWords,
+            type
+          ) as T);
+        } catch (error) {
+          catchError(error);
+        }
+        break;
+      case visualizationTypesEnum.CALENDAR:
+        try {
+          setFilteredData(parseFilter(
+            searchValue,
+            data,
+            calendarWords,
+            type
+          ) as T);
         } catch (error) {
           catchError(error);
         }

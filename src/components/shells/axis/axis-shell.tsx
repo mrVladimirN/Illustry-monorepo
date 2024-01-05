@@ -12,7 +12,7 @@ const AxisChartsView = dynamic(() => import('@/components/views/axis-charts'), {
 });
 
 const FilteredAxisChartsShellView = dynamic(
-  () => import('@/components/shells/filter-axis-shell'),
+  () => import('@/components/shells/axis/filter-axis-shell'),
   {
     ssr: false
   }

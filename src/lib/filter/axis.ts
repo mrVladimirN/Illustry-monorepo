@@ -1,46 +1,9 @@
 import { AxisChartData } from 'types/visualizations';
+// eslint-disable-next-line import/no-cycle
+import { evaluateCondition, getMatchingIndices } from './generic';
 
 export const axisWords = ['headers', 'values'];
 
-function getMatchingIndices(initialArray: string[], filterArray: string[]) {
-  const matchingIndices = [];
-
-  for (let i = 0; i < initialArray.length; i += 1) {
-    if (filterArray.includes(initialArray[i] as string)) {
-      matchingIndices.push(i);
-    }
-  }
-
-  return matchingIndices;
-}
-function parseCondition(condition: string) {
-  const match = condition.match(/([><=!]+)\s*(\d+)/);
-  if (match) {
-    const [, operator, targetValue] = match;
-    return [operator, parseFloat(targetValue as string)];
-  }
-  throw new Error(`Invalid condition: ${condition}`);
-}
-function evaluateCondition(value: string | number, condition: string) {
-  const [operator, targetValue] = parseCondition(condition);
-  const numericValue = parseFloat(value as string);
-
-  switch (operator) {
-    case '>':
-      return numericValue > (targetValue as number);
-    case '<':
-      return numericValue < (targetValue as number);
-    case '>=':
-      return numericValue >= (targetValue as number);
-    case '<=':
-      return numericValue <= (targetValue as number);
-    case '!=':
-      return numericValue !== (targetValue as number);
-    case '=':
-    default:
-      return numericValue === (targetValue as number);
-  }
-}
 const applyValuesFilter = (
   valuesFilter: string,
   validValuesPosition: number[],

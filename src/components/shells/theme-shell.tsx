@@ -30,9 +30,9 @@ import SunBurstShellView from './sunburst-shell';
 import ScatterShellView from './scatter-shell';
 import PieChartShellView from './piechart-shell';
 import ForcedLayoutGraphShellView from './flg-shell';
-import CalendarGraphShellView from './calendar-shell';
+import CalendarGraphShellView from './calendar/calendar-shell';
 import FunnelShellView from './funnel-shell';
-import AxisChartsShellView from './axis-shell';
+import AxisChartsShellView from './axis/axis-shell';
 import HierarchicalEdgeBundlingShellView from './heb-shell';
 
 export interface ShowDiagramState {
@@ -463,6 +463,7 @@ function ThemeShell() {
               data={{ calendar: siteConfig.calendar }}
               legend={false}
               options={false}
+              filter={false}
             />
           </Suspense>
         </div>

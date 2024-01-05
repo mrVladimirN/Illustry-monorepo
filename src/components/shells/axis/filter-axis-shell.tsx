@@ -5,7 +5,7 @@ import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { useState } from 'react';
 import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 import dynamic from 'next/dynamic';
-import CollapsableSearchBar from '../ui/collapsable-searchbar';
+import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
 interface FilteredAxisChartsShellProp extends WithLegend, WithOptions {
   data: AxisChartData;

@@ -1,9 +1,56 @@
-import { AxisChartData } from 'types/visualizations';
+/* eslint-disable import/no-cycle */
+import { AxisChartData, CalendarType } from 'types/visualizations';
 import { applyAxisFilter } from './axis';
 import { visualizationTypesEnum } from '../validation/visualizations';
+import { applyCalendarFilter } from './calendar';
 
 const acceptedSeparators = ['&&'];
 const acceptedConstructions = ['>', '<', '=', '>=', '<=', '!='];
+
+export function parseCondition(condition: string, isDate = false) {
+  const regex = !isDate ? /([><=!]+)\s*(\d+)/ : /([><=!]+)\s*(['"]?)(\d{4}-\d{2}-\d{2}|\d+)['"]?/;
+  const match = condition.match(regex);
+  if (match) {
+    // eslint-disable-next-line no-console
+    if (isDate) {
+      const [, operator, , targetValue] = match;
+      return [operator, targetValue];
+    }
+    const [, operator, targetValue] = match;
+    return [operator, targetValue];
+  }
+  throw new Error(`Invalid condition: ${condition}`);
+}
+
+export function evaluateCondition(value: string | number, condition: string, isDate = false) {
+  const [operator, targetValue] = parseCondition(condition, isDate);
+  switch (operator) {
+    case '>':
+      return targetValue && value > targetValue;
+    case '<':
+      return targetValue && value < targetValue;
+    case '>=':
+      return targetValue && value >= targetValue;
+    case '<=':
+      return targetValue && value <= targetValue;
+    case '!=':
+      return targetValue && value !== targetValue;
+    case '=':
+    default:
+      return targetValue && value === targetValue;
+  }
+}
+export function getMatchingIndices(initialArray: string[], filterArray: string[]) {
+  const matchingIndices = [];
+
+  for (let i = 0; i < initialArray.length; i += 1) {
+    if (filterArray.includes(initialArray[i] as string)) {
+      matchingIndices.push(i);
+    }
+  }
+
+  return matchingIndices;
+}
 
 export const validateExpressions = (expressions:string[], words:string[]): string[] => {
   const validatedExpressions = expressions.map((expression) => {
@@ -28,7 +75,10 @@ export const validateExpressions = (expressions:string[], words:string[]): strin
 };
 export const parseFilter = (
   expression: string,
-  data: AxisChartData,
+  data: AxisChartData | {
+    categories: string[];
+    calendar: CalendarType[];
+},
   words: string[],
   type: visualizationTypesEnum
 ) => {
@@ -63,7 +113,15 @@ export const parseFilter = (
       case visualizationTypesEnum.BAR_CHART:
         return applyAxisFilter(
           (expressions.filter((part) => part !== undefined) as string[]),
-          data
+          data as AxisChartData
+        );
+      case visualizationTypesEnum.CALENDAR:
+        return applyCalendarFilter(
+          (expressions.filter((part) => part !== undefined) as string[]),
+          data as {
+            categories: string[];
+            calendar: CalendarType[];
+          }
         );
       default:
         return data;
