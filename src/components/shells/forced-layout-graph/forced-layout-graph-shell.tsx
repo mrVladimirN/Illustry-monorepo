@@ -1,7 +1,7 @@
 import { NodeLinkData } from 'types/visualizations';
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import dynamic from 'next/dynamic';
-import FilteredForcedLayoutGraphShellView from './filter-flg-shell';
+import FilteredForcedLayoutGraphShellView from './filter-forced-layout-graph-shell';
 
 interface ForcedLayoutGraphShellProp
   extends WithLegend,

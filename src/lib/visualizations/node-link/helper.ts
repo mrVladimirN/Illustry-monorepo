@@ -71,7 +71,7 @@ export const computeNodesSankey = (
   }));
 };
 
-export const computeLinksSankey = (links: Link[]) => links.map((link) => ({
+export const computeLinksSankey = (links: Link[]): Link[] => links.map((link) => ({
   source: link.source,
   target: link.target,
   value: link.value,
@@ -172,15 +172,17 @@ function createLinks(nodes: HierarchyNode<any>[], links: Link[]) {
   links.forEach((lnk) => {
     // eslint-disable-next-line no-underscore-dangle
     let _import;
-    if (lnk.source === null || lnk.source === undefined) {
+    if (lnk && (lnk.source === null || lnk.source === undefined)) {
       _import = map[lnk.source].path(map[lnk.target]);
     } else {
-      const source = map[lnk.source];
-      const target = map[lnk.target];
-      _import = source.path(target);
+      const source = lnk && lnk.source && map[lnk.source];
+      const target = lnk && lnk.target && map[lnk.target];
+      _import = source && target && source.path(target);
     }
-    _import.value = lnk.value;
-    imports.push(_import);
+    if (_import) {
+      _import.value = lnk.value;
+      imports.push(_import);
+    }
   });
 
   return imports;

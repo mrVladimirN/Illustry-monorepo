@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react';
 import {
   select, cluster, lineRadial, curveBundle
 } from 'd3';
-import { NodeLinkData } from 'types/visualizations';
+import { Link, Node } from 'types/visualizations';
 import {
   createHebLinks,
   createHebNodes,
@@ -22,21 +22,21 @@ import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { useThemeColors } from '../theme-provider';
 
 interface HierarchicalEdgeBundlingGraphProp extends WithLegend, WithOptions {
-  data: NodeLinkData;
+  nodes: Node[],
+  links: Link[]
 }
 
 const createHedge = (
-  graph: NodeLinkData,
-  c: string[],
-  width: number | null,
-  height: number | null
+  nodes: Node[],
+  links: Link[],
+  c: string[]
 ) => {
   const colorin = c[0];
   const colorout = c[1];
 
   const tooltip = createToolTip();
 
-  const radius = (height || window.innerHeight) / 2;
+  const radius = window.innerHeight / 2;
   const innerRadius = radius - 200;
   const newCluster = cluster().size([360, innerRadius]);
   const line = lineRadial()
@@ -47,13 +47,13 @@ const createHedge = (
   const svg = select('#viz')
     .append('svg')
     .attr('id', 'hedgeBundleSvg')
-    .attr('width', width || window.innerWidth)
-    .attr('height', height || window.innerHeight - 10)
+    .attr('width', window.innerWidth)
+    .attr('height', window.innerHeight - 10)
     .attr('class', 'edge-bundle')
     .append('g')
     .attr('transform', `translate(${radius},${radius})`);
 
-  const root = packageHierarchy(graph.nodes).sum((d: any) => d.size);
+  const root = packageHierarchy(nodes).sum((d: any) => d.size);
   newCluster(root);
 
   let link: any = svg.append('g').selectAll('.link');
@@ -74,7 +74,7 @@ const createHedge = (
     })
     .on('mousemove', () => onMouseMove(tooltip))
     .on('click', () => onNodeClick(tooltip));
-  link = createHebLinks(link, root, graph.links, line, c[2] as string)
+  link = createHebLinks(link, root, links, line, c[2] as string)
     .on('mouseover', (event: any) => onLinkMouseOver(
       event,
       node,
@@ -91,7 +91,8 @@ const createHedge = (
 };
 
 const HierarchicalEdgeBundlingGraphView = ({
-  data
+  nodes,
+  links
 }: HierarchicalEdgeBundlingGraphProp) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -103,19 +104,14 @@ const HierarchicalEdgeBundlingGraphView = ({
     : activeTheme.heb.light.colors;
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (container) {
-      const containerWidth = container.offsetWidth;
-      const containerHeight = container.offsetHeight;
-      select('#hedgeBundleSvg').remove();
-      createHedge(data, colors, containerWidth, containerHeight);
-    }
+    select('#hedgeBundleSvg').remove();
+    createHedge(nodes, links, colors);
     return () => {
       select('#hedgeBundleSvg').remove();
       select('.my-tooltip').remove();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, JSON.stringify(colors)]);
+  }, [nodes, links, JSON.stringify(colors)]);
 
   return (
     <>

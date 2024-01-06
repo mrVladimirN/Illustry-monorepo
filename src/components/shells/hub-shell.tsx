@@ -18,13 +18,13 @@ import TreeMapShellView from './treemap-shell';
 import SunBurstShellView from './sunburst-shell';
 import ScatterShellView from './scatter-shell';
 import PieChartShellView from './piechart-shell';
-import ForcedLayoutGraphShellView from './flg/flg-shell';
+import ForcedLayoutGraphShellView from './forced-layout-graph/forced-layout-graph-shell';
 import CalendarGraphShellView from './calendar/calendar-shell';
 import FunnelShellView from './funnel-shell';
 import AxisChartsShellView from './axis/axis-shell';
 import TimelineShellView from './timeline-shell';
 import MatrixShellView from './matrix-shell';
-import HierarchicalEdgeBundlingShellView from './heb-shell';
+import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/heb-shell';
 
 interface HubShellProps {
   data?: VisualizationType;
@@ -41,6 +41,7 @@ function HubShell({ data }: HubShellProps) {
                 data={data.data as NodeLinkData}
                 legend={true}
                 options={true}
+                filter={true}
               />
             </Suspense>
           );

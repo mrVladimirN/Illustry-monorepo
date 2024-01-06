@@ -125,6 +125,10 @@ export const parseFilter = (
           }
         );
       case visualizationTypesEnum.FORCE_DIRECTED_GRAPH:
+      case visualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
+      case visualizationTypesEnum.MATRIX:
+      case visualizationTypesEnum.SANKEY:
+
         return applyNodeLinkFilter(
           (expressions.filter((part) => part !== undefined) as string[]),
             data as {

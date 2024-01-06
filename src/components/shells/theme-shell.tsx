@@ -29,11 +29,11 @@ import TreeMapShellView from './treemap-shell';
 import SunBurstShellView from './sunburst-shell';
 import ScatterShellView from './scatter-shell';
 import PieChartShellView from './piechart-shell';
-import ForcedLayoutGraphShellView from './flg/flg-shell';
+import ForcedLayoutGraphShellView from './forced-layout-graph/forced-layout-graph-shell';
 import CalendarGraphShellView from './calendar/calendar-shell';
 import FunnelShellView from './funnel-shell';
 import AxisChartsShellView from './axis/axis-shell';
-import HierarchicalEdgeBundlingShellView from './heb-shell';
+import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/heb-shell';
 
 export interface ShowDiagramState {
   heb: boolean;
@@ -498,6 +498,7 @@ function ThemeShell() {
               data={siteConfig.nodeLink}
               legend={false}
               options={false}
+              filter={false}
             />
           </Suspense>
         </div>
