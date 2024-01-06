@@ -45,7 +45,7 @@ import TreeMapShellView from './treemap-shell';
 import SunBurstShellView from './sunburst-shell';
 import ScatterShellView from './scatter-shell';
 import PieChartShellView from './piechart-shell';
-import ForcedLayoutGraphShellView from './flg-shell';
+import ForcedLayoutGraphShellView from './flg/flg-shell';
 import CalendarGraphShellView from './calendar/calendar-shell';
 import FunnelShellView from './funnel-shell';
 import AxisChartsShellView from './axis/axis-shell';
@@ -177,6 +177,7 @@ function PlaygroundShell() {
                     data={JSON.parse(textareaValue as string) as NodeLinkData}
                     legend={false}
                     options={false}
+                    filter={false}
                   />
                 )}
                 {key === 'matrix' && isSubmitable && (

@@ -5,9 +5,10 @@
 import { EChartsOption } from 'echarts/types/dist/echarts';
 import {
   computeCategoriesFLG,
+  computeLinksFLG,
   computeNodesFLG
 } from '@/lib/visualizations/node-link/helper';
-import { Node } from 'types/visualizations';
+import { Link, Node } from 'types/visualizations';
 import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
@@ -16,16 +17,11 @@ import ReactEcharts from './generic/echarts';
 
 interface ForcedLayoutGraphProp extends WithLegend, WithOptions {
   nodes: Node[];
-  edges: {
-    source: number;
-    target: number;
-    value: number;
-    prop: string;
-}[]
+  links: Link[];
 }
 const ForcedLayoutGraphView = ({
   nodes,
-  edges,
+  links,
   legend
 }: ForcedLayoutGraphProp) => {
   const activeTheme = useThemeColors();
@@ -39,7 +35,7 @@ const ForcedLayoutGraphView = ({
     name: string;
     itemStyle: { color: string | undefined };
   }[] = computeCategoriesFLG(nodes, colors);
-
+  const edges = computeLinksFLG(links, nodes);
   const option: EChartsOption = {
     tooltip: {
       trigger: 'item',

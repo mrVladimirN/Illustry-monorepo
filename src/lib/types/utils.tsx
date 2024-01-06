@@ -1,3 +1,7 @@
+import {
+  AxisChartData, CalendarType, Link, Node
+} from 'types/visualizations';
+
 export interface WithLegend {
     legend: boolean
 }
@@ -9,3 +13,11 @@ export interface WithOptions {
 export interface WithFilter {
     filter:boolean
 }
+
+export type AllVisualizationsShell = AxisChartData | {
+    categories: string[];
+    calendar: CalendarType[];
+  } | {
+    nodes: Node[];
+    links: Link[];
+  }

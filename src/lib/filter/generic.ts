@@ -1,8 +1,12 @@
 /* eslint-disable import/no-cycle */
-import { AxisChartData, CalendarType } from 'types/visualizations';
+import {
+  AxisChartData, CalendarType, Link, Node
+} from 'types/visualizations';
 import { applyAxisFilter } from './axis';
 import { visualizationTypesEnum } from '../validation/visualizations';
 import { applyCalendarFilter } from './calendar';
+import { AllVisualizationsShell } from '../types/utils';
+import { applyNodeLinkFilter } from './nodeLink';
 
 const acceptedSeparators = ['&&'];
 const acceptedConstructions = ['>', '<', '=', '>=', '<=', '!='];
@@ -75,10 +79,7 @@ export const validateExpressions = (expressions:string[], words:string[]): strin
 };
 export const parseFilter = (
   expression: string,
-  data: AxisChartData | {
-    categories: string[];
-    calendar: CalendarType[];
-},
+  data: AllVisualizationsShell,
   words: string[],
   type: visualizationTypesEnum
 ) => {
@@ -122,6 +123,14 @@ export const parseFilter = (
             categories: string[];
             calendar: CalendarType[];
           }
+        );
+      case visualizationTypesEnum.FORCE_DIRECTED_GRAPH:
+        return applyNodeLinkFilter(
+          (expressions.filter((part) => part !== undefined) as string[]),
+            data as {
+              nodes: Node[];
+              links: Link[];
+            }
         );
       default:
         return data;

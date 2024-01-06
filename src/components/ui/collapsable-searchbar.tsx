@@ -11,8 +11,9 @@ import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 import { parseFilter } from '@/lib/filter/generic';
 import { axisWords } from '@/lib/filter/axis';
 import { catchError } from '@/lib/utils';
-import { AxisChartData, CalendarType } from 'types/visualizations';
 import { calendarWords } from '@/lib/filter/calendar';
+import { AllVisualizationsShell } from '@/lib/types/utils';
+import { nodeLinksWords } from '@/lib/filter/nodeLink';
 import { Button } from './button';
 
 interface CollapsableSearchBarProps<T> {
@@ -21,10 +22,9 @@ interface CollapsableSearchBarProps<T> {
   type: visualizationTypesEnum;
 }
 
-const CollapsableSearchBar = <T extends AxisChartData | {
-  categories: string[];
-  calendar: CalendarType[];
-}> ({
+const CollapsableSearchBar = <
+  T extends AllVisualizationsShell
+>({
     data,
     setFilteredData,
     type
@@ -46,24 +46,28 @@ const CollapsableSearchBar = <T extends AxisChartData | {
       case visualizationTypesEnum.LINE_CHART:
       case visualizationTypesEnum.BAR_CHART:
         try {
-          setFilteredData(parseFilter(
-            searchValue,
-            data,
-            axisWords,
-            type
-          ) as T);
+          setFilteredData(parseFilter(searchValue, data, axisWords, type) as T);
         } catch (error) {
           catchError(error);
         }
         break;
       case visualizationTypesEnum.CALENDAR:
         try {
-          setFilteredData(parseFilter(
-            searchValue,
-            data,
-            calendarWords,
-            type
-          ) as T);
+          setFilteredData(
+            parseFilter(searchValue, data, calendarWords, type) as T
+          );
+        } catch (error) {
+          catchError(error);
+        }
+        break;
+      case visualizationTypesEnum.FORCE_DIRECTED_GRAPH:
+      case visualizationTypesEnum.MATRIX:
+      case visualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
+      case visualizationTypesEnum.SANKEY:
+        try {
+          setFilteredData(
+            parseFilter(searchValue, data, nodeLinksWords, type) as T
+          );
         } catch (error) {
           catchError(error);
         }

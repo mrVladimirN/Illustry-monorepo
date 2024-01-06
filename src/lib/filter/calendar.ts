@@ -99,8 +99,8 @@ export const applyCalendarFilter = (expressions:string[], defaultData: {
   let datesFilter: string = '';
   expressions.forEach((expression, index) => {
     const hasCategories = expression.includes('categories');
-    const hasValuesFilter = expression.includes('dates');
-    if (hasValuesFilter) {
+    const hasDatesFilter = expression.includes('dates');
+    if (hasDatesFilter) {
       if (index === 0) {
         datesFilter = expression;
       } else {
