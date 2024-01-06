@@ -1,23 +1,31 @@
 import {
-  AxisChartData, CalendarType, Link, Node
+  AxisChartData,
+  CalendarType,
+  FunnelData,
+  Link,
+  Node
 } from 'types/visualizations';
 
 export interface WithLegend {
-    legend: boolean
+  legend: boolean;
 }
 
 export interface WithOptions {
-    options: boolean
+  options: boolean;
 }
 
 export interface WithFilter {
-    filter:boolean
+  filter: boolean;
 }
 
-export type AllVisualizationsShell = AxisChartData | {
-    categories: string[];
-    calendar: CalendarType[];
-  } | {
-    nodes: Node[];
-    links: Link[];
-  }
+export type AllVisualizationsShell =
+  | AxisChartData
+  | {
+      categories: string[];
+      calendar: CalendarType[];
+    }
+  | {
+      nodes: Node[];
+      links: Link[];
+    }
+  | FunnelData

@@ -1,18 +1,26 @@
 /* eslint-disable import/no-cycle */
 import {
-  AxisChartData, CalendarType, Link, Node
+  AxisChartData,
+  CalendarType,
+  FunnelData,
+  Link,
+  Node,
+  PieChartData
 } from 'types/visualizations';
 import { applyAxisFilter } from './axis';
 import { visualizationTypesEnum } from '../validation/visualizations';
 import { applyCalendarFilter } from './calendar';
 import { AllVisualizationsShell } from '../types/utils';
 import { applyNodeLinkFilter } from './nodeLink';
+import { applyFunnelPieFilter } from './funnelPie';
 
 const acceptedSeparators = ['&&'];
 const acceptedConstructions = ['>', '<', '=', '>=', '<=', '!='];
 
 export function parseCondition(condition: string, isDate = false) {
-  const regex = !isDate ? /([><=!]+)\s*(\d+)/ : /([><=!]+)\s*(['"]?)(\d{4}-\d{2}-\d{2}|\d+)['"]?/;
+  const regex = !isDate
+    ? /([><=!]+)\s*(\d+)/
+    : /([><=!]+)\s*(['"]?)(\d{4}-\d{2}-\d{2}|\d+)['"]?/;
   const match = condition.match(regex);
   if (match) {
     // eslint-disable-next-line no-console
@@ -26,7 +34,11 @@ export function parseCondition(condition: string, isDate = false) {
   throw new Error(`Invalid condition: ${condition}`);
 }
 
-export function evaluateCondition(value: string | number, condition: string, isDate = false) {
+export function evaluateCondition(
+  value: string | number,
+  condition: string,
+  isDate = false
+) {
   const [operator, targetValue] = parseCondition(condition, isDate);
   switch (operator) {
     case '>':
@@ -44,7 +56,10 @@ export function evaluateCondition(value: string | number, condition: string, isD
       return targetValue && value === targetValue;
   }
 }
-export function getMatchingIndices(initialArray: string[], filterArray: string[]) {
+export function getMatchingIndices(
+  initialArray: string[],
+  filterArray: string[]
+) {
   const matchingIndices = [];
 
   for (let i = 0; i < initialArray.length; i += 1) {
@@ -56,7 +71,10 @@ export function getMatchingIndices(initialArray: string[], filterArray: string[]
   return matchingIndices;
 }
 
-export const validateExpressions = (expressions:string[], words:string[]): string[] => {
+export const validateExpressions = (
+  expressions: string[],
+  words: string[]
+): string[] => {
   const validatedExpressions = expressions.map((expression) => {
     const constructionRegex = new RegExp(
       `(${acceptedConstructions.join('|')})`
@@ -105,7 +123,7 @@ export const parseFilter = (
       return part;
     });
     validateExpressions(
-      (expressions.filter((part) => part !== undefined) as string[]),
+      expressions.filter((part) => part !== undefined) as string[],
       words
     );
 
@@ -113,12 +131,12 @@ export const parseFilter = (
       case visualizationTypesEnum.LINE_CHART:
       case visualizationTypesEnum.BAR_CHART:
         return applyAxisFilter(
-          (expressions.filter((part) => part !== undefined) as string[]),
+          expressions.filter((part) => part !== undefined) as string[],
           data as AxisChartData
         );
       case visualizationTypesEnum.CALENDAR:
         return applyCalendarFilter(
-          (expressions.filter((part) => part !== undefined) as string[]),
+          expressions.filter((part) => part !== undefined) as string[],
           data as {
             categories: string[];
             calendar: CalendarType[];
@@ -128,18 +146,26 @@ export const parseFilter = (
       case visualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
       case visualizationTypesEnum.MATRIX:
       case visualizationTypesEnum.SANKEY:
-
         return applyNodeLinkFilter(
-          (expressions.filter((part) => part !== undefined) as string[]),
-            data as {
-              nodes: Node[];
-              links: Link[];
-            }
+          expressions.filter((part) => part !== undefined) as string[],
+          data as {
+            nodes: Node[];
+            links: Link[];
+          }
         );
+      case visualizationTypesEnum.FUNNEL:
+      case visualizationTypesEnum.PIE_CHART:
+        return applyFunnelPieFilter(
+          expressions.filter((part) => part !== undefined) as string[],
+          data as PieChartData | FunnelData
+        );
+
       default:
         return data;
     }
   } catch (error: unknown) {
-    throw new Error(`The expression could not be parsed. ${(error as Error).message}`);
+    throw new Error(
+      `The expression could not be parsed. ${(error as Error).message}`
+    );
   }
 };

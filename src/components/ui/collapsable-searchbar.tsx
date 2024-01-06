@@ -14,6 +14,7 @@ import { catchError } from '@/lib/utils';
 import { calendarWords } from '@/lib/filter/calendar';
 import { AllVisualizationsShell } from '@/lib/types/utils';
 import { nodeLinksWords } from '@/lib/filter/nodeLink';
+import { funnelPieWords } from '@/lib/filter/funnelPie';
 import { Button } from './button';
 
 interface CollapsableSearchBarProps<T> {
@@ -67,6 +68,16 @@ const CollapsableSearchBar = <
         try {
           setFilteredData(
             parseFilter(searchValue, data, nodeLinksWords, type) as T
+          );
+        } catch (error) {
+          catchError(error);
+        }
+        break;
+      case visualizationTypesEnum.FUNNEL:
+      case visualizationTypesEnum.PIE_CHART:
+        try {
+          setFilteredData(
+            parseFilter(searchValue, data, funnelPieWords, type) as T
           );
         } catch (error) {
           catchError(error);

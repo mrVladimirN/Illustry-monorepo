@@ -17,10 +17,10 @@ import WordCloudShellView from './wordcloud-shell';
 import TreeMapShellView from './treemap-shell';
 import SunBurstShellView from './sunburst-shell';
 import ScatterShellView from './scatter-shell';
-import PieChartShellView from './piechart-shell';
+import PieChartShellView from './pie-chart/piechart-shell';
 import ForcedLayoutGraphShellView from './forced-layout-graph/forced-layout-graph-shell';
 import CalendarGraphShellView from './calendar/calendar-shell';
-import FunnelShellView from './funnel-shell';
+import FunnelShellView from './funnel/funnel-shell';
 import AxisChartsShellView from './axis/axis-shell';
 import TimelineShellView from './timeline-shell';
 import MatrixShellView from './matrix/matrix-shell';
@@ -131,6 +131,7 @@ function HubShell({ data }: HubShellProps) {
                 data={data.data as PieChartData}
                 legend={true}
                 options={true}
+                filter={true}
               />
             </Suspense>
           );
@@ -141,6 +142,7 @@ function HubShell({ data }: HubShellProps) {
                 data={data.data as FunnelData}
                 legend={true}
                 options={true}
+                filter={true}
               />
             </Suspense>
           );

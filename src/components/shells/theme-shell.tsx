@@ -28,10 +28,10 @@ import WordCloudShellView from './wordcloud-shell';
 import TreeMapShellView from './treemap-shell';
 import SunBurstShellView from './sunburst-shell';
 import ScatterShellView from './scatter-shell';
-import PieChartShellView from './piechart-shell';
+import PieChartShellView from './pie-chart/piechart-shell';
 import ForcedLayoutGraphShellView from './forced-layout-graph/forced-layout-graph-shell';
 import CalendarGraphShellView from './calendar/calendar-shell';
-import FunnelShellView from './funnel-shell';
+import FunnelShellView from './funnel/funnel-shell';
 import AxisChartsShellView from './axis/axis-shell';
 import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/hierarchical-edge-bundling-shell';
 
@@ -538,6 +538,7 @@ function ThemeShell() {
               data={siteConfig.pieChart}
               legend={false}
               options={false}
+              filter={true}
             />
           </Suspense>
         </div>
@@ -549,6 +550,7 @@ function ThemeShell() {
               data={siteConfig.funnel}
               legend={false}
               options={false}
+              filter={false}
             />
           </Suspense>
         </div>
