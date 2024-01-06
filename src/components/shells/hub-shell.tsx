@@ -12,7 +12,7 @@ import {
 } from 'types/visualizations';
 import { PieChartData } from 'index';
 import Fallback from '../ui/fallback';
-import SankeyGraphShellView from './sankey-shell';
+import SankeyGraphShellView from './sankey/sankey-shell';
 import WordCloudShellView from './wordcloud-shell';
 import TreeMapShellView from './treemap-shell';
 import SunBurstShellView from './sunburst-shell';
@@ -24,7 +24,7 @@ import FunnelShellView from './funnel-shell';
 import AxisChartsShellView from './axis/axis-shell';
 import TimelineShellView from './timeline-shell';
 import MatrixShellView from './matrix-shell';
-import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/heb-shell';
+import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/hierarchical-edge-bundling-shell';
 
 interface HubShellProps {
   data?: VisualizationType;
@@ -63,6 +63,7 @@ function HubShell({ data }: HubShellProps) {
                 data={data.data as NodeLinkData}
                 legend={true}
                 options={true}
+                filter={true}
               />
               </Suspense>
           );

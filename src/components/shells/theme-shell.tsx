@@ -23,7 +23,7 @@ import DefaultThemesAccordion from '../ui/theme/default-themes';
 import GenericThemesAccordion from '../ui/theme/generic-themes';
 import { ScrollArea } from '../ui/scroll-area';
 import Fallback from '../ui/fallback';
-import SankeyGraphShellView from './sankey-shell';
+import SankeyGraphShellView from './sankey/sankey-shell';
 import WordCloudShellView from './wordcloud-shell';
 import TreeMapShellView from './treemap-shell';
 import SunBurstShellView from './sunburst-shell';
@@ -33,7 +33,7 @@ import ForcedLayoutGraphShellView from './forced-layout-graph/forced-layout-grap
 import CalendarGraphShellView from './calendar/calendar-shell';
 import FunnelShellView from './funnel-shell';
 import AxisChartsShellView from './axis/axis-shell';
-import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/heb-shell';
+import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/hierarchical-edge-bundling-shell';
 
 export interface ShowDiagramState {
   heb: boolean;
@@ -453,6 +453,7 @@ function ThemeShell() {
               data={siteConfig.nodeLink}
               legend={false}
               options={false}
+              filter={true}
             />
         </div>
       )}

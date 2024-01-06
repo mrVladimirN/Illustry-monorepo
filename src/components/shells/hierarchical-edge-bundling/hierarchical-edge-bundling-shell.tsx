@@ -1,7 +1,7 @@
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import dynamic from 'next/dynamic';
 import { NodeLinkData } from 'types/visualizations';
-import FilteredHierarchicalEdgeBundlingGraphView from './filter-forced-layout-graph-shell';
+import FilteredHierarchicalEdgeBundlingGraphView from './filter-hierarchical-edge-bundling';
 
 interface HierarchicalEdgeBundlingShellProp extends WithLegend, WithOptions, WithFilter {
   data: NodeLinkData;

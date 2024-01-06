@@ -1,40 +1,42 @@
+import {
+  computeLinksSankey
+} from '@/lib/visualizations/node-link/helper';
 import { NodeLinkData } from 'types/visualizations';
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import dynamic from 'next/dynamic';
-import FilteredForcedLayoutGraphShellView from './filter-forced-layout-graph-shell';
+import FilteredSankeyGraphView from './filter-sankey';
 
-interface ForcedLayoutGraphShellProp
-  extends WithLegend,
-    WithOptions,
-    WithFilter {
+interface SankeyGraphShellProp extends WithLegend, WithOptions, WithFilter {
   data: NodeLinkData;
 }
-const ForcedLayoutGraphView = dynamic(
-  () => import('@/components/views/forced-layout-graph'),
+const SankeyGraphView = dynamic(
+  () => import('@/components/views/sankey-diagram'),
   { ssr: false }
 );
-const ForcedLayoutGraphShellView = ({
+const SankeyGraphShellView = ({
   data,
   legend,
   options,
   filter
-}: ForcedLayoutGraphShellProp) => {
+}: SankeyGraphShellProp) => {
   const { nodes, links } = data;
+  const newLinks = computeLinksSankey(links);
+
   return (
     <>
       {filter ? (
-        <FilteredForcedLayoutGraphShellView
+        <FilteredSankeyGraphView
           options={options}
           nodes={nodes}
-          links={links}
+          links={newLinks}
           legend={legend}
         />
       ) : (
         <>
-          <ForcedLayoutGraphView
+          <SankeyGraphView
             options={options}
             nodes={nodes}
-            links={links}
+            links={newLinks}
             legend={legend}
           />
         </>
@@ -42,4 +44,4 @@ const ForcedLayoutGraphShellView = ({
     </>
   );
 };
-export default ForcedLayoutGraphShellView;
+export default SankeyGraphShellView;

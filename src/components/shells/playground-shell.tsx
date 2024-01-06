@@ -39,7 +39,7 @@ import { Textarea } from '../ui/textarea';
 import Separator from '../ui/separator';
 import Fallback from '../ui/fallback';
 import { ShowDiagramState } from './theme-shell';
-import SankeyGraphShellView from './sankey-shell';
+import SankeyGraphShellView from './sankey/sankey-shell';
 import WordCloudShellView from './wordcloud-shell';
 import TreeMapShellView from './treemap-shell';
 import SunBurstShellView from './sunburst-shell';
@@ -51,7 +51,7 @@ import FunnelShellView from './funnel-shell';
 import AxisChartsShellView from './axis/axis-shell';
 import TimelineShellView from './timeline-shell';
 import MatrixShellView from './matrix-shell';
-import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/heb-shell';
+import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/hierarchical-edge-bundling-shell';
 
 function PlaygroundShell() {
   const [showDiagram, setShowDiagram] = useState<ShowDiagramState>({
@@ -163,6 +163,7 @@ function PlaygroundShell() {
                     data={JSON.parse(textareaValue as string) as NodeLinkData}
                     legend={false}
                     options={false}
+                    filter={true}
                   />
                 )}
                 {key === 'heb' && isSubmitable && (
