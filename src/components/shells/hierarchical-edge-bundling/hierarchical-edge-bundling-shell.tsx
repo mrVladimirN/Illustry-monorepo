@@ -5,6 +5,7 @@ import FilteredHierarchicalEdgeBundlingGraphView from './filter-hierarchical-edg
 
 interface HierarchicalEdgeBundlingShellProp extends WithLegend, WithOptions, WithFilter {
   data: NodeLinkData;
+  containered: boolean
 }
 const HierarchicalEdgeBundlingGraphView = dynamic(
   () => import('@/components/views/hierarchical-edge-bundling'),
@@ -14,7 +15,8 @@ const HierarchicalEdgeBundlingShellView = ({
   data,
   legend,
   options,
-  filter
+  filter,
+  containered
 }: HierarchicalEdgeBundlingShellProp) => {
   const { nodes, links } = data;
   return (
@@ -33,6 +35,7 @@ const HierarchicalEdgeBundlingShellView = ({
             nodes={nodes}
             links={links}
             legend={legend}
+            containered={containered}
           />
         </>
       )}

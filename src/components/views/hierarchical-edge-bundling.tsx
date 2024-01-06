@@ -23,20 +23,24 @@ import { useThemeColors } from '../theme-provider';
 
 interface HierarchicalEdgeBundlingGraphProp extends WithLegend, WithOptions {
   nodes: Node[],
-  links: Link[]
+  links: Link[],
+  containered?: boolean
 }
 
 const createHedge = (
   nodes: Node[],
   links: Link[],
-  c: string[]
+  c: string[],
+  width: number,
+  height: number,
+  containered?: boolean
 ) => {
   const colorin = c[0];
   const colorout = c[1];
 
   const tooltip = createToolTip();
 
-  const radius = window.innerHeight / 2;
+  const radius = !containered ? window.innerHeight / 2 : height / 2;
   const innerRadius = radius - 200;
   const newCluster = cluster().size([360, innerRadius]);
   const line = lineRadial()
@@ -47,8 +51,8 @@ const createHedge = (
   const svg = select('#viz')
     .append('svg')
     .attr('id', 'hedgeBundleSvg')
-    .attr('width', window.innerWidth)
-    .attr('height', window.innerHeight - 10)
+    .attr('width', !containered ? window.innerWidth : width)
+    .attr('height', !containered ? window.innerHeight - 10 : height - 10)
     .attr('class', 'edge-bundle')
     .append('g')
     .attr('transform', `translate(${radius},${radius})`);
@@ -92,7 +96,8 @@ const createHedge = (
 
 const HierarchicalEdgeBundlingGraphView = ({
   nodes,
-  links
+  links,
+  containered
 }: HierarchicalEdgeBundlingGraphProp) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -104,8 +109,13 @@ const HierarchicalEdgeBundlingGraphView = ({
     : activeTheme.heb.light.colors;
 
   useEffect(() => {
-    select('#hedgeBundleSvg').remove();
-    createHedge(nodes, links, colors);
+    const container = containerRef.current;
+    if (container) {
+      const containerWidth = container.offsetWidth;
+      const containerHeight = container.offsetHeight;
+      select('#hedgeBundleSvg').remove();
+      createHedge(nodes, links, colors, containerWidth, containerHeight, containered);
+    }
     return () => {
       select('#hedgeBundleSvg').remove();
       select('.my-tooltip').remove();

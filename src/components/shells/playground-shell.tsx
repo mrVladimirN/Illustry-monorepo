@@ -50,7 +50,7 @@ import CalendarGraphShellView from './calendar/calendar-shell';
 import FunnelShellView from './funnel-shell';
 import AxisChartsShellView from './axis/axis-shell';
 import TimelineShellView from './timeline-shell';
-import MatrixShellView from './matrix-shell';
+import MatrixShellView from './matrix/matrix-shell';
 import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/hierarchical-edge-bundling-shell';
 
 function PlaygroundShell() {
@@ -172,6 +172,7 @@ function PlaygroundShell() {
                     legend={false}
                     options={false}
                     filter={false}
+                    containered={true}
                   />
                 )}
                 {key === 'flg' && isSubmitable && (
@@ -187,6 +188,7 @@ function PlaygroundShell() {
                     data={JSON.parse(textareaValue as string) as NodeLinkData}
                     legend={false}
                     options={false}
+                    filter={false}
                   />
                 )}
                 {key === 'wordCloud' && isSubmitable && (

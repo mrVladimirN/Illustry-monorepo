@@ -7,20 +7,22 @@ import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 import dynamic from 'next/dynamic';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
-interface FilteredHierarchicalEdgeBundlingGraphProp extends WithLegend, WithOptions {
+interface FilteredMatrixShellProp extends WithLegend, WithOptions {
   nodes: Node[];
   links: Link[];
 }
-const HierarchicalEdgeBundlingGraphView = dynamic(
-  () => import('@/components/views/hierarchical-edge-bundling'),
-  { ssr: false }
+const MatrixView = dynamic(
+  () => import('@/components/views/matrix'),
+  {
+    ssr: false
+  }
 );
-const FilteredHierarchicalEdgeBundlingGraphView = ({
+const FilteredMatrixShellView = ({
   nodes,
   links,
   legend,
   options
-}: FilteredHierarchicalEdgeBundlingGraphProp) => {
+}: FilteredMatrixShellProp) => {
   const [filteredData, setFilteredData] = useState<{
     nodes: Node[];
     links: Link[];
@@ -44,16 +46,15 @@ const FilteredHierarchicalEdgeBundlingGraphView = ({
               }>
           >
         }
-        type={visualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING}
+        type={visualizationTypesEnum.MATRIX}
       />
-      <HierarchicalEdgeBundlingGraphView
+      <MatrixView
         options={options}
         nodes={filteredData.nodes}
         links={filteredData.links}
         legend={legend}
-        containered={false}
       />
     </>
   );
 };
-export default FilteredHierarchicalEdgeBundlingGraphView;
+export default FilteredMatrixShellView;

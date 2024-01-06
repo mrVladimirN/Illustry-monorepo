@@ -23,7 +23,7 @@ import CalendarGraphShellView from './calendar/calendar-shell';
 import FunnelShellView from './funnel-shell';
 import AxisChartsShellView from './axis/axis-shell';
 import TimelineShellView from './timeline-shell';
-import MatrixShellView from './matrix-shell';
+import MatrixShellView from './matrix/matrix-shell';
 import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/hierarchical-edge-bundling-shell';
 
 interface HubShellProps {
@@ -42,6 +42,7 @@ function HubShell({ data }: HubShellProps) {
                 legend={true}
                 options={true}
                 filter={true}
+                containered={false}
               />
             </Suspense>
           );
@@ -95,6 +96,7 @@ function HubShell({ data }: HubShellProps) {
                 data={data.data as NodeLinkData}
                 legend={true}
                 options={true}
+                filter={false}
               />
             </Suspense>
           );

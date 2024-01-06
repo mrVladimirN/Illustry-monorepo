@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { select } from 'd3';
-import { NodeLinkData, Node } from 'types/visualizations';
+import { Node, Link } from 'types/visualizations';
 import {
   addStyleTooltipWithHover,
   categoryMap,
@@ -14,24 +14,24 @@ import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { useThemeColors } from '@/components/theme-provider';
 
 interface MatrixProp extends WithLegend, WithOptions {
-  data: NodeLinkData;
+  nodes: Node[];
+  links: Link[];
 }
-const createMatrix = (d: NodeLinkData) => {
-  const categories = categoryMap(d.nodes);
+const createMatrix = (nodes: Node[], links: Link[]) => {
+  const categories = categoryMap(nodes);
   const categoriesKeys: string[] = Object.keys(categories);
   if (categoriesKeys.length !== 2) {
     throw new Error('categories object must have exactly 2 keys');
   }
 
-  const tableString = ` <table id ="myTable" style= "border-spacing: 0;width: 100%;border: 1px solid #ddd ; margin-top:5%">${
-    createHeadersAndPropertiesString(
-      categories[categoriesKeys[0] as string] as Node[],
-      categories[categoriesKeys[1] as string] as Node[],
-      d.links
-    )}`;
+  const tableString = ` <table id ="myTable" style= "border-spacing: 0;width: 100%;border: 1px solid #ddd ; margin-top:5%">${createHeadersAndPropertiesString(
+    categories[categoriesKeys[0] as string] as Node[],
+    categories[categoriesKeys[1] as string] as Node[],
+    links
+  )}`;
   return tableString;
 };
-const MatrixView = ({ data }: MatrixProp) => {
+const MatrixView = ({ nodes, links }: MatrixProp) => {
   const tableRef = useRef<HTMLDivElement>(null);
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
@@ -42,7 +42,7 @@ const MatrixView = ({ data }: MatrixProp) => {
 
   useEffect(() => {
     if (tableRef.current) {
-      tableRef.current.innerHTML = createMatrix(data);
+      tableRef.current.innerHTML = createMatrix(nodes, links);
       sortRows();
       sortColumns();
       addStyleTooltipWithHover();
@@ -51,8 +51,8 @@ const MatrixView = ({ data }: MatrixProp) => {
     return () => {
       select('showData').remove();
     };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, JSON.stringify(colors)]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [nodes, links, JSON.stringify(colors)]);
 
   return <div ref={tableRef}></div>;
 };

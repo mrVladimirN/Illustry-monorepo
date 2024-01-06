@@ -500,6 +500,7 @@ function ThemeShell() {
               legend={false}
               options={false}
               filter={false}
+              containered={true}
             />
           </Suspense>
         </div>
