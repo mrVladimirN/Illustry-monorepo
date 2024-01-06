@@ -13,7 +13,7 @@ import {
 import { PieChartData } from 'index';
 import Fallback from '../ui/fallback';
 import SankeyGraphShellView from './sankey/sankey-shell';
-import WordCloudShellView from './wordcloud-shell';
+import WordCloudShellView from './wordcloud/wordcloud-shell';
 import TreeMapShellView from './treemap-shell';
 import SunBurstShellView from './sunburst-shell';
 import ScatterShellView from './scatter-shell';
@@ -86,6 +86,7 @@ function HubShell({ data }: HubShellProps) {
                 data={data.data as WordCloudData}
                 legend={true}
                 options={true}
+                filter={true}
               />
             </Suspense>
           );

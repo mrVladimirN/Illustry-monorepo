@@ -7,18 +7,18 @@ import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 import dynamic from 'next/dynamic';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
-interface FilteredPieChartProp extends WithLegend, WithOptions {
+interface FilteredPieChartShellProp extends WithLegend, WithOptions {
   data: PieChartData
 }
 const PieChartGraphView = dynamic(
   () => import('@/components/views/pie-chart'),
   { ssr: false }
 );
-const FilteredPieChartGraphView = ({
+const FilteredPieChartGraphShellView = ({
   data,
   legend,
   options
-}: FilteredPieChartProp) => {
+}: FilteredPieChartShellProp) => {
   const [filteredData, setFilteredData] = useState<PieChartData>(data);
 
   return (
@@ -38,4 +38,4 @@ const FilteredPieChartGraphView = ({
     </>
   );
 };
-export default FilteredPieChartGraphView;
+export default FilteredPieChartGraphShellView;

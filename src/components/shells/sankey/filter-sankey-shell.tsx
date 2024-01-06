@@ -7,7 +7,7 @@ import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 import dynamic from 'next/dynamic';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
-interface FilteredSankeyGraphProp extends WithLegend, WithOptions {
+interface FilteredSankeyGraphShellProp extends WithLegend, WithOptions {
   nodes: Node[];
   links: Link[];
 }
@@ -15,12 +15,12 @@ const SankeyGraphView = dynamic(
   () => import('@/components/views/sankey-diagram'),
   { ssr: false }
 );
-const FilteredSankeyGraphView = ({
+const FilteredSankeyGraphShellView = ({
   nodes,
   links,
   legend,
   options
-}: FilteredSankeyGraphProp) => {
+}: FilteredSankeyGraphShellProp) => {
   const [filteredData, setFilteredData] = useState<{
     nodes: Node[];
     links: Link[];
@@ -55,4 +55,4 @@ const FilteredSankeyGraphView = ({
     </>
   );
 };
-export default FilteredSankeyGraphView;
+export default FilteredSankeyGraphShellView;

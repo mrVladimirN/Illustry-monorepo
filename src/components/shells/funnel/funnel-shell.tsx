@@ -1,7 +1,7 @@
 import { FunnelData } from 'types/visualizations';
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import dynamic from 'next/dynamic';
-import FilteredFunnelView from './filter-funnel-shell';
+import FilteredFunnelShellView from './filter-funnel-shell';
 
 interface FunnelShellProp extends WithLegend, WithOptions, WithFilter {
   data: FunnelData;
@@ -14,7 +14,7 @@ const FunnelShellView = ({
 }: FunnelShellProp) => (
   <>
     {filter ? (
-      <FilteredFunnelView
+      <FilteredFunnelShellView
         options={options}
         data={data}
         legend={legend}

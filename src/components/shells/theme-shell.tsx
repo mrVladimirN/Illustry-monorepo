@@ -24,7 +24,7 @@ import GenericThemesAccordion from '../ui/theme/generic-themes';
 import { ScrollArea } from '../ui/scroll-area';
 import Fallback from '../ui/fallback';
 import SankeyGraphShellView from './sankey/sankey-shell';
-import WordCloudShellView from './wordcloud-shell';
+import WordCloudShellView from './wordcloud/wordcloud-shell';
 import TreeMapShellView from './treemap-shell';
 import SunBurstShellView from './sunburst-shell';
 import ScatterShellView from './scatter-shell';
@@ -488,6 +488,7 @@ function ThemeShell() {
               data={{ words: siteConfig.words }}
               legend={false}
               options={false}
+              filter={false}
             />
           </Suspense>
         </div>

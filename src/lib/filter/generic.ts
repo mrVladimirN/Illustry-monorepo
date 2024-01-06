@@ -5,7 +5,8 @@ import {
   FunnelData,
   Link,
   Node,
-  PieChartData
+  PieChartData,
+  WordType
 } from 'types/visualizations';
 import { applyAxisFilter } from './axis';
 import { visualizationTypesEnum } from '../validation/visualizations';
@@ -13,6 +14,7 @@ import { applyCalendarFilter } from './calendar';
 import { AllVisualizationsShell } from '../types/utils';
 import { applyNodeLinkFilter } from './nodeLink';
 import { applyFunnelPieFilter } from './funnelPie';
+import { applyWordCloudFilter } from './wordcloud';
 
 const acceptedSeparators = ['&&'];
 const acceptedConstructions = ['>', '<', '=', '>=', '<=', '!='];
@@ -159,7 +161,11 @@ export const parseFilter = (
           expressions.filter((part) => part !== undefined) as string[],
           data as PieChartData | FunnelData
         );
-
+      case visualizationTypesEnum.WORD_CLOUD:
+        return applyWordCloudFilter(
+            expressions.filter((part) => part !== undefined) as string[],
+            data as WordType[]
+        );
       default:
         return data;
     }

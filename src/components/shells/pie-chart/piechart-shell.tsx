@@ -1,7 +1,7 @@
 import { PieChartData } from 'types/visualizations';
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import dynamic from 'next/dynamic';
-import FilteredPieChartGraphView from './filter-piechart-shell';
+import FilteredPieChartGraphShellView from './filter-piechart-shell';
 
 interface PieChartShellProp extends WithLegend, WithOptions, WithFilter {
   data: PieChartData;
@@ -15,7 +15,7 @@ const PieChartShellView = ({
 }: PieChartShellProp) => (
   <>
     {filter ? (
-      <FilteredPieChartGraphView options={options} data={data} legend={legend} />
+      <FilteredPieChartGraphShellView options={options} data={data} legend={legend} />
     ) : (
       <>
         <PieChartGraphView options={options} data={data} legend={legend} />

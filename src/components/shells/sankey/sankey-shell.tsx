@@ -4,7 +4,7 @@ import {
 import { NodeLinkData } from 'types/visualizations';
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import dynamic from 'next/dynamic';
-import FilteredSankeyGraphView from './filter-sankey-shell';
+import FilteredSankeyGraphShellView from './filter-sankey-shell';
 
 interface SankeyGraphShellProp extends WithLegend, WithOptions, WithFilter {
   data: NodeLinkData;
@@ -25,7 +25,7 @@ const SankeyGraphShellView = ({
   return (
     <>
       {filter ? (
-        <FilteredSankeyGraphView
+        <FilteredSankeyGraphShellView
           options={options}
           nodes={nodes}
           links={newLinks}

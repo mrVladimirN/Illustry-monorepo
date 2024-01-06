@@ -3,7 +3,8 @@ import {
   CalendarType,
   FunnelData,
   Link,
-  Node
+  Node,
+  WordType
 } from 'types/visualizations';
 
 export interface WithLegend {
@@ -29,3 +30,4 @@ export type AllVisualizationsShell =
       links: Link[];
     }
   | FunnelData
+  | WordType[]

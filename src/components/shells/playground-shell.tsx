@@ -40,7 +40,7 @@ import Separator from '../ui/separator';
 import Fallback from '../ui/fallback';
 import { ShowDiagramState } from './theme-shell';
 import SankeyGraphShellView from './sankey/sankey-shell';
-import WordCloudShellView from './wordcloud-shell';
+import WordCloudShellView from './wordcloud/wordcloud-shell';
 import TreeMapShellView from './treemap-shell';
 import SunBurstShellView from './sunburst-shell';
 import ScatterShellView from './scatter-shell';
@@ -196,6 +196,7 @@ function PlaygroundShell() {
                     data={JSON.parse(textareaValue as string) as WordCloudData}
                     legend={false}
                     options={false}
+                    filter={false}
                   />
                 )}
                 {key === 'funnel' && isSubmitable && (

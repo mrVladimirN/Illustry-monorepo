@@ -7,7 +7,7 @@ import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 import dynamic from 'next/dynamic';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
-interface FilteredHierarchicalEdgeBundlingGraphProp extends WithLegend, WithOptions {
+interface FilteredHierarchicalEdgeBundlingGraphShellProp extends WithLegend, WithOptions {
   nodes: Node[];
   links: Link[];
 }
@@ -15,12 +15,12 @@ const HierarchicalEdgeBundlingGraphView = dynamic(
   () => import('@/components/views/hierarchical-edge-bundling'),
   { ssr: false }
 );
-const FilteredHierarchicalEdgeBundlingGraphView = ({
+const FilteredHierarchicalEdgeBundlingGraphShellView = ({
   nodes,
   links,
   legend,
   options
-}: FilteredHierarchicalEdgeBundlingGraphProp) => {
+}: FilteredHierarchicalEdgeBundlingGraphShellProp) => {
   const [filteredData, setFilteredData] = useState<{
     nodes: Node[];
     links: Link[];
@@ -56,4 +56,4 @@ const FilteredHierarchicalEdgeBundlingGraphView = ({
     </>
   );
 };
-export default FilteredHierarchicalEdgeBundlingGraphView;
+export default FilteredHierarchicalEdgeBundlingGraphShellView;

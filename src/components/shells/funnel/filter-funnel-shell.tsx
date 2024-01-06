@@ -7,18 +7,18 @@ import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 import dynamic from 'next/dynamic';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
-interface FilteredFunnelProp extends WithLegend, WithOptions {
+interface FilteredFunnelShellProp extends WithLegend, WithOptions {
   data: FunnelData
 }
 const FunnelView = dynamic(
   () => import('@/components/views/funnel-chart'),
   { ssr: false }
 );
-const FilteredFunnelView = ({
+const FilteredFunnelShellView = ({
   data,
   legend,
   options
-}: FilteredFunnelProp) => {
+}: FilteredFunnelShellProp) => {
   const [filteredData, setFilteredData] = useState<FunnelData>(data);
 
   return (
@@ -40,4 +40,4 @@ const FilteredFunnelView = ({
     </>
   );
 };
-export default FilteredFunnelView;
+export default FilteredFunnelShellView;
