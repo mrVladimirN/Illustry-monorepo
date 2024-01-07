@@ -14,11 +14,11 @@ export function formatDate(date: Date | string) {
 export function catchError(err: unknown) {
   if (err instanceof z.ZodError) {
     const errors = err.issues.map((issue) => issue.message);
-    return toast(errors.join('\n'));
+    return toast.error(errors.join('\n'));
   } if (err instanceof Error) {
-    return toast(err.message);
+    return toast.error(err.message);
   }
-  return toast('Something went wrong, please try again later.');
+  return toast.error('Something went wrong, please try again later.');
 }
 export function cloneDeep<T>(source: T): T {
   return JSON.parse(JSON.stringify(source));

@@ -21,7 +21,11 @@ export const browseProjects = async (filter?: ProjectFilter) => {
     },
     body: JSON.stringify(newFilter)
   });
-  return makeRequest<ExtendedProjectType>(request, ['projects']);
+  return makeRequest<ExtendedProjectType>(request, ['projects'])
+    .catch((error) => {
+      // eslint-disable-next-line no-console
+      console.debug(error.message);
+    });
 };
 
 export const deleteProject = async (projectName: string) => {

@@ -25,7 +25,11 @@ export const browseVisualizations = async (filter?: VisualizationFilter) => {
       body: JSON.stringify(newFilter)
     }
   );
-  return makeRequest<ExtendedVisualizationType>(request, ['visualizations']);
+  return makeRequest<ExtendedVisualizationType>(request, ['visualizations'])
+    .catch((error) => {
+    // eslint-disable-next-line no-console
+      console.debug(error.message);
+    });
 };
 
 export const deleteVisualization = async (

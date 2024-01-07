@@ -69,6 +69,9 @@ export function AddVisualizationForm() {
     startTransition(async () => {
       try {
         if (files.length > 0) {
+          if (files.length > 10) {
+            throw Error('To manny files max 10 accepted in parallel');
+          }
           const formData = new FormData();
           const fileDetails: FileDetails = {
             fileType: data.fileType,
@@ -102,7 +105,6 @@ export function AddVisualizationForm() {
           toast.error('No files selected.');
         }
       } catch (err) {
-        toast.error('Something went wrong.');
         catchError(err);
       }
     });
