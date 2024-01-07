@@ -56,6 +56,12 @@ export default defineConfig({
 					]
 				},
 				{
+					label: 'Filtering',
+					items: [
+						{label: 'Filter your data', link:'guides/filtering'}
+					]
+				},
+				{
 					label: 'Visualizations',
 					items: [
 						{label: 'Word Cloud', link:'guides/word-cloud'},
