@@ -290,7 +290,7 @@ function PlaygroundShell() {
                 defaultValue={textareaValue}
                 onChange={handleTextareaChange}
                 className="w-full h-[90%] flex-1 p-4 border-gray-300 bg-gray-50 rounded-3xl dark:border-gray-700 dark:bg-gray-800 md:min-h-[530px] lg:min-h-[530px]"
-                style={{ overflow: 'hidden', resize: 'none' }}
+                style={{ overflow: 'scroll', resize: 'none' }}
               />
               <div className="flex items-center space-x-2 mt-4">
                 <Button onClick={handleSubmit}>Submit</Button>
