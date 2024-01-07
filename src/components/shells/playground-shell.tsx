@@ -163,7 +163,7 @@ function PlaygroundShell() {
                     data={JSON.parse(textareaValue as string) as NodeLinkData}
                     legend={false}
                     options={false}
-                    filter={true}
+                    filter={false}
                   />
                 )}
                 {key === 'heb' && isSubmitable && (

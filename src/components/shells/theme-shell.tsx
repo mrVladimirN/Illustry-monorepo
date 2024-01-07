@@ -453,7 +453,7 @@ function ThemeShell() {
               data={siteConfig.nodeLink}
               legend={false}
               options={false}
-              filter={true}
+              filter={false}
             />
         </div>
       )}
@@ -539,7 +539,7 @@ function ThemeShell() {
               data={siteConfig.pieChart}
               legend={false}
               options={false}
-              filter={true}
+              filter={false}
             />
           </Suspense>
         </div>
