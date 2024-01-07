@@ -9,12 +9,12 @@ Illustry is providing some common constructions and some specific words in order
 
 ### Constructions
 - &&
-- > (greater than)
-- < (less than)
-- = (equal)
-- >= (greater than or equal)
-- <= (less than or equal)
-- != (not equal)
+- '>' (greater than)
+- '<' (less than)
+- '=' (equal)
+- '>=' (greater than or equal)
+- '<=' (less than or equal)
+- '!=' (not equal)
 
 ## Bar Chart / Line Chart
 
