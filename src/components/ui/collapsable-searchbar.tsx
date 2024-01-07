@@ -18,6 +18,7 @@ import { funnelPieWords } from '@/lib/filter/funnelPie';
 import { wordCloudWords } from '@/lib/filter/wordcloud';
 import { scatterWords } from '@/lib/filter/scatter';
 import { timelineWords } from '@/lib/filter/timeline';
+import { hierarchyWords } from '@/lib/filter/hierarchy';
 import { Button } from './button';
 
 interface CollapsableSearchBarProps<T> {
@@ -73,6 +74,10 @@ const CollapsableSearchBar = <
         break;
       case visualizationTypesEnum.TIMELINE:
         words = timelineWords;
+        break;
+      case visualizationTypesEnum.TREEMAP:
+      case visualizationTypesEnum.SUNBURST:
+        words = hierarchyWords;
         break;
       default:
         words = [];

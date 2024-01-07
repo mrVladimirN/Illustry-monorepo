@@ -41,8 +41,8 @@ import Fallback from '../ui/fallback';
 import { ShowDiagramState } from './theme-shell';
 import SankeyGraphShellView from './sankey/sankey-shell';
 import WordCloudShellView from './wordcloud/wordcloud-shell';
-import TreeMapShellView from './treemap-shell';
-import SunBurstShellView from './sunburst-shell';
+import TreeMapShellView from './treemap/treemap-shell';
+import SunBurstShellView from './sunburst/sunburst-shell';
 import ScatterShellView from './scatter/scatter-shell';
 import PieChartShellView from './pie-chart/piechart-shell';
 import ForcedLayoutGraphShellView from './forced-layout-graph/forced-layout-graph-shell';
@@ -228,6 +228,7 @@ function PlaygroundShell() {
                     data={JSON.parse(textareaValue as string) as HierarchyData}
                     legend={false}
                     options={false}
+                    filter={false}
                   />
                 )}
                 {key === 'timeline' && isSubmitable && (
@@ -244,6 +245,7 @@ function PlaygroundShell() {
                     data={JSON.parse(textareaValue as string) as HierarchyData}
                     legend={false}
                     options={false}
+                    filter={false}
                   />
                 )}
                 {key === 'calendar' && isSubmitable && (

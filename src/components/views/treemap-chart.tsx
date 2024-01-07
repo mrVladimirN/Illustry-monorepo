@@ -5,7 +5,11 @@
 import { EChartsOption } from 'echarts';
 import { HierarchyNode } from 'types/visualizations';
 import {
-  computeNodesHierarchy
+  calculateMeanValue,
+  computeMaxDepth,
+  computeNodesHierarchy,
+  computeUniqueValues,
+  createLevels
 } from '@/lib/visualizations/hierarchy-charts/helper';
 import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
@@ -15,22 +19,12 @@ import ReactEcharts from './generic/echarts';
 
 interface TreeMapProp extends WithLegend, WithOptions {
   categories: string[];
-  maxDepth: number;
-  meanValue: number;
-  levels: {
-    colorSaturation: number[] | undefined;
-    itemStyle: {
-        borderColor: string | undefined;
-        borderColorSaturation: number;
-        borderWidth: number;
-        gapWidth: number;
-    };
-}[]
-nodes: HierarchyNode[]
+  nodes: HierarchyNode[];
 }
-const TreeMapView = ({
-  nodes, categories, maxDepth, meanValue, levels, legend
-}: TreeMapProp) => {
+const TreeMapView = ({ nodes, categories, legend }: TreeMapProp) => {
+  const maxDepth = computeMaxDepth(nodes);
+  const meanValue = calculateMeanValue(computeUniqueValues(nodes));
+  const levels = createLevels(maxDepth);
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';

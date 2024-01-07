@@ -7,7 +7,7 @@ export const scatterWords = [
   'yCoord'
 ];
 
-const applyCategoriesFilter = (CategoriesFilter: string, defaultData: {
+const applyCategoriesFilter = (categoriesFilter: string, defaultData: {
     points: (string | number)[][];
     categories: string[];
   }): string[] => {
@@ -15,10 +15,10 @@ const applyCategoriesFilter = (CategoriesFilter: string, defaultData: {
   const excludedCategories: string[] = [];
 
   try {
-    if (CategoriesFilter === '') {
+    if (categoriesFilter === '') {
       throw Error('No CategoriesFilter');
     }
-    const matches = CategoriesFilter.match(/categories\s*([!=]+)\s*\[([^\]]+)\]/g);
+    const matches = categoriesFilter.match(/categories\s*([!=]+)\s*\[([^\]]+)\]/g);
 
     if (matches) {
       matches.forEach((match) => {

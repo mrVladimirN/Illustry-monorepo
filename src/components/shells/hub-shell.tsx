@@ -14,8 +14,8 @@ import { PieChartData } from 'index';
 import Fallback from '../ui/fallback';
 import SankeyGraphShellView from './sankey/sankey-shell';
 import WordCloudShellView from './wordcloud/wordcloud-shell';
-import TreeMapShellView from './treemap-shell';
-import SunBurstShellView from './sunburst-shell';
+import TreeMapShellView from './treemap/treemap-shell';
+import SunBurstShellView from './sunburst/sunburst-shell';
 import ScatterShellView from './scatter/scatter-shell';
 import PieChartShellView from './pie-chart/piechart-shell';
 import ForcedLayoutGraphShellView from './forced-layout-graph/forced-layout-graph-shell';
@@ -165,6 +165,7 @@ function HubShell({ data }: HubShellProps) {
                 data={data.data as HierarchyData}
                 legend={true}
                 options={true}
+                filter={false}
               />
             </Suspense>
           );
@@ -175,6 +176,7 @@ function HubShell({ data }: HubShellProps) {
                 data={data.data as HierarchyData}
                 legend={true}
                 options={true}
+                filter={false}
               />
             </Suspense>
           );

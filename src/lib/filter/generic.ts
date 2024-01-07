@@ -3,6 +3,7 @@ import {
   AxisChartData,
   CalendarType,
   FunnelData,
+  HierarchyNode,
   Link,
   Node,
   PieChartData,
@@ -18,6 +19,7 @@ import { applyFunnelPieFilter } from './funnelPie';
 import { applyWordCloudFilter } from './wordcloud';
 import { applyScatterFilter } from './scatter';
 import { applyTimelineFilter } from './timeline';
+import { applyHierachyFilter } from './hierarchy';
 
 const acceptedSeparators = ['&&'];
 const acceptedConstructions = ['>', '<', '=', '>=', '<=', '!='];
@@ -180,6 +182,15 @@ export const parseFilter = (
         return applyTimelineFilter(
               expressions.filter((part) => part !== undefined) as string[],
               data as TimelineData
+        );
+      case visualizationTypesEnum.SUNBURST:
+      case visualizationTypesEnum.TREEMAP:
+        return applyHierachyFilter(
+              expressions.filter((part) => part !== undefined) as string[],
+              data as {
+                categories: string[]
+                nodes: HierarchyNode[]
+                }
         );
       default:
         return data;

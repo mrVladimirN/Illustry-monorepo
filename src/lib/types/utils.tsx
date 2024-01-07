@@ -1,11 +1,12 @@
-import { TimelineData } from 'index';
 import {
   AxisChartData,
   CalendarType,
   FunnelData,
+  HierarchyNode,
   Link,
   Node,
-  WordType
+  WordType,
+  TimelineData
 } from 'types/visualizations';
 
 export interface WithLegend {
@@ -36,4 +37,8 @@ export type AllVisualizationsShell =
       points: (string | number)[][];
       categories: string[];
     }
-  | TimelineData;
+  | TimelineData
+  | {
+    categories: string[]
+    nodes: HierarchyNode[]
+    }
