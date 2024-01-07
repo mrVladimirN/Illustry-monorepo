@@ -31,3 +31,7 @@ export type AllVisualizationsShell =
     }
   | FunnelData
   | WordType[]
+  | {
+      points: (string | number)[][];
+      categories: string[];
+    };

@@ -43,7 +43,7 @@ import SankeyGraphShellView from './sankey/sankey-shell';
 import WordCloudShellView from './wordcloud/wordcloud-shell';
 import TreeMapShellView from './treemap-shell';
 import SunBurstShellView from './sunburst-shell';
-import ScatterShellView from './scatter-shell';
+import ScatterShellView from './scatter/scatter-shell';
 import PieChartShellView from './pie-chart/piechart-shell';
 import ForcedLayoutGraphShellView from './forced-layout-graph/forced-layout-graph-shell';
 import CalendarGraphShellView from './calendar/calendar-shell';
@@ -220,6 +220,7 @@ function PlaygroundShell() {
                     data={JSON.parse(textareaValue as string) as ScatterData}
                     legend={false}
                     options={false}
+                    filter={false}
                   />
                 )}
                 {key === 'sunburst' && isSubmitable && (

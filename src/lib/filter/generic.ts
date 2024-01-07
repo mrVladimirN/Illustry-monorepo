@@ -15,6 +15,7 @@ import { AllVisualizationsShell } from '../types/utils';
 import { applyNodeLinkFilter } from './nodeLink';
 import { applyFunnelPieFilter } from './funnelPie';
 import { applyWordCloudFilter } from './wordcloud';
+import { applyScatterFilter } from './scatter';
 
 const acceptedSeparators = ['&&'];
 const acceptedConstructions = ['>', '<', '=', '>=', '<=', '!='];
@@ -165,6 +166,14 @@ export const parseFilter = (
         return applyWordCloudFilter(
             expressions.filter((part) => part !== undefined) as string[],
             data as WordType[]
+        );
+      case visualizationTypesEnum.SCATTER:
+        return applyScatterFilter(
+              expressions.filter((part) => part !== undefined) as string[],
+              data as {
+                points: (string | number)[][];
+                categories: string[];
+              }
         );
       default:
         return data;

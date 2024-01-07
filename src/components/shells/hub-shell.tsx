@@ -16,7 +16,7 @@ import SankeyGraphShellView from './sankey/sankey-shell';
 import WordCloudShellView from './wordcloud/wordcloud-shell';
 import TreeMapShellView from './treemap-shell';
 import SunBurstShellView from './sunburst-shell';
-import ScatterShellView from './scatter-shell';
+import ScatterShellView from './scatter/scatter-shell';
 import PieChartShellView from './pie-chart/piechart-shell';
 import ForcedLayoutGraphShellView from './forced-layout-graph/forced-layout-graph-shell';
 import CalendarGraphShellView from './calendar/calendar-shell';
@@ -154,6 +154,7 @@ function HubShell({ data }: HubShellProps) {
                 data={data.data as ScatterData}
                 legend={true}
                 options={true}
+                filter={true}
               />
             </Suspense>
           );

@@ -16,6 +16,7 @@ import { AllVisualizationsShell } from '@/lib/types/utils';
 import { nodeLinksWords } from '@/lib/filter/nodeLink';
 import { funnelPieWords } from '@/lib/filter/funnelPie';
 import { wordCloudWords } from '@/lib/filter/wordcloud';
+import { scatterWords } from '@/lib/filter/scatter';
 import { Button } from './button';
 
 interface CollapsableSearchBarProps<T> {
@@ -88,6 +89,15 @@ const CollapsableSearchBar = <
         try {
           setFilteredData(
               parseFilter(searchValue, data, wordCloudWords, type) as T
+          );
+        } catch (error) {
+          catchError(error);
+        }
+        break;
+      case visualizationTypesEnum.SCATTER:
+        try {
+          setFilteredData(
+              parseFilter(searchValue, data, scatterWords, type) as T
           );
         } catch (error) {
           catchError(error);
