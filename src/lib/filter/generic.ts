@@ -6,6 +6,7 @@ import {
   Link,
   Node,
   PieChartData,
+  TimelineData,
   WordType
 } from 'types/visualizations';
 import { applyAxisFilter } from './axis';
@@ -16,6 +17,7 @@ import { applyNodeLinkFilter } from './nodeLink';
 import { applyFunnelPieFilter } from './funnelPie';
 import { applyWordCloudFilter } from './wordcloud';
 import { applyScatterFilter } from './scatter';
+import { applyTimelineFilter } from './timeline';
 
 const acceptedSeparators = ['&&'];
 const acceptedConstructions = ['>', '<', '=', '>=', '<=', '!='];
@@ -26,7 +28,6 @@ export function parseCondition(condition: string, isDate = false) {
     : /([><=!]+)\s*(['"]?)(\d{4}-\d{2}-\d{2}|\d+)['"]?/;
   const match = condition.match(regex);
   if (match) {
-    // eslint-disable-next-line no-console
     if (isDate) {
       const [, operator, , targetValue] = match;
       return [operator, targetValue];
@@ -174,6 +175,11 @@ export const parseFilter = (
                 points: (string | number)[][];
                 categories: string[];
               }
+        );
+      case visualizationTypesEnum.TIMELINE:
+        return applyTimelineFilter(
+              expressions.filter((part) => part !== undefined) as string[],
+              data as TimelineData
         );
       default:
         return data;

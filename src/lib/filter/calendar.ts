@@ -115,10 +115,14 @@ export const applyCalendarFilter = (expressions:string[], defaultData: {
       }
     }
   });
-  newData.categories = applyCategoriesFilter(categoriesFilter, defaultData);
-  newData.calendar = applyDatesFilter(
-    datesFilter,
-    defaultData
-  );
+  if (categoriesFilter !== '') {
+    newData.categories = applyCategoriesFilter(categoriesFilter, defaultData);
+  }
+  if (datesFilter !== '') {
+    newData.calendar = applyDatesFilter(
+      datesFilter,
+      defaultData
+    );
+  }
   return newData;
 };

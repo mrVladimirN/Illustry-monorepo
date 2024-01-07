@@ -1,3 +1,4 @@
+import { TimelineData } from 'index';
 import {
   AxisChartData,
   CalendarType,
@@ -34,4 +35,5 @@ export type AllVisualizationsShell =
   | {
       points: (string | number)[][];
       categories: string[];
-    };
+    }
+  | TimelineData;

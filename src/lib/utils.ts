@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatDate(date: Date | string) {
-  return `${new Date(date).getUTCFullYear()}/${new Date(date).getUTCMonth()}/${new Date(date).getUTCDate()}`;
+  return `${new Date(date).getUTCFullYear()}/${new Date(date).getUTCMonth() + 1}/${new Date(date).getUTCDate()}`;
 }
 
 export function catchError(err: unknown) {
@@ -22,23 +22,4 @@ export function catchError(err: unknown) {
 }
 export function cloneDeep<T>(source: T): T {
   return JSON.parse(JSON.stringify(source));
-}
-export function isValidHexaCode(str:string) {
-  // Regex to check valid
-  // hexadecimalColor_code
-  const regex = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
-
-  // if str
-  // is empty return false
-  if (str == null) {
-    return 'false';
-  }
-
-  // Return true if the str
-  // matched the ReGex
-  if (regex.test(str) === true) {
-    return 'true';
-  }
-
-  return 'false';
 }

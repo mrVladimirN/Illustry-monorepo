@@ -22,7 +22,7 @@ import ForcedLayoutGraphShellView from './forced-layout-graph/forced-layout-grap
 import CalendarGraphShellView from './calendar/calendar-shell';
 import FunnelShellView from './funnel/funnel-shell';
 import AxisChartsShellView from './axis/axis-shell';
-import TimelineShellView from './timeline-shell';
+import TimelineShellView from './timeline/timeline-shell';
 import MatrixShellView from './matrix/matrix-shell';
 import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/hierarchical-edge-bundling-shell';
 
@@ -185,6 +185,7 @@ function HubShell({ data }: HubShellProps) {
                 data={data.data as TimelineData}
                 legend={true}
                 options={true}
+                filter={true}
               />
             </Suspense>
           );

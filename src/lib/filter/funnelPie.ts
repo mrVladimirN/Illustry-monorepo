@@ -52,9 +52,11 @@ export const applyFunnelPieFilter = (expressions:string[], defaultData: FunnelDa
       }
     }
   });
-  newData.values = applyValuesFilter(
-    valuesFilter,
-    defaultData
-  );
+  if (valuesFilter !== '') {
+    newData.values = applyValuesFilter(
+      valuesFilter,
+      defaultData
+    );
+  }
   return newData;
 };

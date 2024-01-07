@@ -50,9 +50,11 @@ export const applyWordCloudFilter = (expressions:string[], defaultData:WordType[
       }
     }
   });
-  newData = applyValuesFilter(
-    valuesFilter,
-    defaultData
-  );
+  if (valuesFilter !== '') {
+    newData = applyValuesFilter(
+      valuesFilter,
+      defaultData
+    );
+  }
   return newData;
 };

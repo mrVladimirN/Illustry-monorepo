@@ -110,15 +110,19 @@ export const applyAxisFilter = (expressions:string[], defaultData: AxisChartData
     }
   });
   const initialHeaders = defaultData.headers.slice();
-  newData.headers = applyHeadersFilter(headersFilter, defaultData);
+  if (headersFilter !== '') {
+    newData.headers = applyHeadersFilter(headersFilter, defaultData);
+  }
   const validValuesPosition = getMatchingIndices(
     initialHeaders,
     newData.headers
   );
-  newData.values = applyValuesFilter(
-    valuesFilter,
-    validValuesPosition,
-    defaultData
-  );
+  if (valuesFilter !== '') {
+    newData.values = applyValuesFilter(
+      valuesFilter,
+      validValuesPosition,
+      defaultData
+    );
+  }
   return newData;
 };

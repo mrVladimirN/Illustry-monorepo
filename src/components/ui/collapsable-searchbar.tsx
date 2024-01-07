@@ -17,6 +17,7 @@ import { nodeLinksWords } from '@/lib/filter/nodeLink';
 import { funnelPieWords } from '@/lib/filter/funnelPie';
 import { wordCloudWords } from '@/lib/filter/wordcloud';
 import { scatterWords } from '@/lib/filter/scatter';
+import { timelineWords } from '@/lib/filter/timeline';
 import { Button } from './button';
 
 interface CollapsableSearchBarProps<T> {
@@ -45,67 +46,42 @@ const CollapsableSearchBar = <
 
   const handleSearch = (e: FormEvent) => {
     e.preventDefault();
+    let words: string[] = [];
     switch (type) {
       case visualizationTypesEnum.LINE_CHART:
       case visualizationTypesEnum.BAR_CHART:
-        try {
-          setFilteredData(parseFilter(searchValue, data, axisWords, type) as T);
-        } catch (error) {
-          catchError(error);
-        }
+        words = axisWords;
         break;
       case visualizationTypesEnum.CALENDAR:
-        try {
-          setFilteredData(
-            parseFilter(searchValue, data, calendarWords, type) as T
-          );
-        } catch (error) {
-          catchError(error);
-        }
+        words = calendarWords;
         break;
       case visualizationTypesEnum.FORCE_DIRECTED_GRAPH:
       case visualizationTypesEnum.MATRIX:
       case visualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
       case visualizationTypesEnum.SANKEY:
-        try {
-          setFilteredData(
-            parseFilter(searchValue, data, nodeLinksWords, type) as T
-          );
-        } catch (error) {
-          catchError(error);
-        }
+        words = nodeLinksWords;
         break;
       case visualizationTypesEnum.FUNNEL:
       case visualizationTypesEnum.PIE_CHART:
-        try {
-          setFilteredData(
-            parseFilter(searchValue, data, funnelPieWords, type) as T
-          );
-        } catch (error) {
-          catchError(error);
-        }
+        words = funnelPieWords;
         break;
       case visualizationTypesEnum.WORD_CLOUD:
-        try {
-          setFilteredData(
-              parseFilter(searchValue, data, wordCloudWords, type) as T
-          );
-        } catch (error) {
-          catchError(error);
-        }
+        words = wordCloudWords;
         break;
       case visualizationTypesEnum.SCATTER:
-        try {
-          setFilteredData(
-              parseFilter(searchValue, data, scatterWords, type) as T
-          );
-        } catch (error) {
-          catchError(error);
-        }
+        words = scatterWords;
+        break;
+      case visualizationTypesEnum.TIMELINE:
+        words = timelineWords;
         break;
       default:
-        setFilteredData(data);
+        words = [];
         break;
+    }
+    try {
+      setFilteredData(parseFilter(searchValue, data, words, type) as T);
+    } catch (error) {
+      catchError(error);
     }
   };
 
