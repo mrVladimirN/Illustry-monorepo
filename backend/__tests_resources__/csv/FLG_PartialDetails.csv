@@ -1,0 +1,4 @@
+Node1,1,prop1,FLG_FullDetails,FLG_FullDetails description,full,Node1,Node2,1
+Node2,2,prop2,,,full,Node2,Node3,1
+Node3,3,prop3,,,,Node3,Node2,1
+,,,,,,,,

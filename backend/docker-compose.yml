@@ -1,0 +1,49 @@
+version: '3.9'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongo
+    restart: unless-stopped
+    volumes:
+      - illustry_mongo:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: rootPass
+      MONGO_INITDB_DATABASE: illustry
+    ports:
+      - "27017:27017"
+    networks:
+      - illustry-network
+
+  illustrybackend:
+    image: illustrybackend
+    container_name: illustrybackend
+    restart: unless-stopped
+    environment:
+      MONGO_URL: mongodb://mongo:27017/illustry
+      MONGO_USER: root
+      MONGO_PASSWORD: rootPass
+    ports:
+      - "7000:7000"
+    networks:
+      - illustry-network
+
+  illustryfrontend:
+    image: illustryfrontend
+    container_name: illustryfrontend
+    restart: unless-stopped
+    environment:
+      NEXT_PUBLIC_BACKEND_PUBLIC_URL: http://illustrybackend:7000
+    ports:
+      - "3000:3000"
+    networks:
+      - illustry-network
+
+networks:
+  illustry-network:
+    driver: bridge
+
+volumes:
+  illustry_mongo:

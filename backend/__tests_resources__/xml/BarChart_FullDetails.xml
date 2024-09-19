@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+  <name>BarChart_FullDetails</name>
+  <description>BarChart_FullDetails description</description>
+  <tags>full</tags>
+  <type>bar-chart</type>
+  <data>
+    <headers>Mon</headers>
+    <headers>Tue</headers>
+    <headers>Wed</headers>
+    <headers>Thu</headers>
+    <headers>Fri</headers>
+    <headers>Sat</headers>
+    <headers>Sun</headers>
+    <values>
+      <Statistic_1>120</Statistic_1>
+      <Statistic_1>132</Statistic_1>
+      <Statistic_1>101</Statistic_1>
+      <Statistic_1>134</Statistic_1>
+      <Statistic_1>90</Statistic_1>
+      <Statistic_1>230</Statistic_1>
+      <Statistic_1>210</Statistic_1>
+      <Statistic_2>220</Statistic_2>
+      <Statistic_2>182</Statistic_2>
+      <Statistic_2>191</Statistic_2>
+      <Statistic_2>234</Statistic_2>
+      <Statistic_2>290</Statistic_2>
+      <Statistic_2>330</Statistic_2>
+      <Statistic_2>310</Statistic_2>
+      <Statistic_3>150</Statistic_3>
+      <Statistic_3>232</Statistic_3>
+      <Statistic_3>201</Statistic_3>
+      <Statistic_3>154</Statistic_3>
+      <Statistic_3>190</Statistic_3>
+      <Statistic_3>330</Statistic_3>
+      <Statistic_3>410</Statistic_3>
+      <Statistic_4>320</Statistic_4>
+      <Statistic_4>332</Statistic_4>
+      <Statistic_4>301</Statistic_4>
+      <Statistic_4>334</Statistic_4>
+      <Statistic_4>390</Statistic_4>
+      <Statistic_4>330</Statistic_4>
+      <Statistic_4>320</Statistic_4>
+    </values>
+  </data>
+</root>

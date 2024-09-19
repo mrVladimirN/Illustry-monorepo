@@ -1,0 +1,98 @@
+{
+  "name": "Matrix_FullDetails",
+  "description": "Matrix_FullDetails description",
+  "tags": ["full"],
+  "type": ["matrix"],
+  "data": {
+    "nodes": [
+      {
+        "category": "1",
+        "name": "Node1",
+        "labels": [
+          {
+            "name": "Label1",
+            "value": 1,
+            "properties": {
+              "style": {
+                "font-weight": "bold",
+                "background-color": "#541690",
+                "background-color1": "541690"
+              }
+            }
+          },
+          {
+            "name": "Label2",
+            "value": 0,
+            "properties": [
+              {
+                "style": {
+                  "font-weight": "bold",
+                  "background-color": "#541690",
+                  "background-color1": "541690"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "category": "2",
+        "name": "Node2",
+        "labels": [
+          {
+            "name": "Label3",
+            "value": 1,
+            "properties": {
+              "style": {
+                "font-weight": "bold",
+                "background-color": "#541690",
+                "background-color1": "541690"
+              }
+            }
+          },
+          {
+            "name": "Label4",
+            "value": 0,
+            "properties": [
+              {
+                "style": {
+                  "font-weight": "bold",
+                  "background-color": "#541690",
+                  "background-color1": "541690"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "links": [
+      {
+        "source": "Node1",
+        "target": "Node2",
+        "value": 1,
+        "properties": {
+          "style": {
+            "font-weight": "bold",
+            "background-color": "#541690",
+            "background-color1": "541690"
+          },
+          "a": "b"
+        }
+      },
+      {
+        "source": "Node2",
+        "target": "Node1",
+        "value": 1,
+        "properties": {
+          "style": {
+            "font-weight": "bold",
+            "background-color": "#541690",
+            "background-color1": "541690"
+          },
+          "a": "b"
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+  <name>Scatter_FullDetails</name>
+  <description>Scatter_FullDetails description</description>
+  <tags>full</tags>
+  <type>scatter</type>
+  <data>
+    <points>
+      <value>3.275154</value>
+      <value>2.957587</value>
+      <category>3</category>
+    </points>
+    <points>
+      <value>-3.344465</value>
+      <value>2.603513</value>
+      <category>2</category>
+    </points>
+    <points>
+      <value>0.355083</value>
+      <value>-3.376585</value>
+      <category>2</category>
+    </points>
+    <points>
+      <value>1.852435</value>
+      <value>3.547351</value>
+      <category>1</category>
+    </points>
+    <points>
+      <value>-2.078973</value>
+      <value>2.552013</value>
+      <category>1</category>
+    </points>
+  </data>
+</root>
