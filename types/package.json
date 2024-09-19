@@ -1,0 +1,22 @@
+{
+  "name": "@illustry/types",
+  "version": "0.0.25",
+  "description": "A module for Illustry Types",
+  "types": "illustry.d.ts",
+  "files": [
+    "illustry.d.ts"
+  ],
+  "scripts": {
+    "generate:types": "tsc index.ts --declaration --emitDeclarationOnly --outfile illustryRaw.d.ts && sed -e \"s/export enum/export const enum/g\" illustryRaw.d.ts > illustry.d.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mrVladimirN/IllustryTypes"
+  },
+  "author": "Vladimir Nitu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mrVladimirN/IllustryTypes"
+  },
+  "homepage": "https://github.com/mrVladimirN/IllustryTypes#readme"
+}
