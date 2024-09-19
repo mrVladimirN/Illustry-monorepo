@@ -1,0 +1,101 @@
+---
+title: Visualizations
+description: Visualizations doc
+---
+
+# Visualizations in Your Workspace
+
+When working with visualizations, the system supports a flexible data structure through the `VisualizationData` interface:
+
+## Visualization Data Structure
+
+To represent a visualization in your system, you can use the following `VisualizationData` interface:
+
+```typescript
+interface VisualizationData {
+  projectName: string;
+  type: VisualizationTypesEnum | VisualizationTypesEnum[];
+  description?: string;
+  name: string;
+  tags?: string[];
+  data:
+    | WordCloudData
+    | NodeLinkData
+    | CalendarData
+    | AxisChartData
+    | ScatterData
+    | PieChartData
+    | HierarchyData
+    | FunnelData 
+    | TimelineData;
+  createdAt?: Date;
+  updatedAt?: Date;
+}
+```
+
+### Key Attributes
+- **projectName**: The active project.
+- **type:** A string or a string array that provides the type of visualization(array works only for JSON's).
+- **name:** A unique identifier for the visualization.
+- **description:** An optional field to provide additional context or details about the visualization.
+- **createdAt:** The timestamp indicating when the visualization was initially created.
+- **updatedAt:** The timestamp indicating the last modification of the visualization.
+- **isActive:** A boolean flag specifying whether the project is currently active.
+- **tags:** An optional field used to categorize the visualizations.
+- **data:** The data that the visualization will present
+
+## Visualization Types
+
+The system supports the following visualization types:
+
+- [**WORD_CLOUD**](/IllustryDocs/guides/word-cloud/)
+- [**FORCE_DIRECTED_GRAPH**](/IllustryDocs/guides/forced-layout-graph/)
+- [**SANKEY**](/IllustryDocs/guides/sankey/)
+- [**CALENDAR**](/IllustryDocs/guides/calendar/)
+- [**HIERARCHICAL_EDGE_BUNDLING**](/IllustryDocs/guides/hierarchical-edge-bundling/)
+- [**MATRIX**](/IllustryDocs/guides/matrix/)
+- [**LINE_CHART**](/IllustryDocs/guides/line-chart/)
+- [**BAR_CHART**](/IllustryDocs/guides/bar-chart/)
+- [**PIE_CHART**](/IllustryDocs/guides/pie-chart/)
+- [**SCATTER**](/IllustryDocs/guides/scatter/)
+- [**TREEMAP**](/IllustryDocs/guides/tree-map/)
+- [**SUNBURST**](/IllustryDocs/guides/sun-burst/)
+- [**FUNNEL**](/IllustryDocs/guides/funnel/)
+- [**TIMELINE**](/IllustryDocs/guides/timeline/)
+
+## Practical example
+
+When utilizing file formats like Excel, XML, JSON, and CSV, the system ensures compatibility with both complete and partial details in the file.
+All visualizations formats files can be downloaded from [here](/IllustryDocs/illustry_file_formats.zip)
+
+- **Example 1**: JSON format with all the details
+
+![Visualizations JSON full details](/IllustryDocs/visualizations_json_full.gif)
+
+- **Example 2**: JSON format with partial details, complete the form with the missing details
+
+![Visualizations JSON partial details](/IllustryDocs/visualizations_json_partial.gif)
+
+- **Example 3**: Excel format with all the details, complete the mapping of fields
+
+![Visualizations Excel full details](/IllustryDocs/visualizations_excel_full.gif)
+
+- **Example 4**: Excel format with partial details, complete the form with the missing details
+
+![Visualizations Excel partial details](/IllustryDocs/visualizations_excel_partial.gif)
+
+- **Example 5**: CSV format with all the details, complete the mapping of fields
+
+![Visualizations CSV full details](/IllustryDocs/visualizations_csv_full.gif)
+
+- **Example 6**: CSV format with partial details, complete the form with the missing details
+
+![Visualizations CSV partial details](/IllustryDocs/visualizations_csv_partial.gif)
+
+- **Example 7**: XML format with all the details
+
+![Visualizations XML full details](/IllustryDocs/visualizations_xml_full.gif)
+
+- **Example 8**: XML format with partial details, complete the form with the missing details
+
+![Visualizations XML partial details](/IllustryDocs/visualizations_xml_partial.gif)
