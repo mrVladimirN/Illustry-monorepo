@@ -1,3 +1,5 @@
+import { Request } from 'express';
+
 type FileProperties = {
   filePath: string;
   type: string;
@@ -18,9 +20,6 @@ type UploadedFile = {
 };
 
 interface RequestWithFiles extends Request {
-  files?: {
-    file: UploadedFile[];
-  };
+  files?: Express.Multer.File[];
 }
-
 export { FileProperties, FileDetails, UploadedFile, RequestWithFiles }

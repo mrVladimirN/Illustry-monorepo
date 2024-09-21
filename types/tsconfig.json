@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "./dist",
+    "strict": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "target": "ESNext",
+    "module": "CommonJS",
+    "esModuleInterop": true
+  },
+  "include": ["index.ts", "./files.ts", "./project.ts", "./visualizations.ts", "./utils.ts", "./generic.ts"]
+}
