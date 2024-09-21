@@ -1,181 +1,176 @@
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable max-len */
-
 import { NextFunction, Request, Response } from 'express';
-import * as Bluebird from 'bluebird';
-import _ from 'lodash';
 import { generateErrorMessage } from 'zod-error';
-import { FileProperties } from 'types/files';
-import { VisualizationType, VisualizationFilter } from 'types/visualizations';
+import { FileTypes, VisualizationTypes } from '@illustry/types';
 import { returnResponse } from '../../utils/helper';
 import FileError from '../../errors/fileError';
 import Factory from '../../factory';
 import prettifyZodError from '../../validators/prettifyError';
 import { visualizationFilterSchema } from '../../validators/allValidators';
 
-export const createOrUpdate = (
+type RequestWithFiles = Request & {
+  files: { file: FileTypes.UploadedFile[] }
+}
+const createOrUpdate = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
-  const files = _.get(request, 'files.file');
-  if (_.isNil(files)) {
-    return returnResponse(
-      response,
-      new FileError('No files uploaded'),
-      null,
-      next
-    );
-  }
-  const computedFiles: FileProperties[] = _.map(files, (f) => ({
-    filePath: _.get(f, 'path') as unknown as string,
-    type: _.get(f, 'mimetype') as unknown as string
-  }));
+  try {
+    let requestFiles: FileTypes.UploadedFile[] = [];
+    if (request && (request as RequestWithFiles).files) {
+      let { files: { file } } = request as RequestWithFiles;
+      requestFiles = file;
+    }
+    if (!requestFiles) {
+      return returnResponse(
+        response,
+        new FileError('No files uploaded'),
+        null,
+        next
+      );
+    }
 
-  const fileDetails = request.body && request.body.fileDetails
-    ? JSON.parse(request.body.fileDetails)
-    : undefined;
-  const visualizationDetails = request.body && request.body.visualizationDetails
-    ? JSON.parse(request.body.visualizationDetails)
-    : undefined;
-  const allFileDetails = request.body.fullDetails === 'true';
-  return Bluebird.Promise.resolve(
-    Factory.getInstance()
+    const computedFiles: FileTypes.FileProperties[] = requestFiles.map((f) => ({
+      filePath: f.path,
+      type: f.mimeType
+    }));
+
+    const { fileDetails: reqFDet, visualizationDetails: reqVisDet, fullDetails } = request.body;
+
+    let fileDetails;
+    let visualizationDetails;
+
+    if (reqFDet) {
+      fileDetails = JSON.parse(reqFDet);
+    }
+
+    if (reqVisDet) {
+      visualizationDetails = JSON.parse(reqVisDet);
+    }
+
+    const allFileDetails = fullDetails === 'true';
+
+    const data = await Factory.getInstance()
       .getBZL()
       .VisualizationBZL.createOrUpdateFromFiles(
         computedFiles,
         allFileDetails,
         visualizationDetails,
         fileDetails
-      )
-  )
-    .asCallback((errGPC: Error, data: VisualizationType) => returnResponse(response, errGPC, data, next))
-    .catch((err: Error) => returnResponse(response, err, null, next));
+      );
+
+    return returnResponse(response, null, data, next);
+  } catch (err) {
+    return returnResponse(response, (err as Error), null, next);
+  }
 };
 
-// export const update = (
-//   request: Request,
-//   response: Response,
-//   next: Function
-// ) => {
-//   const VisualizationUpdate: VisualizationCreate = {
-//     name: request && request.body && request.body.name,
-//     description: request && request.body && request.body.description,
-//     tags: request && request.body && request.body.tags,
-//     projectName: request && request.body && request.body.projectName,
-//     type: request && request.body && request.body.type,
-//     data: undefined,
-//   };
-
-//   return Bluebird.Promise.resolve(
-//     VisualizationPartialTypeSchema.safeParse(VisualizationUpdate)
-//   )
-//     .then((result) => {
-//       if (!result.success) {
-//         const errorMessage = generateErrorMessage(
-//           result.error.issues,
-//           prettifyZodError()
-//         );
-//         throw new Error(errorMessage);
-//       } else {
-//         return Factory.getInstance()
-//           .getBZL()
-//           .VisualizationBZL.createOrUpdate(VisualizationUpdate);
-//       }
-//     })
-//     .asCallback((errGPC: Error, data: ProjectType) => {
-//       return returnResponse(response, errGPC, data, next);
-//     })
-//     .catch((err: Error) => {
-//       return returnResponse(response, err, null, next);
-//     });
-// };
-export const findOne = (
+const findOne = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
-  const visualizationFilter: VisualizationFilter = {
-    name: request && request.params && request.params.name,
-    type: request && request.body && request.body.type
-  };
-  return Bluebird.Promise.resolve(
-    visualizationFilterSchema.safeParse(visualizationFilter)
-  )
-    .then((result) => {
-      if (!result.success) {
-        const errorMessage = generateErrorMessage(
-          result.error.issues,
-          prettifyZodError()
-        );
-        throw new Error(errorMessage);
-      } else {
-        return Factory.getInstance()
-          .getBZL()
-          .VisualizationBZL.findOne(visualizationFilter);
-      }
-    })
-    .asCallback((errGPC: Error, data: VisualizationType) => returnResponse(response, errGPC, data, next))
-    .catch((err: Error) => returnResponse(response, err, null, next));
+  try {
+    const { params: { name }, body: { type } } = request;
+
+    const visualizationFilter: VisualizationTypes.VisualizationFilter = {
+      name,
+      type
+    };
+
+    const result = visualizationFilterSchema.safeParse(visualizationFilter);
+
+    if (!result.success) {
+      const errorMessage = generateErrorMessage(
+        result.error.issues,
+        prettifyZodError()
+      );
+      throw new Error(errorMessage);
+    }
+
+    const data = await Factory.getInstance()
+      .getBZL()
+      .VisualizationBZL.findOne(visualizationFilter);
+
+    return returnResponse(response, null, data, next);
+  } catch (err) {
+    return returnResponse(response, (err as Error), null, next);
+  }
 };
 
-export const browse = (
+const browse = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
-  const visualizationFilter: VisualizationFilter = {
-    text: request && request.body && request.body.text,
-    page: request && request.body && request.body.page,
-    sort: request && request.body && request.body.sort,
-    per_page: request && request.body && request.body.per_page
-  };
-  return Bluebird.Promise.resolve(
-    visualizationFilterSchema.safeParse(visualizationFilter)
-  )
-    .then((result) => {
-      if (!result.success) {
-        const errorMessage = generateErrorMessage(
-          result.error.issues,
-          prettifyZodError()
-        );
-        throw new Error(errorMessage);
-      } else {
-        return Factory.getInstance()
-          .getBZL()
-          .VisualizationBZL.browse(visualizationFilter);
+  try {
+    const {
+      body: {
+        text, page, sort, per_page: perPage
       }
-    })
-    .asCallback((errGPC: Error, data: VisualizationType) => returnResponse(response, errGPC, data, next))
-    .catch((err: Error) => returnResponse(response, err, null, next));
+    } = request;
+
+    const visualizationFilter: VisualizationTypes.VisualizationFilter = {
+      text,
+      page,
+      sort,
+      per_page: perPage
+    };
+
+    const result = visualizationFilterSchema.safeParse(visualizationFilter);
+
+    if (!result.success) {
+      const errorMessage = generateErrorMessage(
+        result.error.issues,
+        prettifyZodError()
+      );
+      throw new Error(errorMessage);
+    }
+
+    const data = await Factory.getInstance()
+      .getBZL()
+      .VisualizationBZL.browse(visualizationFilter);
+
+    return returnResponse(response, null, data, next);
+  } catch (err) {
+    return returnResponse(response, (err as Error), null, next);
+  }
 };
 
-export const _delete = (
+const _delete = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
-  const visualizationFilter: VisualizationFilter = {
-    name: request && request.body && request.body.name,
-    type: request && request.body && request.body.type,
-    projectName: request && request.body && request.body.projectName
-  };
-  return Bluebird.Promise.resolve(
-    visualizationFilterSchema.safeParse(visualizationFilter)
-  )
-    .then((result) => {
-      if (!result.success) {
-        const errorMessage = generateErrorMessage(
-          result.error.issues,
-          prettifyZodError()
-        );
-        throw new Error(errorMessage);
-      } else {
-        return Factory.getInstance()
-          .getBZL()
-          .VisualizationBZL.delete(visualizationFilter);
-      }
-    })
-    .asCallback((errGPC: Error, data: VisualizationType) => returnResponse(response, errGPC, data, next))
-    .catch((err: Error) => returnResponse(response, err, null, next));
+  try {
+    const { body: { name, type, projectName } } = request;
+
+    const visualizationFilter: VisualizationTypes.VisualizationFilter = {
+      name,
+      type,
+      projectName
+    };
+
+    const result = visualizationFilterSchema.safeParse(visualizationFilter);
+
+    if (!result.success) {
+      const errorMessage = generateErrorMessage(
+        result.error.issues,
+        prettifyZodError()
+      );
+      throw new Error(errorMessage);
+    }
+
+    const data = await Factory.getInstance()
+      .getBZL()
+      .VisualizationBZL.delete(visualizationFilter);
+
+    return returnResponse(response, null, data, next);
+  } catch (err) {
+    return returnResponse(response, (err as Error), null, next);
+  }
+};
+
+export {
+  createOrUpdate, findOne, browse, _delete
 };

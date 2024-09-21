@@ -1,16 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
-import * as Bluebird from 'bluebird';
-
 import { generateErrorMessage } from 'zod-error';
-import _ from 'lodash';
-import {
-  ProjectCreate,
-  ProjectFilter,
-  ProjectType,
-  ProjectUpdate
-} from 'types/project';
-
-import { VisualizationCreate } from 'types/visualizations';
+import { ProjectTypes, VisualizationTypes } from '@illustry/types';
 import prettifyZodError from '../../validators/prettifyError';
 import Factory from '../../factory';
 import { returnResponse } from '../../utils/helper';
@@ -21,179 +11,237 @@ import {
   visualizationTypeSchema
 } from '../../validators/allValidators';
 
-export const create = (
+const create = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
-  const project: ProjectCreate = {
-    name: request && request.body && request.body.projectName,
-    description: request && request.body && request.body.projectDescription,
-    isActive: request && request.body && request.body.isActive
-  };
-  const visualization: VisualizationCreate = {
-    name: request && request.body && request.body.name,
-    projectName: request && request.body && request.body.projectName,
-    type: request && request.body && request.body.type,
-    description: request && request.body && request.body.description,
-    tags: request && request.body && request.body.tags,
-    data: request && request.body && request.body.data
-  };
+  try {
+    const {
+      projectName,
+      projectDescription,
+      isActive,
+      name,
+      type,
+      description,
+      tags,
+      data
+    } = request.body;
 
-  return Bluebird.Promise.resolve(projectCreateSchema.safeParse(project))
-    .then((result) => {
-      if (!result.success) {
+    const project: ProjectTypes.ProjectCreate = {
+      name: projectName,
+      description: projectDescription,
+      isActive
+    };
+
+    const visualization: VisualizationTypes.VisualizationCreate = {
+      name,
+      projectName,
+      type,
+      description,
+      tags,
+      data
+    };
+
+    const projectValidationResult = projectCreateSchema.safeParse(project);
+    if (!projectValidationResult.success) {
+      const errorMessage = generateErrorMessage(
+        projectValidationResult.error.issues,
+        prettifyZodError()
+      );
+      throw new Error(errorMessage);
+    }
+
+    if (
+      visualization.name
+      && visualization.type
+      && visualization.projectName
+    ) {
+      const visualizationValidationResult = visualizationTypeSchema.safeParse(visualization);
+      if (!visualizationValidationResult.success) {
         const errorMessage = generateErrorMessage(
-          result.error.issues,
+          visualizationValidationResult.error.issues,
           prettifyZodError()
         );
         throw new Error(errorMessage);
-      } else {
-        if (
-          !_.isNil(visualization)
-          && !_.isNil(visualization.name)
-          && !_.isNil(visualization.type)
-          && !_.isNil(visualization.projectName)
-        ) {
-          return Bluebird.Promise.resolve(
-            visualizationTypeSchema.safeParse(visualization)
-          ).then((res) => {
-            if (!res.success) {
-              const errorMessage = generateErrorMessage(
-                res.error.issues,
-                prettifyZodError()
-              );
-              throw new Error(errorMessage);
-            } else {
-              return Factory.getInstance()
-                .getBZL()
-                .ProjectBZL.create(project)
-                .then(() => Factory.getInstance()
-                  .getBZL()
-                  .VisualizationBZL.createOrUpdate(visualization));
-            }
-          });
-        }
-        return Bluebird.Promise.resolve(Factory.getInstance().getBZL().ProjectBZL.create(project));
       }
-    })
-    .asCallback((errGPC: Error, data: ProjectType) => returnResponse(response, errGPC, data, next))
-    .catch((err: Error) => returnResponse(response, err, null, next));
+    }
+
+    await Factory.getInstance().getBZL().ProjectBZL.create(project);
+
+    if (visualization && visualization.name && visualization.type && visualization.projectName) {
+      await Factory.getInstance().getBZL().VisualizationBZL.createOrUpdate(visualization);
+    }
+
+    returnResponse(response, null, project, next);
+  } catch (err) {
+    returnResponse(response, (err as Error), null, next);
+  }
 };
-export const update = (
+
+const update = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
-  const project: ProjectUpdate = {
-    description: request && request.body && request.body.description,
-    isActive: request && request.body && request.body.isActive
-  };
-  const projectFilter: ProjectFilter = {
-    name: request && request.body && request.body.name
-  };
-  return Bluebird.Promise.resolve(projectUpdateSchema.safeParse(project))
-    .then((result) => {
-      if (!result.success) {
-        const errorMessage = generateErrorMessage(
-          result.error.issues,
-          prettifyZodError()
-        );
-        throw new Error(errorMessage);
-      } else {
-        return Bluebird.Promise.resolve(
-          projectFilterSchema.safeParse(projectFilter)
-        ).then((res) => {
-          if (!res.success) {
-            const errorMessage = generateErrorMessage(
-              res.error.issues,
-              prettifyZodError()
-            );
-            throw new Error(errorMessage);
-          } else {
-            return Factory.getInstance()
-              .getBZL()
-              .ProjectBZL.update(projectFilter, project);
-          }
-        });
-      }
-    })
-    .asCallback((errGPC: Error, data: ProjectType) => returnResponse(response, errGPC, data, next))
-    .catch((err: Error) => returnResponse(response, err, null, next));
+  try {
+    const {
+      name,
+      description,
+      isActive
+    } = request.body;
+
+    const projectFilter: ProjectTypes.ProjectFilter = {
+      name
+    };
+
+    const project: ProjectTypes.ProjectUpdate = {
+      description,
+      isActive
+    };
+
+    const projectValidationResult = projectUpdateSchema.safeParse(project);
+    if (!projectValidationResult.success) {
+      const errorMessage = generateErrorMessage(
+        projectValidationResult.error.issues,
+        prettifyZodError()
+      );
+      throw new Error(errorMessage);
+    }
+
+    const projectFilterValidationResult = projectFilterSchema.safeParse(projectFilter);
+    if (!projectFilterValidationResult.success) {
+      const errorMessage = generateErrorMessage(
+        projectFilterValidationResult.error.issues,
+        prettifyZodError()
+      );
+      throw new Error(errorMessage);
+    }
+
+    const data = await Factory.getInstance()
+      .getBZL()
+      .ProjectBZL
+      .update(projectFilter, project);
+
+    returnResponse(response, null, data, next);
+  } catch (err) {
+    returnResponse(response, (err as Error), null, next);
+  }
 };
-export const findOne = (
+
+const findOne = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
-  const projectFilter: ProjectFilter = {
-    name: request && request.body && request.body.name
-  };
-  return Bluebird.Promise.resolve(projectFilterSchema.safeParse(projectFilter))
-    .then((result) => {
-      if (!result.success) {
-        const errorMessage = generateErrorMessage(
-          result.error.issues,
-          prettifyZodError()
-        );
-        throw new Error(errorMessage);
-      } else {
-        return Factory.getInstance()
-          .getBZL()
-          .ProjectBZL.findByName(projectFilter);
-      }
-    })
-    .asCallback((errGPC: Error, data: ProjectType) => returnResponse(response, errGPC, data, next))
-    .catch((err: Error) => returnResponse(response, err, null, next));
+  try {
+    const {
+      name
+    } = request.body;
+
+    const projectFilter: ProjectTypes.ProjectFilter = {
+      name
+    };
+
+    const result = projectFilterSchema.safeParse(projectFilter);
+
+    if (!result.success) {
+      const errorMessage = generateErrorMessage(
+        result.error.issues,
+        prettifyZodError()
+      );
+      throw new Error(errorMessage);
+    }
+
+    const data = await Factory.getInstance()
+      .getBZL()
+      .ProjectBZL
+      .findOne(projectFilter);
+
+    returnResponse(response, null, data, next);
+  } catch (err) {
+    returnResponse(response, (err as Error), null, next);
+  }
 };
-// eslint-disable-next-line no-underscore-dangle
-export const _delete = (
+
+const _delete = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
-  const projectFilter: ProjectFilter = {
-    name: request && request.body && request.body.name
-  };
-  return Bluebird.Promise.resolve(projectFilterSchema.safeParse(projectFilter))
-    .then((result) => {
-      if (!result.success) {
-        const errorMessage = generateErrorMessage(
-          result.error.issues,
-          prettifyZodError()
-        );
-        throw new Error(errorMessage);
-      } else {
-        return Factory.getInstance().getBZL().ProjectBZL.delete(projectFilter);
-      }
-    })
-    .asCallback((errGPC: Error, data: ProjectType) => returnResponse(response, errGPC, data, next))
-    .catch((err: Error) => returnResponse(response, err, null, next));
+  try {
+    const {
+      name
+    } = request.body;
+
+    const projectFilter: ProjectTypes.ProjectFilter = {
+      name
+    };
+
+    const result = projectFilterSchema.safeParse(projectFilter);
+
+    if (!result.success) {
+      const errorMessage = generateErrorMessage(
+        result.error.issues,
+        prettifyZodError()
+      );
+      throw new Error(errorMessage);
+    }
+
+    const data = await Factory.getInstance()
+      .getBZL()
+      .ProjectBZL
+      .delete(projectFilter);
+
+    returnResponse(response, null, data, next);
+  } catch (err) {
+    returnResponse(response, (err as Error), null, next);
+  }
 };
-export const browse = (
+
+const browse = async (
   request: Request,
   response: Response,
   next: NextFunction
 ) => {
-  const projectFilter: ProjectFilter = {
-    name: request && request.body && request.body.name,
-    text: request && request.body && request.body.text,
-    page: request && request.body && request.body.page,
-    sort: request && request.body && request.body.sort,
-    per_page: request && request.body && request.body.per_page
-  };
-  return Bluebird.Promise.resolve(projectFilterSchema.safeParse(projectFilter))
-    .then((result) => {
-      if (!result.success) {
-        const errorMessage = generateErrorMessage(
-          result.error.issues,
-          prettifyZodError()
-        );
-        throw new Error(errorMessage);
-      } else {
-        return Factory.getInstance().getBZL().ProjectBZL.browse(projectFilter);
-      }
-    })
-    .asCallback((errGPC: Error, data: ProjectType) => returnResponse(response, errGPC, data, next))
-    .catch((err: Error) => returnResponse(response, err, null, next));
+  try {
+    const {
+      name,
+      text,
+      page,
+      sort,
+      per_page: perPage
+    } = request.body;
+
+    const projectFilter: ProjectTypes.ProjectFilter = {
+      name,
+      text,
+      page,
+      sort,
+      per_page: perPage
+    };
+
+    const result = projectFilterSchema.safeParse(projectFilter);
+
+    if (!result.success) {
+      const errorMessage = generateErrorMessage(
+        result.error.issues,
+        prettifyZodError()
+      );
+      throw new Error(errorMessage);
+    }
+
+    const data = await Factory.getInstance()
+      .getBZL()
+      .ProjectBZL
+      .browse(projectFilter);
+
+    returnResponse(response, null, data, next);
+  } catch (err) {
+    returnResponse(response, (err as Error), null, next);
+  }
+};
+
+export {
+  create, update, findOne, _delete, browse
 };
