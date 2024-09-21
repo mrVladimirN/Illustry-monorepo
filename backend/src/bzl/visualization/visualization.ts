@@ -1,16 +1,6 @@
-import Bluebird, { Promise } from 'bluebird';
-import _ from 'lodash';
-import {
-  ExtendedVisualizationType,
-  VisualizationCreate,
-  VisualizationFilter,
-  VisualizationType,
-  VisualizationTypesEnum,
-  VisualizationUpdate
-} from 'types/visualizations';
-import { FileDetails, FileProperties } from 'types/files';
-import { ExtendedProjectType, ProjectFilter } from 'types/project';
-import { ExtendedMongoQuery } from 'types/utils';
+
+import { VisualizationTypes, ProjectTypes, FileTypes, UtilTypes, GenericTypes } from '@illustry/types'
+
 import { generateErrorMessage } from 'zod-error';
 import {
   excelFilesToVisualizations,
@@ -23,267 +13,280 @@ import Factory from '../../factory';
 import DbaccInstance from '../../dbacc/lib';
 import prettifyZodError from '../../validators/prettifyError';
 
-export default class VisualizationBZL {
+class VisualizationBZL implements GenericTypes.BaseBZL<
+  VisualizationTypes.VisualizationCreate,
+  VisualizationTypes.VisualizationUpdate,
+  VisualizationTypes.VisualizationFilter,
+  VisualizationTypes.VisualizationType,
+  VisualizationTypes.ExtendedVisualizationType> {
   private dbaccInstance: DbaccInstance;
 
   constructor(dbaccInstance: DbaccInstance) {
     this.dbaccInstance = dbaccInstance;
   }
 
-  createOrUpdate(
-    visualization: VisualizationCreate
-  ): Promise<VisualizationType> {
-    return Promise.resolve()
-      .then(() => {
-        if (typeof visualization.type === 'string') {
-          const visualizationFilter = this.dbaccInstance.Visualization.createFilter({
-            name: visualization.name,
-            type: visualization.type,
-            projectName: visualization.projectName
-          });
-          return this.dbaccInstance.Visualization.update(
-            visualizationFilter,
-            visualization
-          );
-        }
-        return Promise.each(visualization.type, (type) => {
-          const visualizationFilter = this.dbaccInstance.Visualization.createFilter({
-            name: visualization.name,
-            type,
-            projectName: visualization.projectName
-          });
-          const visualizationUpdate: VisualizationUpdate = _.cloneDeep(visualization);
-          _.set(visualizationUpdate, 'type', type);
-          return this.dbaccInstance.Visualization.update(
-            visualizationFilter,
-            visualizationUpdate
-          );
-        }).then(() => visualization);
-      })
-      .catch((err) => {
-        throw err;
-      });
+  create(data: VisualizationTypes.VisualizationCreate): Promise<VisualizationTypes.VisualizationType> {
+    throw new Error('Method not implemented.');
+  }
+  update(filter: VisualizationTypes.VisualizationFilter, data: UtilTypes.DeepPartial<VisualizationTypes.VisualizationType>): Promise<VisualizationTypes.VisualizationType | null> {
+    throw new Error('Method not implemented.');
   }
 
-  createOrUpdateFromFiles(
-    files: FileProperties[],
-    allFileDetails: boolean,
-    visualizationDetails: VisualizationUpdate,
-    fileDetails: FileDetails
-  ): Promise<VisualizationType[]> {
-    return Factory.getInstance()
-      .getBZL()
-      .ProjectBZL.browse({ isActive: true } as ProjectFilter)
-      .then((res: ExtendedProjectType) => {
-        if (res && res.projects && res.projects.length > 0) {
-          if (!fileDetails) {
-            throw new Error('No file details was provided');
-          }
-          switch (fileDetails.fileType) {
-            case 'EXCEL':
-              return this.excelFileProcessor(
-                files,
-                allFileDetails,
-                res.projects[0].name,
-                fileDetails,
-                visualizationDetails
-              );
-            case 'JSON':
-              return this.jsonFileProcessor(
-                files,
-                allFileDetails,
-                res.projects[0].name,
-                visualizationDetails
-              );
-            case 'CSV':
-              return this.csvFileProcessor(
-                files,
-                allFileDetails,
-                res.projects[0].name,
-                fileDetails,
-                visualizationDetails
-              );
-            case 'XML':
-              return this.xmlFileProcessor(
-                files,
-                allFileDetails,
-                res.projects[0].name,
-                visualizationDetails
-              );
-            default:
-              throw Error('No correct type was provided');
-          }
-        } else {
-          throw new Error('No Active Project');
-        }
-      })
-      .catch((err: unknown) => {
-        throw err;
-      });
-  }
+  async createOrUpdate(
+    visualization: VisualizationTypes.VisualizationCreate
+  ): Promise<VisualizationTypes.VisualizationType | null> {
+    const { name, type, projectName } = visualization;
 
-  findOne(filter: VisualizationFilter): Promise<VisualizationType> {
-    return Factory.getInstance()
-      .getBZL()
-      .ProjectBZL.browse({
-        isActive: true
-      } as ProjectFilter)
-      .then((res: ExtendedProjectType) => {
-        if (res && res.projects) {
-          const activeProjectName = res.projects[0].name;
-          _.set(filter, 'projectName', activeProjectName);
-          let newFilter: ExtendedMongoQuery = {};
-          if (!_.isNil(filter)) {
-            newFilter = this.dbaccInstance.Visualization.createFilter(filter);
-          }
-          return this.dbaccInstance.Visualization.findOne(newFilter);
-        }
-        throw new Error('No active project');
+    if (typeof type === 'string') {
+      const visualizationFilter = this.dbaccInstance.Visualization.createFilter({
+        name,
+        type,
+        projectName
       });
-  }
 
-  browse(filter: VisualizationFilter): Promise<ExtendedVisualizationType> {
-    return Factory.getInstance()
-      .getBZL()
-      .ProjectBZL.browse({
-        isActive: true
-      } as ProjectFilter)
-      .then((res:ExtendedProjectType) => {
-        if (res && res.projects) {
-          const activeProjectName = res.projects[0].name;
-          _.set(filter, 'projectName', activeProjectName);
-          let newFilter: ExtendedMongoQuery = {};
-          if (!_.isNil(filter)) {
-            newFilter = this.dbaccInstance.Visualization.createFilter(filter);
-          }
-          return this.dbaccInstance.Visualization.browse(newFilter);
-        }
-        throw new Error('No active project');
-      });
-  }
-
-  delete(filter: VisualizationFilter): Promise<boolean> {
-    let newFilter: ExtendedMongoQuery = {};
-    if (!_.isNil(filter)) {
-      newFilter = this.dbaccInstance.Visualization.createFilter(filter);
+      const returnedVisualization = await this.dbaccInstance.Visualization.update(
+        visualizationFilter,
+        visualization
+      );
+      return returnedVisualization;
     }
-    return Promise.resolve(
-      this.dbaccInstance.Visualization.deleteMany(newFilter)
-    ).then(() => true);
+    await Promise.all(
+      type.map(async (singleType) => {
+        const visualizationFilter = this.dbaccInstance.Visualization.createFilter({
+          name,
+          type: singleType,
+          projectName
+        });
+
+        const visualizationUpdate: VisualizationTypes.VisualizationUpdate = { ...visualization, type: singleType };
+
+        await this.dbaccInstance.Visualization.update(
+          visualizationFilter,
+          visualizationUpdate
+        );
+      })
+    );
+
+    return visualization as VisualizationTypes.VisualizationType;
   }
 
-  private visualizationDetailsProcessor(
-    illustrations: unknown[],
-    allFileDetails: boolean,
-    projectName: string,
-    visualizationDetails: VisualizationUpdate
-  ): Bluebird<VisualizationType[]> {
-    return Promise.map(illustrations, (ill) => {
-      _.set(ill as unknown as VisualizationCreate, 'projectName', projectName);
+  async createOrUpdateFromFiles(
+    files: FileTypes.FileProperties[],
+    includeAllFileDetails: boolean,
+    visualizationUpdate: VisualizationTypes.VisualizationUpdate,
+    fileDetails: FileTypes.FileDetails
+  ): Promise<(VisualizationTypes.VisualizationType | null)[]> {
+    const projectBZL = Factory.getInstance().getBZL().ProjectBZL;
 
-      if (!allFileDetails) {
-        _.forEach(Object.keys(visualizationDetails), (key) => {
-          _.set(
-            ill as unknown as VisualizationCreate,
-            key,
-            _.get(visualizationDetails, key)
-          );
+    const { projects } = await projectBZL.browse({ isActive: true } as ProjectTypes.ProjectFilter);
+
+    if (!projects || projects.length === 0) {
+      throw new Error('No Active Project');
+    }
+
+    if (!fileDetails) {
+      throw new Error('No file details were provided');
+    }
+
+    const projectName = projects[0].name;
+
+    switch (fileDetails.fileType) {
+      case 'EXCEL':
+        return this.processExcelFiles(
+          files,
+          includeAllFileDetails,
+          projectName,
+          fileDetails,
+          visualizationUpdate
+        );
+      case 'JSON':
+        return this.processJsonFiles(
+          files,
+          includeAllFileDetails,
+          projectName,
+          visualizationUpdate
+        );
+      case 'CSV':
+        return this.processCsvFiles(
+          files,
+          includeAllFileDetails,
+          projectName,
+          fileDetails,
+          visualizationUpdate
+        );
+      case 'XML':
+        return this.processXmlFiles(
+          files,
+          includeAllFileDetails,
+          projectName,
+          visualizationUpdate
+        );
+      default:
+        throw new Error('Invalid file type provided');
+    }
+  }
+
+  async findOne(filter: VisualizationTypes.VisualizationFilter): Promise<VisualizationTypes.VisualizationType> {
+    const projectBZL = Factory.getInstance().getBZL().ProjectBZL;
+
+    const { projects } = await projectBZL.browse({ isActive: true } as ProjectTypes.ProjectFilter);
+
+    if (!projects || projects.length === 0) {
+      throw new Error('No active project');
+    }
+
+    const activeProjectName = projects[0].name;
+    const updatedFilter = {
+      ...filter,
+      projectName: activeProjectName
+    };
+
+    const queryFilter: UtilTypes.ExtendedMongoQuery = this.dbaccInstance.Visualization.createFilter(updatedFilter);
+    return this.dbaccInstance.Visualization.findOne(queryFilter) as unknown as VisualizationTypes.VisualizationType;
+  }
+
+  async browse(filter: VisualizationTypes.VisualizationFilter): Promise<VisualizationTypes.ExtendedVisualizationType> {
+    const projectBZL = Factory.getInstance().getBZL().ProjectBZL;
+
+    const { projects } = await projectBZL.browse({ isActive: true } as ProjectTypes.ProjectFilter);
+
+    if (!projects || projects.length === 0) {
+      throw new Error('No active project');
+    }
+
+    const activeProjectName = projects[0].name;
+
+    const updatedFilter: VisualizationTypes.VisualizationFilter = {
+      ...filter,
+      projectName: activeProjectName
+    };
+
+    const queryFilter: UtilTypes.ExtendedMongoQuery = this.dbaccInstance.Visualization.createFilter(updatedFilter);
+
+    return this.dbaccInstance.Visualization.browse(queryFilter);
+  }
+
+  async delete(filter: VisualizationTypes.VisualizationFilter): Promise<boolean> {
+    const queryFilter: UtilTypes.ExtendedMongoQuery = filter ? this.dbaccInstance.Visualization.createFilter(filter) : {};
+
+    await this.dbaccInstance.Visualization.deleteMany(queryFilter);
+
+    return true;
+  }
+
+  private async processVisualizationDetails(
+    illustrations: unknown[],
+    includeAllFileDetails: boolean,
+    projectName: string,
+    visualizationUpdate: VisualizationTypes.VisualizationUpdate
+  ): Promise<(VisualizationTypes.VisualizationType | null)[]> {
+    const processVisualization = async (illustration: unknown) => {
+      const visualizationData: VisualizationTypes.VisualizationCreate = { ...(illustration as VisualizationTypes.VisualizationCreate), projectName };
+
+      if (!includeAllFileDetails) {
+        Object.entries(visualizationUpdate).forEach(([key, value]) => {
+          (visualizationData as Record<string, unknown>)[key] = value;
         });
       }
-      const validVisualization = visualizationTypeSchema.safeParse(ill);
-      if (!validVisualization.success) {
-        const errorMessage = generateErrorMessage(
-          validVisualization.error.issues,
-          prettifyZodError()
-        );
+
+      const validationResult = visualizationTypeSchema.safeParse(visualizationData);
+      if (!validationResult.success) {
+        const errorMessage = generateErrorMessage(validationResult.error.issues, prettifyZodError());
         throw new Error(errorMessage);
-      } else {
-        return this.createOrUpdate(ill as unknown as VisualizationCreate);
       }
-    });
+
+      return this.createOrUpdate(visualizationData);
+    };
+
+    return Promise.all(illustrations.map(processVisualization));
   }
 
-  private jsonFileProcessor(
-    files: FileProperties[],
-    allFileDetails: boolean,
+  private async processJsonFiles(
+    files: FileTypes.FileProperties[],
+    includeAllFileDetails: boolean,
     projectName: string,
-    visualizationDetails: VisualizationUpdate
-  ): Bluebird<VisualizationType[]> {
-    return Promise.resolve(
-      jsonFilesToVisualizations(
-        files,
-        visualizationDetails.type as VisualizationTypesEnum,
-        allFileDetails
-      )
-    ).then((illlustrations) => this.visualizationDetailsProcessor(
-      illlustrations,
-      allFileDetails,
+    visualizationUpdate: VisualizationTypes.VisualizationUpdate
+  ): Promise<(VisualizationTypes.VisualizationType | null)[]> {
+    const visualizations = await jsonFilesToVisualizations(
+      files,
+      visualizationUpdate.type as VisualizationTypes.VisualizationTypesEnum,
+      includeAllFileDetails
+    );
+
+    return this.processVisualizationDetails(
+      visualizations,
+      includeAllFileDetails,
       projectName,
-      visualizationDetails
-    ));
+      visualizationUpdate
+    );
   }
 
-  private xmlFileProcessor(
-    files: FileProperties[],
-    allFileDetails: boolean,
+  private async processXmlFiles(
+    files: FileTypes.FileProperties[],
+    includeAllFileDetails: boolean,
     projectName: string,
-    visualizationDetails: VisualizationUpdate
-  ): Bluebird<VisualizationType[]> {
-    return Promise.resolve(
-      xmlFilesToVisualizations(
-        files,
-        visualizationDetails.type as VisualizationTypesEnum,
-        allFileDetails
-      )
-    ).then((illlustrations) => this.visualizationDetailsProcessor(
-      illlustrations,
-      allFileDetails,
+    visualizationUpdate: VisualizationTypes.VisualizationUpdate
+  ): Promise<(VisualizationTypes.VisualizationType | null)[]> {
+
+    const visualizations = await xmlFilesToVisualizations(
+      files,
+      visualizationUpdate.type as VisualizationTypes.VisualizationTypesEnum,
+      includeAllFileDetails
+    );
+
+    return this.processVisualizationDetails(
+      visualizations,
+      includeAllFileDetails,
       projectName,
-      visualizationDetails
-    ));
+      visualizationUpdate
+    );
   }
 
-  private excelFileProcessor(
-    files: FileProperties[],
-    allFileDetails: boolean,
+  private async processExcelFiles(
+    files: FileTypes.FileProperties[],
+    includeAllFileDetails: boolean,
     projectName: string,
-    fileDetails: FileDetails,
-    visualizationDetails: VisualizationUpdate
-  ): Bluebird<VisualizationType[]> {
-    return Promise.resolve(
-      excelFilesToVisualizations(
-        files,
-        fileDetails,
-        visualizationDetails.type as VisualizationTypesEnum,
-        allFileDetails
-      )
-    ).then((illlustrations) => this.visualizationDetailsProcessor(
-      illlustrations,
-      allFileDetails,
+    fileDetails: FileTypes.FileDetails,
+    visualizationUpdate: VisualizationTypes.VisualizationUpdate
+  ): Promise<(VisualizationTypes.VisualizationType | null)[]> {
+
+    const visualizations = await excelFilesToVisualizations(
+      files,
+      fileDetails,
+      visualizationUpdate.type as VisualizationTypes.VisualizationTypesEnum,
+      includeAllFileDetails
+    );
+
+    return this.processVisualizationDetails(
+      visualizations,
+      includeAllFileDetails,
       projectName,
-      visualizationDetails
-    ));
+      visualizationUpdate
+    );
   }
 
-  private csvFileProcessor(
-    files: FileProperties[],
-    allFileDetails: boolean,
+  private async processCsvFiles(
+    files: FileTypes.FileProperties[],
+    includeAllFileDetails: boolean,
     projectName: string,
-    fileDetails: FileDetails,
-    visualizationDetails: VisualizationUpdate
-  ): Bluebird<VisualizationType[]> {
-    return Promise.resolve(
-      csvFilesToVisualizations(
-        files,
-        fileDetails,
-        visualizationDetails.type as VisualizationTypesEnum,
-        allFileDetails
-      )
-    ).then((illlustrations) => this.visualizationDetailsProcessor(
-      illlustrations,
-      allFileDetails,
+    fileDetails: FileTypes.FileDetails,
+    visualizationUpdate: VisualizationTypes.VisualizationUpdate
+  ): Promise<(VisualizationTypes.VisualizationType | null)[]> {
+
+    const visualizations = await csvFilesToVisualizations(
+      files,
+      fileDetails,
+      visualizationUpdate.type as VisualizationTypes.VisualizationTypesEnum,
+      includeAllFileDetails
+    );
+
+    return this.processVisualizationDetails(
+      visualizations,
+      includeAllFileDetails,
       projectName,
-      visualizationDetails
-    ));
+      visualizationUpdate
+    );
   }
 }
+
+export default VisualizationBZL;

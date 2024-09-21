@@ -1,7 +1,5 @@
-/* eslint-disable no-param-reassign */
 
-import _ from 'lodash';
-import { AxisChartData } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { visualizationDetailsExtractor } from '../../../../utils/helper';
 
 const computeValues = (
@@ -26,21 +24,23 @@ const computeValues = (
     return { [key]: numericValues };
   }
 
-  return undefined; // or handle the case where no valid key is found
+  return undefined;
 };
-export const axisChartTransformer = (
-  mapping: Record<string, unknown>,
-  values: unknown[],
+
+const axisChartTransformer = (
+  mapping: Record<string, string>,
+  values: string[] | number[],
   allFileDetails: boolean
 ) => {
   const baseValues = {
     data: computeValues(values, mapping.data as string),
     headers:
-      typeof values[_.toNumber(mapping.headers)] === 'string'
-        ? values[_.toNumber(mapping.headers)]
-        : _.toString(values[_.toNumber(mapping.headers)])
+      typeof values[+mapping.headers] === 'string'
+        ? values[+mapping.headers]
+        : values[+mapping.headers]?.toString()
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
+
   return allFileDetails
     ? {
       ...{ values: baseValues },
@@ -49,54 +49,47 @@ export const axisChartTransformer = (
     : { values: baseValues };
 };
 
-export const axisChartExtractorCsvOrExcel = (
-  recordedData : Record<string, unknown>[]
-): AxisChartData => {
-  const transformedData = recordedData.reduce(
-    (result, item) => {
-      const axisData = item.values;
-      let headersData;
-      const { data, headers } = axisData as Record<string, unknown>;
-      headersData = (result.headers as string[]).find(
-        (h: string) => h === headers
-      );
-      if (_.isNil(headersData)) {
-        headersData = headers as string;
-        if (!_.isNil(headersData) && !_.isEmpty(headersData)) {
-          (result.headers as string[]).push(headersData);
-        }
-      }
-      if (!_.isNil(data)) {
-        result.values = {
-          ...(result.values as Record<string, unknown>),
-          ...(data as Record<string, unknown>)
-        };
-      }
-      return result;
-    },
-    { headers: [], values: {} }
-  );
-  return transformedData as unknown as AxisChartData;
+const axisChartExtractorCsvOrExcel = (
+  recordedData: Record<string, unknown>[]
+): VisualizationTypes.AxisChartData => {
+  const result: VisualizationTypes.AxisChartData = {
+    headers: [],
+    values: {}
+  };
+
+  recordedData.forEach((item) => {
+    const { values: axisData } = item;
+    const { data, headers } = axisData as { data?: Record<string, number[]>; headers?: string };
+
+    if (headers && !result.headers.includes(headers)) {
+      result.headers.push(headers);
+    }
+
+    if (data) {
+      result.values = { ...result.values, ...data };
+    }
+  });
+
+  return result;
 };
-const axisChartValuesExtractorXml = (values: Record<string, unknown>[]) => {
+
+const axisChartValuesExtractorXml = (values: Record<string, unknown>[]): Record<string, number[]> => {
   const transformedData = values.map((item) => {
     const transformedValues: Record<string, number[]> = {};
 
-    // Transform each array of strings to an array of numbers
+    // Iterate over each key in the item
     Object.keys(item).forEach((key) => {
-      transformedValues[key] = (item[key] as string[]).map((value: string) => Number(value));
+      const valueArray = item[key] as string[];
+      transformedValues[key] = valueArray.map((value) => Number(value));
     });
 
-    return {
-      ...transformedValues
-    };
+    return transformedValues;
   });
 
-  // Return the transformed object inside the array
   return transformedData[0];
 };
 
-export const axisChartExtractorXml = (
+const axisChartExtractorXml = (
   xmlData: Record<string, unknown>,
   allFileDetails: boolean
 ) => {
@@ -127,3 +120,5 @@ export const axisChartExtractorXml = (
     }
     : finalData;
 };
+
+export { axisChartTransformer, axisChartExtractorXml, axisChartExtractorCsvOrExcel }

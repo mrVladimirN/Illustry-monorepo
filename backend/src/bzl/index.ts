@@ -2,7 +2,7 @@ import DbaccInstance from '../dbacc/lib';
 import VisualizationBZL from './visualization/visualization';
 import ProjectBZL from './project/project';
 
-export default class BZLInstance {
+class BZLInstance {
   private dbaccInstance: DbaccInstance;
 
   private projectBZL!: ProjectBZL;
@@ -25,3 +25,5 @@ export default class BZLInstance {
       : new VisualizationBZL(this.dbaccInstance);
   }
 }
+
+export default BZLInstance;

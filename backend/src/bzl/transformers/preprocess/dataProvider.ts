@@ -1,8 +1,6 @@
 import {
-  VisualizationTypesEnum,
-  VisualizationUpdate
-} from 'types/visualizations';
-import _ from 'lodash';
+  VisualizationTypes
+} from '@illustry/types';
 import { visualizationPropertiesExtractor } from '../../../utils/helper';
 import {
   nodesLinksExtractorCsvOrExcel,
@@ -34,191 +32,99 @@ import {
   scatterExtractorXml
 } from './transformers/scatterTransformer';
 
-export const exelOrCsvdataProvider = (
-  type: VisualizationTypesEnum,
+const exelOrCsvdataProvider = (
+  type: VisualizationTypes.VisualizationTypesEnum,
   computedRows: Record<string, unknown>[],
   allFileDetails: boolean
 ) => {
-  const data: VisualizationUpdate = {};
-  switch (type) {
-    case VisualizationTypesEnum.WORD_CLOUD:
-      if (allFileDetails) {
-        const visualizationProperties = visualizationPropertiesExtractor(computedRows);
-        _.set(
-          data,
-          'data',
-          wordCloudExtractorCsvOrExcel(visualizationProperties.data)
-        );
-        _.set(data, 'name', visualizationProperties.name);
-        _.set(data, 'description', visualizationProperties.description);
-        _.set(data, 'tags', visualizationProperties.tags);
-        _.set(data, 'type', type);
-        return data;
-      }
-      _.set(data, 'data', wordCloudExtractorCsvOrExcel(computedRows));
-      _.set(data, 'type', type);
-      return data;
-
-    case VisualizationTypesEnum.FORCE_DIRECTED_GRAPH:
-    case VisualizationTypesEnum.SANKEY:
-    case VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
-      if (allFileDetails) {
-        const visualizationProperties = visualizationPropertiesExtractor(computedRows);
-        _.set(
-          data,
-          'data',
-          nodesLinksExtractorCsvOrExcel(visualizationProperties.data)
-        );
-        _.set(data, 'name', visualizationProperties.name);
-        _.set(data, 'description', visualizationProperties.description);
-        _.set(data, 'tags', visualizationProperties.tags);
-        _.set(data, 'type', type);
-        return data;
-      }
-      _.set(data, 'data', nodesLinksExtractorCsvOrExcel(computedRows));
-      _.set(data, 'type', type);
-      return data;
-
-    case VisualizationTypesEnum.CALENDAR:
-      if (allFileDetails) {
-        const visualizationProperties = visualizationPropertiesExtractor(computedRows);
-        _.set(
-          data,
-          'data',
-          calendarExtractorCsvOrExcel(visualizationProperties.data)
-        );
-        _.set(data, 'name', visualizationProperties.name);
-        _.set(data, 'description', visualizationProperties.description);
-        _.set(data, 'tags', visualizationProperties.tags);
-        _.set(data, 'type', type);
-        return data;
-      }
-      _.set(data, 'data', calendarExtractorCsvOrExcel(computedRows));
-      _.set(data, 'type', type);
-      return data;
-
-    case VisualizationTypesEnum.BAR_CHART:
-    case VisualizationTypesEnum.LINE_CHART:
-      if (allFileDetails) {
-        const visualizationProperties = visualizationPropertiesExtractor(computedRows);
-        _.set(
-          data,
-          'data',
-          axisChartExtractorCsvOrExcel(visualizationProperties.data)
-        );
-        _.set(data, 'name', visualizationProperties.name);
-        _.set(data, 'description', visualizationProperties.description);
-        _.set(data, 'tags', visualizationProperties.tags);
-        _.set(data, 'type', type);
-        return data;
-      }
-      _.set(data, 'data', axisChartExtractorCsvOrExcel(computedRows));
-      _.set(data, 'type', type);
-      return data;
-
-    case VisualizationTypesEnum.FUNNEL:
-    case VisualizationTypesEnum.PIE_CHART:
-      if (allFileDetails) {
-        const visualizationProperties = visualizationPropertiesExtractor(computedRows);
-        _.set(
-          data,
-          'data',
-          pieChartFunnelExtractorCsvOrExcel(visualizationProperties.data)
-        );
-        _.set(data, 'name', visualizationProperties.name);
-        _.set(data, 'description', visualizationProperties.description);
-        _.set(data, 'tags', visualizationProperties.tags);
-        _.set(data, 'type', type);
-        return data;
-      }
-      _.set(data, 'data', pieChartFunnelExtractorCsvOrExcel(computedRows));
-      _.set(data, 'type', type);
-      return data;
-
-    case VisualizationTypesEnum.SCATTER:
-      if (allFileDetails) {
-        const visualizationProperties = visualizationPropertiesExtractor(computedRows);
-        _.set(
-          data,
-          'data',
-          scatterExtractorCsvOrExcel(visualizationProperties.data)
-        );
-        _.set(data, 'name', visualizationProperties.name);
-        _.set(data, 'description', visualizationProperties.description);
-        _.set(data, 'tags', visualizationProperties.tags);
-        _.set(data, 'type', type);
-        return data;
-      }
-      _.set(data, 'data', scatterExtractorCsvOrExcel(computedRows));
-      _.set(data, 'type', type);
-      return data;
-
-    case VisualizationTypesEnum.TREEMAP:
-    case VisualizationTypesEnum.SUNBURST:
-      if (allFileDetails) {
-        const visualizationProperties = visualizationPropertiesExtractor(computedRows);
-        _.set(
-          data,
-          'data',
-          hierarchyExtractorCsvOrExcel(visualizationProperties.data)
-        );
-        _.set(data, 'name', visualizationProperties.name);
-        _.set(data, 'description', visualizationProperties.description);
-        _.set(data, 'tags', visualizationProperties.tags);
-        _.set(data, 'type', type);
-        return data;
-      }
-      _.set(data, 'data', hierarchyExtractorCsvOrExcel(computedRows));
-      _.set(data, 'type', type);
-      return data;
-
-    default:
-      return null;
+  let data: VisualizationTypes.VisualizationUpdate = { type };
+  const visualizationProperties = allFileDetails ? visualizationPropertiesExtractor(computedRows) : null;
+  if (visualizationProperties) {
+    const { name, description, tags } = visualizationProperties;
+    data = {
+      ...data,
+      name,
+      tags,
+      description,
+    }
   }
+  switch (type) {
+    case VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD:
+      data.data = wordCloudExtractorCsvOrExcel(computedRows);
+      break;
+    case VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH:
+    case VisualizationTypes.VisualizationTypesEnum.SANKEY:
+    case VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
+      data.data = nodesLinksExtractorCsvOrExcel(computedRows);
+      break;
+    case VisualizationTypes.VisualizationTypesEnum.CALENDAR:
+      data.data = calendarExtractorCsvOrExcel(computedRows);
+      break;
+    case VisualizationTypes.VisualizationTypesEnum.BAR_CHART:
+    case VisualizationTypes.VisualizationTypesEnum.LINE_CHART:
+      data.data = axisChartExtractorCsvOrExcel(computedRows);
+      break;
+    case VisualizationTypes.VisualizationTypesEnum.FUNNEL:
+    case VisualizationTypes.VisualizationTypesEnum.PIE_CHART:
+      data.data = pieChartFunnelExtractorCsvOrExcel(computedRows as Record<string, Record<string, number>>[]);
+      break;
+    case VisualizationTypes.VisualizationTypesEnum.SCATTER:
+      data.data = scatterExtractorCsvOrExcel(computedRows as Record<string, Record<string, number>>[]);
+      break;
+    case VisualizationTypes.VisualizationTypesEnum.TREEMAP:
+    case VisualizationTypes.VisualizationTypesEnum.SUNBURST:
+      data.data = hierarchyExtractorCsvOrExcel(computedRows as Record<string, Record<string, number>>[]);
+      break;
+    default:
+      break;
+  }
+  return data && data.type ? data : null
 };
 
-export const jsonDataProvider = (
-  type: VisualizationTypesEnum,
+const jsonDataProvider = (
+  type: VisualizationTypes.VisualizationTypesEnum,
   computedData: Record<string, unknown>,
   allFileDetails: boolean
 ) => {
-  const data: VisualizationUpdate = {};
   if (!allFileDetails) {
-    _.set(data, 'data', computedData);
-    _.set(data, 'type', type);
+    const data: VisualizationTypes.VisualizationUpdate = {};
+    data.data = computedData;
+    data.type = type
     return data;
   }
   return computedData;
 };
 
-export const xmlDataProvider = (
-  type: VisualizationTypesEnum,
+const xmlDataProvider = (
+  type: VisualizationTypes.VisualizationTypesEnum,
   computedData: Record<string, unknown>,
   allFileDetails: boolean
 ) => {
   switch (type) {
-    case VisualizationTypesEnum.FORCE_DIRECTED_GRAPH:
-    case VisualizationTypesEnum.SANKEY:
-    case VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
+    case VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH:
+    case VisualizationTypes.VisualizationTypesEnum.SANKEY:
+    case VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
       return nodeLinksExtractorXml(computedData, allFileDetails);
-    case VisualizationTypesEnum.WORD_CLOUD:
+    case VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD:
       return wordCloudExtractorXml(computedData, allFileDetails);
-    case VisualizationTypesEnum.CALENDAR:
+    case VisualizationTypes.VisualizationTypesEnum.CALENDAR:
       return calendarExtractorXml(computedData, allFileDetails);
-    case VisualizationTypesEnum.LINE_CHART:
-    case VisualizationTypesEnum.BAR_CHART:
+    case VisualizationTypes.VisualizationTypesEnum.LINE_CHART:
+    case VisualizationTypes.VisualizationTypesEnum.BAR_CHART:
       return axisChartExtractorXml(computedData, allFileDetails);
-    case VisualizationTypesEnum.PIE_CHART:
-    case VisualizationTypesEnum.FUNNEL:
+    case VisualizationTypes.VisualizationTypesEnum.PIE_CHART:
+    case VisualizationTypes.VisualizationTypesEnum.FUNNEL:
       return pieChartFunnelExtractorXml(computedData, allFileDetails);
-    case VisualizationTypesEnum.SCATTER:
+    case VisualizationTypes.VisualizationTypesEnum.SCATTER:
       return scatterExtractorXml(computedData, allFileDetails);
-    case VisualizationTypesEnum.SUNBURST:
-    case VisualizationTypesEnum.TREEMAP:
+    case VisualizationTypes.VisualizationTypesEnum.SUNBURST:
+    case VisualizationTypes.VisualizationTypesEnum.TREEMAP:
       return hierarchyExtractorXml(computedData, allFileDetails);
-    case VisualizationTypesEnum.MATRIX:
+    case VisualizationTypes.VisualizationTypesEnum.MATRIX:
       return matrixExtractorXml(computedData, allFileDetails);
     default:
       return null;
   }
 };
+
+export { xmlDataProvider, jsonDataProvider, exelOrCsvdataProvider }

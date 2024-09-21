@@ -1,4 +1,4 @@
-import { VisualizationTypesEnum } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { wordCloudTransformer } from './transformers/wordCloudTransformer';
 import { axisChartTransformer } from './transformers/axisChartTransformer';
 import { hierarchyTransformer } from './transformers/hierarchyTransformers';
@@ -8,32 +8,33 @@ import { pieChartFunnelTransformer } from './transformers/pieChartFunnelTransfor
 import { scatterTransformer } from './transformers/scatterTransformer';
 
 const transformerProvider = (
-  type: VisualizationTypesEnum,
-  mapping: Record<string, unknown>,
-  values: unknown[],
+  type: VisualizationTypes.VisualizationTypesEnum,
+  mapping: Record<string, string>,
+  values: string[]| number[],
   allFileDetails: boolean
 ) => {
   switch (type) {
-    case VisualizationTypesEnum.WORD_CLOUD:
+    case VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD:
       return wordCloudTransformer(mapping, values, allFileDetails);
-    case VisualizationTypesEnum.FORCE_DIRECTED_GRAPH:
-    case VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
-    case VisualizationTypesEnum.SANKEY:
+    case VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH:
+    case VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
+    case VisualizationTypes.VisualizationTypesEnum.SANKEY:
       return nodeLinkTransformer(mapping, values, allFileDetails);
-    case VisualizationTypesEnum.CALENDAR:
+    case VisualizationTypes.VisualizationTypesEnum.CALENDAR:
       return calendarTransformer(mapping, values, allFileDetails);
-    case VisualizationTypesEnum.BAR_CHART:
-    case VisualizationTypesEnum.LINE_CHART:
+    case VisualizationTypes.VisualizationTypesEnum.BAR_CHART:
+    case VisualizationTypes.VisualizationTypesEnum.LINE_CHART:
       return axisChartTransformer(mapping, values, allFileDetails);
-    case VisualizationTypesEnum.PIE_CHART:
-    case VisualizationTypesEnum.FUNNEL:
+    case VisualizationTypes.VisualizationTypesEnum.PIE_CHART:
+    case VisualizationTypes.VisualizationTypesEnum.FUNNEL:
       return pieChartFunnelTransformer(mapping, values, allFileDetails);
-    case VisualizationTypesEnum.SCATTER:
+    case VisualizationTypes.VisualizationTypesEnum.SCATTER:
       return scatterTransformer(mapping, values, allFileDetails);
-    case VisualizationTypesEnum.SUNBURST:
-    case VisualizationTypesEnum.TREEMAP:
+    case VisualizationTypes.VisualizationTypesEnum.SUNBURST:
+    case VisualizationTypes.VisualizationTypesEnum.TREEMAP:
       return hierarchyTransformer(mapping, values, allFileDetails);
     default: return null;
   }
 };
+
 export default transformerProvider;

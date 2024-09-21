@@ -1,91 +1,84 @@
-import _ from 'lodash';
 import {
-  ExtendedProjectType,
-  ProjectCreate,
-  ProjectFilter,
-  ProjectType,
-  ProjectUpdate
-} from 'types/project';
-import { ExtendedMongoQuery } from 'types/utils';
+  ProjectTypes,
+  UtilTypes,
+  GenericTypes
+} from '@illustry/types';
 import DbaccInstance from '../../dbacc/lib';
 import NoDataFoundError from '../../errors/noDataFoundError';
 import logger from '../../config/logger';
 import DuplicatedElementError from '../../errors/duplicatedElementError';
 
-export default class ProjectBZL {
+class ProjectBZL implements GenericTypes.BaseBZL<
+  ProjectTypes.ProjectCreate,
+  ProjectTypes.ProjectUpdate,
+  ProjectTypes.ProjectFilter,
+  ProjectTypes.ProjectType,
+  ProjectTypes.ExtendedProjectType> {
   private dbaccInstance: DbaccInstance;
 
   constructor(dbaccInstance: DbaccInstance) {
     this.dbaccInstance = dbaccInstance;
   }
 
-  create(project: ProjectCreate): Promise<ProjectType> {
-    const newProject = _.cloneDeep(project);
-    if (_.isNil(project.createdAt)) {
-      newProject.createdAt = new Date();
-      newProject.updatedAt = new Date();
-    }
-    return this.dbaccInstance.Project.create(newProject).catch(() => {
+  async create(project: ProjectTypes.ProjectCreate): Promise<ProjectTypes.ProjectType> {
+
+    try {
+      return await this.dbaccInstance.Project.create(project);
+    } catch {
       throw new DuplicatedElementError(
         `There already is a project named ${project.name}`
       );
-    });
+    }
   }
 
-  findByName(filter: ProjectFilter): Promise<ProjectType> {
-    let newFilter: ExtendedMongoQuery = {};
-    if (!_.isNil(filter)) {
+  async findOne(filter: ProjectTypes.ProjectFilter): Promise<ProjectTypes.ProjectType> {
+    let newFilter: UtilTypes.ExtendedMongoQuery = {};
+    if (filter) {
       newFilter = this.dbaccInstance.Project.createFilter(filter);
     }
-    return this.dbaccInstance.Project.findByName(newFilter).then((res) => {
-      if (_.isNil(res)) {
-        logger.error(`No data was found with name ${filter.name}`);
-        throw new NoDataFoundError(
-          `No data was found with name ${filter.name}`
-        );
-      } else {
-        return res;
-      }
-    });
+    const foundProject = await this.dbaccInstance.Project.findOne(newFilter);
+    if (!foundProject) {
+      logger.error(`No project was found with name ${filter.name}`);
+      throw new NoDataFoundError(
+        `No project was found with name ${filter.name}`
+      );
+    } else {
+      return foundProject;
+    }
   }
 
-  browse(filter: ProjectFilter): Promise<ExtendedProjectType> {
-    let newFilter: ExtendedMongoQuery = {};
-    if (!_.isNil(filter)) {
+  async browse(filter: ProjectTypes.ProjectFilter): Promise<ProjectTypes.ExtendedProjectType> {
+    let newFilter: UtilTypes.ExtendedMongoQuery = {};
+    if (filter) {
       newFilter = this.dbaccInstance.Project.createFilter(filter);
     }
-
-    return this.dbaccInstance.Project.browse(newFilter);
+    const projects = await this.dbaccInstance.Project.browse(newFilter);
+    return projects;
   }
 
-  update(filter: ProjectFilter, project: ProjectUpdate): Promise<ProjectType> {
-    let newFilter: ExtendedMongoQuery = {};
-    if (!_.isNil(filter)) {
+  async update(filter: ProjectTypes.ProjectFilter, project: ProjectTypes.ProjectUpdate): Promise<ProjectTypes.ProjectType | null> {
+    let newFilter: UtilTypes.ExtendedMongoQuery = {};
+    if (filter) {
       newFilter = this.dbaccInstance.Project.createFilter(filter);
     }
-    return this.findByName(filter).then(() => {
-      const newProject = _.cloneDeep(project);
-      if (_.isNil(project.createdAt)) {
-        newProject.createdAt = new Date();
-      }
-      _.set(project, 'updatedAt', new Date());
-      return this.dbaccInstance.Project.update(newFilter, newProject);
-    });
+    return this.dbaccInstance.Project.update(newFilter, project);
   }
 
-  delete(filter: ProjectFilter): Promise<boolean> {
-    let newProjectFilter: ExtendedMongoQuery = {};
-    let newVisualizationFilter: ExtendedMongoQuery = {};
-    if (!_.isNil(filter)) {
+  async delete(filter: ProjectTypes.ProjectFilter): Promise<boolean> {
+    let newProjectFilter: UtilTypes.ExtendedMongoQuery = {};
+    let newVisualizationFilter: UtilTypes.ExtendedMongoQuery = {};
+    if (filter) {
       newProjectFilter = this.dbaccInstance.Project.createFilter(filter);
       newVisualizationFilter = this.dbaccInstance.Visualization.createFilter({
         projectName: filter.name
       });
     }
-    return Promise.resolve(this.dbaccInstance.Project.delete(newProjectFilter))
-      .then(() => Promise.resolve(
-        this.dbaccInstance.Visualization.deleteMany(newVisualizationFilter)
-      ))
-      .then(() => true);
+    await Promise.resolve(this.dbaccInstance.Project.delete(newProjectFilter));
+    await Promise.resolve(
+      this.dbaccInstance.Visualization.deleteMany(newVisualizationFilter)
+    );
+    return true;
   }
 }
+
+export default ProjectBZL;

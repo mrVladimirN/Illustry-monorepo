@@ -1,19 +1,18 @@
-import _ from 'lodash';
-import { WordCloudData, WordType } from 'types/visualizations';
-import { visualizationDetailsExtractor } from '../../../../utils/helper';
+import { VisualizationTypes} from '@illustry/types';
+import { visualizationDetailsExtractor, toStringWithDefault } from '../../../../utils/helper';
 
-export const wordCloudTransformer = (
+const wordCloudTransformer = (
   mapping: Record<string, unknown>,
-  values: unknown[],
+  values: string[] | number[],
   allFileDetails: boolean
 ) => {
   const baseValues = {
-    name: values[_.toNumber(mapping.names)],
+    name: values[Number(mapping.names)],
     value:
-      typeof values[_.toNumber(mapping.values)] === 'string'
-        ? +(values[_.toNumber(mapping.values)] as string)
-        : values[_.toNumber(mapping.values)],
-    properties: values[_.toNumber(mapping.properties)]
+      typeof values[Number(mapping.values)] === 'string'
+        ? +(values[Number(mapping.values)] as string)
+        : values[Number(mapping.values)],
+    properties: values[Number(mapping.properties)]
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails
@@ -24,9 +23,9 @@ export const wordCloudTransformer = (
     : { word: baseValues };
 };
 
-export const wordCloudExtractorCsvOrExcel = (
+const wordCloudExtractorCsvOrExcel = (
   data: Record<string, unknown>[]
-): WordCloudData => {
+): VisualizationTypes.WordCloudData => {
   const transformedData = data.reduce(
     (result, item) => {
       const words = item.word;
@@ -36,42 +35,37 @@ export const wordCloudExtractorCsvOrExcel = (
         (w: Record<string, unknown>) => w.name === name
       );
 
-      if (_.isNil(word)) {
-        word = { name, value, properties } as WordType;
-        if (
-          !_.isEmpty(word.name)
-          && !_.isNil(word.name)
-          && !_.isNil(word.value)
-          && !_.isNil(word.value)
-        ) {
-          (result.words as WordType[]).push(word);
+      if (!word) {
+        word = { name, value, properties } as VisualizationTypes.WordType;
+        if (word.name && word.value) {
+          (result.words as VisualizationTypes.WordType[]).push(word);
         }
       }
       return result;
     },
     { words: [] }
   );
-  return transformedData as unknown as WordCloudData;
+  return transformedData as unknown as VisualizationTypes.WordCloudData;
 };
 
 const wordCloudWordExtractorXml = (
   words: Record<string, unknown>[]
-): WordType[] => words.map((el: Record<string, unknown>) => ({
+): VisualizationTypes.WordType[] => words.map((el: Record<string, unknown>) => ({
   name:
-      typeof (el.name as string[])[0] === 'string'
-        ? (el.name as string[])[0]
-        : _.toString((el.name as string[])[0]),
+    typeof (el.name as string[])[0] === 'string'
+      ? (el.name as string[])[0]
+      : toStringWithDefault((el.name as string[])[0]),
   value:
-      typeof (el.value as string[])[0] === 'string'
-        ? +(el.value as string[])[0]
-        : (el.value as string[])[0],
+    typeof (el.value as string[])[0] === 'string'
+      ? +(el.value as string[])[0]
+      : (el.value as string[])[0],
   properties:
-      el.properties && (el.properties as Record<string, unknown>[]).length
-        ? (el.properties as string[])[0]
-        : undefined
-})) as unknown as WordType[];
+    el.properties && (el.properties as Record<string, unknown>[]).length
+      ? (el.properties as string[])[0]
+      : undefined
+})) as unknown as VisualizationTypes.WordType[];
 
-export const wordCloudExtractorXml = (
+const wordCloudExtractorXml = (
   xmlData: Record<string, unknown>,
   allFileDetails: boolean
 ) => {
@@ -85,10 +79,10 @@ export const wordCloudExtractorXml = (
     data: {
       words: allFileDetails
         ? wordCloudWordExtractorXml(
-            (data as Record<string, unknown>[])[0].words as Record<
-              string,
-              unknown
-            >[]
+          (data as Record<string, unknown>[])[0].words as Record<
+            string,
+            unknown
+          >[]
         )
         : wordCloudWordExtractorXml(words as Record<string, unknown>[])
     }
@@ -105,3 +99,5 @@ export const wordCloudExtractorXml = (
     }
     : finalData;
 };
+
+export {wordCloudExtractorXml, wordCloudTransformer, wordCloudExtractorCsvOrExcel}

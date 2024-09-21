@@ -1,21 +1,20 @@
-import _ from 'lodash';
-import { PieChartData } from 'types/visualizations';
-import { visualizationDetailsExtractor } from '../../../../utils/helper';
+import { VisualizationTypes } from '@illustry/types';
+import { visualizationDetailsExtractor, toStringWithDefault } from '../../../../utils/helper';
 
-export const pieChartFunnelTransformer = (
+const pieChartFunnelTransformer = (
   mapping: Record<string, unknown>,
-  values: unknown[],
+  values: string[] | number[],
   allFileDetails: boolean
 ) => {
   const baseValues = {
     name:
-      typeof values[_.toNumber(mapping.names)] === 'string'
-        ? values[_.toNumber(mapping.names)]
-        : _.toString(values[_.toNumber(mapping.names)]),
+      typeof values[Number(mapping.names)] === 'string'
+        ? values[Number(mapping.names)]
+        : toStringWithDefault(values[Number(mapping.names)]),
     value:
-      typeof values[_.toNumber(mapping.values)] === 'string'
-        ? +(values[_.toNumber(mapping.values)] as string)
-        : values[_.toNumber(mapping.values)]
+      typeof values[Number(mapping.values)] === 'string'
+        ? +(values[Number(mapping.values)] as string)
+        : values[Number(mapping.values)]
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails
@@ -26,26 +25,19 @@ export const pieChartFunnelTransformer = (
     : { values: baseValues };
 };
 
-export const pieChartFunnelExtractorCsvOrExcel = (
-  data: Record<string, unknown>[]
-): PieChartData => {
+const pieChartFunnelExtractorCsvOrExcel = (
+  data: Record<string, Record<string, number>>[]
+): VisualizationTypes.PieChartData => {
   const transformedData = data.reduce(
     (result, item) => {
       let pieChartFunnelData;
       const { name, value } = item.values as Record<string, unknown>;
       pieChartFunnelData = (result.values as Record<string, number>)[name as string] === value
         || null;
-      if (_.isNil(pieChartFunnelData)) {
+      if (!pieChartFunnelData) {
         pieChartFunnelData = { name, value };
-        if (
-          !_.isNil(pieChartFunnelData.name)
-          && !_.isNil(pieChartFunnelData.value)
-        ) {
-          _.set(
-            result.values as Record<string, number>,
-            `${pieChartFunnelData.name as string}`,
-            pieChartFunnelData.value as number
-          );
+        if (pieChartFunnelData.name && pieChartFunnelData.value) {
+          result.values[`${pieChartFunnelData.name as string}`] = pieChartFunnelData.value as number
         }
       }
       return result;
@@ -53,7 +45,7 @@ export const pieChartFunnelExtractorCsvOrExcel = (
 
     { values: {} }
   );
-  return transformedData as unknown as PieChartData;
+  return transformedData as unknown as VisualizationTypes.PieChartData;
 };
 
 const pieChartFunnelValuesExtractorXml = (
@@ -62,7 +54,6 @@ const pieChartFunnelValuesExtractorXml = (
   const transformedData = values.map((el) => {
     const transformedValues: Record<string, number> = {};
 
-    // Transform each array of strings to an array of numbers
     Object.keys(el).forEach((key) => {
       transformedValues[key] = +(el[key] as string[])[0];
     });
@@ -72,11 +63,10 @@ const pieChartFunnelValuesExtractorXml = (
     };
   });
 
-  // Return the transformed object inside the array
   return transformedData[0];
 };
 
-export const pieChartFunnelExtractorXml = (
+const pieChartFunnelExtractorXml = (
   xmlData: Record<string, unknown>,
   allFileDetails: boolean
 ) => {
@@ -87,10 +77,10 @@ export const pieChartFunnelExtractorXml = (
     data: {
       values: allFileDetails
         ? pieChartFunnelValuesExtractorXml(
-            (data as Record<string, unknown>[])[0].values as Record<
-              string,
-              unknown
-            >[]
+          (data as Record<string, unknown>[])[0].values as Record<
+            string,
+            unknown
+          >[]
         )
         : pieChartFunnelValuesExtractorXml(values as Record<string, unknown>[])
     }
@@ -107,3 +97,5 @@ export const pieChartFunnelExtractorXml = (
     }
     : finalData;
 };
+
+export { pieChartFunnelTransformer, pieChartFunnelExtractorCsvOrExcel, pieChartFunnelExtractorXml }

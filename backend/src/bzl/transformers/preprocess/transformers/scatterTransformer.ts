@@ -1,22 +1,15 @@
-import _ from 'lodash';
-import { ScatterData, ScatterPoint } from 'types/visualizations';
-import { visualizationDetailsExtractor } from '../../../../utils/helper';
+import { VisualizationTypes } from '@illustry/types';
+import { visualizationDetailsExtractor, toStringWithDefault } from '../../../../utils/helper';
 
 const computeValues = (values: unknown[], mapping: string): number[] => {
   const result: number[] = [];
 
   mapping.split(',').forEach((row) => {
-    const index = _.toNumber(row);
+    const index = Number(row);
     const valueAtIndex = values[index];
 
-    if (
-      !_.isNil(valueAtIndex)
-      && (typeof valueAtIndex === 'number'
-        || (typeof valueAtIndex === 'string'
-          && !Number.isNaN(_.toNumber(valueAtIndex))))
-      && result.length <= 1
-    ) {
-      result.push(_.toNumber(valueAtIndex));
+    if (valueAtIndex && (typeof valueAtIndex === 'number' || (typeof valueAtIndex === 'string' && !Number.isNaN(Number(valueAtIndex)))) && result.length <= 1) {
+      result.push(Number(valueAtIndex));
     }
   });
 
@@ -26,21 +19,22 @@ const computeValues = (values: unknown[], mapping: string): number[] => {
 
   return result;
 };
-export const scatterTransformer = (
+
+const scatterTransformer = (
   mapping: Record<string, unknown>,
-  values: unknown[],
+  values: string[] | number[],
   allFileDetails: boolean
 ) => {
   const baseValues = {
     value: computeValues(values, mapping.values as string),
     category:
-      typeof values[_.toNumber(mapping.categories)] === 'string'
-        ? values[_.toNumber(mapping.categories)]
-        : _.toString(values[_.toNumber(mapping.categories)]),
+      typeof values[Number(mapping.categories)] === 'string'
+        ? values[Number(mapping.categories)]
+        : toStringWithDefault(values[Number(mapping.categories)]),
     properties:
-      typeof values[_.toNumber(mapping.properties)] === 'string'
-        ? values[_.toNumber(mapping.properties)]
-        : _.toString(values[_.toNumber(mapping.properties)])
+      typeof values[Number(mapping.properties)] === 'string'
+        ? values[Number(mapping.properties)]
+        : toStringWithDefault(values[Number(mapping.properties)])
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails
@@ -51,9 +45,9 @@ export const scatterTransformer = (
     : { points: baseValues };
 };
 
-export const scatterExtractorCsvOrExcel = (
+const scatterExtractorCsvOrExcel = (
   data: Record<string, unknown>[]
-): ScatterData => {
+): VisualizationTypes.ScatterData => {
   const transformedData = data.reduce(
     (result, item) => {
       let scatterData;
@@ -61,14 +55,14 @@ export const scatterExtractorCsvOrExcel = (
         string,
         unknown
       >;
-      scatterData = (result.points as ScatterPoint[]).find(
-        (e: ScatterPoint) => e.value[0] === (value as unknown[])[0]
+      scatterData = (result.points as VisualizationTypes.ScatterPoint[]).find(
+        (e: VisualizationTypes.ScatterPoint) => e.value[0] === (value as unknown[])[0]
           && e.value[1] === (value as unknown[])[1]
           && e.category === category
       );
-      if (_.isNil(scatterData)) {
+      if (!scatterData) {
         scatterData = { category, value, properties };
-        if (!_.isNil(scatterData.category) && !_.isNil(scatterData.value)) {
+        if (scatterData.category && scatterData.value) {
           (result.points as Record<string, unknown>[]).push(scatterData);
         }
       }
@@ -76,7 +70,7 @@ export const scatterExtractorCsvOrExcel = (
     },
     { points: [] }
   );
-  return transformedData as unknown as ScatterData;
+  return transformedData as unknown as VisualizationTypes.ScatterData;
 };
 
 const scatterPointsExtractorXml = (points: Record<string, unknown>[]) => {
@@ -89,10 +83,10 @@ const scatterPointsExtractorXml = (points: Record<string, unknown>[]) => {
         : undefined
   }));
 
-  // Return the transformed object inside the array
   return transformedData;
 };
-export const scatterExtractorXml = (
+
+const scatterExtractorXml = (
   xmlData: Record<string, unknown>,
   allFileDetails: boolean
 ) => {
@@ -103,10 +97,10 @@ export const scatterExtractorXml = (
     data: {
       points: allFileDetails
         ? scatterPointsExtractorXml(
-            (data as Record<string, unknown>[])[0].points as Record<
-              string,
-              unknown
-            >[]
+          (data as Record<string, unknown>[])[0].points as Record<
+            string,
+            unknown
+          >[]
         )
         : scatterPointsExtractorXml(points as Record<string, string>[])
     }
@@ -123,3 +117,5 @@ export const scatterExtractorXml = (
     }
     : finalData;
 };
+
+export { scatterTransformer, scatterExtractorCsvOrExcel, scatterExtractorXml }

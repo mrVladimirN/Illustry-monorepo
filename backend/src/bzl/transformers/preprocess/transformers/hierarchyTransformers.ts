@@ -1,8 +1,6 @@
-/* eslint-disable no-restricted-syntax */
 
-import _ from 'lodash';
-import { HierarchyNode, HierarchyData } from 'types/visualizations';
-import { visualizationDetailsExtractor } from '../../../../utils/helper';
+import { toStringWithDefault, visualizationDetailsExtractor } from '../../../../utils/helper';
+import { VisualizationTypes } from '@illustry/types';
 
 const computeChildren = (
   values: unknown[],
@@ -11,37 +9,38 @@ const computeChildren = (
   const children: string[] = [];
   (mapping.children as string).split(',').forEach((row) => {
     if (
-      typeof values[_.toNumber(row)] === 'string'
-      && Number.isNaN(_.toNumber(values[_.toNumber(row)]))
+      typeof values[Number(row)] === 'string'
+      && Number.isNaN(Number(values[Number(row)]))
     ) {
-      children.push(values[_.toNumber(row)] as string);
+      children.push(values[Number(row)] as string);
     }
   });
   return children;
 };
-export const hierarchyTransformer = (
+
+const hierarchyTransformer = (
   mapping: Record<string, unknown>,
-  values: unknown[],
+  values: string[] | number[],
   allFileDetails: boolean
 ) => {
   const baseValues = {
     name:
-      typeof values[_.toNumber(mapping.names)] === 'string'
-        ? values[_.toNumber(mapping.names)]
-        : _.toString(values[_.toNumber(mapping.names)]),
+      typeof values[Number(mapping.names)] === 'string'
+        ? values[Number(mapping.names)]
+        : toStringWithDefault(values[Number(mapping.names)]),
     value:
-      typeof values[_.toNumber(mapping.values)] === 'string'
-        ? +(values[_.toNumber(mapping.values)] as string)
-        : values[_.toNumber(mapping.values)],
+      typeof values[Number(mapping.values)] === 'string'
+        ? +(values[Number(mapping.values)] as string)
+        : values[Number(mapping.values)],
     category:
-      typeof values[_.toNumber(mapping.categories)] === 'string'
-        ? values[_.toNumber(mapping.categories)]
-        : _.toString(values[_.toNumber(mapping.categories)]),
+      typeof values[Number(mapping.categories)] === 'string'
+        ? values[Number(mapping.categories)]
+        : toStringWithDefault(values[Number(mapping.categories)]),
     children: computeChildren(values, mapping),
     properties:
-      typeof values[_.toNumber(mapping.properties)] === 'string'
-        ? values[_.toNumber(mapping.properties)]
-        : _.toString(values[_.toNumber(mapping.properties)])
+      typeof values[Number(mapping.properties)] === 'string'
+        ? values[Number(mapping.properties)]
+        : toStringWithDefault(values[Number(mapping.properties)])
   };
   const visualizationDetails = visualizationDetailsExtractor(mapping, values);
   return allFileDetails
@@ -52,13 +51,13 @@ export const hierarchyTransformer = (
     : { nodes: baseValues };
 };
 
-export const hierarchyExtractorCsvOrExcel = (
+const hierarchyExtractorCsvOrExcel = (
   data: Record<string, unknown>[]
-): HierarchyData => {
-  const result: HierarchyNode[] = [];
+): VisualizationTypes.HierarchyData => {
+  const result: VisualizationTypes.HierarchyNode[] = [];
 
-  const transformItem = (item: HierarchyNode): HierarchyNode => {
-    const newItem: HierarchyNode = {
+  const transformItem = (item: VisualizationTypes.HierarchyNode): VisualizationTypes.HierarchyNode => {
+    const newItem: VisualizationTypes.HierarchyNode = {
       name: item.name,
       value: item.value,
       category: item.category,
@@ -69,15 +68,15 @@ export const hierarchyExtractorCsvOrExcel = (
       newItem.children = item.children
         .map((childName) => {
           const child = data.find(
-            (d) => (d.nodes as HierarchyNode).name
+            (d) => (d.nodes as VisualizationTypes.HierarchyNode).name
               === (childName as unknown as string)
           );
           if (child) {
-            return transformItem(child.nodes as HierarchyNode);
+            return transformItem(child.nodes as VisualizationTypes.HierarchyNode);
           }
           return null;
         })
-        .filter(Boolean) as HierarchyNode[];
+        .filter(Boolean) as VisualizationTypes.HierarchyNode[];
     }
     if (newItem.children?.length === 0) {
       delete newItem.children;
@@ -85,7 +84,7 @@ export const hierarchyExtractorCsvOrExcel = (
     return newItem;
   };
 
-  const findItem = (item: HierarchyNode, targetName: string): boolean => {
+  const findItem = (item: VisualizationTypes.HierarchyNode, targetName: string): boolean => {
     if (item.name === targetName) {
       return true;
     }
@@ -94,9 +93,9 @@ export const hierarchyExtractorCsvOrExcel = (
   };
 
   const findParentGroup = (
-    groups: HierarchyNode[],
+    groups: VisualizationTypes.HierarchyNode[],
     targetName: string
-  ): HierarchyNode | null => {
+  ): VisualizationTypes.HierarchyNode | null => {
     for (const group of groups) {
       if (findItem(group, targetName)) {
         return group;
@@ -106,18 +105,18 @@ export const hierarchyExtractorCsvOrExcel = (
   };
 
   data.forEach((item) => {
-    const isChild = result.some((group) => (group.children as HierarchyNode[])
-      .some((child) => findItem(child, (item.nodes as HierarchyNode).name)));
+    const isChild = result.some((group) => (group.children as VisualizationTypes.HierarchyNode[])
+      .some((child) => findItem(child, (item.nodes as VisualizationTypes.HierarchyNode).name)));
 
     if (!isChild) {
-      const transformedItem = transformItem(item.nodes as HierarchyNode);
+      const transformedItem = transformItem(item.nodes as VisualizationTypes.HierarchyNode);
 
       const parentGroup = findParentGroup(
         result,
-        (item.nodes as HierarchyNode).name
+        (item.nodes as VisualizationTypes.HierarchyNode).name
       );
       if (parentGroup) {
-        (parentGroup.children as HierarchyNode[]).push(transformedItem);
+        (parentGroup.children as VisualizationTypes.HierarchyNode[]).push(transformedItem);
       } else {
         result.push(transformedItem);
       }
@@ -126,23 +125,24 @@ export const hierarchyExtractorCsvOrExcel = (
 
   return { nodes: result };
 };
+
 const hierarchyNodeExtractorXml = (
   nodes: Record<string, unknown>[]
-): Record<string, unknown>[] => nodes.map((el: Record<string, unknown>) => ({
-  name: (el.name as string[])[0],
-  category: (el.category as string[])[0],
-  value: +(el.value as string[])[0],
+): Record<string, unknown>[] => nodes.map((node: Record<string, unknown>) => ({
+  name: (node.name as string[])[0],
+  category: (node.category as string[])[0],
+  value: +(node.value as string[])[0],
   properties:
-      el.properties && (el.properties as Record<string, unknown>[]).length
-        ? (el.properties as string[])[0]
+      node.properties && (node.properties as Record<string, unknown>[]).length
+        ? (node.properties as string[])[0]
         : undefined,
   children:
-      el.children && (el.children as Record<string, unknown>[]).length > 0
-        ? hierarchyNodeExtractorXml(el.children as Record<string, unknown>[])
+      node.children && (node.children as Record<string, unknown>[]).length > 0
+        ? hierarchyNodeExtractorXml(node.children as Record<string, unknown>[])
         : undefined
 }));
 
-export const hierarchyExtractorXml = (
+const hierarchyExtractorXml = (
   xmlData: Record<string, unknown>,
   allFileDetails: boolean
 ) => {
@@ -155,7 +155,7 @@ export const hierarchyExtractorXml = (
         ? hierarchyNodeExtractorXml(
           ((data as Record<string, unknown>[])[0].nodes) as Record<string, unknown>[]
         )
-        : hierarchyNodeExtractorXml(nodes as Record<string, unknown>[])
+        :hierarchyNodeExtractorXml(nodes as Record<string, unknown>[])
     }
   };
   return allFileDetails
@@ -170,3 +170,5 @@ export const hierarchyExtractorXml = (
     }
     : finalData;
 };
+
+export { hierarchyTransformer, hierarchyExtractorXml, hierarchyExtractorCsvOrExcel }
