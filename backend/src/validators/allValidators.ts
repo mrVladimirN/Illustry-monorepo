@@ -1,10 +1,32 @@
-// eslint-disable-next-line import/no-unresolved
-import { VisualizationTypesEnum } from 'types/visualizations';
+import { VisualizationTypes } from "@illustry/types";
 import { z } from 'zod';
 
 const dateSchema = z.instanceof(Date);
 const numberSchema = z.number();
 const stringSchema = z.string();
+
+
+const booleanSchema = z.boolean();
+
+const projectDataSchema = z.object({
+  name: stringSchema,
+  description: stringSchema.optional(),
+  createdAt: dateSchema.optional(),
+  updatedAt: dateSchema.optional(),
+  isActive: booleanSchema.optional()
+});
+
+const withOptionalIdSchema = z.object({
+  _id: stringSchema.optional()
+});
+
+const withIdSchema = z.object({
+  _id: stringSchema
+});
+
+const withOptionalVersionSchema = z.object({
+  __v: stringSchema.optional()
+});
 
 // Word-cloud
 const wordTypeSchema = z.object({
@@ -55,14 +77,13 @@ const nodeLinkDataSchema = z.object({
 });
 
 // AxisChart
-
 const axisChartDataSchema = z.object({
   headers: z.array(stringSchema),
   values: z.record(z.array(z.number()).min(1))
 });
 
 // Scatter
-export const scatterDataSchema = z.object({
+const scatterDataSchema = z.object({
   points: z.array(
     z.object({
       value: z.tuple([z.number(), z.number()]),
@@ -72,15 +93,13 @@ export const scatterDataSchema = z.object({
 });
 
 // PieChart/Funnel
-export const pieChartFunnelDataSchema = z.object({
+const pieChartFunnelDataSchema = z.object({
   values: z.record(z.number()),
   properties: z.union([z.any(), z.array(z.any()), z.string()]).optional()
 });
 
 // TreeMap/Sunburst
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const hierarchyNode: any = z.object({
+const hierarchyNode: z.ZodTypeAny = z.object({
   name: z.string(),
   value: z.number(),
   category: z.string(),
@@ -130,90 +149,98 @@ const visualizationDataSchema = z.object({
 
 const visualizationNodeLinkSchema = visualizationDataSchema.extend({
   type: z.union([
-    z.literal(VisualizationTypesEnum.FORCE_DIRECTED_GRAPH),
-    z.literal(VisualizationTypesEnum.SANKEY),
-    z.literal(VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING),
-    z.literal(VisualizationTypesEnum.MATRIX),
+    z.literal(VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH),
+    z.literal(VisualizationTypes.VisualizationTypesEnum.SANKEY),
+    z.literal(VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING),
+    z.literal(VisualizationTypes.VisualizationTypesEnum.MATRIX),
     z.array(
       z.union([
-        z.literal(VisualizationTypesEnum.FORCE_DIRECTED_GRAPH),
-        z.literal(VisualizationTypesEnum.SANKEY),
-        z.literal(VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING),
-        z.literal(VisualizationTypesEnum.MATRIX)
+        z.literal(VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH),
+        z.literal(VisualizationTypes.VisualizationTypesEnum.SANKEY),
+        z.literal(VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING),
+        z.literal(VisualizationTypes.VisualizationTypesEnum.MATRIX)
       ])
     )
   ]),
   data: nodeLinkDataSchema
 });
+
 const visualizationTimelineSchema = visualizationDataSchema.extend({
   type: z.union([
-    z.literal(VisualizationTypesEnum.TIMELINE),
+    z.literal(VisualizationTypes.VisualizationTypesEnum.TIMELINE),
 
-    z.array(z.literal(VisualizationTypesEnum.TIMELINE))
+    z.array(z.literal(VisualizationTypes.VisualizationTypesEnum.TIMELINE))
   ]),
   data: TimelineDataSchema
 });
+
 const visualizationAxisChartSchema = visualizationDataSchema.extend({
   type: z.union([
-    z.literal(VisualizationTypesEnum.LINE_CHART),
-    z.literal(VisualizationTypesEnum.BAR_CHART),
+    z.literal(VisualizationTypes.VisualizationTypesEnum.LINE_CHART),
+    z.literal(VisualizationTypes.VisualizationTypesEnum.BAR_CHART),
     z.array(
       z.union([
-        z.literal(VisualizationTypesEnum.LINE_CHART),
-        z.literal(VisualizationTypesEnum.BAR_CHART)
+        z.literal(VisualizationTypes.VisualizationTypesEnum.LINE_CHART),
+        z.literal(VisualizationTypes.VisualizationTypesEnum.BAR_CHART)
       ])
     )
   ]),
   data: axisChartDataSchema
 });
+
 const visualizationScatterSchema = visualizationDataSchema.extend({
   type: z.union([
-    z.literal(VisualizationTypesEnum.SCATTER),
-    z.array(z.literal(VisualizationTypesEnum.SCATTER))
+    z.literal(VisualizationTypes.VisualizationTypesEnum.SCATTER),
+    z.array(z.literal(VisualizationTypes.VisualizationTypesEnum.SCATTER))
   ]),
   data: scatterDataSchema
 });
+
 const visualizationPieChartFunnelSchema = visualizationDataSchema.extend({
   type: z.union([
-    z.literal(VisualizationTypesEnum.PIE_CHART),
-    z.literal(VisualizationTypesEnum.FUNNEL),
+    z.literal(VisualizationTypes.VisualizationTypesEnum.PIE_CHART),
+    z.literal(VisualizationTypes.VisualizationTypesEnum.FUNNEL),
     z.array(
       z.union([
-        z.literal(VisualizationTypesEnum.PIE_CHART),
-        z.literal(VisualizationTypesEnum.FUNNEL)
+        z.literal(VisualizationTypes.VisualizationTypesEnum.PIE_CHART),
+        z.literal(VisualizationTypes.VisualizationTypesEnum.FUNNEL)
       ])
     )
   ]),
   data: pieChartFunnelDataSchema
 });
+
 const visualizationCalendarSchema = visualizationDataSchema.extend({
   type: z.union([
-    z.literal(VisualizationTypesEnum.CALENDAR),
-    z.array(z.literal(VisualizationTypesEnum.CALENDAR))
+    z.literal(VisualizationTypes.VisualizationTypesEnum.CALENDAR),
+    z.array(z.literal(VisualizationTypes.VisualizationTypesEnum.CALENDAR))
   ]),
   data: calendarDataSchema
 });
-export const visualizationWordCloudSchema = visualizationDataSchema.extend({
+
+const visualizationWordCloudSchema = visualizationDataSchema.extend({
   type: z.union([
-    z.literal(VisualizationTypesEnum.WORD_CLOUD),
-    z.array(z.literal(VisualizationTypesEnum.WORD_CLOUD))
+    z.literal(VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD),
+    z.array(z.literal(VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD))
   ]),
   data: wordCloudDataSchema
 });
+
 const visualizationHierarchySchema = visualizationDataSchema.extend({
   type: z.union([
-    z.literal(VisualizationTypesEnum.TREEMAP),
-    z.literal(VisualizationTypesEnum.SUNBURST),
+    z.literal(VisualizationTypes.VisualizationTypesEnum.TREEMAP),
+    z.literal(VisualizationTypes.VisualizationTypesEnum.SUNBURST),
     z.array(
       z.union([
-        z.literal(VisualizationTypesEnum.TREEMAP),
-        z.literal(VisualizationTypesEnum.SUNBURST)
+        z.literal(VisualizationTypes.VisualizationTypesEnum.TREEMAP),
+        z.literal(VisualizationTypes.VisualizationTypesEnum.SUNBURST)
       ])
     )
   ]),
   data: hierarchySchema
 });
-export const visualizationTypeSchema = z.union([
+
+const visualizationTypeSchema = z.union([
   visualizationNodeLinkSchema,
   visualizationCalendarSchema,
   visualizationWordCloudSchema,
@@ -223,7 +250,8 @@ export const visualizationTypeSchema = z.union([
   visualizationHierarchySchema,
   visualizationTimelineSchema
 ]);
-export const visualizationFilterSchema = z.object({
+
+const visualizationFilterSchema = z.object({
   projectName: stringSchema.optional(),
   name: stringSchema.optional(),
   text: stringSchema.optional(),
@@ -237,7 +265,7 @@ export const visualizationFilterSchema = z.object({
     .optional()
 });
 
-export const visualizationExtendedTypeSchema = z.object({
+const visualizationExtendedTypeSchema = z.object({
   projects: z.array(visualizationTypeSchema).optional(),
   pagination: z
     .object({
@@ -247,37 +275,15 @@ export const visualizationExtendedTypeSchema = z.object({
     .optional()
 });
 
-const booleanSchema = z.boolean();
-
-const projectDataSchema = z.object({
-  name: stringSchema,
-  description: stringSchema.optional(),
-  createdAt: dateSchema.optional(),
-  updatedAt: dateSchema.optional(),
-  isActive: booleanSchema.optional()
-});
-
-const withOptionalIdSchema = z.object({
-  _id: stringSchema.optional()
-});
-
-const withIdSchema = z.object({
-  _id: stringSchema
-});
-
-const withOptionalVersionSchema = z.object({
-  __v: stringSchema.optional()
-});
-
-export const projectCreateSchema = projectDataSchema
+const projectCreateSchema = projectDataSchema
   .merge(withOptionalIdSchema)
   .merge(withOptionalVersionSchema);
 
-export const projectTypeSchema = projectDataSchema
+const projectTypeSchema = projectDataSchema
   .merge(withIdSchema)
   .merge(withOptionalVersionSchema);
 
-export const projectExtendedTypeSchema = z.object({
+const projectExtendedTypeSchema = z.object({
   projects: z.array(projectTypeSchema).optional(),
   pagination: z
     .object({
@@ -287,7 +293,7 @@ export const projectExtendedTypeSchema = z.object({
     .optional()
 });
 
-export const projectUpdateSchema = z.object({
+const projectUpdateSchema = z.object({
   name: stringSchema.optional(),
   description: stringSchema.optional(),
   createdAt: dateSchema.optional(),
@@ -295,7 +301,7 @@ export const projectUpdateSchema = z.object({
   isActive: booleanSchema.optional()
 });
 
-export const projectFilterSchema = z.object({
+const projectFilterSchema = z.object({
   name: stringSchema.optional(),
   text: stringSchema.optional(),
   page: numberSchema.optional(),
@@ -308,3 +314,14 @@ export const projectFilterSchema = z.object({
     })
     .optional()
 });
+
+export {
+  visualizationTypeSchema,
+  visualizationFilterSchema,
+  visualizationExtendedTypeSchema,
+  projectCreateSchema,
+  projectTypeSchema,
+  projectExtendedTypeSchema,
+  projectUpdateSchema,
+  projectFilterSchema
+}

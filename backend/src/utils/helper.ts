@@ -1,111 +1,131 @@
-/* eslint-disable no-restricted-syntax */
-/* eslint-disable no-param-reassign */
-import _ from 'lodash';
 import * as url from 'url';
 import * as fs from 'fs';
 import * as path from 'path';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any, consistent-return
-export const returnResponse = (res: any, err: any, data: any, next: any) => {
-  if (res && res.req && res.req.probe) {
-    const urlParts = url.parse(res.req.originalUrl) || {};
+type Response = {
+  req?: {
+    originalUrl?: string;
+    probe?: {
+      stop: (message: string) => void;
+    };
+  };
+  status: (code: number) => Response;
+  send: (data: unknown) => void;
+};
+
+
+const returnResponse = (
+  res: Response,
+  err: Error | null,
+  data: unknown,
+  next: (error: string | Error) => void
+): void => {
+  if (res?.req?.probe) {
+    const urlParts = url.parse(res.req.originalUrl || '');
     res.req.probe.stop(`Send response${urlParts.pathname}`);
   }
   if (!err) {
     res.status(200);
-    return res.send(data);
-  }
-  if (err.msg) {
-    next(err.msg);
-  } else if (err.message) {
-    next(err.message);
+    res.send(data);
   } else {
-    next(err);
+    next(err.message || err);
   }
 };
 
-export const visualizationDetailsExtractor = (
+const toStringWithDefault = (value: unknown): string => {
+  if (value === undefined || value === null) {
+    return '';
+  }
+  return String(value);
+};
+
+const visualizationDetailsExtractor = (
   mapping: Record<string, unknown>,
-  values: unknown[]
-) => ({
-  visualizationName:
-      values[_.toNumber(mapping.visualizationName)]
-      && typeof values[_.toNumber(mapping.visualizationName)] === 'string'
-      && !_.isEmpty(values[_.toNumber(mapping.visualizationName)])
-        ? values[_.toNumber(mapping.visualizationName)]
-        : undefined,
-  visualizationDescription:
-      values[_.toNumber(mapping.visualizationDescription)]
-      && typeof values[_.toNumber(mapping.visualizationDescription)] === 'string'
-        ? values[_.toNumber(mapping.visualizationDescription)]
-        : undefined,
-  visualizationTags:
-      values[_.toNumber(mapping.visualizationTags)]
-      && typeof values[_.toNumber(mapping.visualizationTags)] === 'string'
-        ? values[_.toNumber(mapping.visualizationTags)]
-        : undefined
-});
-export const visualizationPropertiesExtractor = (
+  values: (string | number)[]
+) => {
+  const getValue = (key: string): string | undefined => {
+    const index = Number(mapping[key]);
+    const value = values[index];
+    return typeof value === 'string' && value.trim() !== '' ? value : undefined;
+  };
+
+  return {
+    visualizationName: getValue('visualizationName'),
+    visualizationDescription: getValue('visualizationDescription'),
+    visualizationTags: getValue('visualizationTags'),
+  };
+};
+
+const visualizationPropertiesExtractor = (
   arr: Record<string, unknown>[]
 ) => {
-  let name: string = '';
-  let description: string = '';
+  let name = '';
+  let description = '';
   let tags: string[] = [];
+
   arr.forEach((item) => {
-    if (!_.isNil(item.visualizationName)) {
+    if (item.visualizationName) {
       name = item.visualizationName as string;
       delete item.visualizationName;
     }
-    if (!_.isNil(item.visualizationDescription)) {
+    if (item.visualizationDescription) {
       description = item.visualizationDescription as string;
       delete item.visualizationDescription;
     }
-    if (!_.isNil(item.visualizationTags)) {
+    if (item.visualizationTags) {
       tags = item.visualizationTags as string[];
       delete item.visualizationTags;
     }
   });
-  const extractedData = {
+
+  return {
     data: arr,
-    name: !_.isEmpty(name) ? name : undefined, // this needs to fail fast on validation
+    name: name || undefined,
     description,
     tags
   };
-  return extractedData;
 };
 
-export const copyDirectory = (src: string, dest: string): void => {
-  if (!fs.existsSync(dest)) {
-    fs.mkdirSync(dest);
-  }
+const copyDirectory = async (src: string, dest: string): Promise<void> => {
+  try {
+    await fs.promises.mkdir(dest, { recursive: true });
+    const files = await fs.promises.readdir(src);
 
-  const files: string[] = fs.readdirSync(src);
+    await Promise.all(files.map(async (file) => {
+      const srcPath = path.join(src, file);
+      const destPath = path.join(dest, file);
+      const stats = await fs.promises.stat(srcPath);
 
-  files.forEach((file) => {
-    const srcPath: string = path.join(src, file);
-    const destPath: string = path.join(dest, file);
-
-    if (fs.statSync(srcPath).isDirectory()) {
-      copyDirectory(srcPath, destPath);
-    } else {
-      fs.copyFileSync(srcPath, destPath);
-    }
-  });
-};
-export const deleteDirectory = (directoryPath: string): void => {
-  if (fs.existsSync(directoryPath)) {
-    const files = fs.readdirSync(directoryPath);
-
-    for (const file of files) {
-      const filePath = path.join(directoryPath, file);
-
-      if (fs.statSync(filePath).isDirectory()) {
-        deleteDirectory(filePath);
+      if (stats.isDirectory()) {
+        await copyDirectory(srcPath, destPath);
       } else {
-        fs.unlinkSync(filePath);
+        await fs.promises.copyFile(srcPath, destPath);
       }
-    }
-
-    fs.rmdirSync(directoryPath);
+    }));
+  } catch (error) {
+    console.error('Error copying directory:', error);
+    throw error;
   }
 };
+
+const deleteDirectory = async (directoryPath: string): Promise<void> => {
+  try {
+    const files = await fs.promises.readdir(directoryPath);
+    await Promise.all(files.map(async (file) => {
+      const filePath = path.join(directoryPath, file);
+      const stats = await fs.promises.stat(filePath);
+
+      if (stats.isDirectory()) {
+        await deleteDirectory(filePath);
+      } else {
+        await fs.promises.unlink(filePath);
+      }
+    }));
+    await fs.promises.rmdir(directoryPath);
+  } catch (error) {
+    console.error('Error deleting directory:', error);
+    throw error;
+  }
+};
+
+export { returnResponse, toStringWithDefault, visualizationDetailsExtractor, visualizationPropertiesExtractor, copyDirectory, deleteDirectory }

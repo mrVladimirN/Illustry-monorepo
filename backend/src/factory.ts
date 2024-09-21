@@ -1,12 +1,9 @@
-/* eslint-disable no-nested-ternary */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable no-use-before-define */
 import mongoose from 'mongoose';
 import BZLInstance from './bzl';
 import DbaccInstance from './dbacc/lib';
 import 'dotenv/config';
 
-export default class Factory {
+class Factory {
   private static _instance: Factory;
 
   private static _dbaccInstance: DbaccInstance;
@@ -17,18 +14,21 @@ export default class Factory {
     if (Factory._instance) {
       throw new Error('Use Factory getInstance() instead');
     }
+    const {
+      NODE_ENV,
+      MONGO_TEST_URL = '',
+      MONGO_URL = '',
+      MONGO_USER,
+      MONGO_PASSWORD
+    } = process.env;
     const dbConnection = mongoose.createConnection(
-      process.env.NODE_ENV === 'test'
-        ? process.env.MONGO_TEST_URL
-          ? process.env.MONGO_TEST_URL
-          : ''
-        : process.env.MONGO_URL
-          ? process.env.MONGO_URL
-          : '',
+      NODE_ENV === 'test'
+        ? MONGO_TEST_URL || ''
+        : MONGO_URL || '',
       {
-        dbName: process.env.NODE_ENV === 'test' ? 'illustrytest' : 'illustry',
-        user: process.env.MONGO_USER,
-        pass: process.env.MONGO_PASSWORD
+        dbName: NODE_ENV === 'test' ? 'illustrytest' : 'illustry',
+        user: MONGO_USER,
+        pass: MONGO_PASSWORD
       }
     );
     Factory._dbaccInstance = new DbaccInstance(dbConnection);
@@ -48,3 +48,5 @@ export default class Factory {
     return Factory._bzlInstance;
   }
 }
+
+export default Factory;
