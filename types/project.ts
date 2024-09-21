@@ -5,7 +5,7 @@ import {
   DeepPartial,
 } from "./utils";
 
-interface ProjectData {
+type ProjectData = {
   name: string;
   description?: string;
   createdAt?: Date;
@@ -13,26 +13,27 @@ interface ProjectData {
   isActive?: boolean;
 }
 
-export interface ProjectCreate
-  extends ProjectData,
-    with_optional_id,
-    with_optional_version {}
+type ProjectCreate =
+  ProjectData &
+  with_optional_id &
+  with_optional_version
 
-export interface ProjectType
-  extends ProjectData,
-    with_id,
-    with_optional_version {}
+type ProjectType =
+  ProjectData &
+  with_id &
+  with_optional_version
 
-export interface ExtendedProjectType {
+type ExtendedProjectType = {
   projects?: ProjectType[];
   pagination?: {
     count: number;
     pageCount: number;
   };
 }
-export interface ProjectUpdate extends DeepPartial<ProjectType> {}
 
-export interface ProjectFilter {
+type ProjectUpdate = DeepPartial<ProjectType>
+
+type ProjectFilter = {
   name?: string;
   text?: string;
   page?: number;
@@ -43,3 +44,5 @@ export interface ProjectFilter {
     sortOrder: string | number;
   };
 }
+
+export { ProjectFilter, ProjectUpdate, ExtendedProjectType, ProjectType, ProjectCreate }

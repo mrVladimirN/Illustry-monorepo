@@ -8,31 +8,31 @@ import {
 } from "./utils";
 
 // Word-cloud
-export interface WordType extends with_optional_properties {
+type WordType = with_optional_properties & {
   name: string;
   value: number;
 }
 
-export interface WordCloudData {
+type WordCloudData = {
   words: WordType[];
 }
 
 // Calendar
-export interface CalendarType extends with_optional_properties {
+type CalendarType = with_optional_properties & {
   date: string;
   value: number;
   category: string;
 }
 
-export interface CalendarData {
+type CalendarData = {
   calendar: CalendarType[];
 }
 
-export interface TimelineEventTag {
+type TimelineEventTag = {
   name: string;
 }
 
-export interface TimelineEvent {
+type TimelineEvent = {
   summary: string;
   date: string;
   type: string;
@@ -41,7 +41,7 @@ export interface TimelineEvent {
   description?: string;
 }
 
-export interface TimelineData {
+type TimelineData = {
   [date: string]: {
     summary?: {
       title?: string;
@@ -49,52 +49,54 @@ export interface TimelineData {
     events: TimelineEvent[];
   };
 }
+
 // Node-Link (force-directed-graph, sankey, hierarchical-edge-bundling )
 
-export interface Node extends with_optional_properties, with_optional_labels {
+type Node = with_optional_properties & with_optional_labels & {
   name: string;
   category: string;
 }
 
-export interface Link extends with_optional_properties {
+type Link = with_optional_properties & {
   source: string;
   target: string;
   value: number;
 }
 
-export interface NodeLinkData {
+type NodeLinkData = {
   nodes: Node[];
   links: Link[];
 }
 
-export interface AxisChartData {
+type AxisChartData = {
   headers: string[];
   values: { [key: string]: number[] };
 }
-export interface ScatterPoint extends with_optional_properties {
+
+type ScatterPoint = with_optional_properties & {
   value: [number, number];
   category: string;
 }
-export interface ScatterData {
+type ScatterData = {
   points: ScatterPoint[];
 }
-export interface PieChartData {
+type PieChartData = {
   values: { [key: string]: number };
 }
-export interface FunnelData {
+type FunnelData = {
   values: { [key: string]: number };
 }
-export interface HierarchyNode extends with_optional_properties {
+type HierarchyNode = with_optional_properties & {
   name: string;
   value: number;
   category: string;
   children?: HierarchyNode[];
 }
 
-export interface HierarchyData {
+type HierarchyData = {
   nodes: HierarchyNode[];
 }
-export enum VisualizationTypesEnum {
+enum VisualizationTypesEnum {
   WORD_CLOUD = "word-cloud",
   FORCE_DIRECTED_GRAPH = "force-directed-graph",
   SANKEY = "sankey",
@@ -106,51 +108,52 @@ export enum VisualizationTypesEnum {
   PIE_CHART = "pie-chart",
   SCATTER = "scatter",
   TREEMAP = "treemap",
-  SUNBURST= "sunburst",
-  FUNNEL= "funnel",
+  SUNBURST = "sunburst",
+  FUNNEL = "funnel",
   TIMELINE = "timeline"
 }
 
-interface VisualizationData {
+type VisualizationData = {
   projectName: string;
   type: VisualizationTypesEnum | VisualizationTypesEnum[];
   description?: string;
   name: string;
   tags?: string[];
   data:
-    | WordCloudData
-    | NodeLinkData
-    | CalendarData
-    | AxisChartData
-    | ScatterData
-    | PieChartData
-    | HierarchyData
-    | FunnelData 
-    | TimelineData;
+  | WordCloudData
+  | NodeLinkData
+  | CalendarData
+  | AxisChartData
+  | ScatterData
+  | PieChartData
+  | HierarchyData
+  | FunnelData
+  | TimelineData;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
-export interface VisualizationCreate
-  extends VisualizationData,
-    with_optional_id,
-    with_optional_version {}
+type VisualizationCreate =
+  VisualizationData &
+  with_optional_id &
+  with_optional_version
 
-export interface VisualizationType
-  extends VisualizationData,
-    with_id,
-    with_optional_version {}
+type VisualizationType =
+  VisualizationData &
+  with_id &
+  with_optional_version
 
-export interface ExtendedVisualizationType {
+type ExtendedVisualizationType = {
   visualizations?: VisualizationType[];
   pagination?: {
     count: number;
     pageCount: number;
   };
 }
-export interface VisualizationUpdate extends DeepPartial<VisualizationType> {}
 
-export interface VisualizationFilter {
+type VisualizationUpdate = DeepPartial<VisualizationType>
+
+type VisualizationFilter = {
   projectName?: string;
   type?: string | string[];
   name?: string;
@@ -162,4 +165,31 @@ export interface VisualizationFilter {
     element: string;
     sortOrder: string | number;
   };
+}
+
+export {
+  WordType,
+  WordCloudData,
+  CalendarType,
+  CalendarData,
+  TimelineEventTag,
+  TimelineEvent,
+  TimelineData,
+  Node,
+  Link,
+  NodeLinkData,
+  AxisChartData,
+  ScatterData,
+  ScatterPoint,
+  PieChartData,
+  FunnelData,
+  HierarchyNode,
+  HierarchyData,
+  VisualizationTypesEnum,
+  VisualizationData,
+  VisualizationCreate,
+  VisualizationType,
+  ExtendedVisualizationType,
+  VisualizationUpdate,
+  VisualizationFilter
 }

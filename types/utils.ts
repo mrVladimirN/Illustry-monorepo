@@ -1,39 +1,42 @@
-export interface with_id {
+type with_id = {
   id: string;
 }
 
-export interface with_optional_id {
+type with_optional_id = {
   id?: string;
 }
 
-export interface with_version {
+type with_version = {
   __v: number;
 }
 
-export interface with_optional_version {
+type with_optional_version = {
   __v?: number;
 }
 
-export type DeepPartial<T> = {
+type DeepPartial<T> = {
   [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
 };
 
-export type ExtendedMongoQuery = {
-  query?: { [key: string]: string | object };
+type MongoQuery = { [key: string]: string | object | Array<object>, };
+
+type ExtendedMongoQuery = {
+  query?: MongoQuery;
   page?: number;
   sort?: { [sortField: string]: string | number };
   per_page?: number;
 };
 
-export type MongoQuery = { [key: string]: string | object };
-
-export interface with_optional_properties {
-  properties?: object | object[] | string;
+type with_optional_properties = {
+  properties?: object | Array<object> | string;
 }
-export interface with_optional_labels {
+
+type with_optional_labels = {
   labels?: {
     name: string;
     value: number;
-    properties?: object | object[] | string;
+    properties?: object | Array<object> | string;
   }[];
 }
+
+export { with_id, with_optional_id, with_version, with_optional_version, DeepPartial, MongoQuery, ExtendedMongoQuery, with_optional_properties, with_optional_labels }

@@ -1,80 +1,86 @@
-declare module "types/files" {
-    export interface FileProperties {
+declare module "files" {
+    type FileProperties = {
         filePath: string;
         type: string;
         delimiter?: string;
-    }
-    export interface FileDetails {
+    };
+    type FileDetails = {
         fileType: "JSON" | "EXCEL" | "CSV" | "XML";
         includeHeaders?: boolean;
         separator?: string;
         mapping?: any;
         sheets?: string;
+    };
+    type UploadedFile = {
+        path: string;
+        mimeType: string;
+    };
+    interface RequestWithFiles extends Request {
+        files?: {
+            file: UploadedFile[];
+        };
     }
+    export { FileProperties, FileDetails, UploadedFile, RequestWithFiles };
 }
-declare module "types/utils" {
-    export interface with_id {
+declare module "utils" {
+    type with_id = {
         id: string;
-    }
-    export interface with_optional_id {
+    };
+    type with_optional_id = {
         id?: string;
-    }
-    export interface with_version {
+    };
+    type with_version = {
         __v: number;
-    }
-    export interface with_optional_version {
+    };
+    type with_optional_version = {
         __v?: number;
-    }
-    export type DeepPartial<T> = {
+    };
+    type DeepPartial<T> = {
         [P in keyof T]?: T[P] extends object ? DeepPartial<T[P]> : T[P];
     };
-    export type ExtendedMongoQuery = {
-        query?: {
-            [key: string]: string | object;
-        };
+    type MongoQuery = {
+        [key: string]: string | object | Array<object>;
+    };
+    type ExtendedMongoQuery = {
+        query?: MongoQuery;
         page?: number;
         sort?: {
             [sortField: string]: string | number;
         };
         per_page?: number;
     };
-    export type MongoQuery = {
-        [key: string]: string | object;
+    type with_optional_properties = {
+        properties?: object | Array<object> | string;
     };
-    export interface with_optional_properties {
-        properties?: object | object[] | string;
-    }
-    export interface with_optional_labels {
+    type with_optional_labels = {
         labels?: {
             name: string;
             value: number;
-            properties?: object | object[] | string;
+            properties?: object | Array<object> | string;
         }[];
-    }
+    };
+    export { with_id, with_optional_id, with_version, with_optional_version, DeepPartial, MongoQuery, ExtendedMongoQuery, with_optional_properties, with_optional_labels };
 }
-declare module "types/project" {
-    import { with_optional_id, with_optional_version, with_id, DeepPartial } from "types/utils";
-    interface ProjectData {
+declare module "project" {
+    import { with_optional_id, with_optional_version, with_id, DeepPartial } from "utils";
+    type ProjectData = {
         name: string;
         description?: string;
         createdAt?: Date;
         updatedAt?: Date;
         isActive?: boolean;
-    }
-    export interface ProjectCreate extends ProjectData, with_optional_id, with_optional_version {
-    }
-    export interface ProjectType extends ProjectData, with_id, with_optional_version {
-    }
-    export interface ExtendedProjectType {
+    };
+    type ProjectCreate = ProjectData & with_optional_id & with_optional_version;
+    type ProjectType = ProjectData & with_id & with_optional_version;
+    type ExtendedProjectType = {
         projects?: ProjectType[];
         pagination?: {
             count: number;
             pageCount: number;
         };
-    }
-    export interface ProjectUpdate extends DeepPartial<ProjectType> {
-    }
-    export interface ProjectFilter {
+    };
+    type ProjectUpdate = DeepPartial<ProjectType>;
+    type ProjectFilter = {
         name?: string;
         text?: string;
         page?: number;
@@ -84,90 +90,91 @@ declare module "types/project" {
             element: string;
             sortOrder: string | number;
         };
-    }
+    };
+    export { ProjectFilter, ProjectUpdate, ExtendedProjectType, ProjectType, ProjectCreate };
 }
-declare module "types/visualizations" {
-    import { DeepPartial, with_id, with_optional_id, with_optional_version, with_optional_properties, with_optional_labels } from "types/utils";
-    export interface WordType extends with_optional_properties {
+declare module "visualizations" {
+    import { DeepPartial, with_id, with_optional_id, with_optional_version, with_optional_properties, with_optional_labels } from "utils";
+    type WordType = with_optional_properties & {
         name: string;
         value: number;
-    }
-    export interface WordCloudData {
+    };
+    type WordCloudData = {
         words: WordType[];
-    }
-    export interface CalendarType extends with_optional_properties {
+    };
+    type CalendarType = with_optional_properties & {
         date: string;
         value: number;
         category: string;
-    }
-    export interface CalendarData {
+    };
+    type CalendarData = {
         calendar: CalendarType[];
-    }
-    export interface TimelineEventTag {
+    };
+    type TimelineEventTag = {
         name: string;
-    }
-    export interface TimelineEvent {
+    };
+    type TimelineEvent = {
         summary: string;
         date: string;
         type: string;
         author: string;
         tags?: TimelineEventTag[];
         description?: string;
-    }
-    export interface TimelineData {
+    };
+    type TimelineData = {
         [date: string]: {
             summary?: {
                 title?: string;
             };
             events: TimelineEvent[];
         };
-    }
-    export interface Node extends with_optional_properties, with_optional_labels {
+    };
+    type Node = with_optional_properties & with_optional_labels & {
         name: string;
         category: string;
-    }
-    export interface Link extends with_optional_properties {
+    };
+    type Link = with_optional_properties & {
         source: string;
         target: string;
         value: number;
-    }
-    export interface NodeLinkData {
+    };
+    type NodeLinkData = {
         nodes: Node[];
         links: Link[];
-    }
-    export interface AxisChartData {
+    };
+    type AxisChartData = {
         headers: string[];
         values: {
             [key: string]: number[];
         };
-    }
-    export interface ScatterPoint extends with_optional_properties {
+    };
+    type ScatterPoint = with_optional_properties & {
         value: [number, number];
         category: string;
-    }
-    export interface ScatterData {
+    };
+    type ScatterData = {
         points: ScatterPoint[];
-    }
-    export interface PieChartData {
+    };
+    type PieChartData = {
         values: {
             [key: string]: number;
         };
-    }
-    export interface FunnelData {
+    };
+    type FunnelData = {
         values: {
             [key: string]: number;
         };
-    }
-    export interface HierarchyNode extends with_optional_properties {
+    };
+    type HierarchyNode = with_optional_properties & {
         name: string;
         value: number;
         category: string;
         children?: HierarchyNode[];
-    }
-    export interface HierarchyData {
+    };
+    type HierarchyData = {
         nodes: HierarchyNode[];
-    }
-    export const enum VisualizationTypesEnum {
+    };
+    enum VisualizationTypesEnum {
         WORD_CLOUD = "word-cloud",
         FORCE_DIRECTED_GRAPH = "force-directed-graph",
         SANKEY = "sankey",
@@ -183,7 +190,7 @@ declare module "types/visualizations" {
         FUNNEL = "funnel",
         TIMELINE = "timeline"
     }
-    interface VisualizationData {
+    type VisualizationData = {
         projectName: string;
         type: VisualizationTypesEnum | VisualizationTypesEnum[];
         description?: string;
@@ -192,21 +199,18 @@ declare module "types/visualizations" {
         data: WordCloudData | NodeLinkData | CalendarData | AxisChartData | ScatterData | PieChartData | HierarchyData | FunnelData | TimelineData;
         createdAt?: Date;
         updatedAt?: Date;
-    }
-    export interface VisualizationCreate extends VisualizationData, with_optional_id, with_optional_version {
-    }
-    export interface VisualizationType extends VisualizationData, with_id, with_optional_version {
-    }
-    export interface ExtendedVisualizationType {
+    };
+    type VisualizationCreate = VisualizationData & with_optional_id & with_optional_version;
+    type VisualizationType = VisualizationData & with_id & with_optional_version;
+    type ExtendedVisualizationType = {
         visualizations?: VisualizationType[];
         pagination?: {
             count: number;
             pageCount: number;
         };
-    }
-    export interface VisualizationUpdate extends DeepPartial<VisualizationType> {
-    }
-    export interface VisualizationFilter {
+    };
+    type VisualizationUpdate = DeepPartial<VisualizationType>;
+    type VisualizationFilter = {
         projectName?: string;
         type?: string | string[];
         name?: string;
@@ -218,11 +222,31 @@ declare module "types/visualizations" {
             element: string;
             sortOrder: string | number;
         };
+    };
+    export { WordType, WordCloudData, CalendarType, CalendarData, TimelineEventTag, TimelineEvent, TimelineData, Node, Link, NodeLinkData, AxisChartData, ScatterData, ScatterPoint, PieChartData, FunnelData, HierarchyNode, HierarchyData, VisualizationTypesEnum, VisualizationData, VisualizationCreate, VisualizationType, ExtendedVisualizationType, VisualizationUpdate, VisualizationFilter };
+}
+declare module "generic" {
+    import { ExtendedMongoQuery } from "utils";
+    interface BaseBZL<TCreate, TUpdate, TFilter, TType, TExtendedType> {
+        create(data: TCreate): Promise<TType>;
+        update(filter: TFilter, data: TUpdate): Promise<TType | null>;
+        delete(filter: TFilter): Promise<boolean>;
+        findOne(filter: TFilter): Promise<TType>;
+        browse(filter: TFilter): Promise<TExtendedType>;
     }
+    interface BaseLib<TCreate, TUpdate, TFilter, TType, TExtendedType> {
+        create(data: TCreate): Promise<TType>;
+        update(filter: ExtendedMongoQuery, data: TUpdate): Promise<TType | null>;
+        delete(filter: ExtendedMongoQuery): Promise<boolean>;
+        findOne(filter: ExtendedMongoQuery): Promise<TType | null>;
+        browse(filter: ExtendedMongoQuery): Promise<TExtendedType>;
+    }
+    export { BaseBZL, BaseLib };
 }
 declare module "index" {
-    export { FileDetails, FileProperties } from "types/files";
-    export { ProjectCreate, ProjectFilter, ProjectType, ProjectUpdate, ExtendedProjectType, } from "types/project";
-    export { VisualizationCreate, VisualizationFilter, VisualizationType, VisualizationTypesEnum, VisualizationUpdate, ExtendedVisualizationType, Node, Link, AxisChartData, ScatterPoint, PieChartData, ScatterData, NodeLinkData, WordType, WordCloudData, CalendarType, CalendarData, HierarchyData, HierarchyNode, FunnelData, TimelineEventTag, TimelineEvent, TimelineData, } from "types/visualizations";
-    export { with_id, with_optional_id, with_optional_properties, with_optional_version, with_version, ExtendedMongoQuery, MongoQuery, DeepPartial, with_optional_labels, } from "types/utils";
+    export { FileDetails, FileProperties, RequestWithFiles, UploadedFile } from "files";
+    export { ProjectCreate, ProjectFilter, ProjectType, ProjectUpdate, ExtendedProjectType, } from "project";
+    export { VisualizationCreate, VisualizationFilter, VisualizationType, VisualizationTypesEnum, VisualizationUpdate, ExtendedVisualizationType, Node, Link, AxisChartData, ScatterPoint, PieChartData, ScatterData, NodeLinkData, WordType, WordCloudData, CalendarType, CalendarData, HierarchyData, HierarchyNode, FunnelData, TimelineEventTag, TimelineEvent, TimelineData, } from "visualizations";
+    export { with_id, with_optional_id, with_optional_properties, with_optional_version, with_version, ExtendedMongoQuery, MongoQuery, DeepPartial, with_optional_labels, } from "utils";
+    export { BaseBZL, BaseLib } from "generic";
 }

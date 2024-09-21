@@ -1,6 +1,6 @@
 // Types
 
-export { FileDetails, FileProperties } from "./types/files";
+export { FileDetails, FileProperties, RequestWithFiles, UploadedFile } from "./files";
 
 export {
   ProjectCreate,
@@ -8,7 +8,7 @@ export {
   ProjectType,
   ProjectUpdate,
   ExtendedProjectType,
-} from "./types/project";
+} from "./project";
 
 export {
   VisualizationCreate,
@@ -34,7 +34,7 @@ export {
   TimelineEventTag,
   TimelineEvent,
   TimelineData,
-} from "./types/visualizations";
+} from "./visualizations";
 
 export {
   with_id,
@@ -46,4 +46,6 @@ export {
   MongoQuery,
   DeepPartial,
   with_optional_labels,
-} from "./types/utils";
+} from "./utils";
+
+export { BaseBZL, BaseLib } from './generic';
