@@ -30,7 +30,14 @@ module.exports = {
 
     'class-methods-use-this': 'off',
 
-    'import/no-unresolved': 'off'
+    'max-length': [130],
+    
+    'no-underscore-dangle': 'off',
+
+    'import/no-unresolved': 'off',
+
+    'no-use-before-define': 'off'
+
     // Add more rules as needed
   },
 
