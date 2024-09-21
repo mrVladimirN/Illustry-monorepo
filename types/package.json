@@ -1,12 +1,14 @@
 {
   "name": "@illustry/types",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A module for Illustry Types",
-  "files": [
-    "dist"
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+   "files": [
+    "dist/**/*"
   ],
   "scripts": {
-    "generate:types": "tsc --outDir dist"
+    "build:ts": "tsc -p tsconfig.json"
   },
   "repository": {
     "type": "git",
