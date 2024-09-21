@@ -1,19 +1,14 @@
-import { ProjectCreate } from "types/project";
-import _ from "lodash";
+import { ProjectTypes, FileTypes, VisualizationTypes } from "@illustry/types";
 import mongoose from "mongoose";
 import path from "path";
-import { FileDetails, FileProperties } from "types/files";
-import {
-  VisualizationUpdate,
-  VisualizationType,
-  VisualizationTypesEnum,
-  VisualizationCreate,
-  ExtendedVisualizationType,
-} from "types/visualizations";
 import { copyDirectory } from "../../src/utils/helper";
 import Factory from "../../src/factory";
 
 process.env.NODE_ENV = "test";
+process.env.MONGO_TEST_URL = "mongodb://localhost:27017/illustrytest";
+process.env.MONGO_USER = "root"
+process.env.MONGO_PASSWORD = "rootPass"
+
 const factory = Factory.getInstance();
 const jsonDirectoryPath = path.resolve(
   __dirname,
@@ -33,45 +28,42 @@ const csvDirectoryPath = path.resolve(
 );
 describe("visualizations CRUD", () => {
   beforeAll(async () => {
-    const expectedProject: ProjectCreate = {
+    const expectedProject: ProjectTypes.ProjectCreate = {
       name: "Test_Project1",
       description: "Test_ProjectDescription1",
       isActive: true,
     };
-    copyDirectory(jsonDirectoryPath, path.resolve(__dirname));
-    copyDirectory(xmlDirectoryPath, path.resolve(__dirname));
-    copyDirectory(excelDirectoryPath, path.resolve(__dirname));
-    copyDirectory(csvDirectoryPath, path.resolve(__dirname));
+    await copyDirectory(jsonDirectoryPath, path.resolve(__dirname));
+    await copyDirectory(xmlDirectoryPath, path.resolve(__dirname));
+    await copyDirectory(excelDirectoryPath, path.resolve(__dirname));
+    await copyDirectory(csvDirectoryPath, path.resolve(__dirname));
     await factory.getBZL().ProjectBZL.create(expectedProject);
   });
+
   afterAll(async () => {
     delete process.env.NODE_ENV;
     const allProjects = await factory.getBZL().ProjectBZL.browse({});
 
-    // Use map to create an array of promises
     const deletePromises = (allProjects.projects || []).map(async (project) => {
       await factory.getBZL().ProjectBZL.delete({ name: project.name });
     });
 
-    // Wait for all promises to complete before disconnecting
     await Promise.all(deletePromises);
     await mongoose.disconnect();
   });
   it("It creates a hierarchical-edge-bundling Visualization JSON with all the details in the JSON", async () => {
-    expect.assertions(2);
-    expect.assertions(2);
     const filePath = path.resolve(__dirname, "./HEB_FullDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "HEB_FullDetails",
       description: "HEB_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING],
+      type: [VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING],
       data: {
         nodes: [
           {
@@ -106,7 +98,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -116,23 +108,23 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a force-directed-graph Visualization JSON with all the details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./FLG_FullDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "FLG_FullDetails",
       description: "FLG_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.FORCE_DIRECTED_GRAPH],
+      type: [VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH],
       data: {
         nodes: [
           {
@@ -167,7 +159,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -177,24 +169,23 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
 
   it("It creates a sankey Visualization JSON with all the details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./SANKEY_FullDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Sankey_FullDetails",
       description: "Sankey_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.SANKEY],
+      type: [VisualizationTypes.VisualizationTypesEnum.SANKEY],
       data: {
         nodes: [
           {
@@ -224,7 +215,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -234,23 +225,22 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a word-cloud Visualization JSON with all the details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Wordcloud_FullDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Wordcloud_FullDetails",
       description: "Wordcloud_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.WORD_CLOUD],
+      type: [VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD],
       data: {
         words: [
           {
@@ -284,7 +274,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -294,23 +284,22 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a calendar Visualization JSON with all the details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Calendar_FullDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Calendar_FullDetails",
       description: "Calendar_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.CALENDAR],
+      type: [VisualizationTypes.VisualizationTypesEnum.CALENDAR],
       data: {
         calendar: [
           {
@@ -391,7 +380,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -401,23 +390,22 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a matrix Visualization JSON with all the details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Matrix_FullDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Matrix_FullDetails",
       description: "Matrix_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.MATRIX],
+      type: [VisualizationTypes.VisualizationTypesEnum.MATRIX],
       data: {
         nodes: [
           {
@@ -511,7 +499,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -521,23 +509,22 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a line-chart Visualization JSON with all the details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./LineChart_FullDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "LineChart_FullDetails",
       description: "LineChart_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.LINE_CHART],
+      type: [VisualizationTypes.VisualizationTypesEnum.LINE_CHART],
       data: {
         headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         values: {
@@ -548,7 +535,7 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -558,23 +545,22 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a bar-chart Visualization JSON with all the details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./BarChart_FullDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "BarChart_FullDetails",
       description: "BarChart_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.BAR_CHART],
+      type: [VisualizationTypes.VisualizationTypesEnum.BAR_CHART],
       data: {
         headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         values: {
@@ -585,7 +571,7 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -595,23 +581,22 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a pie-chart Visualization JSON with all the details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./PieChart_FullDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "PieChart_FullDetails",
       description: "PieChart_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.PIE_CHART],
+      type: [VisualizationTypes.VisualizationTypesEnum.PIE_CHART],
       data: {
         values: {
           "Statistic 1": 122,
@@ -621,7 +606,7 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -631,23 +616,22 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a scatter Visualization JSON with all the details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Scatter_FullDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Scatter_FullDetails",
       description: "Scatter_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.SCATTER],
+      type: [VisualizationTypes.VisualizationTypesEnum.SCATTER],
       data: {
         points: [
           { value: [3.275154, 2.957587], category: "3" },
@@ -658,7 +642,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -668,23 +652,22 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a funnel Visualization JSON with all the details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Funnel_FullDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Funnel_FullDetails",
       description: "Funnel_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.FUNNEL],
+      type: [VisualizationTypes.VisualizationTypesEnum.FUNNEL],
       data: {
         values: {
           "Statistic 1": 122,
@@ -694,7 +677,7 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -704,23 +687,22 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a treemap Visualization JSON with all the details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Treemap_FullDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Treemap_FullDetails",
       description: "Treemap_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.TREEMAP],
+      type: [VisualizationTypes.VisualizationTypesEnum.TREEMAP],
       data: {
         nodes: [
           {
@@ -781,7 +763,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -791,23 +773,22 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a sunburst Visualization JSON with all the details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Sunburst_FullDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Sunburst_FullDetails",
       description: "Sunburst_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.SUNBURST],
+      type: [VisualizationTypes.VisualizationTypesEnum.SUNBURST],
       data: {
         nodes: [
           {
@@ -868,7 +849,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -878,23 +859,22 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a timeline Visualization JSON with all the details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Timeline_FullDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Timeline_FullDetails",
       description: "Timeline_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.TIMELINE],
+      type: [VisualizationTypes.VisualizationTypesEnum.TIMELINE],
       data: {
         "2023-10-07": {
           summary: {
@@ -988,7 +968,7 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -998,29 +978,28 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
 
   it("It creates a hierarchical-edge-bundling Visualization JSON with only the data details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./HEB_PartialDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "HEB_PartialDetails",
       description: "HEB_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING],
+      type: [VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING],
     };
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "HEB_PartialDetails",
       description: "HEB_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING],
+      type: [VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING],
       data: {
         nodes: [
           {
@@ -1055,7 +1034,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -1065,28 +1044,27 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a force-directed-graph Visualization JSON with only the data details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./FLG_PartialDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "FLG_PartialDetails",
       description: "FLG_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.FORCE_DIRECTED_GRAPH],
+      type: [VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH],
     };
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "FLG_PartialDetails",
       description: "FLG_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.FORCE_DIRECTED_GRAPH],
+      type: [VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH],
       data: {
         nodes: [
           {
@@ -1121,7 +1099,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -1131,28 +1109,27 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a sankey Visualization JSON with only the data details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./SANKEY_PartialDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Sankey_PartialDetails",
       description: "Sankey_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.SANKEY],
+      type: [VisualizationTypes.VisualizationTypesEnum.SANKEY],
     };
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Sankey_PartialDetails",
       description: "Sankey_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.SANKEY],
+      type: [VisualizationTypes.VisualizationTypesEnum.SANKEY],
       data: {
         nodes: [
           {
@@ -1182,7 +1159,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -1192,28 +1169,27 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a word-cloud Visualization JSON with only the data details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Wordcloud_PartialDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Wordcloud_PartialDetails",
       description: "Wordcloud_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.WORD_CLOUD],
+      type: [VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD],
     };
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Wordcloud_PartialDetails",
       description: "Wordcloud_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.WORD_CLOUD],
+      type: [VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD],
       data: {
         words: [
           {
@@ -1247,7 +1223,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -1257,28 +1233,27 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a calendar Visualization JSON with only the data details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Calendar_PartialDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Calendar_PartialDetails",
       description: "Calendar_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.CALENDAR],
+      type: [VisualizationTypes.VisualizationTypesEnum.CALENDAR],
     };
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Calendar_PartialDetails",
       description: "Calendar_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.CALENDAR],
+      type: [VisualizationTypes.VisualizationTypesEnum.CALENDAR],
       data: {
         calendar: [
           {
@@ -1359,7 +1334,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -1369,28 +1344,27 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a matrix Visualization JSON with only the data details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Matrix_PartialDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Matrix_PartialDetails",
       description: "Matrix_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.MATRIX],
+      type: [VisualizationTypes.VisualizationTypesEnum.MATRIX],
     };
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Matrix_PartialDetails",
       description: "Matrix_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.MATRIX],
+      type: [VisualizationTypes.VisualizationTypesEnum.MATRIX],
       data: {
         nodes: [
           {
@@ -1484,7 +1458,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -1494,28 +1468,27 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a line-chart Visualization JSON with only the data details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./LineChart_PartialDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "LineChart_PartialDetails",
       description: "LineChart_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.LINE_CHART],
+      type: [VisualizationTypes.VisualizationTypesEnum.LINE_CHART],
     };
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "LineChart_PartialDetails",
       description: "LineChart_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.LINE_CHART],
+      type: [VisualizationTypes.VisualizationTypesEnum.LINE_CHART],
       data: {
         headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         values: {
@@ -1526,7 +1499,7 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -1536,28 +1509,27 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a bar-chart Visualization JSON with only the data details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./BarChart_PartialDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "BarChart_PartialDetails",
       description: "BarChart_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.BAR_CHART],
+      type: [VisualizationTypes.VisualizationTypesEnum.BAR_CHART],
     };
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "BarChart_PartialDetails",
       description: "BarChart_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.BAR_CHART],
+      type: [VisualizationTypes.VisualizationTypesEnum.BAR_CHART],
       data: {
         headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         values: {
@@ -1568,7 +1540,7 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -1578,28 +1550,27 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a pie-chart Visualization JSON with only the data details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./PieChart_PartialDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "PieChart_PartialDetails",
       description: "PieChart_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.PIE_CHART],
+      type: [VisualizationTypes.VisualizationTypesEnum.PIE_CHART],
     };
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "PieChart_PartialDetails",
       description: "PieChart_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.PIE_CHART],
+      type: [VisualizationTypes.VisualizationTypesEnum.PIE_CHART],
       data: {
         values: {
           "Statistic 1": 122,
@@ -1609,7 +1580,7 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -1619,28 +1590,27 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a scatter Visualization JSON with only the data details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Scatter_PartialDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Scatter_PartialDetails",
       description: "Scatter_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.SCATTER],
+      type: [VisualizationTypes.VisualizationTypesEnum.SCATTER],
     };
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Scatter_PartialDetails",
       description: "Scatter_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.SCATTER],
+      type: [VisualizationTypes.VisualizationTypesEnum.SCATTER],
       data: {
         points: [
           { value: [3.275154, 2.957587], category: "3" },
@@ -1651,7 +1621,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -1661,28 +1631,27 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a funnel Visualization JSON with only the data details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Funnel_PartialDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Funnel_PartialDetails",
       description: "Funnel_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.FUNNEL],
+      type: [VisualizationTypes.VisualizationTypesEnum.FUNNEL],
     };
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Funnel_PartialDetails",
       description: "Funnel_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.FUNNEL],
+      type: [VisualizationTypes.VisualizationTypesEnum.FUNNEL],
       data: {
         values: {
           "Statistic 1": 122,
@@ -1692,7 +1661,7 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -1702,28 +1671,27 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a treemap Visualization JSON with only the data details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Treemap_PartialDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Treemap_PartialDetails",
       description: "Treemap_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.TREEMAP],
+      type: [VisualizationTypes.VisualizationTypesEnum.TREEMAP],
     };
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Treemap_PartialDetails",
       description: "Treemap_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.TREEMAP],
+      type: [VisualizationTypes.VisualizationTypesEnum.TREEMAP],
       data: {
         nodes: [
           {
@@ -1784,7 +1752,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -1794,28 +1762,27 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a sunburst Visualization JSON with only the data details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Sunburst_PartialDetails",
       description: "Sunburst_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.SUNBURST],
+      type: [VisualizationTypes.VisualizationTypesEnum.SUNBURST],
     };
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Sunburst_PartialDetails",
       description: "Sunburst_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.SUNBURST],
+      type: [VisualizationTypes.VisualizationTypesEnum.SUNBURST],
       data: {
         nodes: [
           {
@@ -1876,7 +1843,7 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -1886,28 +1853,27 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a timeline Visualization JSON with only the data details in the JSON", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Timeline_PartialDetails.json");
 
-    const files: FileProperties[] = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Timeline_PartialDetails",
       description: "Timeline_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.TIMELINE],
+      type: [VisualizationTypes.VisualizationTypesEnum.TIMELINE],
     };
-    const fileDetails: FileDetails = { fileType: "JSON" };
-    const expectedVisualization: VisualizationCreate = {
+    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Timeline_PartialDetails",
       description: "Timeline_PartialDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.TIMELINE],
+      type: [VisualizationTypes.VisualizationTypesEnum.TIMELINE],
       data: {
         "2023-10-07": {
           summary: {
@@ -2001,7 +1967,7 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -2011,18 +1977,17 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a bar-chart Visualization XML with all the details in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./BarChart_FullDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "XML" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         values: {
@@ -2035,11 +2000,11 @@ describe("visualizations CRUD", () => {
       name: "BarChart_FullDetails",
       description: "BarChart_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.BAR_CHART],
+      type: [VisualizationTypes.VisualizationTypesEnum.BAR_CHART],
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -2050,18 +2015,17 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a calendar Visualization XML with all the details in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Calendar_FullDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "XML" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         calendar: [
           {
@@ -2144,11 +2108,11 @@ describe("visualizations CRUD", () => {
       name: "Calendar_FullDetails",
       description: "Calendar_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.CALENDAR],
+      type: [VisualizationTypes.VisualizationTypesEnum.CALENDAR],
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -2159,18 +2123,17 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a forced-directed-graph Visualization XML with all the details in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./FLG_FullDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "XML" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         nodes: [
           {
@@ -2207,11 +2170,11 @@ describe("visualizations CRUD", () => {
       name: "FLG_FullDetails",
       description: "FLG_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.FORCE_DIRECTED_GRAPH],
+      type: [VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH],
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -2222,18 +2185,17 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a funnel Visualization XML with all the details in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Funnel_FullDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "XML" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         values: {
           Statistic_1: 122,
@@ -2245,11 +2207,11 @@ describe("visualizations CRUD", () => {
       name: "Funnel_FullDetails",
       description: "Funnel_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.FUNNEL],
+      type: [VisualizationTypes.VisualizationTypesEnum.FUNNEL],
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -2260,18 +2222,17 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a hierarchical-edge-bundling Visualization XML with all the details in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./HEB_FullDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "XML" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         nodes: [
           {
@@ -2308,11 +2269,11 @@ describe("visualizations CRUD", () => {
       name: "HEB_FullDetails",
       description: "HEB_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING],
+      type: [VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING],
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -2323,18 +2284,17 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a line-chart Visualization XML with all the details in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./LineChart_FullDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "XML" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         values: {
@@ -2347,11 +2307,11 @@ describe("visualizations CRUD", () => {
       name: "LineChart_FullDetails",
       description: "LineChart_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.LINE_CHART],
+      type: [VisualizationTypes.VisualizationTypesEnum.LINE_CHART],
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -2362,18 +2322,17 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a pie-chart Visualization XML with all the details in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./PieChart_FullDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "XML" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         values: {
           Statistic_1: 122,
@@ -2385,11 +2344,11 @@ describe("visualizations CRUD", () => {
       name: "PieChart_FullDetails",
       description: "PieChart_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.PIE_CHART],
+      type: [VisualizationTypes.VisualizationTypesEnum.PIE_CHART],
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -2400,18 +2359,17 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a sankey Visualization XML with all the details in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Sankey_FullDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "XML" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         nodes: [
           {
@@ -2443,11 +2401,11 @@ describe("visualizations CRUD", () => {
       name: "Sankey_FullDetails",
       description: "Sankey_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.SANKEY],
+      type: [VisualizationTypes.VisualizationTypesEnum.SANKEY],
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -2458,18 +2416,17 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a scatter Visualization XML with all the details in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Scatter_FullDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "XML" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         points: [
           {
@@ -2497,11 +2454,11 @@ describe("visualizations CRUD", () => {
       name: "Scatter_FullDetails",
       description: "Scatter_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.SCATTER],
+      type: [VisualizationTypes.VisualizationTypesEnum.SCATTER],
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -2512,18 +2469,17 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a sunburst Visualization XML with all the details in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Sunburst_FullDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "XML" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         nodes: [
           {
@@ -2586,11 +2542,11 @@ describe("visualizations CRUD", () => {
       name: "Sunburst_FullDetails",
       description: "Sunburst_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.SUNBURST],
+      type: [VisualizationTypes.VisualizationTypesEnum.SUNBURST],
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -2601,18 +2557,17 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a treemap Visualization XML with all the details in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Treemap_FullDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "XML" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         nodes: [
           {
@@ -2675,11 +2630,11 @@ describe("visualizations CRUD", () => {
       name: "Treemap_FullDetails",
       description: "Treemap_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.TREEMAP],
+      type: [VisualizationTypes.VisualizationTypesEnum.TREEMAP],
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -2690,18 +2645,17 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a word-cloud Visualization XML with all the details in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Wordcloud_FullDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "XML" };
-    const expectedVisualization: VisualizationCreate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         words: [
           {
@@ -2737,11 +2691,11 @@ describe("visualizations CRUD", () => {
       name: "Wordcloud_FullDetails",
       description: "Wordcloud_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypesEnum.WORD_CLOUD],
+      type: [VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD],
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -2752,17 +2706,16 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a matrix Visualization XML with all the details in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Matrix_FullDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {};
-    const fileDetails: FileDetails = { fileType: "XML" };
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
     const expectedVisualization = {
       data: {
         nodes: [
@@ -2883,7 +2836,7 @@ describe("visualizations CRUD", () => {
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -2894,26 +2847,25 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a bar-chart Visualization XML with only the data in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./BarChart_PartialDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "BarChart_PartialDetails",
       description: "BarChart_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.BAR_CHART,
+      type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
     };
-    const fileDetails: FileDetails = { fileType: "XML" };
-    const expectedVisualization: VisualizationCreate = {
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       name: "BarChart_PartialDetails",
       projectName: "Test_Project1",
-      type: VisualizationTypesEnum.BAR_CHART,
+      type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
       data: {
         headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         values: {
@@ -2927,7 +2879,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -2937,26 +2889,25 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a calendar Visualization XML with only the data in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Calendar_PartialDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Calendar_PartialDetails",
       description: "Calendar_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.CALENDAR,
+      type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
     };
-    const fileDetails: FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
     const expectedVisualization = {
       name: "Calendar_PartialDetails",
       projectName: "Test_Project1",
-      type: VisualizationTypesEnum.CALENDAR,
+      type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
       data: {
         calendar: [
           {
@@ -3055,7 +3006,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -3066,26 +3017,25 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a forced-directed-graph Visualization XML with only the data in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./FLG_PartialDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "FLG_PartialDetails",
       description: "FLG_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
+      type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
     };
-    const fileDetails: FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
     const expectedVisualization = {
       name: "FLG_PartialDetails",
       projectName: "Test_Project1",
-      type: VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
+      type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
       data: {
         nodes: [
           { name: "Node1", category: "1", properties: null },
@@ -3102,7 +3052,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -3113,22 +3063,21 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a funnel Visualization XML with only the data in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Funnel_PartialDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Funnel_PartialDetails",
       description: "Funnel_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.FUNNEL,
+      type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
     };
-    const fileDetails: FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
     const expectedVisualization = {
       name: "Funnel_PartialDetails",
       projectName: "Test_Project1",
@@ -3145,7 +3094,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -3156,22 +3105,21 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a hierarchical-edge-bundling Visualization XML with only the data in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./HEB_PartialDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "HEB_PartialDetails",
       description: "HEB_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
+      type: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
     };
-    const fileDetails: FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
     const expectedVisualization = {
       name: "HEB_PartialDetails",
       projectName: "Test_Project1",
@@ -3192,7 +3140,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -3203,22 +3151,21 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a line-chart Visualization XML with only the data in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./LineChart_PartialDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "LineChart_PartialDetails",
       description: "LineChart_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.LINE_CHART,
+      type: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
     };
-    const fileDetails: FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
     const expectedVisualization = {
       name: "LineChart_PartialDetails",
       projectName: "Test_Project1",
@@ -3235,7 +3182,7 @@ describe("visualizations CRUD", () => {
       description: "LineChart_PartialDetails description",
       tags: ["full"],
     };
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -3246,22 +3193,21 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a pie-chart Visualization XML with only the data in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./PieChart_PartialDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "PieChart_PartialDetails",
       description: "PieChart_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.PIE_CHART,
+      type: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
     };
-    const fileDetails: FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
     const expectedVisualization = {
       name: "PieChart_PartialDetails",
       projectName: "Test_Project1",
@@ -3278,7 +3224,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -3289,22 +3235,21 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a sankey Visualization XML with only the data in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Sankey_PartialDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Sankey_PartialDetails",
       description: "Sankey_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.SANKEY,
+      type: VisualizationTypes.VisualizationTypesEnum.SANKEY,
     };
-    const fileDetails: FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
     const expectedVisualization = {
       name: "Sankey_PartialDetails",
       projectName: "Test_Project1",
@@ -3324,7 +3269,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -3334,22 +3279,21 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a scatter Visualization XML with only the data in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Scatter_PartialDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Scatter_PartialDetails",
       description: "Scatter_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.SCATTER,
+      type: VisualizationTypes.VisualizationTypesEnum.SCATTER,
     };
-    const fileDetails: FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
     const expectedVisualization = {
       name: "Scatter_PartialDetails",
       projectName: "Test_Project1",
@@ -3367,7 +3311,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -3378,22 +3322,21 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a sunburst Visualization XML with only the data in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Sunburst_PartialDetails",
       description: "Sunburst_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.SUNBURST,
+      type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
     };
-    const fileDetails: FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
     const expectedVisualization = {
       name: "Sunburst_PartialDetails",
       projectName: "Test_Project1",
@@ -3474,7 +3417,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -3485,22 +3428,21 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a treemap Visualization XML with only the data in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Treemap_PartialDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Treemap_PartialDetails",
       description: "Treemap_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.TREEMAP,
+      type: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
     };
-    const fileDetails: FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
     const expectedVisualization = {
       name: "Treemap_PartialDetails",
       projectName: "Test_Project1",
@@ -3581,7 +3523,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -3592,22 +3534,21 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a word-cloud Visualization XML with only the data in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Wordcloud_PartialDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Wordcloud_PartialDetails",
       description: "Wordcloud_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.WORD_CLOUD,
+      type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
     };
-    const fileDetails: FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
     const expectedVisualization = {
       name: "Wordcloud_PartialDetails",
       projectName: "Test_Project1",
@@ -3627,7 +3568,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -3638,22 +3579,21 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a matrix Visualization XML with only the data in the XML", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Matrix_PartialDetails.xml");
 
-    const files: FileProperties[] = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Matrix_PartialDetails",
       description: "Matrix_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.MATRIX,
+      type: VisualizationTypes.VisualizationTypesEnum.MATRIX,
     };
-    const fileDetails: FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
     const expectedVisualization = {
       name: "Matrix_PartialDetails",
       projectName: "Test_Project1",
@@ -3776,7 +3716,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -3787,24 +3727,23 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a word-cloud Visualization EXCEL with all the details in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Wordcloud_FullDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.WORD_CLOUD,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: false,
       mapping: {
@@ -3831,7 +3770,7 @@ describe("visualizations CRUD", () => {
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -3842,24 +3781,23 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a forced-directed-graph Visualization EXCEL with all the details in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./FLG_FullDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -3895,7 +3833,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -3905,24 +3843,23 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a sankey Visualization EXCEL with all the details in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Sankey_FullDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.SANKEY,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.SANKEY,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -3977,7 +3914,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -3987,25 +3924,24 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
 
   it("It creates a hierarchical-edge-bundling Visualization EXCEL with all the details in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./HEB_FullDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -4041,7 +3977,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -4051,24 +3987,23 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a calendar Visualization EXCEL with all the details in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Calendar_FullDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.CALENDAR,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -4090,19 +4025,19 @@ describe("visualizations CRUD", () => {
         calendar: [
           {
             category: "1",
-            date: "1997-10-04",
+            date: "1997-10-05",
             value: 1,
             properties: "prop1",
           },
           {
             category: "2",
-            date: "1997-11-04",
+            date: "1997-11-05",
             value: 2,
             properties: "prop2",
           },
           {
             category: "3",
-            date: "1997-12-04",
+            date: "1997-12-05",
             value: 3,
             properties: "prop3",
           },
@@ -4118,7 +4053,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -4128,24 +4063,23 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a line-chart Visualization EXCEL with all the details in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./LineChart_FullDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.LINE_CHART,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -4174,7 +4108,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -4185,24 +4119,23 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a bar-chart Visualization EXCEL with all the details in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./BarChart_FullDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.BAR_CHART,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -4231,7 +4164,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -4242,24 +4175,23 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a pie-chart Visualization EXCEL with all the details in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./PieChart_FullDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.PIE_CHART,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -4287,7 +4219,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -4298,24 +4230,23 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a scatter Visualization EXCEL with all the details in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Scatter_FullDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.SCATTER,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.SCATTER,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -4359,7 +4290,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -4370,25 +4301,24 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
 
   it("It creates a treemap Visualization EXCEL with all the details in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Treemap_FullDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.TREEMAP,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -4456,7 +4386,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -4467,24 +4397,23 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a sunburst Visualization EXCEL with all the details in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Sunburst_FullDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.SUNBURST,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -4552,7 +4481,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -4563,24 +4492,23 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a funnel Visualization EXCEL with all the details in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Funnel_FullDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.FUNNEL,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -4608,7 +4536,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -4619,28 +4547,27 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
 
   it("It creates a word-cloud Visualization EXCEL with only the data in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Wordcloud_PartialDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Wordcloud_PartialDetails",
       description: "Wordcloud_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.WORD_CLOUD,
+      type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: false,
       mapping: {
@@ -4664,7 +4591,7 @@ describe("visualizations CRUD", () => {
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -4675,27 +4602,26 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a forced-directed-graph Visualization EXCEL with only the data in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./FLG_PartialDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "FLG_PartialDetails",
       description: "FLG_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
+      type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -4728,7 +4654,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -4738,27 +4664,26 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a sankey Visualization EXCEL with only the data in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Sankey_PartialDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Sankey_PartialDetails",
       description: "Sankey_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.SANKEY,
+      type: VisualizationTypes.VisualizationTypesEnum.SANKEY,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -4810,7 +4735,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -4820,28 +4745,27 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
 
   it("It creates a hierarchical-edge-bundling Visualization EXCEL with only the data in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./HEB_PartialDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "HEB_PartialDetails",
       description: "HEB_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
+      type: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -4874,7 +4798,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -4884,27 +4808,26 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a calendar Visualization EXCEL with only the data in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Calendar_PartialDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Calendar_PartialDetails",
       description: "Calendar_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.CALENDAR,
+      type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -4923,19 +4846,19 @@ describe("visualizations CRUD", () => {
         calendar: [
           {
             category: "1",
-            date: "1997-10-04",
+            date: "1997-10-05",
             value: 1,
             properties: "prop1",
           },
           {
             category: "2",
-            date: "1997-11-04",
+            date: "1997-11-05",
             value: 2,
             properties: "prop2",
           },
           {
             category: "3",
-            date: "1997-12-04",
+            date: "1997-12-05",
             value: 3,
             properties: "prop3",
           },
@@ -4951,7 +4874,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -4961,27 +4884,26 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a line-chart Visualization EXCEL with only the data in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./LineChart_PartialDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "LineChart_PartialDetails",
       description: "LineChart_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.LINE_CHART,
+      type: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -5007,7 +4929,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -5018,27 +4940,26 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a bar-chart Visualization EXCEL with only the data in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./BarChart_PartialDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "BarChart_PartialDetails",
       description: "BarChart_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.BAR_CHART,
+      type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -5064,7 +4985,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -5075,27 +4996,26 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a pie-chart Visualization EXCEL with only the data in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./PieChart_PartialDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "PieChart_PartialDetails",
       description: "PieChart_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.PIE_CHART,
+      type: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -5120,7 +5040,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -5131,28 +5051,27 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
 
   it("It creates a scatter Visualization EXCEL with only the data in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Scatter_PartialDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "ScatterChart_PartialDetails",
       description: "ScatterChart_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.SCATTER,
+      type: VisualizationTypes.VisualizationTypesEnum.SCATTER,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -5196,7 +5115,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -5207,27 +5126,26 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a treemap Visualization EXCEL with only the data in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Treemap_PartialDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Treemap_PartialDetails",
       description: "Treemap_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.TREEMAP,
+      type: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -5293,7 +5211,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -5304,27 +5222,26 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a sunburst Visualization EXCEL with only the data in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Sunburst_PartialDetails",
       description: "Sunburst_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.SUNBURST,
+      type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -5389,7 +5306,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -5400,27 +5317,26 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a funnel Visualization EXCEL with only the data in the EXCEL", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Funnel_PartialDetails.xlsx");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Funnel_PartialDetails",
       description: "Funnel_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.FUNNEL,
+      type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "EXCEL",
       includeHeaders: true,
       mapping: {
@@ -5445,7 +5361,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -5456,24 +5372,23 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a word-cloud Visualization CSV with all the details in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Wordcloud_FullDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.WORD_CLOUD,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: false,
       mapping: {
@@ -5500,7 +5415,7 @@ describe("visualizations CRUD", () => {
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -5511,24 +5426,23 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a forced-directed-graph Visualization CSV with all the details in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./FLG_FullDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -5564,7 +5478,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -5574,24 +5488,23 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a sankey Visualization CSV with all the details in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Sankey_FullDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.SANKEY,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.SANKEY,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -5646,7 +5559,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -5656,25 +5569,24 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
 
   it("It creates a hierarchical-edge-bundling Visualization CSV with all the details in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./HEB_FullDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -5710,7 +5622,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -5720,24 +5632,23 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a calendar Visualization CSV with all the details in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Calendar_FullDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.CALENDAR,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -5781,7 +5692,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -5791,24 +5702,23 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a line-chart Visualization CSV with all the details in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./LineChart_FullDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.LINE_CHART,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -5837,7 +5747,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -5848,24 +5758,23 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a bar-chart Visualization CSV with all the details in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./BarChart_FullDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.BAR_CHART,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -5894,7 +5803,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -5905,24 +5814,23 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a pie-chart Visualization CSV with all the details in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./PieChart_FullDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.PIE_CHART,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -5950,7 +5858,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -5961,24 +5869,23 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a scatter Visualization CSV with all the details in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Scatter_FullDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.SCATTER,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.SCATTER,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -6022,7 +5929,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -6033,25 +5940,24 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
 
   it("It creates a treemap Visualization CSV with all the details in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Treemap_FullDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.TREEMAP,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -6119,7 +6025,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -6130,24 +6036,23 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a sunburst Visualization CSV with all the details in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Sunburst_FullDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.SUNBURST,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -6215,7 +6120,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -6226,24 +6131,23 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a funnel Visualization CSV with all the details in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Funnel_FullDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails: VisualizationUpdate = {
-      type: VisualizationTypesEnum.FUNNEL,
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -6271,7 +6175,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -6282,28 +6186,27 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
 
   it("It creates a word-cloud Visualization CSV with only the data in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Wordcloud_PartialDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Wordcloud_PartialDetails",
       description: "Wordcloud_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.WORD_CLOUD,
+      type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: false,
       mapping: {
@@ -6327,7 +6230,7 @@ describe("visualizations CRUD", () => {
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -6338,27 +6241,26 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a forced-directed-graph Visualization CSV with only the data in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./FLG_PartialDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "FLG_PartialDetails",
       description: "FLG_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
+      type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -6391,7 +6293,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -6401,27 +6303,26 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a sankey Visualization CSV with only the data in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Sankey_PartialDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Sankey_PartialDetails",
       description: "Sankey_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.SANKEY,
+      type: VisualizationTypes.VisualizationTypesEnum.SANKEY,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -6473,7 +6374,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -6483,28 +6384,27 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
 
   it("It creates a hierarchical-edge-bundling Visualization CSV with only the data in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./HEB_PartialDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "HEB_PartialDetails",
       description: "HEB_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
+      type: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -6537,7 +6437,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -6547,27 +6447,26 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a calendar Visualization CSV with only the data in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Calendar_PartialDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Calendar_PartialDetails",
       description: "Calendar_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.CALENDAR,
+      type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       separator: ",",
       includeHeaders: true,
@@ -6609,7 +6508,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -6619,27 +6518,26 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a line-chart Visualization CSV with only the data in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./LineChart_PartialDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "LineChart_PartialDetails",
       description: "LineChart_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.LINE_CHART,
+      type: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -6665,7 +6563,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -6676,27 +6574,26 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a bar-chart Visualization CSV with only the data in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./BarChart_PartialDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "BarChart_PartialDetails",
       description: "BarChart_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.BAR_CHART,
+      type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -6722,7 +6619,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -6733,27 +6630,26 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a pie-chart Visualization CSV with only the data in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./PieChart_PartialDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "PieChart_PartialDetails",
       description: "PieChart_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.PIE_CHART,
+      type: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -6778,7 +6674,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -6789,28 +6685,27 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
 
   it("It creates a scatter Visualization CSV with only the data in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Scatter_PartialDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "ScatterChart_PartialDetails",
       description: "ScatterChart_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.SCATTER,
+      type: VisualizationTypes.VisualizationTypesEnum.SCATTER,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -6854,7 +6749,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -6865,27 +6760,26 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a treemap Visualization CSV with only the data in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Treemap_PartialDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Treemap_PartialDetails",
       description: "Treemap_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.TREEMAP,
+      type: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -6951,7 +6845,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -6962,27 +6856,26 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a sunburst Visualization CSV with only the data in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Sunburst_PartialDetails",
       description: "Sunburst_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.SUNBURST,
+      type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -7047,7 +6940,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -7058,27 +6951,26 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a funnel Visualization CSV with only the data in the CSV", async () => {
-    expect.assertions(2);
+
     const filePath = path.resolve(__dirname, "./Funnel_PartialDetails.csv");
 
-    const files: FileProperties[] = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails: VisualizationUpdate = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Funnel_PartialDetails",
       description: "Funnel_PartialDetails description",
       tags: ["full"],
-      type: VisualizationTypesEnum.FUNNEL,
+      type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
     };
-    const fileDetails: FileDetails = {
+    const fileDetails: FileTypes.FileDetails = {
       fileType: "CSV",
       includeHeaders: true,
       mapping: {
@@ -7103,7 +6995,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -7114,12 +7006,11 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
 
   it("It finds one visualization", async () => {
-    expect.assertions(2);
+
     const expectedVisualization = {
       name: "Funnel_PartialDetails",
       projectName: "Test_Project1",
@@ -7136,74 +7027,58 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization: VisualizationType = await factory
+    const visualization: VisualizationTypes.VisualizationType | null = await factory
       .getBZL()
       .VisualizationBZL.findOne({
         name: "Funnel_PartialDetails",
         type: "funnel",
       });
 
-    expect(!_.isNil(visualization)).toBe(true);
-    expect(_.isMatch(visualization, expectedVisualization)).toBe(true);
+    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It browse visualizations with different filters", async () => {
-    expect.assertions(8);
     const expectedVisualization1 = {
       name: "Funnel_PartialDetails",
-      type: VisualizationTypesEnum.FUNNEL,
+      type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
       description: "Funnel_PartialDetails description",
       tags: ["full"],
     };
 
-    const visualization1: ExtendedVisualizationType = await factory
+    const visualization1: VisualizationTypes.ExtendedVisualizationType = await factory
       .getBZL()
       .VisualizationBZL.browse({
         name: "Funnel_PartialDetails",
-        type: VisualizationTypesEnum.FUNNEL,
+        type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
       });
-    expect(!_.isNil(visualization1)).toBe(true);
-    expect(
-      _.isMatch(
-        (visualization1.visualizations as VisualizationType[])[0],
-        expectedVisualization1
-      )
-    ).toBe(true);
+    expect((visualization1.visualizations as VisualizationTypes.VisualizationType[])[0]).toMatchObject(expectedVisualization1);
     const expectedVisualization2 = {
       name: "Funnel_PartialDetails",
-      type: VisualizationTypesEnum.FUNNEL,
+      type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
       description: "Funnel_PartialDetails description",
       tags: ["full"],
     };
 
-    const visualization2: ExtendedVisualizationType = await factory
+    const visualization2: VisualizationTypes.ExtendedVisualizationType = await factory
       .getBZL()
       .VisualizationBZL.browse({
         text: "Funnel_PartialDetails",
       });
-    expect(!_.isNil(visualization2)).toBe(true);
-    expect(
-      _.isMatch(
-        (visualization2.visualizations as VisualizationType[])[0],
-        expectedVisualization2
-      )
-    ).toBe(true);
-    const visualization3: ExtendedVisualizationType = await factory
+    expect((visualization2.visualizations as VisualizationTypes.VisualizationType[])[0]).toMatchObject(expectedVisualization2);
+    const visualization3: VisualizationTypes.ExtendedVisualizationType = await factory
       .getBZL()
       .VisualizationBZL.browse({
         text: "randooooom",
       });
-    expect(!_.isNil(visualization2)).toBe(true);
-    expect(
-      _.isMatch((visualization3.visualizations as VisualizationType[])[0], [])
-    ).toBe(true);
+    expect((visualization3.visualizations as VisualizationTypes.VisualizationType[]).length === 0).toBe(true);
+
     const expectedVisualization4 = {
       name: "BarChart_FullDetails",
-      type: VisualizationTypesEnum.BAR_CHART,
+      type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
       description: "BarChart_FullDetails description",
       tags: ["full"],
     };
 
-    const visualization4: ExtendedVisualizationType = await factory
+    const visualization4: VisualizationTypes.ExtendedVisualizationType = await factory
       .getBZL()
       .VisualizationBZL.browse({
         sort: {
@@ -7211,16 +7086,10 @@ describe("visualizations CRUD", () => {
           sortOrder: 1,
         },
       });
-    expect(!_.isNil(visualization4)).toBe(true);
-    expect(
-      _.isMatch(
-        (visualization4.visualizations as VisualizationType[])[0],
-        expectedVisualization4
-      )
-    ).toBe(true);
+    expect((visualization4.visualizations as VisualizationTypes.VisualizationType[])[0]).toMatchObject(expectedVisualization4);
   });
   it("It delets one visualization", async () => {
-    expect.assertions(2);
+
     const visualization: boolean = await factory
       .getBZL()
       .VisualizationBZL.delete({
@@ -7228,7 +7097,6 @@ describe("visualizations CRUD", () => {
         type: "funnel",
       });
 
-    expect(!_.isNil(visualization)).toBe(true);
     expect(visualization).toBe(true);
   });
 });
