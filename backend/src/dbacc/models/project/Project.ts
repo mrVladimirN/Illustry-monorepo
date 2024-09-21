@@ -1,19 +1,18 @@
 import { Connection, Model, Schema } from 'mongoose';
-// eslint-disable-next-line import/no-unresolved
-import { ProjectType } from 'types/project';
+import { ProjectTypes } from '@illustry/types';
 
-export default class Project {
+class Project {
   private readonly connection: Connection;
 
-  private projectModel?: Model<ProjectType>;
+  private projectModel?: Model<ProjectTypes.ProjectType>;
 
   constructor(connection: Connection) {
     this.connection = connection;
   }
 
-  getModel(): Model<ProjectType> {
+  getModel(): Model<ProjectTypes.ProjectType> {
     if (!this.projectModel) {
-      const ProjectSchema = new Schema<ProjectType>({
+      const ProjectSchema = new Schema<ProjectTypes.ProjectType>({
         name: { type: String, required: true, unique: true },
         description: {
           type: String, required: false, maxLength: 50, default: ''
@@ -25,7 +24,7 @@ export default class Project {
 
       ProjectSchema.index({ name: 'text', description: 'text' });
 
-      this.projectModel = this.connection.model<ProjectType>(
+      this.projectModel = this.connection.model<ProjectTypes.ProjectType>(
         'Project',
         ProjectSchema
       );
@@ -34,3 +33,5 @@ export default class Project {
     return this.projectModel;
   }
 }
+
+export default Project;

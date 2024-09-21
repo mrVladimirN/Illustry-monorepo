@@ -1,26 +1,24 @@
-import Bluebird from 'bluebird';
-import _ from 'lodash';
 import validator from 'validator';
 import {
-  ExtendedVisualizationType,
-  VisualizationCreate,
-  VisualizationFilter,
-  VisualizationType,
-  VisualizationUpdate
-} from 'types/visualizations';
-import { ExtendedMongoQuery, MongoQuery } from 'types/utils';
+  VisualizationTypes, GenericTypes, UtilTypes
+} from '@illustry/types';
 import ModelInstance from '../../models/modelInstance';
 
 const PAGE_SIZE = 10;
-export default class Visualization {
+class Visualization implements GenericTypes.BaseLib<
+  VisualizationTypes.VisualizationCreate,
+  VisualizationTypes.VisualizationUpdate,
+  VisualizationTypes.VisualizationFilter,
+  VisualizationTypes.VisualizationType,
+  VisualizationTypes.ExtendedVisualizationType> {
   private modelInstance: ModelInstance;
 
   constructor(modelInstance: ModelInstance) {
     this.modelInstance = modelInstance;
   }
 
-  createFilter(filter: VisualizationFilter): ExtendedMongoQuery {
-    const query: MongoQuery = { $and: [] };
+  createFilter(filter: VisualizationTypes.VisualizationFilter): UtilTypes.ExtendedMongoQuery {
+    const query: UtilTypes.MongoQuery = { $and: [] };
     if (filter.name) {
       (query.$and as Array<object>).push({
         name: filter.name
@@ -70,7 +68,7 @@ export default class Visualization {
       });
     }
     if ((query.$and as Array<object>).length === 0) delete query.$and;
-    // eslint-disable-next-line no-nested-ternary
+
     const skip = filter && filter.page && filter.page > 1
       ? filter.per_page
         ? (filter.page - 1) * filter.per_page
@@ -90,23 +88,24 @@ export default class Visualization {
     };
   }
 
-  create(data: VisualizationCreate): Promise<VisualizationType> {
-    return Promise.resolve().then(() => {
-      const newData = _.cloneDeep(data);
-      if (_.isNil(data.createdAt)) {
-        newData.createdAt = new Date();
-        newData.updatedAt = new Date();
-      }
-      return this.modelInstance.VisualizationModel.create(newData);
-    });
+  create(data: VisualizationTypes.VisualizationCreate): Promise<VisualizationTypes.VisualizationType> {
+    return Promise.resolve()
+      .then(() => {
+        const newData = { ...data };
+        if (newData.createdAt) {
+          newData.createdAt = new Date();
+          newData.updatedAt = new Date();
+        }
+        return this.modelInstance.VisualizationModel.create(newData);
+      });
   }
 
-  findOne(filter: ExtendedMongoQuery): Promise<VisualizationType> {
-    return Bluebird.resolve()
+  findOne(filter: UtilTypes.ExtendedMongoQuery): Promise<VisualizationTypes.VisualizationType | null> {
+    return Promise.resolve()
       .then(() => this.modelInstance.VisualizationModel.findOne(filter.query));
   }
 
-  browse(filter: ExtendedMongoQuery): Promise<ExtendedVisualizationType> {
+  browse(filter: UtilTypes.ExtendedMongoQuery): Promise<VisualizationTypes.ExtendedVisualizationType> {
     return Promise.resolve()
       .then(() => this.modelInstance.VisualizationModel.find(
         filter.query ? filter.query : {},
@@ -118,7 +117,7 @@ export default class Visualization {
         },
         {
           sort: filter.sort ? filter.sort : { name: 1 },
-          skip: filter && filter.page ? _.toNumber(filter.page) : 0,
+          skip: filter && filter.page ? Number(filter.page) : 0,
           limit: filter.per_page
         }
       ))
@@ -140,32 +139,33 @@ export default class Visualization {
   }
 
   update(
-    filter: ExtendedMongoQuery,
-    data: VisualizationUpdate
-  ): Promise<VisualizationType> {
-    const newData = _.cloneDeep(data);
-    if (_.isNil(data.createdAt)) {
+    filter: UtilTypes.ExtendedMongoQuery,
+    data: VisualizationTypes.VisualizationUpdate
+  ): Promise<VisualizationTypes.VisualizationType | null> {
+    const newData = { ...data };
+    if (newData.createdAt) {
       newData.createdAt = new Date();
     }
-    if (_.isNil(data.updatedAt)) {
-      newData.updatedAt = new Date();
-    }
-    return Bluebird.resolve().then(() => this.modelInstance.VisualizationModel.findOneAndUpdate(
-      filter.query,
-      newData,
-      { upsert: true, new: true }
-    ));
+    newData.updatedAt = new Date();
+    return Promise.resolve()
+      .then(() => this.modelInstance.VisualizationModel.findOneAndUpdate(
+        filter.query,
+        newData,
+        { upsert: true, new: true }
+      ));
   }
 
-  delete(filter: ExtendedMongoQuery): Promise<boolean> {
-    return Promise.resolve().then(() => Bluebird.resolve(
-      this.modelInstance.VisualizationModel.deleteOne(filter.query)
-    ).thenReturn(true));
+  async delete(filter: UtilTypes.ExtendedMongoQuery): Promise<boolean> {
+    await Promise.resolve()
+      .then(() => this.modelInstance.VisualizationModel.deleteOne(filter.query));
+    return true;
   }
 
-  deleteMany(filter: ExtendedMongoQuery): Promise<boolean> {
-    return Promise.resolve().then(() => Bluebird.resolve(
-      this.modelInstance.VisualizationModel.deleteMany(filter.query)
-    ).thenReturn(true));
+  async deleteMany(filter: UtilTypes.ExtendedMongoQuery): Promise<boolean> {
+    await Promise.resolve()
+      .then(() => this.modelInstance.VisualizationModel.deleteMany(filter.query));
+    return true;
   }
 }
+
+export default Visualization;

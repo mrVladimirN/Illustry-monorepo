@@ -1,25 +1,24 @@
-import Bluebird from 'bluebird';
 import validator from 'validator';
-import { ExtendedMongoQuery, MongoQuery } from 'types/utils';
 import {
-  ExtendedProjectType,
-  ProjectCreate,
-  ProjectFilter,
-  ProjectType,
-  ProjectUpdate
-} from 'types/project';
+  ProjectTypes, GenericTypes, UtilTypes
+} from '@illustry/types';
 import ModelInstance from '../../models/modelInstance';
 
 const PAGE_SIZE = 10;
-export default class Project {
+class Project implements GenericTypes.BaseLib<
+  ProjectTypes.ProjectCreate,
+  ProjectTypes.ProjectUpdate,
+  ProjectTypes.ProjectFilter,
+  ProjectTypes.ProjectType,
+  ProjectTypes.ExtendedProjectType> {
   private modelInstance: ModelInstance;
 
   constructor(modelInstance: ModelInstance) {
     this.modelInstance = modelInstance;
   }
 
-  createFilter(filter: ProjectFilter): ExtendedMongoQuery {
-    const query: MongoQuery = { $and: [] };
+  createFilter(filter: ProjectTypes.ProjectFilter): UtilTypes.ExtendedMongoQuery {
+    const query: UtilTypes.MongoQuery = { $and: [] };
     if (filter.name) {
       (query.$and as Array<object>).push({
         name: filter.name
@@ -49,7 +48,6 @@ export default class Project {
 
     if ((query.$and as Array<object>).length === 0) delete query.$and;
 
-    // eslint-disable-next-line no-nested-ternary
     const skip = filter && filter.page && filter.page > 1
       ? filter.per_page
         ? (filter.page - 1) * filter.per_page
@@ -69,26 +67,32 @@ export default class Project {
     };
   }
 
-  create(data: ProjectCreate): Promise<ProjectType> {
-    return Promise.resolve().then(() => {
-      if (!data.isActive) {
-        return this.modelInstance.ProjectModel.create(data);
-      }
-      return this.modelInstance.ProjectModel.updateMany(
-        {},
-        { $set: { isActive: false } }
-      ).then(() => this.modelInstance.ProjectModel.create(data));
-    });
+  create(data: ProjectTypes.ProjectCreate): Promise<ProjectTypes.ProjectType> {
+    return Promise.resolve()
+      .then(() => {
+        if (!data.createdAt) {
+          data.createdAt = new Date();
+          data.updatedAt = new Date();
+        }
+        if (!data.isActive) {
+          return this.modelInstance.ProjectModel.create(data);
+        }
+        return this.modelInstance.ProjectModel.updateMany(
+          {},
+          { $set: { isActive: false } }
+        ).then(() => this.modelInstance.ProjectModel.create(data));
+      });
   }
 
-  findByName(filter: ExtendedMongoQuery): Promise<ProjectType> {
-    return Bluebird.resolve().then(() => this.modelInstance.ProjectModel.findOne(filter.query, {
-      __v: 0,
-      _id: 0
-    }));
+  findOne(filter: UtilTypes.ExtendedMongoQuery): Promise<ProjectTypes.ProjectType | null> {
+    return Promise.resolve()
+      .then(() => this.modelInstance.ProjectModel.findOne(filter.query, {
+        __v: 0,
+        _id: 0
+      }));
   }
 
-  browse(filter: ExtendedMongoQuery): Promise<ExtendedProjectType> {
+  browse(filter: UtilTypes.ExtendedMongoQuery): Promise<ProjectTypes.ExtendedProjectType> {
     return Promise.resolve()
       .then(() => this.modelInstance.ProjectModel.find(
         filter.query ? filter.query : {},
@@ -120,37 +124,47 @@ export default class Project {
   }
 
   update(
-    filter: ExtendedMongoQuery,
-    data: ProjectUpdate
-  ): Promise<ProjectType> {
-    return Bluebird.resolve().then(() => {
-      if (!data.isActive) {
-        return this.modelInstance.ProjectModel.findOneAndUpdate(
-          filter.query,
-          data,
-          {
-            upsert: true,
-            new: true
+    filter: UtilTypes.ExtendedMongoQuery,
+    data: ProjectTypes.ProjectUpdate
+  ): Promise<ProjectTypes.ProjectType | null> {
+    return Promise.resolve()
+      .then(async () => {
+        const foundProject = await this.findOne(filter);
+        if (foundProject) {
+          if (!data.createdAt) {
+            data.createdAt = new Date();
           }
-        );
-      }
-      return this.modelInstance.ProjectModel.updateMany(
-        {},
-        { $set: { isActive: false } }
-      ).then(() => this.modelInstance.ProjectModel.findOneAndUpdate(
-        filter.query,
-        data,
-        {
-          upsert: true,
-          new: true
         }
-      ));
-    });
+        data.updatedAt = new Date();
+        if (!data.isActive) {
+          return this.modelInstance.ProjectModel.findOneAndUpdate(
+            filter.query,
+            data,
+            {
+              upsert: true,
+              new: true
+            }
+          );
+        }
+        return this.modelInstance.ProjectModel.updateMany(
+          {},
+          { $set: { isActive: false } }
+        )
+          .then(() => this.modelInstance.ProjectModel.findOneAndUpdate(
+            filter.query,
+            data,
+            {
+              upsert: true,
+              new: true
+            }
+          ));
+      });
   }
 
-  delete(filter: ExtendedMongoQuery): Promise<boolean> {
-    return Bluebird.resolve()
-      .then(() => this.modelInstance.ProjectModel.deleteOne(filter.query))
-      .thenReturn(true);
+  async delete(filter: UtilTypes.ExtendedMongoQuery): Promise<boolean> {
+    await Promise.resolve()
+      .then(() => this.modelInstance.ProjectModel.deleteOne(filter.query));
+    return true;
   }
 }
+export default Project;

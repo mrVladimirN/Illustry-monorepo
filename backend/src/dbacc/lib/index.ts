@@ -3,7 +3,7 @@ import ModelInstance from '../models/modelInstance';
 import Visualization from './visualization/visualization';
 import Project from './project/project';
 
-export default class DbaccInstance {
+class DbaccInstance {
   private project!: Project;
 
   private visualization!: Visualization;
@@ -24,3 +24,5 @@ export default class DbaccInstance {
       : new Visualization(this.modelInstance);
   }
 }
+
+export default DbaccInstance;

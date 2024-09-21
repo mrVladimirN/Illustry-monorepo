@@ -1,20 +1,18 @@
 import { Connection, Model, Schema } from 'mongoose';
-import _ from 'lodash';
-// eslint-disable-next-line import/no-unresolved
-import { VisualizationType, VisualizationTypesEnum } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 
-export default class Visualization {
+class Visualization {
   private readonly connection: Connection;
 
-  private VisualizationModel?: Model<VisualizationType>;
+  private VisualizationModel?: Model<VisualizationTypes.VisualizationType>;
 
   constructor(connection: Connection) {
     this.connection = connection;
   }
 
-  getModel(): Model<VisualizationType> {
+  getModel(): Model<VisualizationTypes.VisualizationType> {
     if (!this.VisualizationModel) {
-      const VisualizationSchema = new Schema<VisualizationType>({
+      const VisualizationSchema = new Schema<VisualizationTypes.VisualizationType>({
         projectName: { type: String, required: true },
         name: { type: String, required: true },
         description: {
@@ -25,14 +23,7 @@ export default class Visualization {
         },
         type: {
           type: String,
-          required: true,
-          enum: _.values([
-            VisualizationTypesEnum.CALENDAR,
-            VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
-            VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
-            VisualizationTypesEnum.SANKEY,
-            VisualizationTypesEnum.WORD_CLOUD
-          ])
+          required: true
         },
         tags: [{ type: String, required: false }],
         data: { type: Schema.Types.Mixed, required: true },
@@ -40,14 +31,12 @@ export default class Visualization {
         updatedAt: { type: Date, required: false }
       });
 
-      // Create indexes
       VisualizationSchema.index(
         { projectName: 1, type: 1, name: 1 },
         { unique: true, background: true }
       );
       VisualizationSchema.index({ projectName: 1, name: 1 });
-      // VisualizationSchema.index({ name: "text", description: "text" });
-      this.VisualizationModel = this.connection.model<VisualizationType>(
+      this.VisualizationModel = this.connection.model<VisualizationTypes.VisualizationType>(
         'Visualization',
         VisualizationSchema
       );
@@ -56,3 +45,5 @@ export default class Visualization {
     return this.VisualizationModel;
   }
 }
+
+export default Visualization;
