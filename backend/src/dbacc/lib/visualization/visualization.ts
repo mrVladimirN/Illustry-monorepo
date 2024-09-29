@@ -92,7 +92,7 @@ class Visualization implements GenericTypes.BaseLib<
     return Promise.resolve()
       .then(() => {
         const newData = { ...data };
-        if (newData.createdAt) {
+        if (!newData.createdAt) {
           newData.createdAt = new Date();
           newData.updatedAt = new Date();
         }
@@ -143,7 +143,7 @@ class Visualization implements GenericTypes.BaseLib<
     data: VisualizationTypes.VisualizationUpdate
   ): Promise<VisualizationTypes.VisualizationType | null> {
     const newData = { ...data };
-    if (newData.createdAt) {
+    if (!newData.createdAt) {
       newData.createdAt = new Date();
     }
     newData.updatedAt = new Date();

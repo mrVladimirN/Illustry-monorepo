@@ -7,9 +7,7 @@ import Factory from '../../factory';
 import prettifyZodError from '../../validators/prettifyError';
 import { visualizationFilterSchema } from '../../validators/allValidators';
 
-type RequestWithFiles = Request & {
-  files: { file: FileTypes.UploadedFile[] }
-}
+
 const createOrUpdate = async (
   request: Request,
   response: Response,
@@ -17,8 +15,8 @@ const createOrUpdate = async (
 ) => {
   try {
     let requestFiles: FileTypes.UploadedFile[] = [];
-    if (request && (request as RequestWithFiles).files) {
-      let { files: { file } } = request as RequestWithFiles;
+    if (request && (request as FileTypes.RequestWithFiles).files) {
+      const { files: { file } } = request as FileTypes.RequestWithFiles;
       requestFiles = file;
     }
     if (!requestFiles) {
@@ -32,7 +30,7 @@ const createOrUpdate = async (
 
     const computedFiles: FileTypes.FileProperties[] = requestFiles.map((f) => ({
       filePath: f.path,
-      type: f.mimeType
+      type: f.mimetype
     }));
 
     const { fileDetails: reqFDet, visualizationDetails: reqVisDet, fullDetails } = request.body;
@@ -49,7 +47,7 @@ const createOrUpdate = async (
     }
 
     const allFileDetails = fullDetails === 'true';
-
+    console.log(JSON.stringify(computedFiles,null,2))
     const data = await Factory.getInstance()
       .getBZL()
       .VisualizationBZL.createOrUpdateFromFiles(

@@ -52,6 +52,8 @@ const create = async (
       throw new Error(errorMessage);
     }
 
+    await Factory.getInstance().getBZL().ProjectBZL.create(project);
+
     if (
       visualization.name
       && visualization.type
@@ -65,11 +67,6 @@ const create = async (
         );
         throw new Error(errorMessage);
       }
-    }
-
-    await Factory.getInstance().getBZL().ProjectBZL.create(project);
-
-    if (visualization && visualization.name && visualization.type && visualization.projectName) {
       await Factory.getInstance().getBZL().VisualizationBZL.createOrUpdate(visualization);
     }
 
@@ -135,10 +132,8 @@ const findOne = async (
   next: NextFunction
 ) => {
   try {
-    const {
-      name
-    } = request.body;
-
+    const { params: { name } } = request;
+    
     const projectFilter: ProjectTypes.ProjectFilter = {
       name
     };
