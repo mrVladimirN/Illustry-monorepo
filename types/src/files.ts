@@ -16,10 +16,10 @@ type FileDetails = {
 
 type UploadedFile = {
   path: string;
-  mimeType: string;
+  mimetype: string;
 };
 
-interface RequestWithFiles extends Request {
-  files?: Express.Multer.File[];
+type RequestWithFiles = Request & {
+  files: { file: UploadedFile[] }
 }
 export { FileProperties, FileDetails, UploadedFile, RequestWithFiles }
