@@ -4,7 +4,7 @@
 
 import { EChartsOption } from 'echarts';
 
-import { HierarchyNode } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import {
   computeNodesHierarchy
 } from '@/lib/visualizations/hierarchy-charts/helper';
@@ -15,7 +15,7 @@ import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
 interface SunburstViewProp extends WithLegend, WithOptions {
-  nodes: HierarchyNode[];
+  nodes: VisualizationTypes.HierarchyNode[];
   categories: string[]
 }
 const SunburstView = ({ nodes, categories, legend }: SunburstViewProp) => {

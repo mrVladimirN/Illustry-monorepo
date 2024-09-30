@@ -1,20 +1,18 @@
 'use client';
 
-import { EChartsOption } from 'echarts/types/dist/echarts';
-
-import { AxisChartData } from 'types/visualizations';
+import { EChartsOption, SeriesOption } from 'echarts';
+import { VisualizationTypes } from '@illustry/types';
 import {
   computeLegendColors,
   constructSeries
 } from '@/lib/visualizations/chart/helper';
-import { SeriesOption } from 'echarts';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
 interface AxisChartProp extends WithLegend, WithOptions {
-  data: AxisChartData;
+  data: VisualizationTypes.AxisChartData;
   type: 'line' | 'bar';
 }
 const AxisChartView = ({ data, type, legend }: AxisChartProp) => {

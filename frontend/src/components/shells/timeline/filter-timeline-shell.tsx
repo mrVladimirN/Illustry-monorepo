@@ -4,12 +4,12 @@ import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 import dynamic from 'next/dynamic';
-import { TimelineData } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
 interface FilteredTimelineShellViewProp extends WithLegend, WithOptions {
-    data: TimelineData;
-  }
+  data: VisualizationTypes.TimelineData;
+}
 const TimelineView = dynamic(
   () => import('@/components/views/timeline'),
   { ssr: false }
@@ -19,7 +19,7 @@ const FilteredTimelineShellView = ({
   legend,
   options
 }: FilteredTimelineShellViewProp) => {
-  const [filteredData, setFilteredData] = useState<TimelineData>(data);
+  const [filteredData, setFilteredData] = useState<VisualizationTypes.TimelineData>(data);
 
   return (
     <>
@@ -27,18 +27,18 @@ const FilteredTimelineShellView = ({
         data={data}
         setFilteredData={
           setFilteredData as Dispatch<
-            SetStateAction<TimelineData>
+            SetStateAction<VisualizationTypes.TimelineData>
           >
         }
         type={visualizationTypesEnum.TIMELINE}
       />
-       <>
-          <TimelineView
-            options={options}
-            data = {filteredData}
-            legend={legend}
-          />
-        </>
+      <>
+        <TimelineView
+          options={options}
+          data={filteredData}
+          legend={legend}
+        />
+      </>
     </>
   );
 };

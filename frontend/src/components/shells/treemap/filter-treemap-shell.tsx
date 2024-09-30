@@ -1,6 +1,6 @@
 'use client';
 
-import { HierarchyNode } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { visualizationTypesEnum } from '@/lib/validation/visualizations';
@@ -8,9 +8,9 @@ import dynamic from 'next/dynamic';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
 interface FilteredTreemapShellViewProp extends WithLegend, WithOptions {
-    categories: string[];
-    nodes: HierarchyNode[];
-  }
+  categories: string[];
+  nodes: VisualizationTypes.HierarchyNode[];
+}
 const TreeMapView = dynamic(
   () => import('@/components/views/treemap-chart'),
   { ssr: false }
@@ -23,7 +23,7 @@ const FilteredTreemapShellView = ({
 }: FilteredTreemapShellViewProp) => {
   const [filteredData, setFilteredData] = useState<{
     categories: string[];
-    nodes: HierarchyNode[];
+    nodes: VisualizationTypes.HierarchyNode[];
   }>({ categories, nodes });
 
   return (
@@ -33,18 +33,18 @@ const FilteredTreemapShellView = ({
         setFilteredData={
           setFilteredData as Dispatch<
             SetStateAction<{
-                categories: string[];
-                nodes: HierarchyNode[];
-              }>
+              categories: string[];
+              nodes: VisualizationTypes.HierarchyNode[];
+            }>
           >
         }
         type={visualizationTypesEnum.TREEMAP}
       />
-       <>
-          <TreeMapView options={options}
+      <>
+        <TreeMapView options={options}
           nodes={filteredData.nodes}
           categories={filteredData.categories} legend={legend} />
-        </>
+      </>
     </>
   );
 };

@@ -1,4 +1,4 @@
-import { AxisChartData } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 
 export const constructSeries = (
   values: { [key: string]: number[] },
@@ -40,7 +40,7 @@ export const constructSeries = (
 };
 
 export const computeLegendColors = (
-  data: AxisChartData,
+  data: VisualizationTypes.AxisChartData,
   colors: string[]
 ) => {
   const keys = Object.keys(data.values);

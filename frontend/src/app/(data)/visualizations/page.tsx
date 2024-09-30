@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { browseVisualizations } from '@/app/_actions/visualization';
 import VisualizationsTableShell from '@/components/shells/visualizations-table-shell';
-import { VisualizationFilter } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 
 export const metadata: Metadata = {
   title: 'Visualizations',
@@ -27,7 +27,7 @@ const Visualizations = async ({ searchParams }: VisualizationsProps) => {
         element: (sort as string).split('.')[0]
       }
       : undefined
-  } as VisualizationFilter);
+  } as VisualizationTypes.VisualizationFilter);
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-gray-50 rounded-3xl dark:bg-gray-800">
       <div className="space-y-2.5">

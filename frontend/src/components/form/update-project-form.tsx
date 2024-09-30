@@ -19,14 +19,14 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { Icons } from '@/components/icons';
 import { updateProject } from '@/app/_actions/project';
-import { ProjectUpdate } from 'types/project';
+import { ProjectTypes } from '@illustry/types';
 import { useTransition } from 'react';
 import Checkbox from '../ui/checkbox';
 
 type Inputs = z.infer<typeof projectUpdateSchema>;
 
 interface UpdateProjectFormProps {
-  project?: ProjectUpdate;
+  project?: ProjectTypes.ProjectUpdate;
 }
 function UpdateProjectForm({ project }: UpdateProjectFormProps) {
   const router = useRouter();
@@ -45,7 +45,7 @@ function UpdateProjectForm({ project }: UpdateProjectFormProps) {
     startTransition(async () => {
       try {
         if (project && project.name) {
-          await updateProject({ name: project.name, ...data } as ProjectUpdate);
+          await updateProject({ name: project.name, ...data } as ProjectTypes.ProjectUpdate);
 
           form.reset();
           toast.success('Project updated successfully.');
@@ -60,58 +60,58 @@ function UpdateProjectForm({ project }: UpdateProjectFormProps) {
 
   return (
     <div>
-    <h2 className="text-2xl font-bold mb-4">Update Project {project?.name}</h2>
-    <Form {...form}>
-      <form
-        className="grid w-full max-w-xl gap-5"
-        // eslint-disable-next-line no-void
-        onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
-      >
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Type project description here."
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="isActive"
-          render={({ field }) => (
-            <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-              <FormControl>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
-              </FormControl>
+      <h2 className="text-2xl font-bold mb-4">Update Project {project?.name}</h2>
+      <Form {...form}>
+        <form
+          className="grid w-full max-w-xl gap-5"
+          // eslint-disable-next-line no-void
+          onSubmit={(...args) => void form.handleSubmit(onSubmit)(...args)}
+        >
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Type project description here."
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="isActive"
+            render={({ field }) => (
+              <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                <FormControl>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </FormControl>
 
-              <FormMessage />
-              <FormLabel>Make this project active</FormLabel>
-            </FormItem>
-          )}
-        />
-        <Button className="w-fit" disabled={isPending}>
-          {isPending && (
-            <Icons.spinner
-              className="mr-2 h-4 w-4 animate-spin"
-              aria-hidden="true"
-            />
-          )}
-          Update Project
-          <span className="sr-only">Update Project</span>
-        </Button>
-      </form>
-    </Form>
+                <FormMessage />
+                <FormLabel>Make this project active</FormLabel>
+              </FormItem>
+            )}
+          />
+          <Button className="w-fit" disabled={isPending}>
+            {isPending && (
+              <Icons.spinner
+                className="mr-2 h-4 w-4 animate-spin"
+                aria-hidden="true"
+              />
+            )}
+            Update Project
+            <span className="sr-only">Update Project</span>
+          </Button>
+        </form>
+      </Form>
     </div>
   );
 }

@@ -1,4 +1,5 @@
-import { CalendarType } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
+
 // eslint-disable-next-line import/no-cycle
 import { evaluateCondition } from './generic';
 
@@ -8,7 +9,7 @@ const applyDatesFilter = (
   datesFilter: string,
   defaultData: {
     categories: string[];
-    calendar: CalendarType[];
+    calendar: VisualizationTypes.CalendarType[];
   }
 ) => {
   try {
@@ -45,7 +46,7 @@ const applyDatesFilter = (
 
 const applyCategoriesFilter = (categoriesFilter: string, defaultData: {
     categories: string[];
-    calendar: CalendarType[];
+    calendar: VisualizationTypes.CalendarType[];
   }): string[] => {
   const includedCategories: string[] = [];
   const excludedCategories: string[] = [];
@@ -86,11 +87,11 @@ const applyCategoriesFilter = (categoriesFilter: string, defaultData: {
 
 export const applyCalendarFilter = (expressions:string[], defaultData: {
     categories: string[];
-    calendar: CalendarType[];
+    calendar: VisualizationTypes.CalendarType[];
   }) => {
   const newData:{
     categories: string[];
-    calendar: CalendarType[];
+    calendar: VisualizationTypes.CalendarType[];
   } = {
     categories: [],
     calendar: []

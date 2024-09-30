@@ -3,7 +3,7 @@
 'use client';
 
 import { EChartsOption } from 'echarts';
-import { HierarchyNode } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import {
   calculateMeanValue,
   computeMaxDepth,
@@ -19,7 +19,7 @@ import ReactEcharts from './generic/echarts';
 
 interface TreeMapProp extends WithLegend, WithOptions {
   categories: string[];
-  nodes: HierarchyNode[];
+  nodes: VisualizationTypes.HierarchyNode[];
 }
 const TreeMapView = ({ nodes, categories, legend }: TreeMapProp) => {
   const maxDepth = computeMaxDepth(nodes);

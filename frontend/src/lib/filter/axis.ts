@@ -1,4 +1,5 @@
-import { AxisChartData } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
+
 // eslint-disable-next-line import/no-cycle
 import { evaluateCondition, getMatchingIndices } from './generic';
 
@@ -7,7 +8,7 @@ export const axisWords = ['headers', 'values'];
 const applyValuesFilter = (
   valuesFilter: string,
   validValuesPosition: number[],
-  defaultData: AxisChartData
+  defaultData: VisualizationTypes.AxisChartData
 ) => {
   try {
     let valuesOperations: string[] = [];
@@ -46,7 +47,7 @@ const applyValuesFilter = (
   }
 };
 
-const applyHeadersFilter = (headersFilter: string, defaultData: AxisChartData): string[] => {
+const applyHeadersFilter = (headersFilter: string, defaultData: VisualizationTypes.AxisChartData): string[] => {
   const includedHeaders: string[] = [];
   const excludedHeaders: string[] = [];
 
@@ -84,8 +85,8 @@ const applyHeadersFilter = (headersFilter: string, defaultData: AxisChartData): 
   return [];
 };
 
-export const applyAxisFilter = (expressions:string[], defaultData: AxisChartData) => {
-  const newData: AxisChartData = {
+export const applyAxisFilter = (expressions:string[], defaultData: VisualizationTypes.AxisChartData) => {
+  const newData: VisualizationTypes.AxisChartData = {
     headers: [],
     values: {}
   };

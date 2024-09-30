@@ -1,4 +1,4 @@
-import { TimelineData, TimelineEvent } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 
 export const computeColors = (types: string[], colors: string[]) => {
   const color: { [key: string]: string } = {};
@@ -8,7 +8,7 @@ export const computeColors = (types: string[], colors: string[]) => {
   return color;
 };
 
-export const extractTimelineDataTypes = (data: TimelineData): string[] => {
+export const extractTimelineDataTypes = (data: VisualizationTypes.TimelineData): string[] => {
   let timelineDataTypes: string[] = [];
 
   Object.keys(data).forEach((date) => {
@@ -20,8 +20,11 @@ export const extractTimelineDataTypes = (data: TimelineData): string[] => {
 
   return Array.from(new Set(timelineDataTypes));
 };
-export const groupEventsByDate = (events: TimelineEvent[]): { [date: string]: TimelineEvent[] } => {
-  const groupedEvents: { [date: string]: TimelineEvent[] } = {};
+
+export const groupEventsByDate = (events: VisualizationTypes.TimelineEvent[]): {
+  [date: string]: VisualizationTypes.TimelineEvent[]
+} => {
+  const groupedEvents: { [date: string]: VisualizationTypes.TimelineEvent[] } = {};
 
   return events.reduce((groupedEv, event) => {
     const { date } = event;

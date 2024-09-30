@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { TimelineData } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { VerticalTimeline } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import { formatDate } from '@/lib/utils';
@@ -13,7 +13,7 @@ import TimelineAccordion from './timeline/timelineAccordion';
 import TimelineElement from './timeline/timelineElement';
 
 interface TimelineProp extends WithLegend, WithOptions {
-  data: TimelineData;
+  data: VisualizationTypes.TimelineData;
 }
 
 const TimelineView = ({

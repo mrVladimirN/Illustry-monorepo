@@ -1,11 +1,11 @@
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import { computeCategories } from '@/lib/visualizations/hierarchy-charts/helper';
 import dynamic from 'next/dynamic';
-import { HierarchyData } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import FilteredSunburstShellView from './filtered-sunburst-shell';
 
 interface SunBurstShellProp extends WithLegend, WithOptions, WithFilter {
-  data: HierarchyData;
+  data: VisualizationTypes.HierarchyData;
 }
 const SunBurstGraphView = dynamic(
   () => import('@/components/views/sunburst-chart'),

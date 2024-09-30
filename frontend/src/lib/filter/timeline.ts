@@ -1,4 +1,4 @@
-import { TimelineData } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 // eslint-disable-next-line import/no-cycle
 import { evaluateCondition } from './generic';
 
@@ -6,7 +6,7 @@ export const timelineWords = ['types', 'dates', 'authors'];
 
 const applyDatesFilter = (
   datesFilter: string,
-  defaultData: TimelineData
+  defaultData: VisualizationTypes.TimelineData
 ) => {
   try {
     let datesOperations: string[] = [];
@@ -33,7 +33,7 @@ const applyDatesFilter = (
         }
         return true;
       });
-    const filteredValues: TimelineData = {};
+    const filteredValues: VisualizationTypes.TimelineData = {};
 
     filteredKeys.forEach((key) => {
       const value = defaultData[key];
@@ -49,7 +49,7 @@ const applyDatesFilter = (
 };
 const applyEventsFilter = (
   filter: string,
-  defaultData: TimelineData,
+  defaultData: VisualizationTypes.TimelineData,
   filterType: string
 ) => {
   const included: string[] = [];
@@ -85,7 +85,7 @@ const applyEventsFilter = (
         }
       });
     }
-    const filteredData: TimelineData = {};
+    const filteredData: VisualizationTypes.TimelineData = {};
 
     Object.keys(defaultData).forEach((date) => {
       const events = defaultData[date]?.events || [];
@@ -114,8 +114,8 @@ const applyEventsFilter = (
     return defaultData;
   }
 };
-export const applyTimelineFilter = (expressions:string[], defaultData: TimelineData) => {
-  let newData: TimelineData = { ...defaultData };
+export const applyTimelineFilter = (expressions:string[], defaultData: VisualizationTypes.TimelineData) => {
+  let newData: VisualizationTypes.TimelineData = { ...defaultData };
   let datesFilter: string = '';
   let authorsFilter: string = '';
   let typesFilter: string = '';

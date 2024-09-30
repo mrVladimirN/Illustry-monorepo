@@ -1,4 +1,4 @@
-import { ScatterData } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import dynamic from 'next/dynamic';
 import {
@@ -8,7 +8,7 @@ import {
 import FilteredScatterGraphShellView from './filter-scatter-shell';
 
 interface ScatterShellProp extends WithLegend, WithOptions, WithFilter {
-  data: ScatterData;
+  data: VisualizationTypes.ScatterData;
 }
 const ScatterGraphView = dynamic(() => import('@/components/views/scatter'), {
   ssr: false

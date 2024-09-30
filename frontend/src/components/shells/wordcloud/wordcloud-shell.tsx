@@ -1,10 +1,10 @@
-import { WordCloudData } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import dynamic from 'next/dynamic';
 import FilteredWordCloudGraphShellView from './filter-wordcloud-shell';
 
 interface WordCloudShellProp extends WithLegend, WithOptions, WithFilter {
-  data: WordCloudData;
+  data: VisualizationTypes.WordCloudData;
 }
 const WordCloudGraphView = dynamic(
   () => import('@/components/views/wordcloud'),

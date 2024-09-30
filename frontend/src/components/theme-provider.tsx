@@ -8,7 +8,7 @@ import {
   Dispatch, createContext, ReactNode, useReducer, useEffect, useContext
 } from 'react';
 import { cloneDeep } from '@/lib/utils';
-import { DeepPartial } from 'types/utils';
+import { UtilTypes } from '@illustry/types';
 
 export interface ThemeColors {
   calendar: {
@@ -110,7 +110,7 @@ export interface ThemeColors {
 }
 interface OptionAction {
   type: 'apply';
-  modifiedData?: DeepPartial<ThemeColors>;
+  modifiedData?: UtilTypes.DeepPartial<ThemeColors>;
 }
 interface AuxProps {
   children: ReactNode;

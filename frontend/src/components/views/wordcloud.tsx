@@ -5,18 +5,18 @@
 import {
   EChartsOption,
   WordCloudSeriesOption
-} from 'echarts/types/dist/echarts';
+} from 'echarts';
 import {
   computeWords,
   computePropertiesForToolTip
 } from '@/lib/visualizations/word-cloud/helper';
-import { WordType } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
 interface WordCloudProp extends WithLegend, WithOptions {
-  words: WordType[];
+  words: VisualizationTypes.WordType[];
 }
 const WordCloudView = ({ words }: WordCloudProp) => {
   const activeTheme = useThemeColors();

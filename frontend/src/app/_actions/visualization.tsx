@@ -4,13 +4,11 @@ import makeRequest from '@/lib/request';
 import 'dotenv/config';
 import { revalidateTag } from 'next/cache';
 import {
-  ExtendedVisualizationType,
-  VisualizationFilter,
-  VisualizationType
-} from 'types/visualizations';
+  VisualizationTypes
+} from '@illustry/types';
 
-export const browseVisualizations = async (filter?: VisualizationFilter) => {
-  let newFilter: VisualizationFilter = {};
+export const browseVisualizations = async (filter?: VisualizationTypes.VisualizationFilter) => {
+  let newFilter: VisualizationTypes.VisualizationFilter = {};
   if (filter) {
     newFilter = filter;
   }
@@ -25,15 +23,15 @@ export const browseVisualizations = async (filter?: VisualizationFilter) => {
       body: JSON.stringify(newFilter)
     }
   );
-  return makeRequest<ExtendedVisualizationType>(request, ['visualizations'])
+  return makeRequest<VisualizationTypes.ExtendedVisualizationType>(request, ['visualizations'])
     .catch((error) => {
-    // eslint-disable-next-line no-console
+      // eslint-disable-next-line no-console
       console.debug(error.message);
     });
 };
 
 export const deleteVisualization = async (
-  visualizationFilter: VisualizationFilter
+  visualizationFilter: VisualizationTypes.VisualizationFilter
 ) => {
   revalidateTag('visualizations');
   const request = new Request(
@@ -59,11 +57,11 @@ export const createOrUpdateVisualization = async (
       body: form
     }
   );
-  return makeRequest<VisualizationType>(request, ['visualizations']);
+  return makeRequest<VisualizationTypes.VisualizationType>(request, ['visualizations']);
 };
 
 export const findOneVisualization = async (
-  visualizationFilter: VisualizationFilter
+  visualizationFilter: VisualizationTypes.VisualizationFilter
 ) => {
   revalidateTag('visualizations');
   const request = new Request(
@@ -76,5 +74,5 @@ export const findOneVisualization = async (
       body: JSON.stringify(visualizationFilter)
     }
   );
-  return makeRequest<VisualizationType>(request, ['visualizations']);
+  return makeRequest<VisualizationTypes.VisualizationType>(request, ['visualizations']);
 };

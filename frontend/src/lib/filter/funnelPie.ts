@@ -1,4 +1,5 @@
-import { FunnelData, PieChartData } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
+
 // eslint-disable-next-line import/no-cycle
 import { evaluateCondition } from './generic';
 
@@ -6,7 +7,7 @@ export const funnelPieWords = ['values'];
 
 const applyValuesFilter = (
   valuesFilter: string,
-  defaultData: FunnelData | PieChartData
+  defaultData: VisualizationTypes.FunnelData | VisualizationTypes.PieChartData
 ) => {
   try {
     let valuesOperations: string[] = [];
@@ -37,8 +38,8 @@ const applyValuesFilter = (
 };
 
 // eslint-disable-next-line max-len
-export const applyFunnelPieFilter = (expressions:string[], defaultData: FunnelData | PieChartData) => {
-  const newData: FunnelData| PieChartData = {
+export const applyFunnelPieFilter = (expressions:string[], defaultData: VisualizationTypes.FunnelData | VisualizationTypes.PieChartData) => {
+  const newData: VisualizationTypes.FunnelData| VisualizationTypes.PieChartData = {
     values: {}
   };
   let valuesFilter: string = '';

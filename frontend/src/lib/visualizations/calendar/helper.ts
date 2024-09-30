@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { CalendarType } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 
-export const computeCategoriesCalendar = (calendarData: CalendarType[]) => [
+export const computeCategoriesCalendar = (calendarData: VisualizationTypes.CalendarType[]) => [
   ...new Set(
     calendarData.map((cal) => cal.category)
   )
@@ -22,7 +21,7 @@ export const computeLegendColors = (categories: string[], colors: string[]) => {
   return color;
 };
 // eslint-disable-next-line max-len
-export const computeElementsCalendar = (element: CalendarType) => [element.date, element.value ? element.value : 1, element.category];
+export const computeElementsCalendar = (element: VisualizationTypes.CalendarType) => [element.date, element.value ? element.value : 1, element.category];
 
 export const computePropertiesForToolTip = (
   properties: any,
@@ -49,7 +48,7 @@ export const computePropertiesForToolTip = (
 };
 
 export const computeCalendar = (
-  calendarData: CalendarType[],
+  calendarData: VisualizationTypes.CalendarType[],
   textColor: string
 ) => {
   const years = [

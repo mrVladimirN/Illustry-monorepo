@@ -1,15 +1,5 @@
 /* eslint-disable import/no-cycle */
-import {
-  AxisChartData,
-  CalendarType,
-  FunnelData,
-  HierarchyNode,
-  Link,
-  Node,
-  PieChartData,
-  TimelineData,
-  WordType
-} from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { applyAxisFilter } from './axis';
 import { visualizationTypesEnum } from '../validation/visualizations';
 import { applyCalendarFilter } from './calendar';
@@ -138,14 +128,14 @@ export const parseFilter = (
       case visualizationTypesEnum.BAR_CHART:
         return applyAxisFilter(
           expressions.filter((part) => part !== undefined) as string[],
-          data as AxisChartData
+          data as VisualizationTypes.AxisChartData
         );
       case visualizationTypesEnum.CALENDAR:
         return applyCalendarFilter(
           expressions.filter((part) => part !== undefined) as string[],
           data as {
             categories: string[];
-            calendar: CalendarType[];
+            calendar: VisualizationTypes.CalendarType[];
           }
         );
       case visualizationTypesEnum.FORCE_DIRECTED_GRAPH:
@@ -155,20 +145,20 @@ export const parseFilter = (
         return applyNodeLinkFilter(
           expressions.filter((part) => part !== undefined) as string[],
           data as {
-            nodes: Node[];
-            links: Link[];
+            nodes: VisualizationTypes.Node[];
+            links: VisualizationTypes.Link[];
           }
         );
       case visualizationTypesEnum.FUNNEL:
       case visualizationTypesEnum.PIE_CHART:
         return applyFunnelPieFilter(
           expressions.filter((part) => part !== undefined) as string[],
-          data as PieChartData | FunnelData
+          data as VisualizationTypes.PieChartData | VisualizationTypes.FunnelData
         );
       case visualizationTypesEnum.WORD_CLOUD:
         return applyWordCloudFilter(
             expressions.filter((part) => part !== undefined) as string[],
-            data as WordType[]
+            data as VisualizationTypes.WordType[]
         );
       case visualizationTypesEnum.SCATTER:
         return applyScatterFilter(
@@ -181,7 +171,7 @@ export const parseFilter = (
       case visualizationTypesEnum.TIMELINE:
         return applyTimelineFilter(
               expressions.filter((part) => part !== undefined) as string[],
-              data as TimelineData
+              data as VisualizationTypes.TimelineData
         );
       case visualizationTypesEnum.SUNBURST:
       case visualizationTypesEnum.TREEMAP:
@@ -189,7 +179,7 @@ export const parseFilter = (
               expressions.filter((part) => part !== undefined) as string[],
               data as {
                 categories: string[]
-                nodes: HierarchyNode[]
+                nodes: VisualizationTypes.HierarchyNode[]
                 }
         );
       default:

@@ -1,16 +1,5 @@
 import { Suspense } from 'react';
-import {
-  CalendarData,
-  AxisChartData,
-  NodeLinkData,
-  VisualizationType,
-  WordCloudData,
-  ScatterData,
-  HierarchyData,
-  FunnelData,
-  TimelineData
-} from 'types/visualizations';
-import { PieChartData } from 'index';
+import { VisualizationTypes } from '@illustry/types';
 import Fallback from '../ui/fallback';
 import SankeyGraphShellView from './sankey/sankey-shell';
 import WordCloudShellView from './wordcloud/wordcloud-shell';
@@ -27,7 +16,7 @@ import MatrixShellView from './matrix/matrix-shell';
 import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/hierarchical-edge-bundling-shell';
 
 interface HubShellProps {
-  data?: VisualizationType;
+  data?: VisualizationTypes.VisualizationType;
 }
 
 function HubShell({ data }: HubShellProps) {
@@ -38,7 +27,7 @@ function HubShell({ data }: HubShellProps) {
           return (
             <Suspense fallback={<Fallback />}>
               <HierarchicalEdgeBundlingShellView
-                data={data.data as NodeLinkData}
+                data={data.data as VisualizationTypes.NodeLinkData}
                 legend={true}
                 options={true}
                 filter={true}
@@ -50,7 +39,7 @@ function HubShell({ data }: HubShellProps) {
           return (
             <Suspense fallback={<Fallback />}>
               <ForcedLayoutGraphShellView
-                data={data.data as NodeLinkData}
+                data={data.data as VisualizationTypes.NodeLinkData}
                 legend={true}
                 options={true}
                 filter={true}
@@ -60,19 +49,19 @@ function HubShell({ data }: HubShellProps) {
         case 'sankey':
           return (
             <Suspense fallback={<Fallback />}>
-               <SankeyGraphShellView
-                data={data.data as NodeLinkData}
+              <SankeyGraphShellView
+                data={data.data as VisualizationTypes.NodeLinkData}
                 legend={true}
                 options={true}
                 filter={true}
               />
-              </Suspense>
+            </Suspense>
           );
         case 'calendar':
           return (
             <Suspense fallback={<Fallback />}>
               <CalendarGraphShellView
-                data={data.data as CalendarData}
+                data={data.data as VisualizationTypes.CalendarData}
                 legend={true}
                 options={true}
                 filter={true}
@@ -83,7 +72,7 @@ function HubShell({ data }: HubShellProps) {
           return (
             <Suspense fallback={<Fallback />}>
               <WordCloudShellView
-                data={data.data as WordCloudData}
+                data={data.data as VisualizationTypes.WordCloudData}
                 legend={true}
                 options={true}
                 filter={true}
@@ -94,7 +83,7 @@ function HubShell({ data }: HubShellProps) {
           return (
             <Suspense fallback={<Fallback />}>
               <MatrixShellView
-                data={data.data as NodeLinkData}
+                data={data.data as VisualizationTypes.NodeLinkData}
                 legend={true}
                 options={true}
                 filter={false}
@@ -105,7 +94,7 @@ function HubShell({ data }: HubShellProps) {
           return (
             <Suspense fallback={<Fallback />}>
               <AxisChartsShellView
-                data={data.data as AxisChartData}
+                data={data.data as VisualizationTypes.AxisChartData}
                 legend={true}
                 options={true}
                 type="line"
@@ -117,7 +106,7 @@ function HubShell({ data }: HubShellProps) {
           return (
             <Suspense fallback={<Fallback />}>
               <AxisChartsShellView
-                data={data.data as AxisChartData}
+                data={data.data as VisualizationTypes.AxisChartData}
                 legend={true}
                 options={true}
                 type="bar"
@@ -129,7 +118,7 @@ function HubShell({ data }: HubShellProps) {
           return (
             <Suspense fallback={<Fallback />}>
               <PieChartShellView
-                data={data.data as PieChartData}
+                data={data.data as VisualizationTypes.PieChartData}
                 legend={true}
                 options={true}
                 filter={true}
@@ -140,7 +129,7 @@ function HubShell({ data }: HubShellProps) {
           return (
             <Suspense fallback={<Fallback />}>
               <FunnelShellView
-                data={data.data as FunnelData}
+                data={data.data as VisualizationTypes.FunnelData}
                 legend={true}
                 options={true}
                 filter={true}
@@ -151,7 +140,7 @@ function HubShell({ data }: HubShellProps) {
           return (
             <Suspense fallback={<Fallback />}>
               <ScatterShellView
-                data={data.data as ScatterData}
+                data={data.data as VisualizationTypes.ScatterData}
                 legend={true}
                 options={true}
                 filter={true}
@@ -162,7 +151,7 @@ function HubShell({ data }: HubShellProps) {
           return (
             <Suspense fallback={<Fallback />}>
               <TreeMapShellView
-                data={data.data as HierarchyData}
+                data={data.data as VisualizationTypes.HierarchyData}
                 legend={true}
                 options={true}
                 filter={false}
@@ -173,7 +162,7 @@ function HubShell({ data }: HubShellProps) {
           return (
             <Suspense fallback={<Fallback />}>
               <SunBurstShellView
-                data={data.data as HierarchyData}
+                data={data.data as VisualizationTypes.HierarchyData}
                 legend={true}
                 options={true}
                 filter={false}
@@ -184,7 +173,7 @@ function HubShell({ data }: HubShellProps) {
           return (
             <Suspense fallback={<Fallback />}>
               <TimelineShellView
-                data={data.data as TimelineData}
+                data={data.data as VisualizationTypes.TimelineData}
                 legend={true}
                 options={true}
                 filter={true}

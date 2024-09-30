@@ -1,10 +1,10 @@
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import dynamic from 'next/dynamic';
-import { NodeLinkData } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import FilteredMatrixShellView from './filter-matrix-shell';
 
 interface MatrixShellProp extends WithLegend, WithOptions, WithFilter {
-  data: NodeLinkData;
+  data: VisualizationTypes.NodeLinkData;
 }
 const MatrixGraphView = dynamic(() => import('@/components/views/matrix'), {
   ssr: false

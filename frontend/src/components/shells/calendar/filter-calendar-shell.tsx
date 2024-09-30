@@ -1,6 +1,6 @@
 'use client';
 
-import { CalendarType } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { visualizationTypesEnum } from '@/lib/validation/visualizations';
@@ -9,7 +9,7 @@ import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
 interface FilteredCalendarShellProp extends WithLegend, WithOptions {
   categories: string[];
-  calendar: CalendarType[];
+  calendar: VisualizationTypes.CalendarType[];
 }
 const CalendarView = dynamic(
   () => import('@/components/views/calendar-graph'),
@@ -25,7 +25,7 @@ const FilteredCalendarShellView = ({
 }: FilteredCalendarShellProp) => {
   const [filteredData, setFilteredData] = useState<{
     categories: string[];
-    calendar: CalendarType[];
+    calendar: VisualizationTypes.CalendarType[];
   }>({
     categories,
     calendar
@@ -42,7 +42,7 @@ const FilteredCalendarShellView = ({
           setFilteredData as Dispatch<
             SetStateAction<{
               categories: string[];
-              calendar: CalendarType[];
+              calendar: VisualizationTypes.CalendarType[];
             }>
           >
         }

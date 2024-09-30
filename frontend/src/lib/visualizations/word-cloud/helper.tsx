@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { WordType } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 
 export const computePropertiesForToolTip = (
-  properties: any,
+  properties: Record<string, unknown>,
   value?: number | string
 ) => {
   let prop = '';
@@ -62,7 +61,7 @@ const computeColor = (nr: number, meanValue: number, colors: string[]) => {
   }
   return '';
 };
-export const computeWords = (words: WordType[], colors: string[]) => {
+export const computeWords = (words: VisualizationTypes.WordType[], colors: string[]) => {
   const values = words.map((word) => word.value);
   const meanValue = calculateMeanValue(values);
 

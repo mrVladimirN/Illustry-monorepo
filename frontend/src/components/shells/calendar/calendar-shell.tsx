@@ -1,11 +1,11 @@
-import { CalendarData } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import dynamic from 'next/dynamic';
 import { computeCategoriesCalendar } from '@/lib/visualizations/calendar/helper';
 import FilteredCalendarShellView from './filter-calendar-shell';
 
 interface CalendarGraphShellProp extends WithLegend, WithOptions, WithFilter {
-  data: CalendarData;
+  data: VisualizationTypes.CalendarData;
 }
 const CalendarGraphView = dynamic(
   () => import('@/components/views/calendar-graph'),

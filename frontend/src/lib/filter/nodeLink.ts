@@ -1,4 +1,4 @@
-import { Link, Node } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 // eslint-disable-next-line import/no-cycle
 import { evaluateCondition } from './generic';
 
@@ -13,8 +13,8 @@ export const nodeLinksWords = [
 const applyNodeNameFilter = (
   filter: string,
   defaultData: {
-    nodes: Node[];
-    links: Link[];
+    nodes: VisualizationTypes.Node[];
+    links: VisualizationTypes.Link[];
   },
   filterType: string
 ) => {
@@ -94,8 +94,8 @@ const applyNodeNameFilter = (
 const applyValuesFilter = (
   valuesFilter: string,
   defaultData: {
-    nodes: Node[];
-    links: Link[];
+    nodes: VisualizationTypes.Node[];
+    links: VisualizationTypes.Link[];
   }
 ) => {
   try {
@@ -136,13 +136,13 @@ const applyValuesFilter = (
 export const applyNodeLinkFilter = (
   expressions: string[],
   defaultData: {
-    nodes: Node[];
-    links: Link[];
+    nodes: VisualizationTypes.Node[];
+    links: VisualizationTypes.Link[];
   }
 ) => {
   let newData: {
-    nodes: Node[];
-    links: Link[];
+    nodes: VisualizationTypes.Node[];
+    links: VisualizationTypes.Link[];
   } = { nodes: [...defaultData.nodes], links: [...defaultData.links] };
   let categoriesFilter: string = '';
   let sourcesFilter: string = '';

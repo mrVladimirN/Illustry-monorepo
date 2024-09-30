@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react';
 import {
   select, cluster, lineRadial, curveBundle
 } from 'd3';
-import { Link, Node } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import {
   createHebLinks,
   createHebNodes,
@@ -22,14 +22,14 @@ import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { useThemeColors } from '../theme-provider';
 
 interface HierarchicalEdgeBundlingGraphProp extends WithLegend, WithOptions {
-  nodes: Node[],
-  links: Link[],
+  nodes: VisualizationTypes.Node[],
+  links: VisualizationTypes.Link[],
   containered?: boolean
 }
 
 const createHedge = (
-  nodes: Node[],
-  links: Link[],
+  nodes: VisualizationTypes.Node[],
+  links: VisualizationTypes.Link[],
   c: string[],
   width: number,
   height: number,

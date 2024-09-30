@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { browseProjects } from '@/app/_actions/project';
 import ProjectsTableShell from '@/components/shells/projects-table-shell';
-import { ProjectFilter } from 'types/project';
+import { ProjectTypes } from '@illustry/types';
 
 export const metadata: Metadata = {
   title: 'Projects',
@@ -28,7 +28,7 @@ const Projects = async ({ searchParams }: ProjectsProps) => {
         element: (sort as string).split('.')[0]
       }
       : undefined
-  } as ProjectFilter);
+  } as ProjectTypes.ProjectFilter);
   return (
     <div className="m-2 md:m-10 mt-24 p-2 md:p-10 bg-gray-50 rounded-3xl dark:bg-gray-800">
       <div className="space-y-2.5">

@@ -1,6 +1,6 @@
 'use client';
 
-import { WordType } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { visualizationTypesEnum } from '@/lib/validation/visualizations';
@@ -8,7 +8,7 @@ import dynamic from 'next/dynamic';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
 interface FilteredWordCloudShellProp extends WithLegend, WithOptions {
-  words: WordType[]
+  words: VisualizationTypes.WordType[]
 }
 const WordCloudGraphView = dynamic(
   () => import('@/components/views/wordcloud'),
@@ -19,7 +19,7 @@ const FilteredWordCloudGraphShellView = ({
   legend,
   options
 }: FilteredWordCloudShellProp) => {
-  const [filteredData, setFilteredData] = useState<WordType[]>(words);
+  const [filteredData, setFilteredData] = useState<VisualizationTypes.WordType[]>(words);
 
   return (
     <>
@@ -27,7 +27,7 @@ const FilteredWordCloudGraphShellView = ({
         data={words}
         setFilteredData={
           setFilteredData as Dispatch<
-            SetStateAction<WordType[]>
+            SetStateAction<VisualizationTypes.WordType[]>
           >
         }
         type={visualizationTypesEnum.WORD_CLOUD}

@@ -1,10 +1,10 @@
-import { PieChartData } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import dynamic from 'next/dynamic';
 import FilteredPieChartGraphShellView from './filter-piechart-shell';
 
 interface PieChartShellProp extends WithLegend, WithOptions, WithFilter {
-  data: PieChartData;
+  data: VisualizationTypes.PieChartData;
 }
 const PieChartGraphView = dynamic(
   () => import('@/components/views/pie-chart'),

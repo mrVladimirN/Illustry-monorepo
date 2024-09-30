@@ -1,7 +1,7 @@
-import { FunnelData, PieChartData } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 
 export const computeValues = (
-  data: PieChartData | FunnelData,
+  data: VisualizationTypes.PieChartData | VisualizationTypes.FunnelData,
   colors: string[]
 ) => {
   const keys = Object.keys(data.values);
@@ -13,7 +13,7 @@ export const computeValues = (
 };
 
 export const computeLegendColors = (
-  data: PieChartData | FunnelData,
+  data: VisualizationTypes.PieChartData | VisualizationTypes.FunnelData,
   colors: string[]
 ) => {
   const keys = Object.keys(data.values);

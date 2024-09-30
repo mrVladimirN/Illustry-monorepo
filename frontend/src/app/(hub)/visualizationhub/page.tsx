@@ -1,7 +1,7 @@
 import { findOneVisualization } from '@/app/_actions/visualization';
 import HubShell from '@/components/shells/hub-shell';
 import { Metadata } from 'next';
-import { VisualizationFilter } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 
 export const metadata: Metadata = {
   title: 'Visualizations',
@@ -19,7 +19,7 @@ const Hub = async ({ searchParams }: VisualizationsProps) => {
   const visualization = await findOneVisualization({
     name,
     type
-  } as VisualizationFilter);
+  } as VisualizationTypes.VisualizationFilter);
   return (
     <>
       <HubShell data={visualization}></HubShell>

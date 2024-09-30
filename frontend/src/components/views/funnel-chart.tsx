@@ -1,7 +1,7 @@
 'use client';
 
-import { EChartsOption } from 'echarts/types/dist/echarts';
-import { FunnelData } from 'types/visualizations';
+import { EChartsOption } from 'echarts';
+import { VisualizationTypes } from '@illustry/types';
 import {
   computeLegendColors,
   computeValues
@@ -12,7 +12,7 @@ import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
 interface FunnelProp extends WithLegend, WithOptions {
-  data: FunnelData;
+  data: VisualizationTypes.FunnelData;
 }
 const FunnelView = ({ data, legend }: FunnelProp) => {
   const activeTheme = useThemeColors();

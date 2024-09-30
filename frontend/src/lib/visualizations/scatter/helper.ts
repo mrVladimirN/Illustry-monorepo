@@ -1,6 +1,6 @@
-import { ScatterPoint } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 
-export const computeCategoriesScatter = (points: ScatterPoint[]) => [
+export const computeCategoriesScatter = (points: VisualizationTypes.ScatterPoint[]) => [
   ...new Set(
     points.map((p) => p.category)
   )
@@ -14,5 +14,6 @@ export const computeColors = (categories: string[], colors: string[]) => {
   return color;
 };
 
-// eslint-disable-next-line max-len
-export const computePoints = (points:ScatterPoint[]) => points.map((point) => [...point.value, point.category]);
+export const computePoints = (points: VisualizationTypes.ScatterPoint[]) => {
+  return points.map((point) => [...point.value, point.category])
+};

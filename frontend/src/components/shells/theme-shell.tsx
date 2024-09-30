@@ -2,12 +2,11 @@
 
 'use client';
 
-import { DeepPartial } from 'types/utils';
 import {
   Suspense, useEffect, useRef, useState
 } from 'react';
 import { siteConfig } from '@/config/site';
-import { ScatterData, HierarchyData } from 'types/visualizations';
+import { VisualizationTypes, UtilTypes } from '@illustry/types';
 import {
   ThemeColors,
   useThemeColors,
@@ -85,7 +84,7 @@ function ThemeShell() {
     }
   };
   const handleApplyTheme = (themeName: string) => {
-    const appliedThemeColors: DeepPartial<ThemeColors> = {
+    const appliedThemeColors: UtilTypes.DeepPartial<ThemeColors> = {
       flg: {
         dark: { colors: colorPalette[themeName] },
         light: { colors: colorPalette[themeName] }
@@ -560,7 +559,7 @@ function ThemeShell() {
         <div className="flex-grow p-4">
           <Suspense fallback={<Fallback />}>
             <ScatterShellView
-              data={siteConfig.scatter as ScatterData}
+              data={siteConfig.scatter as VisualizationTypes.ScatterData}
               legend={false}
               options={false}
               filter={false}
@@ -572,7 +571,7 @@ function ThemeShell() {
         <div className="flex-grow p-4">
           <Suspense fallback={<Fallback />}>
             <TreeMapShellView
-              data={siteConfig.hierarchy as HierarchyData}
+              data={siteConfig.hierarchy as VisualizationTypes.HierarchyData}
               legend={false}
               options={false}
               filter={false}
@@ -584,7 +583,7 @@ function ThemeShell() {
         <div className="flex-grow p-4">
           <Suspense fallback={<Fallback />}>
             <SunBurstShellView
-              data={siteConfig.hierarchy as HierarchyData}
+              data={siteConfig.hierarchy as VisualizationTypes.HierarchyData}
               legend={false}
               options={false}
               filter={false}

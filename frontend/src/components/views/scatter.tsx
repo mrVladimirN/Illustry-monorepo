@@ -1,7 +1,6 @@
 'use client';
 
-import { EChartsOption } from 'echarts/types/dist/echarts';
-
+import { EChartsOption } from 'echarts';
 import {
   computeColors
 } from '@/lib/visualizations/scatter/helper';

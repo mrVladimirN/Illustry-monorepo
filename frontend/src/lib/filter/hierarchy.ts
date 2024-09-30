@@ -1,12 +1,12 @@
-import { HierarchyNode } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 // eslint-disable-next-line import/no-cycle
 import { evaluateCondition } from './generic';
 
 export const hierarchyWords = ['values', 'categories'];
 export const applyValuesFilterRecursive = (
-  node: HierarchyNode,
+  node: VisualizationTypes.HierarchyNode,
   valuesOperations: string[]
-): HierarchyNode | undefined => {
+): VisualizationTypes.HierarchyNode | undefined => {
   try {
     if (valuesOperations.length > 0) {
       const currentValue = node.value || 0;
@@ -20,7 +20,7 @@ export const applyValuesFilterRecursive = (
 
     const filteredChildren = (node.children || [])
       .map((child) => applyValuesFilterRecursive(child, valuesOperations))
-      .filter((child) => child !== undefined) as HierarchyNode[];
+      .filter((child) => child !== undefined) as VisualizationTypes.HierarchyNode[];
     return {
       ...node,
       children: filteredChildren
@@ -34,9 +34,9 @@ export const applyValuesFilter = (
   valuesFilter: string,
   defaultData: {
       categories: string[];
-      nodes: HierarchyNode[];
+      nodes: VisualizationTypes.HierarchyNode[];
     }
-): { categories: string[]; nodes: HierarchyNode[] } => {
+): { categories: string[]; nodes: VisualizationTypes.HierarchyNode[] } => {
   try {
     let valuesOperations: string[] = [];
     const matchesValues = valuesFilter.match(/values\s*([><=!]*)\s*(\d+)/g);
@@ -55,7 +55,7 @@ export const applyValuesFilter = (
 
     const filteredValues = defaultData.nodes
       .map((node) => applyValuesFilterRecursive(node, valuesOperations))
-      .filter((node) => node !== undefined) as HierarchyNode[];
+      .filter((node) => node !== undefined) as VisualizationTypes.HierarchyNode[];
     return { categories: defaultData.categories, nodes: filteredValues };
   } catch (error) {
     return defaultData;
@@ -63,7 +63,7 @@ export const applyValuesFilter = (
 };
 const applyCategoriesFilter = (categoriesFilter: string, defaultData: {
     categories: string[]
-    nodes: HierarchyNode[]
+    nodes: VisualizationTypes.HierarchyNode[]
     }): string[] => {
   const includedCategories: string[] = [];
   const excludedCategories: string[] = [];
@@ -104,11 +104,11 @@ const applyCategoriesFilter = (categoriesFilter: string, defaultData: {
 
 export const applyHierachyFilter = (expressions:string[], defaultData: {
     categories: string[]
-    nodes: HierarchyNode[]
+    nodes: VisualizationTypes.HierarchyNode[]
     }) => {
   let newData: {
     categories: string[]
-    nodes: HierarchyNode[]
+    nodes: VisualizationTypes.HierarchyNode[]
     } = { nodes: [...defaultData.nodes], categories: [...defaultData.categories] };
   let valuesFilter: string = '';
   let categoriesFilter: string = '';

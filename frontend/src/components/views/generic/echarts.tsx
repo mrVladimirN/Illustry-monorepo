@@ -35,7 +35,7 @@ import {
   EChartsOption,
   SetOptionOpts,
   WordCloudSeriesOption
-} from 'echarts/types/dist/echarts';
+} from 'echarts';
 
 export interface ReactEChartsProps<T> {
   option: T;

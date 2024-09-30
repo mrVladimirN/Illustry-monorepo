@@ -1,13 +1,4 @@
-import {
-  AxisChartData,
-  CalendarType,
-  FunnelData,
-  HierarchyNode,
-  Link,
-  Node,
-  WordType,
-  TimelineData
-} from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 
 export interface WithLegend {
   legend: boolean;
@@ -22,23 +13,23 @@ export interface WithFilter {
 }
 
 export type AllVisualizationsShell =
-  | AxisChartData
+  | VisualizationTypes.AxisChartData
   | {
       categories: string[];
-      calendar: CalendarType[];
+      calendar: VisualizationTypes.CalendarType[];
     }
   | {
-      nodes: Node[];
-      links: Link[];
+      nodes: VisualizationTypes.Node[];
+      links: VisualizationTypes.Link[];
     }
-  | FunnelData
-  | WordType[]
+  | VisualizationTypes.FunnelData
+  | VisualizationTypes.WordType[]
   | {
       points: (string | number)[][];
       categories: string[];
     }
-  | TimelineData
+  | VisualizationTypes.TimelineData
   | {
     categories: string[]
-    nodes: HierarchyNode[]
+    nodes: VisualizationTypes.HierarchyNode[]
     }

@@ -6,7 +6,7 @@
 /* eslint-disable no-sequences */
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Link, Node } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 
 // HEB transformers
 
@@ -18,13 +18,13 @@ import {
 } from 'd3';
 
 // Sankey transformers
-export const computeCategoriesSankey = (nodes: Node[]) => [
+export const computeCategoriesSankey = (nodes: VisualizationTypes.Node[]) => [
   ...new Set(
     nodes.map((node) => node.category)
   )
 ];
 const computePropertiesForToolTip = (
-  properties: any,
+  properties: Record<string, unknown>,
   value?: number | string
 ) => {
   let prop = '';
@@ -53,7 +53,7 @@ const computePropertiesForToolTip = (
   return prop;
 };
 export const computeNodesSankey = (
-  nodes: Node[],
+  nodes: VisualizationTypes.Node[],
   categories: string[],
   colors: string[]
 ) => {
@@ -67,27 +67,27 @@ export const computeNodesSankey = (
       color: colorMapSchema.get(node.category),
       borderColor: colorMapSchema.get(node.category)
     },
-    prop: computePropertiesForToolTip(node.properties)
+    prop: computePropertiesForToolTip((node.properties) as Record<string, unknown>)
   }));
 };
 
-export const computeLinksSankey = (links: Link[]): Link[] => links.map((link) => ({
+export const computeLinksSankey = (links: VisualizationTypes.Link[]): VisualizationTypes.Link[] => links.map((link) => ({
   source: link.source,
   target: link.target,
   value: link.value,
-  prop: computePropertiesForToolTip(link.properties, link.value)
+  prop: computePropertiesForToolTip((link.properties) as Record<string, unknown>, link.value)
 }));
 
 // FLG transformers
 
-export const computeCategoriesFLG = (nodes: Node[], colors: string[]) => [
+export const computeCategoriesFLG = (nodes: VisualizationTypes.Node[], colors: string[]) => [
   ...new Set(
     nodes.map((node) => node.category)
   )
 ].map((node, index) => ({ name: node, itemStyle: { color: colors[index] } }));
 
 export const computeNodesFLG = (
-  nodes: Node[],
+  nodes: VisualizationTypes.Node[],
   categories: {
     name: string;
   }[]
@@ -102,14 +102,14 @@ export const computeNodesFLG = (
   };
 });
 
-export const computeLinksFLG = (links: Link[], nodes: Node[]) => links.map((link) => {
+export const computeLinksFLG = (links: VisualizationTypes.Link[], nodes: VisualizationTypes.Node[]) => links.map((link) => {
   const source = nodes.findIndex((node) => node.name === link.source);
   const target = nodes.findIndex((node) => node.name === link.target);
   return {
     source,
     target,
     value: link.value,
-    prop: computePropertiesForToolTip(link.properties, link.value)
+    prop: computePropertiesForToolTip((link.properties as Record<string, unknown>), link.value)
   };
 });
 
@@ -145,7 +145,7 @@ export const assignToComponents = (
   return n;
 };
 
-export const packageHierarchy = (nodes: Node[]) => {
+export const packageHierarchy = (nodes: VisualizationTypes.Node[]) => {
   const map: any = {};
   map['@root'] = {
     name: '@root',
@@ -160,7 +160,7 @@ export const packageHierarchy = (nodes: Node[]) => {
   return hierarchy(map['@root']);
 };
 
-function createLinks(nodes: HierarchyNode<any>[], links: Link[]) {
+function createLinks(nodes: HierarchyNode<any>[], links: VisualizationTypes.Link[]) {
   const map: any = {};
   const imports: any[] = [];
 
@@ -191,7 +191,7 @@ function createLinks(nodes: HierarchyNode<any>[], links: Link[]) {
 export const createHebLinks = (
   link: any,
   root: HierarchyNode<any>,
-  links: Link[],
+  links: VisualizationTypes.Link[],
   line: LineRadial<[number, number]>,
   color: string
 ) => link
@@ -218,12 +218,9 @@ export const createHebNodes = (
   .attr('dy', '0.31em')
   .attr(
     'transform',
-    (d: { x: number; y: number }) => `rotate(${
-      d.x - 90
-    })translate(${
-      d.y + 8
-    },0)${
-      d.x < 180 ? '' : 'rotate(180)'}`
+    (d: { x: number; y: number }) => `rotate(${d.x - 90
+      })translate(${d.y + 8
+      },0)${d.x < 180 ? '' : 'rotate(180)'}`
   )
   .attr('text-anchor', (d: { x: number; y: number }) => (d.x < 180 ? 'start' : 'end'))
   .style('fill', color)
@@ -390,13 +387,12 @@ const constructMatrixToolTipAndStyle = (
   classNames?: string[]
 ) => {
   const className = classNames ? classNames.join(' ') : '';
-  return `<${htmlElement} class="${className}" style=${
-    style?.length
-      ? `${style};border: 1px solid #ddd ;`
-      : 'width:10%;text-align:center; border: 1px solid #ddd ;'
-  }>${tooltip?.length ? tooltip : ''}${name}</${htmlElement}>`;
+  return `<${htmlElement} class="${className}" style=${style?.length
+    ? `${style};border: 1px solid #ddd ;`
+    : 'width:10%;text-align:center; border: 1px solid #ddd ;'
+    }>${tooltip?.length ? tooltip : ''}${name}</${htmlElement}>`;
 };
-export const categoryMap = (nodes: Node[]) => nodes.reduce((map: Record<string, Node[]>, node) => {
+export const categoryMap = (nodes: VisualizationTypes.Node[]) => nodes.reduce((map: Record<string, VisualizationTypes.Node[]>, node) => {
   const { category } = node;
   if (!map[category]) {
     map[category] = [];
@@ -464,7 +460,7 @@ const constructPropertiesMatrix = (
   }
   return finalConstruction;
 };
-const createRightHeaderString = (spacesForEmptyTd: number, headers: Node[]) => {
+const createRightHeaderString = (spacesForEmptyTd: number, headers: VisualizationTypes.Node[]) => {
   let firstRow = ' <tr id="header" ><th> </th>';
   for (let i = 0; i < spacesForEmptyTd; i++) {
     firstRow += '<th style="width: 10%; "> </th>';
@@ -480,9 +476,9 @@ const createRightHeaderString = (spacesForEmptyTd: number, headers: Node[]) => {
   firstRow += '</tr> ';
   return firstRow;
 };
-const populateRightPropertiesString = (group2: Node[], label: string) => {
+const populateRightPropertiesString = (group2: VisualizationTypes.Node[], label: string) => {
   let finalProduct = '';
-  group2.forEach((g2: Node) => {
+  group2.forEach((g2: VisualizationTypes.Node) => {
     const foundLabel = g2.labels?.find(
       (groupLabel) => groupLabel.name === label
     );
@@ -681,7 +677,7 @@ const createLeftHeaderString = (labels: string[]) => {
 const createRightPropertiesString = (
   spacesForEmptyTd: number,
   labels: string[],
-  group2: Node[]
+  group2: VisualizationTypes.Node[]
 ) => {
   const finalProduct = labels.map((label: string) => {
     let row = '<tr>';
@@ -701,13 +697,13 @@ const createRightPropertiesString = (
 const populateLinks = (
   group1Name: string,
   group2Name: string,
-  links: Link[]
+  links: VisualizationTypes.Link[]
 ) => {
   let finalProduct = '';
 
   const foundLink = links.find((link) => (
     (link.source === group1Name && link.target === group2Name)
-      || (link.target === group1Name && link.source === group2Name)
+    || (link.target === group1Name && link.source === group2Name)
   ));
   if (foundLink) {
     finalProduct += constructPropertiesMatrix(
@@ -727,9 +723,9 @@ const populateLinks = (
 };
 
 const createLeftPropertiesString = (
-  group1: Node[],
-  group2: Node[],
-  links: Link[],
+  group1: VisualizationTypes.Node[],
+  group2: VisualizationTypes.Node[],
+  links: VisualizationTypes.Link[],
   labels: string[]
 ) => {
   let finalProduct = '';
@@ -763,8 +759,8 @@ const createLeftPropertiesString = (
 };
 
 export const createHeadersAndPropertiesString = (
-  group1: Node[],
-  group2: Node[],
+  group1: VisualizationTypes.Node[],
+  group2: VisualizationTypes.Node[],
   links: any[]
 ) => {
   const uniqueLabelNamesGroup1 = [
@@ -794,11 +790,9 @@ export const createHeadersAndPropertiesString = (
     links,
     uniqueLabelNamesGroup1
   );
-  const tableString: string = `<thead>${
-    rightHeader
-  }</thead>`
-    + `<tbody>${
-      rightProperties
+  const tableString: string = `<thead>${rightHeader
+    }</thead>`
+    + `<tbody>${rightProperties
     }${leftHeader
     }${leftProperties
     }</tbody>`;

@@ -1,10 +1,10 @@
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import dynamic from 'next/dynamic';
-import { NodeLinkData } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import FilteredHierarchicalEdgeBundlingGraphShellView from './filter-hierarchical-edge-bundling-shell';
 
 interface HierarchicalEdgeBundlingShellProp extends WithLegend, WithOptions, WithFilter {
-  data: NodeLinkData;
+  data: VisualizationTypes.NodeLinkData;
   containered: boolean
 }
 const HierarchicalEdgeBundlingGraphView = dynamic(

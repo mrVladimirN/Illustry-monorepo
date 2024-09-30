@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { select } from 'd3';
-import { Node, Link } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import {
   addStyleTooltipWithHover,
   categoryMap,
@@ -14,10 +14,10 @@ import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { useThemeColors } from '@/components/theme-provider';
 
 interface MatrixProp extends WithLegend, WithOptions {
-  nodes: Node[];
-  links: Link[];
+  nodes: VisualizationTypes.Node[];
+  links: VisualizationTypes.Link[];
 }
-const createMatrix = (nodes: Node[], links: Link[]) => {
+const createMatrix = (nodes: VisualizationTypes.Node[], links: VisualizationTypes.Link[]) => {
   const categories = categoryMap(nodes);
   const categoriesKeys: string[] = Object.keys(categories);
   if (categoriesKeys.length !== 2) {
@@ -25,8 +25,8 @@ const createMatrix = (nodes: Node[], links: Link[]) => {
   }
 
   const tableString = ` <table id ="myTable" style= "border-spacing: 0;width: 100%;border: 1px solid #ddd ; margin-top:5%">${createHeadersAndPropertiesString(
-    categories[categoriesKeys[0] as string] as Node[],
-    categories[categoriesKeys[1] as string] as Node[],
+    categories[categoriesKeys[0] as string] as VisualizationTypes.Node[],
+    categories[categoriesKeys[1] as string] as VisualizationTypes.Node[],
     links
   )}`;
   return tableString;

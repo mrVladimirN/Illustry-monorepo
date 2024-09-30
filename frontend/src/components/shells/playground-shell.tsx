@@ -9,15 +9,8 @@ import {
   useState
 } from 'react';
 import {
-  AxisChartData,
-  CalendarData,
-  FunnelData,
-  HierarchyData,
-  NodeLinkData,
-  ScatterData,
-  TimelineData,
-  WordCloudData
-} from 'types/visualizations';
+  VisualizationTypes
+} from '@illustry/types';
 import { catchError } from '@/lib/utils';
 import {
   axisChartDataSchema,
@@ -142,7 +135,7 @@ function PlaygroundShell() {
               <Suspense fallback={<Fallback />}>
                 {key === 'barChart' && isSubmitable && (
                   <AxisChartsShellView
-                    data={JSON.parse(textareaValue as string) as AxisChartData}
+                    data={JSON.parse(textareaValue as string) as VisualizationTypes.AxisChartData}
                     legend={false}
                     options={false}
                     type={'bar'}
@@ -151,7 +144,7 @@ function PlaygroundShell() {
                 )}
                 {key === 'lineChart' && isSubmitable && (
                   <AxisChartsShellView
-                    data={JSON.parse(textareaValue as string) as AxisChartData}
+                    data={JSON.parse(textareaValue as string) as VisualizationTypes.AxisChartData}
                     legend={false}
                     options={false}
                     type={'line'}
@@ -160,7 +153,7 @@ function PlaygroundShell() {
                 )}
                 {key === 'sankey' && isSubmitable && (
                   <SankeyGraphShellView
-                    data={JSON.parse(textareaValue as string) as NodeLinkData}
+                    data={JSON.parse(textareaValue as string) as VisualizationTypes.NodeLinkData}
                     legend={false}
                     options={false}
                     filter={false}
@@ -177,7 +170,7 @@ function PlaygroundShell() {
                 )}
                 {key === 'flg' && isSubmitable && (
                   <ForcedLayoutGraphShellView
-                    data={JSON.parse(textareaValue as string) as NodeLinkData}
+                    data={JSON.parse(textareaValue as string) as VisualizationTypes.NodeLinkData}
                     legend={false}
                     options={false}
                     filter={false}
@@ -185,7 +178,7 @@ function PlaygroundShell() {
                 )}
                 {key === 'matrix' && isSubmitable && (
                   <MatrixShellView
-                    data={JSON.parse(textareaValue as string) as NodeLinkData}
+                    data={JSON.parse(textareaValue as string) as VisualizationTypes.NodeLinkData}
                     legend={false}
                     options={false}
                     filter={false}
@@ -193,7 +186,7 @@ function PlaygroundShell() {
                 )}
                 {key === 'wordCloud' && isSubmitable && (
                   <WordCloudShellView
-                    data={JSON.parse(textareaValue as string) as WordCloudData}
+                    data={JSON.parse(textareaValue as string) as VisualizationTypes.WordCloudData}
                     legend={false}
                     options={false}
                     filter={false}
@@ -201,7 +194,7 @@ function PlaygroundShell() {
                 )}
                 {key === 'funnel' && isSubmitable && (
                   <FunnelShellView
-                    data={JSON.parse(textareaValue as string) as FunnelData}
+                    data={JSON.parse(textareaValue as string) as VisualizationTypes.FunnelData}
                     legend={false}
                     options={false}
                     filter={false}
@@ -209,7 +202,7 @@ function PlaygroundShell() {
                 )}
                 {key === 'pieChart' && isSubmitable && (
                   <PieChartShellView
-                    data={JSON.parse(textareaValue as string) as FunnelData}
+                    data={JSON.parse(textareaValue as string) as VisualizationTypes.FunnelData}
                     legend={false}
                     options={false}
                     filter={false}
@@ -217,7 +210,7 @@ function PlaygroundShell() {
                 )}
                 {key === 'scatter' && isSubmitable && (
                   <ScatterShellView
-                    data={JSON.parse(textareaValue as string) as ScatterData}
+                    data={JSON.parse(textareaValue as string) as VisualizationTypes.ScatterData}
                     legend={false}
                     options={false}
                     filter={false}
@@ -225,7 +218,7 @@ function PlaygroundShell() {
                 )}
                 {key === 'sunburst' && isSubmitable && (
                   <SunBurstShellView
-                    data={JSON.parse(textareaValue as string) as HierarchyData}
+                    data={JSON.parse(textareaValue as string) as VisualizationTypes.HierarchyData}
                     legend={false}
                     options={false}
                     filter={false}
@@ -233,7 +226,7 @@ function PlaygroundShell() {
                 )}
                 {key === 'timeline' && isSubmitable && (
                   <TimelineShellView
-                    data={JSON.parse(textareaValue as string) as TimelineData}
+                    data={JSON.parse(textareaValue as string) as VisualizationTypes.TimelineData}
                     legend={false}
                     options={false}
                     filter={false}
@@ -242,7 +235,7 @@ function PlaygroundShell() {
                 )}
                 {key === 'treeMap' && isSubmitable && (
                   <TreeMapShellView
-                    data={JSON.parse(textareaValue as string) as HierarchyData}
+                    data={JSON.parse(textareaValue as string) as VisualizationTypes.HierarchyData}
                     legend={false}
                     options={false}
                     filter={false}
@@ -250,7 +243,7 @@ function PlaygroundShell() {
                 )}
                 {key === 'calendar' && isSubmitable && (
                   <CalendarGraphShellView
-                    data={JSON.parse(textareaValue as string) as CalendarData}
+                    data={JSON.parse(textareaValue as string) as VisualizationTypes.CalendarData}
                     legend={false}
                     options={false}
                     filter={false}

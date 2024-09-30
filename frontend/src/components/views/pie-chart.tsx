@@ -1,7 +1,7 @@
 'use client';
 
-import { EChartsOption } from 'echarts/types/dist/echarts';
-import { PieChartData } from 'types/visualizations';
+import { EChartsOption } from 'echarts';
+import { VisualizationTypes } from '@illustry/types';
 import {
   computeLegendColors,
   computeValues
@@ -12,7 +12,7 @@ import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
 interface PieProp extends WithLegend, WithOptions {
-  data: PieChartData;
+  data: VisualizationTypes.PieChartData;
 }
 const PieView = ({ data, legend }: PieProp) => {
   const activeTheme = useThemeColors();

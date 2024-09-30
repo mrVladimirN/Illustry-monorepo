@@ -3,13 +3,11 @@
 import makeRequest from '@/lib/request';
 import 'dotenv/config';
 import { revalidateTag } from 'next/cache';
-import {
-  ExtendedProjectType, ProjectCreate, ProjectFilter, ProjectType, ProjectUpdate
-} from 'types/project';
+import { ProjectTypes } from '@illustry/types';
 
-export const browseProjects = async (filter?: ProjectFilter) => {
+export const browseProjects = async (filter?: ProjectTypes.ProjectFilter) => {
   revalidateTag('projects');
-  let newFilter: ProjectFilter = {};
+  let newFilter: ProjectTypes.ProjectFilter = {};
 
   if (filter) {
     newFilter = filter;
@@ -21,7 +19,7 @@ export const browseProjects = async (filter?: ProjectFilter) => {
     },
     body: JSON.stringify(newFilter)
   });
-  return makeRequest<ExtendedProjectType>(request, ['projects'])
+  return makeRequest<ProjectTypes.ExtendedProjectType>(request, ['projects'])
     .catch((error) => {
       // eslint-disable-next-line no-console
       console.debug(error.message);
@@ -42,7 +40,7 @@ export const deleteProject = async (projectName: string) => {
   return makeRequest<boolean>(request, ['projects']);
 };
 
-export const updateProject = async (project: ProjectUpdate) => {
+export const updateProject = async (project: ProjectTypes.ProjectUpdate) => {
   revalidateTag('projects');
   const request = new Request(`${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_URL as string}/api/project`, {
     method: 'PUT',
@@ -52,10 +50,10 @@ export const updateProject = async (project: ProjectUpdate) => {
     body: JSON.stringify(project)
   });
 
-  return makeRequest<ProjectType>(request, ['projects']);
+  return makeRequest<ProjectTypes.ProjectType>(request, ['projects']);
 };
 
-export const createProject = async (project: ProjectCreate) => {
+export const createProject = async (project: ProjectTypes.ProjectCreate) => {
   const newProject = {
     projectName: project.name,
     projectDescription: project.description,
@@ -68,7 +66,7 @@ export const createProject = async (project: ProjectCreate) => {
     },
     body: JSON.stringify(newProject)
   });
-  return makeRequest<ProjectType>(request, ['projects']);
+  return makeRequest<ProjectTypes.ProjectType>(request, ['projects']);
 };
 
 export const findOneProject = async (projectName: string) => {
@@ -82,5 +80,5 @@ export const findOneProject = async (projectName: string) => {
       body: JSON.stringify({ name: projectName })
     }
   );
-  return makeRequest<ProjectType>(request, ['projects']);
+  return makeRequest<ProjectTypes.ProjectType>(request, ['projects']);
 };

@@ -7,10 +7,7 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { deleteVisualization } from '@/app/_actions/visualization';
-import {
-  VisualizationType,
-  VisualizationTypesEnum
-} from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { useMemo, useState, useTransition } from 'react';
 import DataTableColumnHeader from '../data-table/data-table-column-header';
 import DataTable from '../data-table/data-table';
@@ -27,7 +24,7 @@ import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 
 interface VisualizationsTableShellProps {
-  data?: VisualizationType[];
+  data?: VisualizationTypes.VisualizationType[];
   pageCount?: number;
 }
 function VisualizationsTableShell({
@@ -36,9 +33,9 @@ function VisualizationsTableShell({
 }: VisualizationsTableShellProps) {
   const [isPending, startTransition] = useTransition();
   const [selectedRowProperties, setSelectedRowProperties] = useState<
-    { name: string; type: VisualizationTypesEnum }[]
+    { name: string; type: VisualizationTypes.VisualizationTypesEnum }[]
   >([]);
-  const columns = useMemo<ColumnDef<VisualizationType, unknown>[]>(
+  const columns = useMemo<ColumnDef<VisualizationTypes.VisualizationType, unknown>[]>(
     () => [
       {
         id: 'select',
@@ -49,12 +46,12 @@ function VisualizationsTableShell({
               table.toggleAllPageRowsSelected(!!value);
               if (data) {
                 setSelectedRowProperties(
-                  (p: { name: string; type: VisualizationTypesEnum }[]) => (p.length === data.length
+                  (p: { name: string; type: VisualizationTypes.VisualizationTypesEnum }[]) => (p.length === data.length
                     ? []
                     : data.map(
                       (row) => ({ name: row.name, type: row.type } as {
                               name: string;
-                              type: VisualizationTypesEnum;
+                              type: VisualizationTypes.VisualizationTypesEnum;
                             })
                     ))
                 );
@@ -70,13 +67,13 @@ function VisualizationsTableShell({
             onCheckedChange={(value) => {
               row.toggleSelected(!!value);
               setSelectedRowProperties(
-                (prev: { name: string; type: VisualizationTypesEnum }[]) => (value
+                (prev: { name: string; type: VisualizationTypes.VisualizationTypesEnum }[]) => (value
                   ? [
                     ...prev,
                         {
                           name: row.original.name,
                           type: row.original.type
-                        } as { name: string; type: VisualizationTypesEnum }
+                        } as { name: string; type: VisualizationTypes.VisualizationTypesEnum }
                   ]
                   : prev.filter(
                     (id) => id.name !== row.original.name
@@ -235,7 +232,7 @@ function VisualizationsTableShell({
   return (
     <DataTable
       columns={columns}
-      data={data as VisualizationType[]}
+      data={data as VisualizationTypes.VisualizationType[]}
       pageCount={pageCount as number}
       filterableColumns={[]}
       newRowLink="/visualizations/new"

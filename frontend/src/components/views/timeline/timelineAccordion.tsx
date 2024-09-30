@@ -6,11 +6,11 @@ import {
 } from '@/components/ui/accordion';
 import { groupEventsByDate } from '@/lib/visualizations/timeline/helper';
 
-import { TimelineData, TimelineEvent } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import TimelineDialog from './timelineDialog';
 
 export interface TimelineAccordionProps {
-  data: TimelineData;
+  data: VisualizationTypes.TimelineData;
   date: string;
 }
 const TimelineAccordion = ({
@@ -22,10 +22,10 @@ const TimelineAccordion = ({
         && data[date]
         && data[date]?.events
         && Object.keys(
-          groupEventsByDate(data[date]?.events as TimelineEvent[])
+          groupEventsByDate(data[date]?.events as VisualizationTypes.TimelineEvent[])
         ).map((time) => {
           const events = groupEventsByDate(
-            data[date]?.events as TimelineEvent[]
+            data[date]?.events as VisualizationTypes.TimelineEvent[]
           );
           return (
             <AccordionItem key={time} value={time}>

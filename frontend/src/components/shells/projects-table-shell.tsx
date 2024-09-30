@@ -7,7 +7,7 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { deleteProject } from '@/app/_actions/project';
-import { ProjectType } from 'types/project';
+import { ProjectTypes } from '@illustry/types';
 import { useMemo, useState, useTransition } from 'react';
 import { Button } from '../ui/button';
 import {
@@ -23,13 +23,13 @@ import DataTable from '../data-table/data-table';
 import DataTableColumnHeader from '../data-table/data-table-column-header';
 
 interface ProjectsTableShellProps {
-  data?: ProjectType[];
+  data?: ProjectTypes.ProjectType[];
   pageCount?: number;
 }
 function ProjectsTableShell({ data, pageCount }: ProjectsTableShellProps) {
   const [isPending, startTransition] = useTransition();
   const [selectedRowNames, setSelectedRowNames] = useState<string[]>([]);
-  const columns = useMemo<ColumnDef<ProjectType, unknown>[]>(
+  const columns = useMemo<ColumnDef<ProjectTypes.ProjectType, unknown>[]>(
     () => [
       {
         id: 'select',
@@ -163,7 +163,7 @@ function ProjectsTableShell({ data, pageCount }: ProjectsTableShellProps) {
   return (
     <DataTable
       columns={columns}
-      data={data as ProjectType[]}
+      data={data as ProjectTypes.ProjectType[]}
       pageCount={pageCount as number}
       filterableColumns={[]}
       newRowLink="/projects/new"

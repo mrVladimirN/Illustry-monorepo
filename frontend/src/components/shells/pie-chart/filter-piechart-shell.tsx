@@ -1,6 +1,6 @@
 'use client';
 
-import { PieChartData } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { Dispatch, SetStateAction, useState } from 'react';
 import { visualizationTypesEnum } from '@/lib/validation/visualizations';
@@ -8,7 +8,7 @@ import dynamic from 'next/dynamic';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
 interface FilteredPieChartShellProp extends WithLegend, WithOptions {
-  data: PieChartData
+  data: VisualizationTypes.PieChartData
 }
 const PieChartGraphView = dynamic(
   () => import('@/components/views/pie-chart'),
@@ -19,7 +19,7 @@ const FilteredPieChartGraphShellView = ({
   legend,
   options
 }: FilteredPieChartShellProp) => {
-  const [filteredData, setFilteredData] = useState<PieChartData>(data);
+  const [filteredData, setFilteredData] = useState<VisualizationTypes.PieChartData>(data);
 
   return (
     <>
@@ -27,7 +27,7 @@ const FilteredPieChartGraphShellView = ({
         data={data}
         setFilteredData={
           setFilteredData as Dispatch<
-            SetStateAction<PieChartData>
+            SetStateAction<VisualizationTypes.PieChartData>
           >
         }
         type={visualizationTypesEnum.PIE_CHART}

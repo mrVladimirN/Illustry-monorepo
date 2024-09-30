@@ -1,10 +1,10 @@
-import { FunnelData } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import dynamic from 'next/dynamic';
 import FilteredFunnelShellView from './filter-funnel-shell';
 
 interface FunnelShellProp extends WithLegend, WithOptions, WithFilter {
-  data: FunnelData;
+  data: VisualizationTypes.FunnelData;
 }
 const FunnelView = dynamic(() => import('@/components/views/funnel-chart'), {
   ssr: false

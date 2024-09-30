@@ -20,11 +20,7 @@ import {
   visualizationSchema,
   visualizationTypesEnum
 } from '@/lib/validation/visualizations';
-import { FileDetails } from 'types/files';
-import {
-  VisualizationTypesEnum,
-  VisualizationUpdate
-} from 'types/visualizations';
+import { VisualizationTypes, FileTypes } from '@illustry/types';
 import { useState, useTransition } from 'react';
 import { createOrUpdateVisualization } from '@/app/_actions/visualization';
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
@@ -70,10 +66,10 @@ export function AddVisualizationForm() {
       try {
         if (files.length > 0) {
           if (files.length > 10) {
-            throw Error('To manny files max 10 accepted in parallel');
+            throw Error('To many files max 10 accepted in parallel');
           }
           const formData = new FormData();
-          const fileDetails: FileDetails = {
+          const fileDetails: FileTypes.FileDetails = {
             fileType: data.fileType,
             includeHeaders: (data as ExcelType).includeHeaders,
             mapping: (data as ExcelType).mapping,
@@ -82,9 +78,9 @@ export function AddVisualizationForm() {
           };
           formData.append('fullDetails', data.fullDetails.toString());
           formData.append('fileDetails', JSON.stringify(fileDetails));
-          const visualizationDetails: VisualizationUpdate = {
+          const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
             name: (data as ExcelType).name as string,
-            type: (data as ExcelType).type as unknown as VisualizationTypesEnum,
+            type: (data as ExcelType).type as unknown as VisualizationTypes.VisualizationTypesEnum,
             description: (data as ExcelType).description,
             tags: (data as ExcelType).tags?.split(',')
           };
@@ -97,7 +93,7 @@ export function AddVisualizationForm() {
           });
           await createOrUpdateVisualization(formData);
           form.reset();
-          setFiles([]); // Clear the files
+          setFiles([]); 
           toast.success('Visualizations added successfully.');
           router.push('/visualizations');
           router.refresh();

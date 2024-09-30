@@ -8,10 +8,10 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog';
 
-import { TimelineEvent } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 
 export interface TimelineDialogProps {
-  event: TimelineEvent;
+  event: VisualizationTypes.TimelineEvent;
 }
 const TimelineDialog = ({ event }: TimelineDialogProps) => (
     <Dialog>

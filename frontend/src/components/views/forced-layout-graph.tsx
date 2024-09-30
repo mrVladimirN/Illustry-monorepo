@@ -2,13 +2,13 @@
 
 'use client';
 
-import { EChartsOption } from 'echarts/types/dist/echarts';
+import { EChartsOption } from 'echarts';
 import {
   computeCategoriesFLG,
   computeLinksFLG,
   computeNodesFLG
 } from '@/lib/visualizations/node-link/helper';
-import { Link, Node } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
@@ -16,8 +16,8 @@ import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
 interface ForcedLayoutGraphProp extends WithLegend, WithOptions {
-  nodes: Node[];
-  links: Link[];
+  nodes: VisualizationTypes.Node[];
+  links: VisualizationTypes.Link[];
 }
 const ForcedLayoutGraphView = ({
   nodes,

@@ -2,7 +2,7 @@
 
 'use client';
 
-import { EChartsOption, SeriesOption } from 'echarts/types/dist/echarts';
+import { EChartsOption, SeriesOption } from 'echarts';
 import {
   computeCalendar,
   computeColors,
@@ -10,7 +10,7 @@ import {
   computePropertiesForToolTip
 } from '@/lib/visualizations/calendar/helper';
 import { CalendarOption } from 'echarts/types/dist/shared';
-import { CalendarType } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
@@ -18,7 +18,7 @@ import ReactEcharts from './generic/echarts';
 
 interface CalendarGraphProp extends WithLegend, WithOptions {
   categories: string[];
-  calendar: CalendarType[];
+  calendar: VisualizationTypes.CalendarType[];
 }
 const CalendarGraphView = ({ categories, calendar, legend }: CalendarGraphProp) => {
   const activeTheme = useThemeColors();
@@ -37,7 +37,7 @@ const CalendarGraphView = ({ categories, calendar, legend }: CalendarGraphProp) 
       formatter(params) {
         // @ts-ignore
         if (params && params.data && params.data.length) {
-          const element = (calendar as CalendarType[]).find((el) =>
+          const element = (calendar as VisualizationTypes.CalendarType[]).find((el) =>
             // @ts-ignore
             // eslint-disable-next-line implicit-arrow-linebreak
             el.date === params.data[0]);

@@ -2,12 +2,12 @@
 
 'use client';
 
-import { EChartsOption } from 'echarts/types/dist/echarts';
+import { EChartsOption } from 'echarts';
 import {
   computeCategoriesSankey,
   computeNodesSankey
 } from '@/lib/visualizations/node-link/helper';
-import { Link, Node } from 'types/visualizations';
+import { VisualizationTypes } from '@illustry/types';
 import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
@@ -15,8 +15,8 @@ import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
 interface SankeyGraphProp extends WithLegend, WithOptions {
-links: Link[],
-nodes: Node[],
+links: VisualizationTypes.Link[],
+nodes: VisualizationTypes.Node[],
 }
 const SankeyGraphView = ({
   links,
