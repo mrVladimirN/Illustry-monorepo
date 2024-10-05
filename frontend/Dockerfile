@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package.json ./
 COPY package-lock.json ./
 COPY tsconfig.json .
-RUN npm ci
+RUN npm i
 
 FROM base AS builder
 WORKDIR /app

@@ -4,7 +4,7 @@ WORKDIR /illustry
 
 COPY package.json .
 COPY package-lock.json .
-RUN npm ci
+RUN npm i
 
 COPY tsconfig.json .
 COPY webpack.config.js .
@@ -25,7 +25,7 @@ RUN rm -rf /usr/illustry/src
 
 RUN npm install xlsx-stream-reader@1.1.1
 
-ENV ILLUSTRY_PORT=7000
+ENV ILLUSTRY_PORT=7001
 
 EXPOSE $ILLUSTRY_PORT
 
