@@ -1,4 +1,3 @@
-/* eslint-disable no-plusplus */
 /* eslint-disable no-return-assign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable no-unused-expressions */
@@ -219,8 +218,8 @@ export const createHebNodes = (
   .attr(
     'transform',
     (d: { x: number; y: number }) => `rotate(${d.x - 90
-      })translate(${d.y + 8
-      },0)${d.x < 180 ? '' : 'rotate(180)'}`
+    })translate(${d.y + 8
+    },0)${d.x < 180 ? '' : 'rotate(180)'}`
   )
   .attr('text-anchor', (d: { x: number; y: number }) => (d.x < 180 ? 'start' : 'end'))
   .style('fill', color)
@@ -370,11 +369,13 @@ export const onNodeMouseOver = (
 
 // Matrix
 
-const constructMatrixTooltip = (obj: object) => `<span class="tooltip" style=" width: 10%; background-color: rgba(235, 0, 0, 0.703); color: #fff; text-align: center; border-radius: 6px; padding: 5px 0; position: absolute; z-index: 1;">${obj && Object.entries(
-  obj
-)
-  .map(([k, v]) => `${k}:${v}</br>`)
-  .join(' ')}</span>`;
+const constructMatrixTooltip = (obj: object) => `<span class="tooltip" style=" width: 10%; 
+background-color: rgba(235, 0, 0, 0.703); color: #fff; text-align: center; 
+border-radius: 6px; padding: 5px 0; position: absolute; z-index: 1;">${obj && Object.entries(
+    obj
+  )
+    .map(([k, v]) => `${k}:${v}</br>`)
+    .join(' ')}</span>`;
 const constructMatrixStyle = (object: object) => `${object && Object.entries(object)
   .map(([k, v]) => `${k}:${v}`)
   .join(';')};width:10%;text-align:center; border: 1px solid #ddd ;`;
@@ -390,9 +391,11 @@ const constructMatrixToolTipAndStyle = (
   return `<${htmlElement} class="${className}" style=${style?.length
     ? `${style};border: 1px solid #ddd ;`
     : 'width:10%;text-align:center; border: 1px solid #ddd ;'
-    }>${tooltip?.length ? tooltip : ''}${name}</${htmlElement}>`;
+  }>${tooltip?.length ? tooltip : ''}${name}</${htmlElement}>`;
 };
-export const categoryMap = (nodes: VisualizationTypes.Node[]) => nodes.reduce((map: Record<string, VisualizationTypes.Node[]>, node) => {
+export const categoryMap = (
+  nodes: VisualizationTypes.Node[]
+) => nodes.reduce((map: Record<string, VisualizationTypes.Node[]>, node) => {
   const { category } = node;
   if (!map[category]) {
     map[category] = [];
@@ -462,7 +465,7 @@ const constructPropertiesMatrix = (
 };
 const createRightHeaderString = (spacesForEmptyTd: number, headers: VisualizationTypes.Node[]) => {
   let firstRow = ' <tr id="header" ><th> </th>';
-  for (let i = 0; i < spacesForEmptyTd; i++) {
+  for (let i = 0; i < spacesForEmptyTd; i += 1) {
     firstRow += '<th style="width: 10%; "> </th>';
   }
   headers.forEach((header) => {
@@ -535,7 +538,7 @@ const sortUpperTable = (n: number, newDir: string) => {
     });
     const newIndexMap = getSwappedIndexes(rowsValues, newDir);
 
-    for (let i = 0; i < rows.length; i++) {
+    for (let i = 0; i < rows.length; i += 1) {
       const sortableItemsArray = [
         ...(rows[i]?.getElementsByClassName(
           'right-sortable-items'
@@ -554,7 +557,7 @@ const sortUpperTable = (n: number, newDir: string) => {
         for (
           let j = 0;
           j < (existingSortableItems as HTMLCollectionOf<Element>).length;
-          j++
+          j += 1
         ) {
           (existingSortableItems[j] as any).replaceWith(
             sortedItems[j].cloneNode(true)
@@ -669,7 +672,8 @@ export const sortRows = () => {
 const createLeftHeaderString = (labels: string[]) => {
   let finalProduct = '<tr><td style="width: 10%; "></td>';
   labels.forEach((label: string) => {
-    finalProduct += `<td class="sortableRow " left-data-sort-direction:"asc" style ="font-weight:bold;width: 10%; border: 1px solid #ddd ; cursor: pointer; text-align:center;">${label} </td>`;
+    finalProduct += '<td class="sortableRow" left-data-sort-direction:"asc" style ="font-weight:bold;width: 10%;'
+      + `border: 1px solid #ddd ; cursor: pointer; text-align:center;">${label} </td>`;
   });
   return `${finalProduct}</tr>`;
 };
@@ -681,13 +685,15 @@ const createRightPropertiesString = (
 ) => {
   const finalProduct = labels.map((label: string) => {
     let row = '<tr>';
-    for (let i = 0; i < spacesForEmptyTd - 1; i++) {
+    for (let i = 0; i < spacesForEmptyTd - 1; i += 1) {
       row += '<td style= "width: 10%;"></td>';
     }
-    row += `<td class="sortableCol" right-data-sort-direction="asc" style="font-weight: bold; width: 10%; border: 1px solid #ddd ; cursor: pointer;text-align:center;">${label}</td><td></td>${populateRightPropertiesString(
-      group2,
-      label
-    )}</tr>`;
+    row += '<td class="sortableCol" right-data-sort-direction="asc" style="font-weight: bold;'
+      + `width: 10%; border: 1px solid #ddd ; cursor: pointer;text-align:center;">${label}</td>`
+      + `<td></td>${populateRightPropertiesString(
+        group2,
+        label
+      )}</tr>`;
 
     return row;
   });
@@ -730,7 +736,8 @@ const createLeftPropertiesString = (
 ) => {
   let finalProduct = '';
   group1.forEach((g1) => {
-    const row = `<tr class = "sortus"><td style = "font-weight:bold;width: 10%;text-align:center;border: 1px solid #ddd ; ">${g1.name}</td>`;
+    const row = '<tr class = "sortus">'
+    + `<td style = "font-weight:bold;width: 10%;text-align:center;border: 1px solid #ddd ; ">${g1.name}</td>`;
     finalProduct += row;
     labels.forEach((label) => {
       const foundLabel = g1.labels?.find(
@@ -791,7 +798,7 @@ export const createHeadersAndPropertiesString = (
     uniqueLabelNamesGroup1
   );
   const tableString: string = `<thead>${rightHeader
-    }</thead>`
+  }</thead>`
     + `<tbody>${rightProperties
     }${leftHeader
     }${leftProperties

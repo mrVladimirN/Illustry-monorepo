@@ -1,5 +1,5 @@
 import Link from 'next/link';
-
+import { ComponentPropsWithoutRef } from 'react';
 import { cn } from '@/lib/utils';
 import { buttonVariants } from '@/components/ui/button';
 import {
@@ -11,7 +11,6 @@ import {
   CardTitle
 } from '@/components/ui/card';
 import { Icons } from '@/components/icons';
-import { ComponentPropsWithoutRef } from 'react';
 
 interface ErrorCardProps extends ComponentPropsWithoutRef<typeof Card> {
   icon?: keyof typeof Icons

@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Icons } from '@/components/icons';
-// eslint-disable-next-line import/no-cycle
-import { Inputs, fileTypes } from '@/components/form/add-visualization-form';
+/* eslint-disable import/no-cycle */
 import { UseFormReturn } from 'react-hook-form';
-
 import { useState } from 'react';
+import { Icons } from '@/components/icons';
+import { Inputs, fileTypes } from '@/components/form/add-visualization-form';
 import { Button } from '../../button';
 import { TabsContent } from '../../tabs';
 import ExcelOrCsvMappingTab from './excelOrCsvMappingTab';

@@ -7,8 +7,8 @@ import type { ThemeProviderProps } from 'next-themes/dist/types';
 import {
   Dispatch, createContext, ReactNode, useReducer, useEffect, useContext
 } from 'react';
-import { cloneDeep } from '@/lib/utils';
 import { UtilTypes } from '@illustry/types';
+import { cloneDeep } from '@/lib/utils';
 
 export interface ThemeColors {
   calendar: {

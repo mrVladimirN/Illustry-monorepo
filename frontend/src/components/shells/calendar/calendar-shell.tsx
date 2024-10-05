@@ -1,6 +1,6 @@
 import { VisualizationTypes } from '@illustry/types';
-import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import dynamic from 'next/dynamic';
+import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import { computeCategoriesCalendar } from '@/lib/visualizations/calendar/helper';
 import FilteredCalendarShellView from './filter-calendar-shell';
 

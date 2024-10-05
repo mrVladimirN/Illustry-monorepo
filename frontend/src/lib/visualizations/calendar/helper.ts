@@ -24,6 +24,7 @@ export const computeLegendColors = (categories: string[], colors: string[]) => {
 export const computeElementsCalendar = (element: VisualizationTypes.CalendarType) => [element.date, element.value ? element.value : 1, element.category];
 
 export const computePropertiesForToolTip = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   properties: any,
   value?: number | string
 ) => {
@@ -57,6 +58,7 @@ export const computeCalendar = (
     )
   ];
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const groupedByYears = calendarData.reduce((group: any, event) => {
     const eventDate = new Date(event.date);
     const eventYear = eventDate.getFullYear();

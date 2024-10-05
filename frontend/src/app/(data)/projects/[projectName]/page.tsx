@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-
 import UpdateProjectForm from '@/components/form/update-project-form';
 import { findOneProject } from '@/app/_actions/project';
 

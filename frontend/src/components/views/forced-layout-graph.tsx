@@ -3,12 +3,12 @@
 'use client';
 
 import { EChartsOption } from 'echarts';
+import { VisualizationTypes } from '@illustry/types';
 import {
   computeCategoriesFLG,
   computeLinksFLG,
   computeNodesFLG
 } from '@/lib/visualizations/node-link/helper';
-import { VisualizationTypes } from '@illustry/types';
 import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';

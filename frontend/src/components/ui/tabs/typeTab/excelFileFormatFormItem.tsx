@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import { ExtFile } from '@files-ui/react';
-
+import { UseFormReturn } from 'react-hook-form';
 import {
   FormLabel,
   FormControl,
@@ -9,7 +9,6 @@ import {
   UncontrolledFormMessage
 
 } from '@/components/ui/form';
-import { UseFormReturn } from 'react-hook-form';
 import FileUpload from '../../file-upload';
 // eslint-disable-next-line import/no-cycle
 import { Inputs } from '../../../form/add-visualization-form';

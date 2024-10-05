@@ -1,6 +1,6 @@
 import { VisualizationTypes } from '@illustry/types';
-import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import dynamic from 'next/dynamic';
+import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import FilteredFunnelShellView from './filter-funnel-shell';
 
 interface FunnelShellProp extends WithLegend, WithOptions, WithFilter {

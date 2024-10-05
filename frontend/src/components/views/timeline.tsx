@@ -5,9 +5,9 @@ import { useInView } from 'react-intersection-observer';
 import { VisualizationTypes } from '@illustry/types';
 import { VerticalTimeline } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
+import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
 import { formatDate } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import TimelineAccordion from './timeline/timelineAccordion';
 import TimelineElement from './timeline/timelineElement';
@@ -53,20 +53,21 @@ const TimelineView = ({
         lineColor={!isDarkTheme ? 'rgb(245, 245, 245)' : 'rgb(66, 66, 66)'}
       >
         {displayedDates.map((date) => (
-            <TimelineElement
-              date={date}
-              isDarkTheme={isDarkTheme}
-              inView={inView}
-              key={date}
-            >
-              <h3 className="vertical-timeline-element-title text-gray-700 dark:text-gray-400 text-center my-2 text-xm md:text-xl">
-                {data[date]?.summary?.title}
-              </h3>
-              <span className="capitalize font-medium text-gray-700 dark:text-gray-400 xs:text-sm">
-                {formatDate(date)}
-              </span>
-              <TimelineAccordion data={data} date={date}></TimelineAccordion>
-            </TimelineElement>
+          <TimelineElement
+            date={date}
+            isDarkTheme={isDarkTheme}
+            inView={inView}
+            key={date}
+          >
+            <h3 className="vertical-timeline-element-title text-gray-700 dark:text-gray-400
+               text-center my-2 text-xm md:text-xl">
+              {data[date]?.summary?.title}
+            </h3>
+            <span className="capitalize font-medium text-gray-700 dark:text-gray-400 xs:text-sm">
+              {formatDate(date)}
+            </span>
+            <TimelineAccordion data={data} date={date}></TimelineAccordion>
+          </TimelineElement>
         ))}
       </VerticalTimeline>
       <div className="flex justify-center mt-[5%] mb-[10%]">

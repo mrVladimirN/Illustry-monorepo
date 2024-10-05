@@ -1,31 +1,29 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable no-param-reassign */
-
 import { VisualizationTypes } from '@illustry/types';
 
 interface ProcessedNode {
   name: string;
-  value:number,
+  value: number,
   itemStyle: {
     color?: string;
     borderColor?: string;
   };
-  prop: object; // You can define a type for this property
+  prop: object;
   children: ProcessedNode[];
 }
 // TreeMap/Sunburst
 
 const findMaxDepth = (item: VisualizationTypes.HierarchyNode, depth: number, maxDepth: number): number => {
+  let finalMaxDepth = maxDepth;
   if (Array.isArray(item.children)) {
     // If the 'children' property is an array, recursively find the maximum depth
     item.children.forEach((nestedItem) => {
-      maxDepth = findMaxDepth(nestedItem, depth + 1, maxDepth);
+      finalMaxDepth = findMaxDepth(nestedItem, depth + 1, maxDepth);
     });
   } else {
     // If there are no children or 'children' is not an array, update maxDepth if needed
-    maxDepth = Math.max(maxDepth, depth);
+    finalMaxDepth = Math.max(maxDepth, depth);
   }
-  return maxDepth; // Return the updated maxDepth
+  return finalMaxDepth; // Return the updated maxDepth
 };
 
 export const computeMaxDepth = (arr: VisualizationTypes.HierarchyNode[]): number => {
@@ -58,6 +56,7 @@ export const computeCategories = (arr: VisualizationTypes.HierarchyNode[]): stri
   return Array.from(uniqueCategories); // Convert Set to an array
 };
 const computePropertiesForToolTip = (
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   properties: any,
   value?: number | string
 ) => {

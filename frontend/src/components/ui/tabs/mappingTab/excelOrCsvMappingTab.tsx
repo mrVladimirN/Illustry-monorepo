@@ -1,9 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { visualizationTypesEnum } from '@/lib/validation/visualizations';
-
-// eslint-disable-next-line import/no-cycle
-import { Inputs, fileTypes } from '@/components/form/add-visualization-form';
+/* eslint-disable import/no-cycle */
 import { UseFormReturn } from 'react-hook-form';
+import { visualizationTypesEnum } from '@/lib/validation/visualizations';
+import { Inputs, fileTypes } from '@/components/form/add-visualization-form';
 import {
   FormField,
   FormItem,
@@ -25,7 +23,8 @@ import ExcelOrCsvScatterMapping from './excelOrCsvMappings/ScatterMapping';
 import ExcelOrCsvHierarchyMapping from './excelOrCsvMappings/HierarchyMapping';
 
 interface ExcelMappingTabProps {
-  form: UseFormReturn<Inputs>; // Include the form context
+  form: UseFormReturn<Inputs>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   router: any;
   fileDetails: boolean;
   selectedFileType: fileTypes;

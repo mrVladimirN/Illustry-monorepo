@@ -8,9 +8,9 @@ export const scatterWords = [
 ];
 
 const applyCategoriesFilter = (categoriesFilter: string, defaultData: {
-    points: (string | number)[][];
-    categories: string[];
-  }): string[] => {
+  points: (string | number)[][];
+  categories: string[];
+}): string[] => {
   const includedCategories: string[] = [];
   const excludedCategories: string[] = [];
 
@@ -38,7 +38,7 @@ const applyCategoriesFilter = (categoriesFilter: string, defaultData: {
       });
       const filteredCategories = defaultData.categories.filter(
         (cat) => (includedCategories.length && includedCategories.includes(cat))
-            || (excludedCategories.length && !excludedCategories.includes(cat))
+          || (excludedCategories.length && !excludedCategories.includes(cat))
       );
       return filteredCategories;
     }
@@ -51,9 +51,9 @@ const applyCategoriesFilter = (categoriesFilter: string, defaultData: {
 const applyPointsFilter = (
   filter: string,
   defaultData: {
-        points: (string | number)[][];
-        categories: string[];
-      },
+    points: (string | number)[][];
+    categories: string[];
+  },
   filterType: string
 ) => {
   try {
@@ -79,6 +79,7 @@ const applyPointsFilter = (
     }
     const filteredPoints = defaultData.points.map((point) => {
       if (valuesOperations.length > 0) {
+        // eslint-disable-next-line max-len
         if (valuesOperations.every((condition) => evaluateCondition(filterType === 'xCoord' ? point[0] as number : point[1] as number, condition))) {
           return point;
         }

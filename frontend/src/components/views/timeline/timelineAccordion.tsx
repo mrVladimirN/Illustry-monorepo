@@ -1,3 +1,4 @@
+import { VisualizationTypes } from '@illustry/types';
 import {
   Accordion,
   AccordionContent,
@@ -5,8 +6,6 @@ import {
   AccordionTrigger
 } from '@/components/ui/accordion';
 import { groupEventsByDate } from '@/lib/visualizations/timeline/helper';
-
-import { VisualizationTypes } from '@illustry/types';
 import TimelineDialog from './timelineDialog';
 
 export interface TimelineAccordionProps {

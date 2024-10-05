@@ -1,6 +1,5 @@
 'use client';
 
-import { siteConfig } from '@/config/site';
 import {
   ChangeEvent,
   Dispatch,
@@ -11,6 +10,8 @@ import {
 import {
   VisualizationTypes
 } from '@illustry/types';
+import { generateErrorMessage } from 'zod-error';
+import { siteConfig } from '@/config/site';
 import { catchError } from '@/lib/utils';
 import {
   axisChartDataSchema,
@@ -22,11 +23,8 @@ import {
   timelineDataSchema,
   wordCloudDataSchema
 } from '@/lib/validation/visualizations';
-import { generateErrorMessage } from 'zod-error';
 import prettifyZodError from '@/lib/validation/prettifyError';
 import { Button } from '../ui/button';
-// import CodeViewer from '../ui/playground/components/code-viewer';
-
 import PresetSelector from '../ui/playground/preset-selector';
 import { Textarea } from '../ui/textarea';
 import Separator from '../ui/separator';
@@ -131,126 +129,126 @@ function PlaygroundShell() {
     <div className="overflow-auto flex-grow bg-gray-50 rounded-3xl dark:bg-gray-800 p-4 m-4 visualization-div">
       {Object.keys(showDiagram).map(
         (key) => showDiagram[key as keyof ShowDiagramState] && (
-            <div key={key} className="w-full h-full">
-              <Suspense fallback={<Fallback />}>
-                {key === 'barChart' && isSubmitable && (
-                  <AxisChartsShellView
-                    data={JSON.parse(textareaValue as string) as VisualizationTypes.AxisChartData}
-                    legend={false}
-                    options={false}
-                    type={'bar'}
-                    filter={false}
-                  />
-                )}
-                {key === 'lineChart' && isSubmitable && (
-                  <AxisChartsShellView
-                    data={JSON.parse(textareaValue as string) as VisualizationTypes.AxisChartData}
-                    legend={false}
-                    options={false}
-                    type={'line'}
-                    filter={false}
-                  />
-                )}
-                {key === 'sankey' && isSubmitable && (
-                  <SankeyGraphShellView
-                    data={JSON.parse(textareaValue as string) as VisualizationTypes.NodeLinkData}
-                    legend={false}
-                    options={false}
-                    filter={false}
-                  />
-                )}
-                {key === 'heb' && isSubmitable && (
-                  <HierarchicalEdgeBundlingShellView
-                    data={siteConfig.nodeLink}
-                    legend={false}
-                    options={false}
-                    filter={false}
-                    containered={true}
-                  />
-                )}
-                {key === 'flg' && isSubmitable && (
-                  <ForcedLayoutGraphShellView
-                    data={JSON.parse(textareaValue as string) as VisualizationTypes.NodeLinkData}
-                    legend={false}
-                    options={false}
-                    filter={false}
-                  />
-                )}
-                {key === 'matrix' && isSubmitable && (
-                  <MatrixShellView
-                    data={JSON.parse(textareaValue as string) as VisualizationTypes.NodeLinkData}
-                    legend={false}
-                    options={false}
-                    filter={false}
-                  />
-                )}
-                {key === 'wordCloud' && isSubmitable && (
-                  <WordCloudShellView
-                    data={JSON.parse(textareaValue as string) as VisualizationTypes.WordCloudData}
-                    legend={false}
-                    options={false}
-                    filter={false}
-                  />
-                )}
-                {key === 'funnel' && isSubmitable && (
-                  <FunnelShellView
-                    data={JSON.parse(textareaValue as string) as VisualizationTypes.FunnelData}
-                    legend={false}
-                    options={false}
-                    filter={false}
-                  />
-                )}
-                {key === 'pieChart' && isSubmitable && (
-                  <PieChartShellView
-                    data={JSON.parse(textareaValue as string) as VisualizationTypes.FunnelData}
-                    legend={false}
-                    options={false}
-                    filter={false}
-                  />
-                )}
-                {key === 'scatter' && isSubmitable && (
-                  <ScatterShellView
-                    data={JSON.parse(textareaValue as string) as VisualizationTypes.ScatterData}
-                    legend={false}
-                    options={false}
-                    filter={false}
-                  />
-                )}
-                {key === 'sunburst' && isSubmitable && (
-                  <SunBurstShellView
-                    data={JSON.parse(textareaValue as string) as VisualizationTypes.HierarchyData}
-                    legend={false}
-                    options={false}
-                    filter={false}
-                  />
-                )}
-                {key === 'timeline' && isSubmitable && (
-                  <TimelineShellView
-                    data={JSON.parse(textareaValue as string) as VisualizationTypes.TimelineData}
-                    legend={false}
-                    options={false}
-                    filter={false}
+          <div key={key} className="w-full h-full">
+            <Suspense fallback={<Fallback />}>
+              {key === 'barChart' && isSubmitable && (
+                <AxisChartsShellView
+                  data={JSON.parse(textareaValue as string) as VisualizationTypes.AxisChartData}
+                  legend={false}
+                  options={false}
+                  type={'bar'}
+                  filter={false}
+                />
+              )}
+              {key === 'lineChart' && isSubmitable && (
+                <AxisChartsShellView
+                  data={JSON.parse(textareaValue as string) as VisualizationTypes.AxisChartData}
+                  legend={false}
+                  options={false}
+                  type={'line'}
+                  filter={false}
+                />
+              )}
+              {key === 'sankey' && isSubmitable && (
+                <SankeyGraphShellView
+                  data={JSON.parse(textareaValue as string) as VisualizationTypes.NodeLinkData}
+                  legend={false}
+                  options={false}
+                  filter={false}
+                />
+              )}
+              {key === 'heb' && isSubmitable && (
+                <HierarchicalEdgeBundlingShellView
+                  data={siteConfig.nodeLink}
+                  legend={false}
+                  options={false}
+                  filter={false}
+                  containered={true}
+                />
+              )}
+              {key === 'flg' && isSubmitable && (
+                <ForcedLayoutGraphShellView
+                  data={JSON.parse(textareaValue as string) as VisualizationTypes.NodeLinkData}
+                  legend={false}
+                  options={false}
+                  filter={false}
+                />
+              )}
+              {key === 'matrix' && isSubmitable && (
+                <MatrixShellView
+                  data={JSON.parse(textareaValue as string) as VisualizationTypes.NodeLinkData}
+                  legend={false}
+                  options={false}
+                  filter={false}
+                />
+              )}
+              {key === 'wordCloud' && isSubmitable && (
+                <WordCloudShellView
+                  data={JSON.parse(textareaValue as string) as VisualizationTypes.WordCloudData}
+                  legend={false}
+                  options={false}
+                  filter={false}
+                />
+              )}
+              {key === 'funnel' && isSubmitable && (
+                <FunnelShellView
+                  data={JSON.parse(textareaValue as string) as VisualizationTypes.FunnelData}
+                  legend={false}
+                  options={false}
+                  filter={false}
+                />
+              )}
+              {key === 'pieChart' && isSubmitable && (
+                <PieChartShellView
+                  data={JSON.parse(textareaValue as string) as VisualizationTypes.FunnelData}
+                  legend={false}
+                  options={false}
+                  filter={false}
+                />
+              )}
+              {key === 'scatter' && isSubmitable && (
+                <ScatterShellView
+                  data={JSON.parse(textareaValue as string) as VisualizationTypes.ScatterData}
+                  legend={false}
+                  options={false}
+                  filter={false}
+                />
+              )}
+              {key === 'sunburst' && isSubmitable && (
+                <SunBurstShellView
+                  data={JSON.parse(textareaValue as string) as VisualizationTypes.HierarchyData}
+                  legend={false}
+                  options={false}
+                  filter={false}
+                />
+              )}
+              {key === 'timeline' && isSubmitable && (
+                <TimelineShellView
+                  data={JSON.parse(textareaValue as string) as VisualizationTypes.TimelineData}
+                  legend={false}
+                  options={false}
+                  filter={false}
 
-                  />
-                )}
-                {key === 'treeMap' && isSubmitable && (
-                  <TreeMapShellView
-                    data={JSON.parse(textareaValue as string) as VisualizationTypes.HierarchyData}
-                    legend={false}
-                    options={false}
-                    filter={false}
-                  />
-                )}
-                {key === 'calendar' && isSubmitable && (
-                  <CalendarGraphShellView
-                    data={JSON.parse(textareaValue as string) as VisualizationTypes.CalendarData}
-                    legend={false}
-                    options={false}
-                    filter={false}
-                  />
-                )}
-              </Suspense>
-            </div>
+                />
+              )}
+              {key === 'treeMap' && isSubmitable && (
+                <TreeMapShellView
+                  data={JSON.parse(textareaValue as string) as VisualizationTypes.HierarchyData}
+                  legend={false}
+                  options={false}
+                  filter={false}
+                />
+              )}
+              {key === 'calendar' && isSubmitable && (
+                <CalendarGraphShellView
+                  data={JSON.parse(textareaValue as string) as VisualizationTypes.CalendarData}
+                  legend={false}
+                  options={false}
+                  filter={false}
+                />
+              )}
+            </Suspense>
+          </div>
         )
       )}
     </div>
@@ -259,7 +257,8 @@ function PlaygroundShell() {
   return (
     <>
       <div className="hidden flex-col md:flex">
-        <div className="container flex flex-col items-start justify-between space-y-2 py-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16">
+        <div className="container flex flex-col items-start justify-between
+         space-y-2 py-4 sm:flex-row sm:items-center sm:space-y-0 md:h-16">
           <h2 className="text-lg font-semibold">Playground</h2>
           <div className="ml-auto flex w-full space-x-2 sm:justify-end">
             <PresetSelector
@@ -268,7 +267,7 @@ function PlaygroundShell() {
               setTextareaValue={
                 setTextareaValue as Dispatch<SetStateAction<string>>
               }
-                    setIsSubmitable ={setIsSubmitable}
+              setIsSubmitable={setIsSubmitable}
             />
             <div className="hidden space-x-2 md:flex">
               {/* <CodeViewer /> */}
@@ -282,7 +281,8 @@ function PlaygroundShell() {
               <Textarea
                 defaultValue={textareaValue}
                 onChange={handleTextareaChange}
-                className="w-full h-[90%] flex-1 p-4 border-gray-300 bg-gray-50 rounded-3xl dark:border-gray-700 dark:bg-gray-800 md:min-h-[530px] lg:min-h-[530px]"
+                className="w-full h-[90%] flex-1 p-4 border-gray-300 bg-gray-50 rounded-3xl
+                 dark:border-gray-700 dark:bg-gray-800 md:min-h-[530px] lg:min-h-[530px]"
                 style={{ overflow: 'scroll', resize: 'none' }}
               />
               <div className="flex items-center space-x-2 mt-4">

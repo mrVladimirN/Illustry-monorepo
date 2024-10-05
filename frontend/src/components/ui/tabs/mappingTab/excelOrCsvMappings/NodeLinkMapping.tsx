@@ -1,10 +1,10 @@
-// eslint-disable-next-line import/no-cycle
+/* eslint-disable import/no-cycle */
+import { UseFormReturn } from 'react-hook-form';
 import { Inputs } from '@/components/form/add-visualization-form';
 import { Input } from '@/components/ui/input';
-import { UseFormReturn } from 'react-hook-form';
 
 interface ExcelOrCsvNodeLinkMappingProps {
-  form: UseFormReturn<Inputs>; // Include the form context
+  form: UseFormReturn<Inputs>;
 }
 function ExcelOrCsvNodeLinkMapping({ form }: ExcelOrCsvNodeLinkMappingProps) {
   return (

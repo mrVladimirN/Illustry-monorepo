@@ -2,16 +2,15 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import {
+  Dispatch, ReactNode, SetStateAction, useState
+} from 'react';
 import { siteConfig } from '@/config/site';
 import { cn } from '@/lib/utils';
-
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Icons } from '@/components/icons';
-import {
-  Dispatch, ReactNode, SetStateAction, useState
-} from 'react';
 import ThemeToggle from './theme-toggle';
 
 interface NavItem {
@@ -55,7 +54,8 @@ function MobileLink({
     <Link
       href={href}
       className={cn(
-        'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
+        'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors',
+        'hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
         pathname === href,
         disabled && 'pointer-events-none opacity-60'
       )}
@@ -74,7 +74,8 @@ function MobileNav({ items }: MobileNavProps) {
         <Button
           suppressHydrationWarning
           variant="ghost"
-          className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 lg:hidden"
+          className="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent
+          focus-visible:ring-0 focus-visible:ring-offset-0 lg:hidden"
         >
           <Icons.menu className="h-6 w-6" />
           <span className="sr-only">Toggle Menu</span>
@@ -105,7 +106,7 @@ function MobileNav({ items }: MobileNavProps) {
                 {item.title}
               </MobileLink>
             ))}
-              <ThemeToggle />
+            <ThemeToggle />
           </div>
         </ScrollArea>
       </SheetContent>

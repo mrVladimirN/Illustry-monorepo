@@ -13,18 +13,13 @@
     "node": true
   },
   "rules": {
-    "import/extensions": [
-      "error",
-      "ignorePackages",
-      {
-        "ts": "never",
-        "tsx": "never"
-      }
-    ],
+    "import/extensions": "off",
     "class-methods-use-this": "off",
     "no-console": "error",
     "import/no-extraneous-dependencies": "off",
-    "max-length": [
+    "eslint-plugin-import/extensions": "off",
+    "max-len": [
+      "error",
       130
     ],
     "comma-dangle": [

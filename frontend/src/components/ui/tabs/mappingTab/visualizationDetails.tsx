@@ -1,6 +1,6 @@
-// eslint-disable-next-line import/no-cycle
-import { Inputs } from '@/components/form/add-visualization-form';
+/* eslint-disable import/no-cycle */
 import { UseFormReturn } from 'react-hook-form';
+import { Inputs } from '@/components/form/add-visualization-form';
 import {
   FormField,
   FormItem,
@@ -12,7 +12,7 @@ import { Input } from '../../input';
 import { Textarea } from '../../textarea';
 
 interface VisualizationDetailsProp {
-  form: UseFormReturn<Inputs>; // Include the form context
+  form: UseFormReturn<Inputs>;
 }
 function VisualizationDetails({
   form

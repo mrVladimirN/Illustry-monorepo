@@ -24,11 +24,12 @@ const createMatrix = (nodes: VisualizationTypes.Node[], links: VisualizationType
     throw new Error('categories object must have exactly 2 keys');
   }
 
-  const tableString = ` <table id ="myTable" style= "border-spacing: 0;width: 100%;border: 1px solid #ddd ; margin-top:5%">${createHeadersAndPropertiesString(
-    categories[categoriesKeys[0] as string] as VisualizationTypes.Node[],
-    categories[categoriesKeys[1] as string] as VisualizationTypes.Node[],
-    links
-  )}`;
+  const tableString = '<table id ="myTable" style= "border-spacing: 0;width: 100%;border: 1px solid #ddd ;'
+    + `margin-top:5%">${createHeadersAndPropertiesString(
+      categories[categoriesKeys[0] as string] as VisualizationTypes.Node[],
+      categories[categoriesKeys[1] as string] as VisualizationTypes.Node[],
+      links
+    )}`;
   return tableString;
 };
 const MatrixView = ({ nodes, links }: MatrixProp) => {
@@ -51,7 +52,6 @@ const MatrixView = ({ nodes, links }: MatrixProp) => {
     return () => {
       select('showData').remove();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodes, links, JSON.stringify(colors)]);
 
   return <div ref={tableRef}></div>;

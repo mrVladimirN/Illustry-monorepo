@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type { z } from 'zod';
+import { useTransition } from 'react';
 import { catchError } from '@/lib/utils';
 import { projectSchema } from '@/lib/validation/project';
 import { Button } from '@/components/ui/button';
@@ -20,7 +21,6 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Icons } from '@/components/icons';
 import { createProject } from '@/app/_actions/project';
-import { useTransition } from 'react';
 import Checkbox from '../ui/checkbox';
 
 type Inputs = z.infer<typeof projectSchema>;

@@ -1,11 +1,11 @@
 'use server';
 
-import makeRequest from '@/lib/request';
 import 'dotenv/config';
 import { revalidateTag } from 'next/cache';
 import {
   VisualizationTypes
 } from '@illustry/types';
+import makeRequest from '@/lib/request';
 
 export const browseVisualizations = async (filter?: VisualizationTypes.VisualizationFilter) => {
   let newFilter: VisualizationTypes.VisualizationFilter = {};

@@ -1,8 +1,8 @@
 import { MouseEventHandler, TransitionStartFunction } from 'react';
 import { PlusCircledIcon, TrashIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
 import type { Table } from '@tanstack/react-table';
+import { cn } from '@/lib/utils';
 import { Button, buttonVariants } from './button';
 
 interface ActionButtonProps<TData> {

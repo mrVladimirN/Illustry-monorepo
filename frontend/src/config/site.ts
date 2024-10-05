@@ -1,5 +1,5 @@
-import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 import { v4 as randomUUID } from 'uuid';
+import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 
 export const siteConfig = {
   name: 'Illustry',

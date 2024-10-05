@@ -1,9 +1,9 @@
 'use client';
 
-import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { Dispatch, SetStateAction, useState } from 'react';
-import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 import dynamic from 'next/dynamic';
+import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
 interface FilteredScatterShellViewProp extends WithLegend, WithOptions {

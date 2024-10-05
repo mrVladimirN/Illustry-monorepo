@@ -1,9 +1,9 @@
+import { VisualizationTypes } from '@illustry/types';
+import dynamic from 'next/dynamic';
 import {
   computeLinksSankey
 } from '@/lib/visualizations/node-link/helper';
-import { VisualizationTypes } from '@illustry/types';
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
-import dynamic from 'next/dynamic';
 import FilteredSankeyGraphShellView from './filter-sankey-shell';
 
 interface SankeyGraphShellProp extends WithLegend, WithOptions, WithFilter {

@@ -1,7 +1,7 @@
-import { findOneVisualization } from '@/app/_actions/visualization';
-import HubShell from '@/components/shells/hub-shell';
 import { Metadata } from 'next';
 import { VisualizationTypes } from '@illustry/types';
+import { findOneVisualization } from '@/app/_actions/visualization';
+import HubShell from '@/components/shells/hub-shell';
 
 export const metadata: Metadata = {
   title: 'Visualizations',

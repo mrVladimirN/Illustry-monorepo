@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
+import { VisualizationTypes } from '@illustry/types';
 import { browseVisualizations } from '@/app/_actions/visualization';
 import VisualizationsTableShell from '@/components/shells/visualizations-table-shell';
-import { VisualizationTypes } from '@illustry/types';
 
 export const metadata: Metadata = {
   title: 'Visualizations',

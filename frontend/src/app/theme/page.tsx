@@ -1,5 +1,5 @@
-import ThemeShell from '@/components/shells/theme-shell';
 import { Metadata } from 'next';
+import ThemeShell from '@/components/shells/theme-shell';
 
 export const metadata: Metadata = {
   title: 'Theme',

@@ -8,13 +8,12 @@ import {
   type FieldPath,
   type FieldValues
 } from 'react-hook-form';
-
-import { cn } from '@/lib/utils';
-import Label from '@/components/ui/label';
 import {
   ComponentPropsWithoutRef, ElementRef, createContext, forwardRef, useContext,
   HTMLAttributes, useId
 } from 'react';
+import { cn } from '@/lib/utils';
+import Label from '@/components/ui/label';
 
 const Form = FormProvider;
 

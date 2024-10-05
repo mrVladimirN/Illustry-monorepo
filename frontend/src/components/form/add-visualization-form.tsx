@@ -9,10 +9,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type { z } from 'zod';
+import { VisualizationTypes, FileTypes } from '@illustry/types';
+import { useState, useTransition } from 'react';
+import { ExtFile } from '@files-ui/react';
 import { catchError } from '@/lib/utils';
 import 'dotenv/config';
 import { Form } from '@/components/ui/form';
-import { ExtFile } from '@files-ui/react';
 import {
   csvSchema,
   excelSchema,
@@ -20,8 +22,6 @@ import {
   visualizationSchema,
   visualizationTypesEnum
 } from '@/lib/validation/visualizations';
-import { VisualizationTypes, FileTypes } from '@illustry/types';
-import { useState, useTransition } from 'react';
 import { createOrUpdateVisualization } from '@/app/_actions/visualization';
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import MappingTab from '../ui/tabs/mappingTab/mappingTab';
@@ -93,7 +93,7 @@ export function AddVisualizationForm() {
           });
           await createOrUpdateVisualization(formData);
           form.reset();
-          setFiles([]); 
+          setFiles([]);
           toast.success('Visualizations added successfully.');
           router.push('/visualizations');
           router.refresh();

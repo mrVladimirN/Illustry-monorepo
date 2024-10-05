@@ -14,6 +14,6 @@ export const computeColors = (categories: string[], colors: string[]) => {
   return color;
 };
 
-export const computePoints = (points: VisualizationTypes.ScatterPoint[]) => {
-  return points.map((point) => [...point.value, point.category])
-};
+export const computePoints = (
+  points: VisualizationTypes.ScatterPoint[]
+) => points.map((point) => [...point.value, point.category]);

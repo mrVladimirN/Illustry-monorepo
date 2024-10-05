@@ -115,7 +115,8 @@ const CollapsableSearchBar = <
           onChange={handleInputChange}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          className={`peer relative z-10 h-12 w-12 cursor-pointer rounded-full border bg-transparent pl-12 outline-none transition-all duration-500 ${
+          className={`peer relative z-10 h-12 w-12 cursor-pointer 
+          rounded-full border bg-transparent pl-12 outline-none transition-all duration-500 ${
             isFocused || searchValue.trim() !== '' ? 'w-screen' : 'w-12'
           } focus:border-lime-300 focus:pl-16 focus:pr-4`}
         />
@@ -142,7 +143,8 @@ const CollapsableSearchBar = <
         )}
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          className="absolute inset-y-0 my-auto h-8 w-12 cursor-pointer border-r border-transparent stroke-gray-500 px-3.5 peer-focus:border-lime-300 peer-focus:stroke-lime-500"
+          className="absolute inset-y-0 my-auto h-8 w-12 cursor-pointer border-r border-transparent
+          stroke-gray-500 px-3.5 peer-focus:border-lime-300 peer-focus:stroke-lime-500"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"

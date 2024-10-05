@@ -1,7 +1,7 @@
-import { cn } from '@/lib/utils';
 import {
   HTMLAttributes, TdHTMLAttributes, ThHTMLAttributes, forwardRef
 } from 'react';
+import { cn } from '@/lib/utils';
 
 const Table = forwardRef<
   HTMLTableElement,

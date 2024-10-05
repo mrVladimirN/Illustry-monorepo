@@ -6,11 +6,11 @@ import {
   EChartsOption,
   WordCloudSeriesOption
 } from 'echarts';
+import { VisualizationTypes } from '@illustry/types';
 import {
   computeWords,
   computePropertiesForToolTip
 } from '@/lib/visualizations/word-cloud/helper';
-import { VisualizationTypes } from '@illustry/types';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';

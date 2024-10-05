@@ -1,7 +1,7 @@
-import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
-import { computeCategories } from '@/lib/visualizations/hierarchy-charts/helper';
 import dynamic from 'next/dynamic';
 import { VisualizationTypes } from '@illustry/types';
+import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
+import { computeCategories } from '@/lib/visualizations/hierarchy-charts/helper';
 import FilteredTreemapShellView from './filter-treemap-shell';
 
 interface TreeMapShellProp extends WithLegend, WithOptions, WithFilter {

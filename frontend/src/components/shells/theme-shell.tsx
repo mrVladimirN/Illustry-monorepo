@@ -5,8 +5,8 @@
 import {
   Suspense, useEffect, useRef, useState
 } from 'react';
-import { siteConfig } from '@/config/site';
 import { VisualizationTypes, UtilTypes } from '@illustry/types';
+import { siteConfig } from '@/config/site';
 import {
   ThemeColors,
   useThemeColors,

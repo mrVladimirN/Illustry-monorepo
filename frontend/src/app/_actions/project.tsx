@@ -1,9 +1,9 @@
 'use server';
 
-import makeRequest from '@/lib/request';
 import 'dotenv/config';
 import { revalidateTag } from 'next/cache';
 import { ProjectTypes } from '@illustry/types';
+import makeRequest from '@/lib/request';
 
 export const browseProjects = async (filter?: ProjectTypes.ProjectFilter) => {
   revalidateTag('projects');

@@ -5,6 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type { z } from 'zod';
+import { ProjectTypes } from '@illustry/types';
+import { useTransition } from 'react';
 import { catchError } from '@/lib/utils';
 import { projectUpdateSchema } from '@/lib/validation/project';
 import { Button } from '@/components/ui/button';
@@ -19,12 +21,10 @@ import {
 import { Textarea } from '@/components/ui/textarea';
 import { Icons } from '@/components/icons';
 import { updateProject } from '@/app/_actions/project';
-import { ProjectTypes } from '@illustry/types';
-import { useTransition } from 'react';
+
 import Checkbox from '../ui/checkbox';
 
 type Inputs = z.infer<typeof projectUpdateSchema>;
-
 interface UpdateProjectFormProps {
   project?: ProjectTypes.ProjectUpdate;
 }

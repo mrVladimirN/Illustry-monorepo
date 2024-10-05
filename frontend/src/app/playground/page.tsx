@@ -1,5 +1,5 @@
-import PlaygroundShell from '@/components/shells/playground-shell';
 import { Metadata } from 'next';
+import PlaygroundShell from '@/components/shells/playground-shell';
 
 export const metadata: Metadata = {
   title: 'Playground',

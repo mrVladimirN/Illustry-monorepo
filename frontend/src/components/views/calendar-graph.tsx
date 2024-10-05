@@ -3,14 +3,14 @@
 'use client';
 
 import { EChartsOption, SeriesOption } from 'echarts';
+import { CalendarOption } from 'echarts/types/dist/shared';
+import { VisualizationTypes } from '@illustry/types';
 import {
   computeCalendar,
   computeColors,
   computeLegendColors,
   computePropertiesForToolTip
 } from '@/lib/visualizations/calendar/helper';
-import { CalendarOption } from 'echarts/types/dist/shared';
-import { VisualizationTypes } from '@illustry/types';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';

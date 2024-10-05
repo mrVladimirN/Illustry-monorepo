@@ -1,3 +1,4 @@
+import { VisualizationTypes } from '@illustry/types';
 import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
@@ -7,8 +8,6 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
-
-import { VisualizationTypes } from '@illustry/types';
 
 export interface TimelineDialogProps {
   event: VisualizationTypes.TimelineEvent;

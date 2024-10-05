@@ -1,10 +1,9 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Icons } from '@/components/icons';
-import { useRouter } from 'next/navigation';
 
 function ThemeToggle() {
   const { setTheme, theme } = useTheme();

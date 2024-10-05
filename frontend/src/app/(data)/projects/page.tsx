@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
+import { ProjectTypes } from '@illustry/types';
 import { browseProjects } from '@/app/_actions/project';
 import ProjectsTableShell from '@/components/shells/projects-table-shell';
-import { ProjectTypes } from '@illustry/types';
 
 export const metadata: Metadata = {
   title: 'Projects',

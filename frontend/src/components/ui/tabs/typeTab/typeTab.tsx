@@ -1,8 +1,8 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable no-unused-vars */
-// eslint-disable-next-line import/no-cycle
-import { Inputs, fileTypes } from '@/components/form/add-visualization-form';
 import { UseFormReturn } from 'react-hook-form';
 import { ExtFile } from '@files-ui/react';
+import { Inputs, fileTypes } from '@/components/form/add-visualization-form';
 import {
   FormField,
   FormItem,
@@ -25,7 +25,7 @@ import CSVFileFormatter from './csvFileFormatFormItem';
 import XMLFileFormatter from './xmlFileFormatFormItem';
 
 interface TypeTabProps {
-  form: UseFormReturn<Inputs>; // Include the form context
+  form: UseFormReturn<Inputs>;
   // eslint-disable-next-line no-unused-vars
   handleFileTypeChange: (value: string) => void;
   selectedFileType: string;

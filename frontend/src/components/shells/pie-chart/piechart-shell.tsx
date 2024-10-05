@@ -1,6 +1,6 @@
 import { VisualizationTypes } from '@illustry/types';
-import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import dynamic from 'next/dynamic';
+import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import FilteredPieChartGraphShellView from './filter-piechart-shell';
 
 interface PieChartShellProp extends WithLegend, WithOptions, WithFilter {

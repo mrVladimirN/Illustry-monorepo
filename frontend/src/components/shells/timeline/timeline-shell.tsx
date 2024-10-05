@@ -1,6 +1,6 @@
-import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import dynamic from 'next/dynamic';
 import { VisualizationTypes } from '@illustry/types';
+import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import FilteredTimelineShellView from './filter-timeline-shell';
 
 interface TimelineShellProp extends WithLegend, WithOptions, WithFilter {
