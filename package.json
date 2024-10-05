@@ -19,7 +19,6 @@
     "depcheck": "lerna run depcheck",
     "test": "lerna run test --stream",
     "prepare": "husky install",
-    "commit": "commit",
     "postversion": "lerna publish from-package",
     "build:ts": "lerna run build:ts --stream",
     "release": "npm run lint:fix && npm run version && git push --follow-tags origin main"
