@@ -48,11 +48,15 @@ class Project implements GenericTypes.BaseLib<
 
     if ((query.$and as Array<object>).length === 0) delete query.$and;
 
-    const skip = filter && filter.page && filter.page > 1
-      ? filter.per_page
-        ? (filter.page - 1) * filter.per_page
-        : (filter.page - 1) * PAGE_SIZE
-      : 0;
+    let skip: number = 0;
+    if (filter && filter.page && filter.page > 1) {
+      if (filter.per_page) {
+        skip = (filter.page - 1) * filter.per_page;
+      } else {
+        skip = (filter.page - 1) * PAGE_SIZE;
+      }
+    }
+
     let sort = {};
     if (filter.sort && filter.sort.element) {
       const sortField = filter.sort.element;
@@ -70,17 +74,18 @@ class Project implements GenericTypes.BaseLib<
   create(data: ProjectTypes.ProjectCreate): Promise<ProjectTypes.ProjectType> {
     return Promise.resolve()
       .then(() => {
-        if (!data.createdAt) {
-          data.createdAt = new Date();
-          data.updatedAt = new Date();
+        const finalData: ProjectTypes.ProjectCreate = { ...data };
+        if (!finalData.createdAt) {
+          finalData.createdAt = new Date();
+          finalData.updatedAt = new Date();
         }
-        if (!data.isActive) {
-          return this.modelInstance.ProjectModel.create(data);
+        if (!finalData.isActive) {
+          return this.modelInstance.ProjectModel.create(finalData);
         }
         return this.modelInstance.ProjectModel.updateMany(
           {},
           { $set: { isActive: false } }
-        ).then(() => this.modelInstance.ProjectModel.create(data));
+        ).then(() => this.modelInstance.ProjectModel.create(finalData));
       });
   }
 
@@ -130,12 +135,13 @@ class Project implements GenericTypes.BaseLib<
     return Promise.resolve()
       .then(async () => {
         const foundProject = await this.findOne(filter);
+        const finalData: ProjectTypes.ProjectUpdate = { ...data };
         if (foundProject) {
-          if (!data.createdAt) {
-            data.createdAt = new Date();
+          if (!finalData.createdAt) {
+            finalData.createdAt = new Date();
           }
         }
-        data.updatedAt = new Date();
+        finalData.updatedAt = new Date();
         if (!data.isActive) {
           return this.modelInstance.ProjectModel.findOneAndUpdate(
             filter.query,

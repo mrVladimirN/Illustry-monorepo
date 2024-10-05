@@ -69,11 +69,15 @@ class Visualization implements GenericTypes.BaseLib<
     }
     if ((query.$and as Array<object>).length === 0) delete query.$and;
 
-    const skip = filter && filter.page && filter.page > 1
-      ? filter.per_page
-        ? (filter.page - 1) * filter.per_page
-        : (filter.page - 1) * PAGE_SIZE
-      : 0;
+    let skip: number = 0;
+    if (filter && filter.page && filter.page > 1) {
+      if (filter.per_page) {
+        skip = (filter.page - 1) * filter.per_page;
+      } else {
+        skip = (filter.page - 1) * PAGE_SIZE;
+      }
+    }
+
     let sort = {};
     if (filter.sort && filter.sort.element) {
       const sortField = filter.sort.element;
@@ -91,12 +95,12 @@ class Visualization implements GenericTypes.BaseLib<
   create(data: VisualizationTypes.VisualizationCreate): Promise<VisualizationTypes.VisualizationType> {
     return Promise.resolve()
       .then(() => {
-        const newData = { ...data };
-        if (!newData.createdAt) {
-          newData.createdAt = new Date();
-          newData.updatedAt = new Date();
+        const finalData = { ...data };
+        if (!finalData.createdAt) {
+          finalData.createdAt = new Date();
+          finalData.updatedAt = new Date();
         }
-        return this.modelInstance.VisualizationModel.create(newData);
+        return this.modelInstance.VisualizationModel.create(finalData);
       });
   }
 
@@ -142,15 +146,15 @@ class Visualization implements GenericTypes.BaseLib<
     filter: UtilTypes.ExtendedMongoQuery,
     data: VisualizationTypes.VisualizationUpdate
   ): Promise<VisualizationTypes.VisualizationType | null> {
-    const newData = { ...data };
-    if (!newData.createdAt) {
-      newData.createdAt = new Date();
+    const finalData = { ...data };
+    if (!finalData.createdAt) {
+      finalData.createdAt = new Date();
     }
-    newData.updatedAt = new Date();
+    finalData.updatedAt = new Date();
     return Promise.resolve()
       .then(() => this.modelInstance.VisualizationModel.findOneAndUpdate(
         filter.query,
-        newData,
+        finalData,
         { upsert: true, new: true }
       ));
   }

@@ -37,7 +37,8 @@ const pieChartFunnelExtractorCsvOrExcel = (
       if (!pieChartFunnelData) {
         pieChartFunnelData = { name, value };
         if (pieChartFunnelData.name && pieChartFunnelData.value) {
-          result.values[`${pieChartFunnelData.name as string}`] = pieChartFunnelData.value as number
+          // eslint-disable-next-line no-param-reassign
+          result.values[`${pieChartFunnelData.name as string}`] = pieChartFunnelData.value as number;
         }
       }
       return result;
@@ -98,4 +99,4 @@ const pieChartFunnelExtractorXml = (
     : finalData;
 };
 
-export { pieChartFunnelTransformer, pieChartFunnelExtractorCsvOrExcel, pieChartFunnelExtractorXml }
+export { pieChartFunnelTransformer, pieChartFunnelExtractorCsvOrExcel, pieChartFunnelExtractorXml };

@@ -21,7 +21,6 @@ class ProjectBZL implements GenericTypes.BaseBZL<
   }
 
   async create(project: ProjectTypes.ProjectCreate): Promise<ProjectTypes.ProjectType> {
-
     try {
       return await this.dbaccInstance.Project.create(project);
     } catch {
@@ -56,7 +55,10 @@ class ProjectBZL implements GenericTypes.BaseBZL<
     return projects;
   }
 
-  async update(filter: ProjectTypes.ProjectFilter, project: ProjectTypes.ProjectUpdate): Promise<ProjectTypes.ProjectType | null> {
+  async update(
+    filter: ProjectTypes.ProjectFilter,
+    project: ProjectTypes.ProjectUpdate
+  ): Promise<ProjectTypes.ProjectType | null> {
     let newFilter: UtilTypes.ExtendedMongoQuery = {};
     if (filter) {
       newFilter = this.dbaccInstance.Project.createFilter(filter);

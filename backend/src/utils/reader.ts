@@ -10,6 +10,7 @@ import {
 import transformerProvider from '../bzl/transformers/preprocess/transformersProvider';
 import FileError from '../errors/fileError';
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const XlsxStreamReader = require('xlsx-stream-reader');
 
 const readJsonFile = (
@@ -201,41 +202,27 @@ const excelFilesToVisualizations = async (
   fileDetails: FileTypes.FileDetails,
   visualizationType: VisualizationTypes.VisualizationTypesEnum,
   allFileDetails: boolean
-) => {
-  return Promise.all(files.map(file =>
-    readExcelFile(file, fileDetails, visualizationType, allFileDetails)
-  ));
-};
+) => Promise.all(files.map((file) => readExcelFile(file, fileDetails, visualizationType, allFileDetails)));
 
 const jsonFilesToVisualizations = async (
   files: FileTypes.FileProperties[],
   visualizationType: VisualizationTypes.VisualizationTypesEnum,
   allFileDetails: boolean
-) => {
-  return Promise.all(files.map(file =>
-    readJsonFile(file, visualizationType, allFileDetails)
-  ));
-};
+) => Promise.all(files.map((file) => readJsonFile(file, visualizationType, allFileDetails)));
 
 const csvFilesToVisualizations = async (
   files: FileTypes.FileProperties[],
   fileDetails: FileTypes.FileDetails,
   visualizationType: VisualizationTypes.VisualizationTypesEnum,
   allFileDetails: boolean
-) => {
-  return Promise.all(files.map(file =>
-    readCsvFile(file, fileDetails, visualizationType, allFileDetails)
-  ));
-};
+) => Promise.all(files.map((file) => readCsvFile(file, fileDetails, visualizationType, allFileDetails)));
 
 const xmlFilesToVisualizations = async (
   files: FileTypes.FileProperties[],
   visualizationType: VisualizationTypes.VisualizationTypesEnum,
   allFileDetails: boolean
-) => {
-  return Promise.all(files.map(file =>
-    readXmlFile(file, visualizationType, allFileDetails)
-  ));
-};
+) => Promise.all(files.map((file) => readXmlFile(file, visualizationType, allFileDetails)));
 
-export { excelFilesToVisualizations, jsonFilesToVisualizations, csvFilesToVisualizations, xmlFilesToVisualizations }
+export {
+  excelFilesToVisualizations, jsonFilesToVisualizations, csvFilesToVisualizations, xmlFilesToVisualizations
+};

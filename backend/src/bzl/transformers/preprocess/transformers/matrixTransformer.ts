@@ -1,17 +1,18 @@
-import { VisualizationTypes} from '@illustry/types';
+import { VisualizationTypes } from '@illustry/types';
 
 const matrixLabelExtractorXml = (labels: Record<string, unknown>[]) => labels.map((el: Record<string, unknown>) => ({
   name: (el.name as string[])[0],
   value:
-      typeof (el.value as string[])[0] === 'string'
-        ? +(el.value as string[])[0]
-        : (el.value as string[])[0],
+    typeof (el.value as string[])[0] === 'string'
+      ? +(el.value as string[])[0]
+      : (el.value as string[])[0],
   properties:
-      el.properties && (el.properties as Record<string, unknown>[])
-        ? (el.properties as Record<string, unknown>[])
-        : undefined
+    el.properties && (el.properties as Record<string, unknown>[])
+      ? (el.properties as Record<string, unknown>[])
+      : undefined
 }));
 
+// eslint-disable-next-line max-len
 const matrixLinkExtractorXml = (links: Record<string, unknown>[]): VisualizationTypes.Link[] => links.map((el: Record<string, unknown>) => ({
   source: (el.source as string[])[0],
   target: (el.target as string[])[0],
@@ -25,13 +26,14 @@ const matrixLinkExtractorXml = (links: Record<string, unknown>[]): Visualization
         : undefined
 })) as unknown as VisualizationTypes.Link[];
 
+// eslint-disable-next-line max-len
 const matrixNodeExtractorXml = (nodes: Record<string, unknown>[]): VisualizationTypes.Node[] => nodes.map((el: Record<string, unknown>) => ({
   name: (el.name as string[])[0],
   category: (el.category as string[])[0],
   properties:
-      el.properties && (el.properties as Record<string, unknown>[])
-        ? (el.properties as Record<string, unknown>[])
-        : undefined,
+    el.properties && (el.properties as Record<string, unknown>[])
+      ? (el.properties as Record<string, unknown>[])
+      : undefined,
   labels: matrixLabelExtractorXml(el.labels as Record<string, unknown>[])
 })) as unknown as VisualizationTypes.Node[];
 
@@ -46,18 +48,18 @@ const matrixExtractorXml = (
     data: {
       nodes: allFileDetails
         ? matrixNodeExtractorXml(
-            (data as Record<string, unknown>[])[0].nodes as Record<
-              string,
-              unknown
-            >[]
+          (data as Record<string, unknown>[])[0].nodes as Record<
+            string,
+            unknown
+          >[]
         )
         : matrixNodeExtractorXml(nodes as Record<string, unknown>[]),
       links: allFileDetails
         ? matrixLinkExtractorXml(
-            (data as Record<string, unknown>[])[0].links as Record<
-              string,
-              unknown
-            >[]
+          (data as Record<string, unknown>[])[0].links as Record<
+            string,
+            unknown
+          >[]
         )
         : matrixLinkExtractorXml(links as Record<string, unknown>[])
     }

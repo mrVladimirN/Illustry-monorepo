@@ -45,8 +45,8 @@ const exelOrCsvdataProvider = (
       ...data,
       name,
       tags,
-      description,
-    }
+      description
+    };
   }
   switch (type) {
     case VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD:
@@ -78,7 +78,7 @@ const exelOrCsvdataProvider = (
     default:
       break;
   }
-  return data && data.type ? data : null
+  return data && data.type ? data : null;
 };
 
 const jsonDataProvider = (
@@ -89,7 +89,7 @@ const jsonDataProvider = (
   if (!allFileDetails) {
     const data: VisualizationTypes.VisualizationUpdate = {};
     data.data = computedData;
-    data.type = type
+    data.type = type;
     return data;
   }
   return computedData;
@@ -127,4 +127,4 @@ const xmlDataProvider = (
   }
 };
 
-export { xmlDataProvider, jsonDataProvider, exelOrCsvdataProvider }
+export { xmlDataProvider, jsonDataProvider, exelOrCsvdataProvider };

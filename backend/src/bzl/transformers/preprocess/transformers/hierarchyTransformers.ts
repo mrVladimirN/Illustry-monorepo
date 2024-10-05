@@ -1,6 +1,5 @@
-
-import { toStringWithDefault, visualizationDetailsExtractor } from '../../../../utils/helper';
 import { VisualizationTypes } from '@illustry/types';
+import { toStringWithDefault, visualizationDetailsExtractor } from '../../../../utils/helper';
 
 const computeChildren = (
   values: unknown[],
@@ -95,14 +94,7 @@ const hierarchyExtractorCsvOrExcel = (
   const findParentGroup = (
     groups: VisualizationTypes.HierarchyNode[],
     targetName: string
-  ): VisualizationTypes.HierarchyNode | null => {
-    for (const group of groups) {
-      if (findItem(group, targetName)) {
-        return group;
-      }
-    }
-    return null;
-  };
+  ): VisualizationTypes.HierarchyNode | undefined => groups.find((group) => findItem(group, targetName));
 
   data.forEach((item) => {
     const isChild = result.some((group) => (group.children as VisualizationTypes.HierarchyNode[])
@@ -133,13 +125,13 @@ const hierarchyNodeExtractorXml = (
   category: (node.category as string[])[0],
   value: +(node.value as string[])[0],
   properties:
-      node.properties && (node.properties as Record<string, unknown>[]).length
-        ? (node.properties as string[])[0]
-        : undefined,
+    node.properties && (node.properties as Record<string, unknown>[]).length
+      ? (node.properties as string[])[0]
+      : undefined,
   children:
-      node.children && (node.children as Record<string, unknown>[]).length > 0
-        ? hierarchyNodeExtractorXml(node.children as Record<string, unknown>[])
-        : undefined
+    node.children && (node.children as Record<string, unknown>[]).length > 0
+      ? hierarchyNodeExtractorXml(node.children as Record<string, unknown>[])
+      : undefined
 }));
 
 const hierarchyExtractorXml = (
@@ -155,7 +147,7 @@ const hierarchyExtractorXml = (
         ? hierarchyNodeExtractorXml(
           ((data as Record<string, unknown>[])[0].nodes) as Record<string, unknown>[]
         )
-        :hierarchyNodeExtractorXml(nodes as Record<string, unknown>[])
+        : hierarchyNodeExtractorXml(nodes as Record<string, unknown>[])
     }
   };
   return allFileDetails
@@ -171,4 +163,4 @@ const hierarchyExtractorXml = (
     : finalData;
 };
 
-export { hierarchyTransformer, hierarchyExtractorXml, hierarchyExtractorCsvOrExcel }
+export { hierarchyTransformer, hierarchyExtractorXml, hierarchyExtractorCsvOrExcel };

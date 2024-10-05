@@ -1,6 +1,8 @@
+/* eslint-disable no-unused-vars */
 import * as url from 'url';
 import * as fs from 'fs';
 import * as path from 'path';
+import logger from '../config/logger';
 
 type Response = {
   req?: {
@@ -12,7 +14,6 @@ type Response = {
   status: (code: number) => Response;
   send: (data: unknown) => void;
 };
-
 
 const returnResponse = (
   res: Response,
@@ -52,7 +53,7 @@ const visualizationDetailsExtractor = (
   return {
     visualizationName: getValue('visualizationName'),
     visualizationDescription: getValue('visualizationDescription'),
-    visualizationTags: getValue('visualizationTags'),
+    visualizationTags: getValue('visualizationTags')
   };
 };
 
@@ -63,23 +64,27 @@ const visualizationPropertiesExtractor = (
   let description = '';
   let tags: string[] = [];
 
-  arr.forEach((item) => {
-    if (item.visualizationName) {
-      name = item.visualizationName as string;
-      delete item.visualizationName;
+  const sanitizedArr = arr.map((item) => {
+    const newItem = { ...item };
+
+    if (newItem.visualizationName) {
+      name = newItem.visualizationName as string;
+      delete newItem.visualizationName;
     }
-    if (item.visualizationDescription) {
-      description = item.visualizationDescription as string;
-      delete item.visualizationDescription;
+    if (newItem.visualizationDescription) {
+      description = newItem.visualizationDescription as string;
+      delete newItem.visualizationDescription;
     }
-    if (item.visualizationTags) {
-      tags = item.visualizationTags as string[];
-      delete item.visualizationTags;
+    if (newItem.visualizationTags) {
+      tags = newItem.visualizationTags as string[];
+      delete newItem.visualizationTags;
     }
+
+    return newItem;
   });
 
   return {
-    data: arr,
+    data: sanitizedArr,
     name: name || undefined,
     description,
     tags
@@ -103,7 +108,7 @@ const copyDirectory = async (src: string, dest: string): Promise<void> => {
       }
     }));
   } catch (error) {
-    console.error('Error copying directory:', error);
+    logger.error('Error copying directory:', error);
     throw error;
   }
 };
@@ -123,9 +128,16 @@ const deleteDirectory = async (directoryPath: string): Promise<void> => {
     }));
     await fs.promises.rmdir(directoryPath);
   } catch (error) {
-    console.error('Error deleting directory:', error);
+    logger.error('Error deleting directory:', error);
     throw error;
   }
 };
 
-export { returnResponse, toStringWithDefault, visualizationDetailsExtractor, visualizationPropertiesExtractor, copyDirectory, deleteDirectory }
+export {
+  returnResponse,
+  toStringWithDefault,
+  visualizationDetailsExtractor,
+  visualizationPropertiesExtractor,
+  copyDirectory,
+  deleteDirectory
+};

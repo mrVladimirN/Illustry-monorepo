@@ -15,7 +15,7 @@ const create = async (
   request: Request,
   response: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const {
       projectName,
@@ -80,7 +80,7 @@ const update = async (
   request: Request,
   response: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const {
       name,
@@ -130,10 +130,10 @@ const findOne = async (
   request: Request,
   response: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const { params: { name } } = request;
-    
+
     const projectFilter: ProjectTypes.ProjectFilter = {
       name
     };
@@ -163,7 +163,7 @@ const _delete = async (
   request: Request,
   response: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const {
       name
@@ -198,7 +198,7 @@ const browse = async (
   request: Request,
   response: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   try {
     const {
       name,

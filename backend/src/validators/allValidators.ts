@@ -1,10 +1,9 @@
-import { VisualizationTypes } from "@illustry/types";
+import { VisualizationTypes } from '@illustry/types';
 import { z } from 'zod';
 
 const dateSchema = z.instanceof(Date);
 const numberSchema = z.number();
 const stringSchema = z.string();
-
 
 const booleanSchema = z.boolean();
 
@@ -324,4 +323,4 @@ export {
   projectExtendedTypeSchema,
   projectUpdateSchema,
   projectFilterSchema
-}
+};

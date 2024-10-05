@@ -8,7 +8,11 @@ const computeValues = (values: unknown[], mapping: string): number[] => {
     const index = Number(row);
     const valueAtIndex = values[index];
 
-    if (valueAtIndex && (typeof valueAtIndex === 'number' || (typeof valueAtIndex === 'string' && !Number.isNaN(Number(valueAtIndex)))) && result.length <= 1) {
+    if (valueAtIndex
+      && (typeof valueAtIndex === 'number'
+        || (typeof valueAtIndex === 'string'
+          && !Number.isNaN(Number(valueAtIndex))))
+      && result.length <= 1) {
       result.push(Number(valueAtIndex));
     }
   });
@@ -118,4 +122,4 @@ const scatterExtractorXml = (
     : finalData;
 };
 
-export { scatterTransformer, scatterExtractorCsvOrExcel, scatterExtractorXml }
+export { scatterTransformer, scatterExtractorCsvOrExcel, scatterExtractorXml };

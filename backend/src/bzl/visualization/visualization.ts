@@ -1,5 +1,8 @@
-
-import { VisualizationTypes, ProjectTypes, FileTypes, UtilTypes, GenericTypes } from '@illustry/types'
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
+import {
+  VisualizationTypes, ProjectTypes, FileTypes, UtilTypes, GenericTypes
+} from '@illustry/types';
 
 import { generateErrorMessage } from 'zod-error';
 import {
@@ -28,7 +31,11 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
   create(data: VisualizationTypes.VisualizationCreate): Promise<VisualizationTypes.VisualizationType> {
     throw new Error('Method not implemented.');
   }
-  update(filter: VisualizationTypes.VisualizationFilter, data: UtilTypes.DeepPartial<VisualizationTypes.VisualizationType>): Promise<VisualizationTypes.VisualizationType | null> {
+
+  update(
+    filter: VisualizationTypes.VisualizationFilter,
+    data: UtilTypes.DeepPartial<VisualizationTypes.VisualizationType>
+  ): Promise<VisualizationTypes.VisualizationType | null> {
     throw new Error('Method not implemented.');
   }
 
@@ -181,7 +188,10 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
     visualizationUpdate: VisualizationTypes.VisualizationUpdate
   ): Promise<(VisualizationTypes.VisualizationType | null)[]> {
     const processVisualization = async (illustration: unknown) => {
-      const visualizationData: VisualizationTypes.VisualizationCreate = { ...(illustration as VisualizationTypes.VisualizationCreate), projectName };
+      const visualizationData: VisualizationTypes.VisualizationCreate = {
+        ...(illustration as VisualizationTypes.VisualizationCreate),
+        projectName
+      };
 
       if (!includeAllFileDetails) {
         Object.entries(visualizationUpdate).forEach(([key, value]) => {
@@ -227,7 +237,6 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
     projectName: string,
     visualizationUpdate: VisualizationTypes.VisualizationUpdate
   ): Promise<(VisualizationTypes.VisualizationType | null)[]> {
-
     const visualizations = await xmlFilesToVisualizations(
       files,
       visualizationUpdate.type as VisualizationTypes.VisualizationTypesEnum,
@@ -249,7 +258,6 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
     fileDetails: FileTypes.FileDetails,
     visualizationUpdate: VisualizationTypes.VisualizationUpdate
   ): Promise<(VisualizationTypes.VisualizationType | null)[]> {
-
     const visualizations = await excelFilesToVisualizations(
       files,
       fileDetails,
@@ -272,7 +280,6 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
     fileDetails: FileTypes.FileDetails,
     visualizationUpdate: VisualizationTypes.VisualizationUpdate
   ): Promise<(VisualizationTypes.VisualizationType | null)[]> {
-
     const visualizations = await csvFilesToVisualizations(
       files,
       fileDetails,

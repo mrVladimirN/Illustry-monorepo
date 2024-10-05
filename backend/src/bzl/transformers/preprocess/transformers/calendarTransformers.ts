@@ -2,6 +2,7 @@ import { VisualizationTypes } from '@illustry/types';
 import { toStringWithDefault, visualizationDetailsExtractor } from '../../../../utils/helper';
 
 const reformatDate = (date: string): string | null => {
+  // eslint-disable-next-line max-len
   const dateRegex = /\b(?:\d{4}[./-]\d{1,2}[./-]\d{1,2}|\d{1,2}[./-]\d{1,2}[./-]\d{4}|\d{1,2}[./-]\d{1,2}[./-]\d{2}|\d{4}-\d{2}-\d{2}|\d{2}-\d{2}-\d{4}|\d{2}-\d{2}-\d{2})\b/;
   const matches = date.match(dateRegex);
 
@@ -18,7 +19,8 @@ const reformatDate = (date: string): string | null => {
 
     if (tryOrdering(+component1, +component2)) {
       return `${year}-${String(component1).padStart(2, '0')}-${String(component2).padStart(2, '0')}`;
-    } else if (tryOrdering(+component2, +component1)) {
+    }
+    if (tryOrdering(+component2, +component1)) {
       return `${year}-${String(component2).padStart(2, '0')}-${String(component1).padStart(2, '0')}`;
     }
   }
@@ -32,6 +34,7 @@ const excelDateToJSDate = (excelDate: number): string | null => {
   const jsDate = new Date(millisecondsSinceExcelEpoch);
 
   if (!Number.isNaN(jsDate.getTime())) {
+    // eslint-disable-next-line max-len
     return `${jsDate.getFullYear()}-${String(jsDate.getMonth() + 1).padStart(2, '0')}-${String(jsDate.getDate()).padStart(2, '0')}`;
   }
   return null;
@@ -85,9 +88,9 @@ const calendarExtractorCsvOrExcel = (
         } as VisualizationTypes.CalendarType;
 
         if (
-          calendar.category &&
-          calendar.date &&
-          calendar.value
+          calendar.category
+          && calendar.date
+          && calendar.value
         ) {
           (result.calendar as VisualizationTypes.CalendarType[]).push(calendar);
         }
@@ -101,7 +104,7 @@ const calendarExtractorCsvOrExcel = (
 };
 
 const calendarEventExtractorXml = (
-calendar: Record<string, unknown>[]
+  calendar: Record<string, unknown>[]
 ): VisualizationTypes.CalendarType[] => calendar.map((el: Record<string, unknown>) => ({
   category: typeof (el.value as string[])[0] === 'string'
     ? (el.category as string[])[0]
@@ -119,7 +122,9 @@ const calendarExtractorXml = (
   xmlData: Record<string, unknown>,
   allFileDetails: boolean
 ) => {
-  const { name, description, tags, type, data, calendar } = xmlData.root as Record<string, unknown>;
+  const {
+    name, description, tags, type, data, calendar
+  } = xmlData.root as Record<string, unknown>;
   const finalData = {
     data: {
       calendar: allFileDetails
@@ -142,4 +147,4 @@ const calendarExtractorXml = (
     : finalData;
 };
 
-export { calendarTransformer, calendarExtractorCsvOrExcel, calendarExtractorXml }
+export { calendarTransformer, calendarExtractorCsvOrExcel, calendarExtractorXml };

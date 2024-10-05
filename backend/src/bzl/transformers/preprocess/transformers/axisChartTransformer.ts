@@ -1,4 +1,3 @@
-
 import { VisualizationTypes } from '@illustry/types';
 import { visualizationDetailsExtractor } from '../../../../utils/helper';
 
@@ -121,4 +120,4 @@ const axisChartExtractorXml = (
     : finalData;
 };
 
-export { axisChartTransformer, axisChartExtractorXml, axisChartExtractorCsvOrExcel }
+export { axisChartTransformer, axisChartExtractorXml, axisChartExtractorCsvOrExcel };

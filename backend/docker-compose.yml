@@ -17,29 +17,29 @@ services:
     networks:
       - illustry-network
 
-  illustrybackend:
-    image: illustrybackend
-    container_name: illustrybackend
-    restart: unless-stopped
-    environment:
-      MONGO_URL: mongodb://mongo:27017/illustry
-      MONGO_USER: root
-      MONGO_PASSWORD: rootPass
-    ports:
-      - "7000:7000"
-    networks:
-      - illustry-network
+  # illustrybackend:
+  #   image: illustrybackend
+  #   container_name: illustrybackend
+  #   restart: unless-stopped
+  #   environment:
+  #     MONGO_URL: mongodb://mongo:27017/illustry
+  #     MONGO_USER: root
+  #     MONGO_PASSWORD: rootPass
+  #   ports:
+  #     - "7000:7000"
+  #   networks:
+  #     - illustry-network
 
-  illustryfrontend:
-    image: illustryfrontend
-    container_name: illustryfrontend
-    restart: unless-stopped
-    environment:
-      NEXT_PUBLIC_BACKEND_PUBLIC_URL: http://illustrybackend:7000
-    ports:
-      - "3000:3000"
-    networks:
-      - illustry-network
+  # illustryfrontend:
+  #   image: illustryfrontend
+  #   container_name: illustryfrontend
+  #   restart: unless-stopped
+  #   environment:
+  #     NEXT_PUBLIC_BACKEND_PUBLIC_URL: http://illustrybackend:7000
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - illustry-network
 
 networks:
   illustry-network:

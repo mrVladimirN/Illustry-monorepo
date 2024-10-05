@@ -39,7 +39,7 @@ class Illustry {
 
   async start(): Promise<void> {
     try {
-      return new Promise((resolve, reject) => {
+      await new Promise<void>((resolve, reject) => {
         this.httpServer.on('error', (error) => {
           logger.error(error);
           reject(error);

@@ -1,4 +1,4 @@
-import { VisualizationTypes} from '@illustry/types';
+import { VisualizationTypes } from '@illustry/types';
 import { visualizationDetailsExtractor, toStringWithDefault } from '../../../../utils/helper';
 
 const wordCloudTransformer = (
@@ -100,4 +100,4 @@ const wordCloudExtractorXml = (
     : finalData;
 };
 
-export {wordCloudExtractorXml, wordCloudTransformer, wordCloudExtractorCsvOrExcel}
+export { wordCloudExtractorXml, wordCloudTransformer, wordCloudExtractorCsvOrExcel };

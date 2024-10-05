@@ -1,5 +1,5 @@
 import { Connection, Model } from 'mongoose';
-import { ProjectTypes, VisualizationTypes } from '@illustry/types'
+import { ProjectTypes, VisualizationTypes } from '@illustry/types';
 import Project from './project/Project';
 import Visualization from './visualization/Visualization';
 

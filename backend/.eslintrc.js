@@ -30,15 +30,17 @@ module.exports = {
 
     'class-methods-use-this': 'off',
 
-    'max-length': [130],
-    
+    "max-len": [
+      "error",
+      130
+    ],
+
     'no-underscore-dangle': 'off',
 
     'import/no-unresolved': 'off',
 
     'no-use-before-define': 'off'
 
-    // Add more rules as needed
   },
 
   overrides: [
@@ -61,5 +63,5 @@ module.exports = {
     }
   ],
 
-  ignorePatterns: ['__tests__', 'dist/']
+  ignorePatterns: ['__tests__', 'dist/', 'build-dist/', '*.js']
 };

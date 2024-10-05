@@ -1,5 +1,5 @@
 import { VisualizationTypes } from '@illustry/types';
-import { visualizationDetailsExtractor, toStringWithDefault, } from '../../../../utils/helper';
+import { visualizationDetailsExtractor, toStringWithDefault } from '../../../../utils/helper';
 
 const nodeLinkTransformer = (
   mapping: Record<string, unknown>,
@@ -73,7 +73,9 @@ const nodesLinksExtractorCsvOrExcel = (
   return transformedData as unknown as VisualizationTypes.NodeLinkData;
 };
 
-const linkExtractorXml = (nodes: Record<string, unknown>[]): VisualizationTypes.Node[] => nodes.map((el: Record<string, unknown>) => ({
+const linkExtractorXml = (
+  nodes: Record<string, unknown>[]
+): VisualizationTypes.Node[] => nodes.map((el: Record<string, unknown>) => ({
   name: (el.name as string[])[0],
   category: (el.category as string[])[0],
   properties:
@@ -82,7 +84,9 @@ const linkExtractorXml = (nodes: Record<string, unknown>[]): VisualizationTypes.
       : undefined
 })) as unknown as VisualizationTypes.Node[];
 
-const nodeExtractorXml = (links: Record<string, unknown>[]): VisualizationTypes.Link[] => links.map((el: Record<string, unknown>) => ({
+const nodeExtractorXml = (
+  links: Record<string, unknown>[]
+): VisualizationTypes.Link[] => links.map((el: Record<string, unknown>) => ({
   source: (el.source as string[])[0],
   target: (el.target as string[])[0],
   value:
@@ -131,4 +135,4 @@ const nodeLinksExtractorXml = (
     : finalData;
 };
 
-export { nodeLinkTransformer, nodesLinksExtractorCsvOrExcel, nodeLinksExtractorXml }
+export { nodeLinkTransformer, nodesLinksExtractorCsvOrExcel, nodeLinksExtractorXml };
