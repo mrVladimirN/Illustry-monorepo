@@ -1,0 +1,24 @@
+{
+    "packages": [
+        "backend",
+        "docs",
+        "frontend",
+        "types"
+    ],
+    "version": "independent",
+    "command": {
+        "publish": {
+            "conventionalCommits": true,
+            "yes": false
+        },
+        "version": {
+            "conventionalCommits": true,
+            "message": "chore: release",
+            "gitTagVersion": true,
+            "includeMergedTags": true,
+            "push": false,
+            "exact": true
+        }
+    },
+    "npmClient": "npm"
+}

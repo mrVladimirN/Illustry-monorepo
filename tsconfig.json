@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "declaration": true,
+    "outDir": "./dist",
+    "sourceMap": true,
+  },
+  "include": [
+    "backend/**/src",
+    "docs/**/src",
+    "frontend/**/src",
+    "types/**/src"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/__tests__",
+    "**/*.test.ts",
+    "**/*.spec.ts"
+  ]
+}
