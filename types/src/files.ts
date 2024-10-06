@@ -27,4 +27,4 @@ type UploadedFile = {
 type RequestWithFiles = Request & {
   files: { file: UploadedFile[] }
 }
-export { FileProperties, FileDetails, UploadedFile, RequestWithFiles }
+export { FileProperties, FileDetails, UploadedFile, RequestWithFiles, FileType }

@@ -1,3 +1,4 @@
+import { VisualizationTypes } from ".";
 import {
     with_optional_id,
     with_optional_version,
@@ -11,7 +12,7 @@ type DashboardData = {
     description?: string;
     createdAt?: Date;
     updatedAt?: Date;
-    visualizations?: { [name: string]: string };
+    visualizations?: { [name: string]: string } | VisualizationTypes.VisualizationType[];
 }
 
 type DashboardCreate =
