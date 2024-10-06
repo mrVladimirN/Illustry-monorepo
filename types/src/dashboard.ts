@@ -36,6 +36,7 @@ type DashboardUpdate = DeepPartial<DashboardType>
 
 type DashboardFilter = {
     name?: string;
+    projectName?: string;
     text?: string;
     page?: number;
     per_page?: number;
