@@ -7,14 +7,6 @@ const stringSchema = z.string();
 
 const booleanSchema = z.boolean();
 
-const projectDataSchema = z.object({
-  name: stringSchema,
-  description: stringSchema.optional(),
-  createdAt: dateSchema.optional(),
-  updatedAt: dateSchema.optional(),
-  isActive: booleanSchema.optional()
-});
-
 const withOptionalIdSchema = z.object({
   _id: stringSchema.optional()
 });
@@ -274,6 +266,14 @@ const visualizationExtendedTypeSchema = z.object({
     .optional()
 });
 
+const projectDataSchema = z.object({
+  name: stringSchema,
+  description: stringSchema.optional(),
+  createdAt: dateSchema.optional(),
+  updatedAt: dateSchema.optional(),
+  isActive: booleanSchema.optional()
+});
+
 const projectCreateSchema = projectDataSchema
   .merge(withOptionalIdSchema)
   .merge(withOptionalVersionSchema);
@@ -314,6 +314,56 @@ const projectFilterSchema = z.object({
     .optional()
 });
 
+const dashboardDataSchema = z.object({
+  name: stringSchema,
+  projectName: stringSchema,
+  description: stringSchema.optional(),
+  createdAt: dateSchema.optional(),
+  updatedAt: dateSchema.optional(),
+  visualizations: z.record(z.string()).optional()
+});
+
+const dashboardCreateSchema = dashboardDataSchema
+  .merge(withOptionalIdSchema)
+  .merge(withOptionalVersionSchema);
+
+const dashboardTypeSchema = dashboardDataSchema
+  .merge(withIdSchema)
+  .merge(withOptionalVersionSchema);
+
+const dashboardExtendedTypeSchema = z.object({
+  dashboards: z.array(dashboardTypeSchema).optional(),
+  pagination: z
+    .object({
+      count: numberSchema,
+      pageCount: numberSchema
+    })
+    .optional()
+});
+
+const dashboardUpdateSchema = z.object({
+  name: stringSchema.optional(),
+  projectName: stringSchema.optional(),
+  description: stringSchema.optional(),
+  createdAt: dateSchema.optional(),
+  updatedAt: dateSchema.optional(),
+  isActive: booleanSchema.optional()
+});
+
+const dashboardFilterSchema = z.object({
+  name: stringSchema.optional(),
+  text: stringSchema.optional(),
+  projectName: stringSchema.optional(),
+  page: numberSchema.optional(),
+  per_page: numberSchema.optional(),
+  sort: z
+    .object({
+      element: stringSchema,
+      sortOrder: z.union([stringSchema, numberSchema])
+    })
+    .optional()
+});
+
 export {
   visualizationTypeSchema,
   visualizationFilterSchema,
@@ -322,5 +372,10 @@ export {
   projectTypeSchema,
   projectExtendedTypeSchema,
   projectUpdateSchema,
-  projectFilterSchema
+  projectFilterSchema,
+  dashboardCreateSchema,
+  dashboardTypeSchema,
+  dashboardExtendedTypeSchema,
+  dashboardUpdateSchema,
+  dashboardFilterSchema
 };

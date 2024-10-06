@@ -69,16 +69,20 @@ class ProjectBZL implements GenericTypes.BaseBZL<
   async delete(filter: ProjectTypes.ProjectFilter): Promise<boolean> {
     let newProjectFilter: UtilTypes.ExtendedMongoQuery = {};
     let newVisualizationFilter: UtilTypes.ExtendedMongoQuery = {};
+    let newDashboardFilter: UtilTypes.ExtendedMongoQuery = {};
     if (filter) {
       newProjectFilter = this.dbaccInstance.Project.createFilter(filter);
       newVisualizationFilter = this.dbaccInstance.Visualization.createFilter({
         projectName: filter.name
       });
+      newDashboardFilter = this.dbaccInstance.Dashboard.createFilter({
+        projectName: filter.name
+      });
     }
+    await Promise.resolve(this.dbaccInstance.Visualization.deleteMany(newVisualizationFilter));
+    await Promise.resolve(this.dbaccInstance.Dashboard.deleteMany(newDashboardFilter));
     await Promise.resolve(this.dbaccInstance.Project.delete(newProjectFilter));
-    await Promise.resolve(
-      this.dbaccInstance.Visualization.deleteMany(newVisualizationFilter)
-    );
+
     return true;
   }
 }
