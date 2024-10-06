@@ -7,10 +7,11 @@ import {
 
 type DashboardData = {
     name: string;
+    projectName: string;
     description?: string;
     createdAt?: Date;
     updatedAt?: Date;
-    visualizationIds?: string[];
+    visualizations?: { [name: string]: string };
 }
 
 type DashboardCreate =
