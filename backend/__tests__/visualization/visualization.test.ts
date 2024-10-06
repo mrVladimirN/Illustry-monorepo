@@ -57,7 +57,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "HEB_FullDetails",
@@ -118,7 +118,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "FLG_FullDetails",
@@ -179,7 +179,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Sankey_FullDetails",
@@ -234,7 +234,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Wordcloud_FullDetails",
@@ -293,7 +293,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Calendar_FullDetails",
@@ -399,7 +399,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Matrix_FullDetails",
@@ -518,7 +518,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "LineChart_FullDetails",
@@ -554,7 +554,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "BarChart_FullDetails",
@@ -590,7 +590,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "PieChart_FullDetails",
@@ -625,7 +625,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Scatter_FullDetails",
@@ -661,7 +661,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Funnel_FullDetails",
@@ -696,7 +696,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Treemap_FullDetails",
@@ -782,7 +782,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Sunburst_FullDetails",
@@ -868,7 +868,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Timeline_FullDetails",
@@ -993,7 +993,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "HEB_PartialDetails",
@@ -1058,7 +1058,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "FLG_PartialDetails",
@@ -1123,7 +1123,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.SANKEY],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Sankey_PartialDetails",
@@ -1183,7 +1183,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Wordcloud_PartialDetails",
@@ -1247,7 +1247,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.CALENDAR],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Calendar_PartialDetails",
@@ -1358,7 +1358,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.MATRIX],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Matrix_PartialDetails",
@@ -1482,7 +1482,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.LINE_CHART],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "LineChart_PartialDetails",
@@ -1523,7 +1523,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.BAR_CHART],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "BarChart_PartialDetails",
@@ -1564,7 +1564,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.PIE_CHART],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "PieChart_PartialDetails",
@@ -1604,7 +1604,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.SCATTER],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Scatter_PartialDetails",
@@ -1645,7 +1645,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.FUNNEL],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Funnel_PartialDetails",
@@ -1685,7 +1685,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.TREEMAP],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Treemap_PartialDetails",
@@ -1776,7 +1776,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.SUNBURST],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Sunburst_PartialDetails",
@@ -1867,7 +1867,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.TIMELINE],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Timeline_PartialDetails",
@@ -1986,7 +1986,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -2024,7 +2024,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         calendar: [
@@ -2132,7 +2132,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         nodes: [
@@ -2194,7 +2194,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         values: {
@@ -2231,7 +2231,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         nodes: [
@@ -2293,7 +2293,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -2331,7 +2331,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         values: {
@@ -2368,7 +2368,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         nodes: [
@@ -2425,7 +2425,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         points: [
@@ -2478,7 +2478,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         nodes: [
@@ -2566,7 +2566,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         nodes: [
@@ -2654,7 +2654,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         words: [
@@ -2715,7 +2715,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       data: {
         nodes: [
@@ -2861,7 +2861,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       name: "BarChart_PartialDetails",
       projectName: "Test_Project1",
@@ -2903,7 +2903,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "Calendar_PartialDetails",
       projectName: "Test_Project1",
@@ -3031,7 +3031,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "FLG_PartialDetails",
       projectName: "Test_Project1",
@@ -3077,7 +3077,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "Funnel_PartialDetails",
       projectName: "Test_Project1",
@@ -3119,7 +3119,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "HEB_PartialDetails",
       projectName: "Test_Project1",
@@ -3165,7 +3165,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "LineChart_PartialDetails",
       projectName: "Test_Project1",
@@ -3207,7 +3207,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "PieChart_PartialDetails",
       projectName: "Test_Project1",
@@ -3249,7 +3249,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: VisualizationTypes.VisualizationTypesEnum.SANKEY,
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "Sankey_PartialDetails",
       projectName: "Test_Project1",
@@ -3293,7 +3293,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: VisualizationTypes.VisualizationTypesEnum.SCATTER,
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "Scatter_PartialDetails",
       projectName: "Test_Project1",
@@ -3336,7 +3336,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "Sunburst_PartialDetails",
       projectName: "Test_Project1",
@@ -3442,7 +3442,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "Treemap_PartialDetails",
       projectName: "Test_Project1",
@@ -3548,7 +3548,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "Wordcloud_PartialDetails",
       projectName: "Test_Project1",
@@ -3593,7 +3593,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: VisualizationTypes.VisualizationTypesEnum.MATRIX,
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "Matrix_PartialDetails",
       projectName: "Test_Project1",
@@ -3744,7 +3744,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: false,
       mapping: {
         names: "1",
@@ -3798,7 +3798,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -3860,7 +3860,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.SANKEY,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -3942,7 +3942,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -4004,7 +4004,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         dates: "1",
@@ -4080,7 +4080,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         data: "2,3,7,8",
@@ -4136,7 +4136,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         data: "2,3,7,8",
@@ -4192,7 +4192,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         values: "2",
@@ -4247,7 +4247,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.SCATTER,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         values: "2,3",
@@ -4319,7 +4319,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         names: "1",
@@ -4414,7 +4414,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         names: "1",
@@ -4509,7 +4509,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         values: "2",
@@ -4568,7 +4568,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: false,
       mapping: {
         names: "1",
@@ -4622,7 +4622,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -4684,7 +4684,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.SANKEY,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -4766,7 +4766,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -4828,7 +4828,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         dates: "1",
@@ -4904,7 +4904,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         data: "2,3,7,8",
@@ -4960,7 +4960,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         data: "2,3,7,8",
@@ -5016,7 +5016,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         values: "2",
@@ -5072,7 +5072,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.SCATTER,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         values: "2,3",
@@ -5146,7 +5146,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         names: "1",
@@ -5242,7 +5242,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         names: "1",
@@ -5337,7 +5337,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "EXCEL",
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         values: "2",
@@ -5389,7 +5389,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: false,
       mapping: {
         names: "1",
@@ -5443,7 +5443,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -5505,7 +5505,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.SANKEY,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -5587,7 +5587,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -5649,7 +5649,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         dates: "1",
@@ -5719,7 +5719,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         data: "2,3,7,8",
@@ -5775,7 +5775,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         data: "2,3,7,8",
@@ -5831,7 +5831,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         values: "2",
@@ -5886,7 +5886,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.SCATTER,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         values: "2,3",
@@ -5958,7 +5958,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         names: "1",
@@ -6053,7 +6053,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         names: "1",
@@ -6148,7 +6148,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         values: "2",
@@ -6207,7 +6207,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: false,
       mapping: {
         names: "1",
@@ -6261,7 +6261,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -6323,7 +6323,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.SANKEY,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -6405,7 +6405,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -6467,7 +6467,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       separator: ",",
       includeHeaders: true,
       mapping: {
@@ -6538,7 +6538,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         data: "2,3,7,8",
@@ -6594,7 +6594,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         data: "2,3,7,8",
@@ -6650,7 +6650,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         values: "2",
@@ -6706,7 +6706,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.SCATTER,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         values: "2,3",
@@ -6780,7 +6780,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         names: "1",
@@ -6876,7 +6876,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         names: "1",
@@ -6971,7 +6971,7 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
     };
     const fileDetails: FileTypes.FileDetails = {
-      fileType: "CSV",
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         values: "2",
