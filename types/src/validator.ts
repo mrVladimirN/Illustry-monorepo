@@ -6,17 +6,14 @@ import { FileTypes } from '.';
 const dateSchema = z.instanceof(Date);
 const numberSchema = z.number();
 const stringSchema = z.string();
-
 const booleanSchema = z.boolean();
 
 const withOptionalIdSchema = z.object({
     _id: stringSchema.optional()
 });
-
 const withIdSchema = z.object({
     _id: stringSchema
 });
-
 const withOptionalVersionSchema = z.object({
     __v: stringSchema.optional()
 });
@@ -45,15 +42,16 @@ const calendarDataSchema = z.object({
 });
 
 // Node-Link (force-directed-graph, sankey, hierarchical-edge-bundling)
-const labelsSchema = z.object({
+const labelSchema = z.object({
     name: stringSchema,
     value: numberSchema,
     properties: z.union([z.any(), z.array(z.any()), z.string()]).optional()
 });
+
 const nodeSchema = z.object({
     name: stringSchema,
     category: stringSchema,
-    labels: z.array(labelsSchema).optional(),
+    labels: z.array(labelSchema).optional(),
     properties: z.union([z.any(), z.array(z.any()), z.string()]).optional()
 });
 
@@ -106,27 +104,27 @@ const hierarchySchema = z.object({
 
 // TimeLine
 
-const TimelineEventTagSchema = z.object({
+const timelineEventTagSchema = z.object({
     name: z.string()
 });
 
-const TimelineEventSchema = z.object({
+const timelineEventSchema = z.object({
     summary: z.string(),
     date: z.string(),
     type: z.string(),
     author: z.string(),
-    tags: z.array(TimelineEventTagSchema).optional(),
+    tags: z.array(timelineEventTagSchema).optional(),
     description: z.string().optional()
 });
 
-const TimelineDataSchema = z.record(
+const timelineDataSchema = z.record(
     z.object({
         summary: z
             .object({
                 title: z.string().optional()
             })
             .optional(),
-        events: z.array(TimelineEventSchema)
+        events: z.array(timelineEventSchema)
     })
 );
 
@@ -164,7 +162,7 @@ const visualizationTimelineSchema = visualizationDataSchema.extend({
 
         z.array(z.literal(VisualizationTypesEnum.TIMELINE))
     ]),
-    data: TimelineDataSchema
+    data: timelineDataSchema
 });
 
 const visualizationAxisChartSchema = visualizationDataSchema.extend({
@@ -528,6 +526,40 @@ const validateWithSchema = <T>(
 };
 
 export {
+    dateSchema,
+    numberSchema,
+    stringSchema,
+    booleanSchema,
+    withOptionalIdSchema,
+    withIdSchema,
+    withOptionalVersionSchema,
+    wordTypeSchema,
+    wordCloudDataSchema,
+    calendarTypeSchema,
+    calendarDataSchema,
+    labelSchema,
+    nodeSchema,
+    linkSchema,
+    nodeLinkDataSchema,
+    axisChartDataSchema,
+    scatterDataSchema,
+    pieChartFunnelDataSchema,
+    hierarchyNode,
+    hierarchySchema,
+    timelineEventTagSchema,
+    timelineEventSchema,
+    timelineDataSchema,
+    visualizationDataSchema,
+    visualizationNodeLinkSchema,
+    visualizationTimelineSchema,
+    visualizationAxisChartSchema,
+    visualizationScatterSchema,
+    visualizationPieChartFunnelSchema,
+    visualizationCalendarSchema,
+    visualizationWordCloudSchema,
+    visualizationHierarchySchema,
+    projectDataSchema,
+    dashboardDataSchema,
     visualizationTypeSchema,
     visualizationFilterSchema,
     visualizationExtendedTypeSchema,
@@ -550,3 +582,4 @@ export {
     prettifyZodError,
     validateWithSchema
 };
+
