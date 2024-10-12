@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import * as dashboardAPI from '../../api/project/project';
+import * as dashboardAPI from '../../api/dashboard/dashboard';
 
 const router = Router();
 
-router.post('/api/project', dashboardAPI.create);
-router.post('/api/projects', dashboardAPI.browse);
-router.post('/api/project/:name', dashboardAPI.findOne);
-router.put('/api/project', dashboardAPI.update);
-router.delete('/api/project', dashboardAPI._delete);
+router.post('/api/dashboard', dashboardAPI.create);
+router.post('/api/dashboards', dashboardAPI.browse);
+router.post('/api/dashboard/:name', dashboardAPI.findOne);
+router.put('/api/dashboard', dashboardAPI.update);
+router.delete('/api/dashboard', dashboardAPI._delete);
 
 export default router;

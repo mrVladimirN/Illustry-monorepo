@@ -1,14 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { generateErrorMessage } from 'zod-error';
-import { DashboardTypes } from '@illustry/types';
-import prettifyZodError from '../../validators/prettifyError';
+import { DashboardTypes, ValidatorSchemas } from '@illustry/types';
 import Factory from '../../factory';
 import { returnResponse } from '../../utils/helper';
-import {
-  dashboardCreateSchema,
-  dashboardFilterSchema,
-  dashboardUpdateSchema
-} from '../../validators/allValidators';
 
 const create = async (
   request: Request,
@@ -30,14 +23,7 @@ const create = async (
       visualizations
     };
 
-    const dashboardValidationResult = dashboardCreateSchema.safeParse(dashboard);
-    if (!dashboardValidationResult.success) {
-      const errorMessage = generateErrorMessage(
-        dashboardValidationResult.error.issues,
-        prettifyZodError()
-      );
-      throw new Error(errorMessage);
-    }
+    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.dashboardCreateSchema, dashboard);
 
     await Factory.getInstance().getBZL().DashboardBZL.create(dashboard);
 
@@ -68,23 +54,8 @@ const update = async (
       visualizations
     };
 
-    const dashboardValidationResult = dashboardUpdateSchema.safeParse(dashboard);
-    if (!dashboardValidationResult.success) {
-      const errorMessage = generateErrorMessage(
-        dashboardValidationResult.error.issues,
-        prettifyZodError()
-      );
-      throw new Error(errorMessage);
-    }
-
-    const dashboardFilterValidationResult = dashboardFilterSchema.safeParse(dashboardFilter);
-    if (!dashboardFilterValidationResult.success) {
-      const errorMessage = generateErrorMessage(
-        dashboardFilterValidationResult.error.issues,
-        prettifyZodError()
-      );
-      throw new Error(errorMessage);
-    }
+    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.dashboardUpdateSchema, dashboard);
+    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.dashboardFilterSchema, dashboardFilter);
 
     const data = await Factory.getInstance()
       .getBZL()
@@ -109,15 +80,7 @@ const findOne = async (
       name
     };
 
-    const result = dashboardFilterSchema.safeParse(dashboardFilter);
-
-    if (!result.success) {
-      const errorMessage = generateErrorMessage(
-        result.error.issues,
-        prettifyZodError()
-      );
-      throw new Error(errorMessage);
-    }
+    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.dashboardFilterSchema, dashboardFilter);
 
     const data = await Factory.getInstance()
       .getBZL()
@@ -144,15 +107,7 @@ const _delete = async (
       name
     };
 
-    const result = dashboardFilterSchema.safeParse(dashboardFilter);
-
-    if (!result.success) {
-      const errorMessage = generateErrorMessage(
-        result.error.issues,
-        prettifyZodError()
-      );
-      throw new Error(errorMessage);
-    }
+    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.dashboardFilterSchema, dashboardFilter);
 
     const data = await Factory.getInstance()
       .getBZL()
@@ -187,15 +142,7 @@ const browse = async (
       per_page: perPage
     };
 
-    const result = dashboardFilterSchema.safeParse(dashboardFilter);
-
-    if (!result.success) {
-      const errorMessage = generateErrorMessage(
-        result.error.issues,
-        prettifyZodError()
-      );
-      throw new Error(errorMessage);
-    }
+    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.dashboardFilterSchema, dashboardFilter);
 
     const data = await Factory.getInstance()
       .getBZL()

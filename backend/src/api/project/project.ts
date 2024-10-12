@@ -1,15 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
-import { generateErrorMessage } from 'zod-error';
-import { ProjectTypes, VisualizationTypes } from '@illustry/types';
-import prettifyZodError from '../../validators/prettifyError';
+import { ProjectTypes, VisualizationTypes, ValidatorSchemas } from '@illustry/types';
 import Factory from '../../factory';
 import { returnResponse } from '../../utils/helper';
-import {
-  projectCreateSchema,
-  projectFilterSchema,
-  projectUpdateSchema,
-  visualizationTypeSchema
-} from '../../validators/allValidators';
 
 const create = async (
   request: Request,
@@ -43,14 +35,7 @@ const create = async (
       data
     };
 
-    const projectValidationResult = projectCreateSchema.safeParse(project);
-    if (!projectValidationResult.success) {
-      const errorMessage = generateErrorMessage(
-        projectValidationResult.error.issues,
-        prettifyZodError()
-      );
-      throw new Error(errorMessage);
-    }
+    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.projectCreateSchema, project);
 
     await Factory.getInstance().getBZL().ProjectBZL.create(project);
 
@@ -59,14 +44,7 @@ const create = async (
       && visualization.type
       && visualization.projectName
     ) {
-      const visualizationValidationResult = visualizationTypeSchema.safeParse(visualization);
-      if (!visualizationValidationResult.success) {
-        const errorMessage = generateErrorMessage(
-          visualizationValidationResult.error.issues,
-          prettifyZodError()
-        );
-        throw new Error(errorMessage);
-      }
+      ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.visualizationTypeSchema, visualization);
       await Factory.getInstance().getBZL().VisualizationBZL.createOrUpdate(visualization);
     }
 
@@ -97,23 +75,8 @@ const update = async (
       isActive
     };
 
-    const projectValidationResult = projectUpdateSchema.safeParse(project);
-    if (!projectValidationResult.success) {
-      const errorMessage = generateErrorMessage(
-        projectValidationResult.error.issues,
-        prettifyZodError()
-      );
-      throw new Error(errorMessage);
-    }
-
-    const projectFilterValidationResult = projectFilterSchema.safeParse(projectFilter);
-    if (!projectFilterValidationResult.success) {
-      const errorMessage = generateErrorMessage(
-        projectFilterValidationResult.error.issues,
-        prettifyZodError()
-      );
-      throw new Error(errorMessage);
-    }
+    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.projectUpdateSchema, project);
+    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.projectFilterSchema, projectFilter);
 
     const data = await Factory.getInstance()
       .getBZL()
@@ -138,15 +101,7 @@ const findOne = async (
       name
     };
 
-    const result = projectFilterSchema.safeParse(projectFilter);
-
-    if (!result.success) {
-      const errorMessage = generateErrorMessage(
-        result.error.issues,
-        prettifyZodError()
-      );
-      throw new Error(errorMessage);
-    }
+    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.projectFilterSchema, projectFilter);
 
     const data = await Factory.getInstance()
       .getBZL()
@@ -173,15 +128,7 @@ const _delete = async (
       name
     };
 
-    const result = projectFilterSchema.safeParse(projectFilter);
-
-    if (!result.success) {
-      const errorMessage = generateErrorMessage(
-        result.error.issues,
-        prettifyZodError()
-      );
-      throw new Error(errorMessage);
-    }
+    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.projectFilterSchema, projectFilter);
 
     const data = await Factory.getInstance()
       .getBZL()
@@ -216,15 +163,7 @@ const browse = async (
       per_page: perPage
     };
 
-    const result = projectFilterSchema.safeParse(projectFilter);
-
-    if (!result.success) {
-      const errorMessage = generateErrorMessage(
-        result.error.issues,
-        prettifyZodError()
-      );
-      throw new Error(errorMessage);
-    }
+    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.projectFilterSchema, projectFilter);
 
     const data = await Factory.getInstance()
       .getBZL()

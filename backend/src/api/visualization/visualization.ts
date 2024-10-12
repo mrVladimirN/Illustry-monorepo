@@ -1,11 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { generateErrorMessage } from 'zod-error';
-import { FileTypes, VisualizationTypes } from '@illustry/types';
+import { FileTypes, VisualizationTypes, ValidatorSchemas } from '@illustry/types';
 import { returnResponse } from '../../utils/helper';
 import FileError from '../../errors/fileError';
 import Factory from '../../factory';
-import prettifyZodError from '../../validators/prettifyError';
-import { visualizationFilterSchema } from '../../validators/allValidators';
 
 const createOrUpdate = async (
   request: Request,
@@ -74,15 +71,7 @@ const findOne = async (
       type
     };
 
-    const result = visualizationFilterSchema.safeParse(visualizationFilter);
-
-    if (!result.success) {
-      const errorMessage = generateErrorMessage(
-        result.error.issues,
-        prettifyZodError()
-      );
-      throw new Error(errorMessage);
-    }
+    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.visualizationFilterSchema, visualizationFilter);
 
     const data = await Factory.getInstance()
       .getBZL()
@@ -113,15 +102,7 @@ const browse = async (
       per_page: perPage
     };
 
-    const result = visualizationFilterSchema.safeParse(visualizationFilter);
-
-    if (!result.success) {
-      const errorMessage = generateErrorMessage(
-        result.error.issues,
-        prettifyZodError()
-      );
-      throw new Error(errorMessage);
-    }
+    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.visualizationFilterSchema, visualizationFilter);
 
     const data = await Factory.getInstance()
       .getBZL()
@@ -147,15 +128,7 @@ const _delete = async (
       projectName
     };
 
-    const result = visualizationFilterSchema.safeParse(visualizationFilter);
-
-    if (!result.success) {
-      const errorMessage = generateErrorMessage(
-        result.error.issues,
-        prettifyZodError()
-      );
-      throw new Error(errorMessage);
-    }
+    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.visualizationFilterSchema, visualizationFilter);
 
     const data = await Factory.getInstance()
       .getBZL()

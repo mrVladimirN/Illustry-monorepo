@@ -1,20 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import {
-  VisualizationTypes, ProjectTypes, FileTypes, UtilTypes, GenericTypes
+  VisualizationTypes, ProjectTypes, FileTypes, UtilTypes, GenericTypes, ValidatorSchemas
 } from '@illustry/types';
-
-import { generateErrorMessage } from 'zod-error';
 import {
   excelFilesToVisualizations,
   jsonFilesToVisualizations,
   csvFilesToVisualizations,
   xmlFilesToVisualizations
 } from '../../utils/reader';
-import { visualizationTypeSchema } from '../../validators/allValidators';
 import Factory from '../../factory';
 import DbaccInstance from '../../dbacc/lib';
-import prettifyZodError from '../../validators/prettifyError';
 
 class VisualizationBZL implements GenericTypes.BaseBZL<
   VisualizationTypes.VisualizationCreate,
@@ -199,11 +195,7 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
         });
       }
 
-      const validationResult = visualizationTypeSchema.safeParse(visualizationData);
-      if (!validationResult.success) {
-        const errorMessage = generateErrorMessage(validationResult.error.issues, prettifyZodError());
-        throw new Error(errorMessage);
-      }
+      ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.visualizationTypeSchema, visualizationData);
 
       return this.createOrUpdate(visualizationData);
     };
