@@ -1,9 +1,7 @@
 import { VisualizationTypes } from '@illustry/types';
-
-// eslint-disable-next-line import/no-cycle
 import { evaluateCondition, getMatchingIndices } from './generic';
 
-export const axisWords = ['headers', 'values'];
+const axisWords = ['headers', 'values'];
 
 const applyValuesFilter = (
   valuesFilter: string,
@@ -85,7 +83,7 @@ const applyHeadersFilter = (headersFilter: string, defaultData: VisualizationTyp
   return [];
 };
 
-export const applyAxisFilter = (expressions:string[], defaultData: VisualizationTypes.AxisChartData) => {
+const applyAxisFilter = (expressions: string[], defaultData: VisualizationTypes.AxisChartData) => {
   const newData: VisualizationTypes.AxisChartData = {
     headers: [],
     values: {}
@@ -121,9 +119,13 @@ export const applyAxisFilter = (expressions:string[], defaultData: Visualization
   if (valuesFilter !== '') {
     newData.values = applyValuesFilter(
       valuesFilter,
-      validValuesPosition,
+      validValuesPosition.length ?
+        validValuesPosition :
+        Array.from({ length: initialHeaders.length }, (_, i) => i),
       defaultData
     );
   }
   return newData;
 };
+
+export { axisWords, applyAxisFilter };

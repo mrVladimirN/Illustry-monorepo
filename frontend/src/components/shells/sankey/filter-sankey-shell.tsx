@@ -4,17 +4,19 @@ import { VisualizationTypes } from '@illustry/types';
 import { Dispatch, SetStateAction, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
-import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
-interface FilteredSankeyGraphShellProp extends WithLegend, WithOptions {
+type FilteredSankeyGraphShellProp = {
   nodes: VisualizationTypes.Node[];
   links: VisualizationTypes.Link[];
-}
+} & WithLegend
+  & WithOptions
+
 const SankeyGraphView = dynamic(
   () => import('@/components/views/sankey-diagram'),
   { ssr: false }
 );
+
 const FilteredSankeyGraphShellView = ({
   nodes,
   links,
@@ -28,7 +30,6 @@ const FilteredSankeyGraphShellView = ({
     nodes,
     links
   });
-
   return (
     <>
       <CollapsableSearchBar
@@ -39,12 +40,12 @@ const FilteredSankeyGraphShellView = ({
         setFilteredData={
           setFilteredData as Dispatch<
             SetStateAction<{
-                nodes: VisualizationTypes.Node[];
-                links: VisualizationTypes.Link[];
-              }>
+              nodes: VisualizationTypes.Node[];
+              links: VisualizationTypes.Link[];
+            }>
           >
         }
-        type={visualizationTypesEnum.SANKEY}
+        type={VisualizationTypes.VisualizationTypesEnum.SANKEY}
       />
       <SankeyGraphView
         options={options}
@@ -55,4 +56,5 @@ const FilteredSankeyGraphShellView = ({
     </>
   );
 };
+
 export default FilteredSankeyGraphShellView;

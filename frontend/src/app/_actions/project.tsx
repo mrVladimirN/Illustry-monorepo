@@ -5,7 +5,7 @@ import { revalidateTag } from 'next/cache';
 import { ProjectTypes } from '@illustry/types';
 import makeRequest from '@/lib/request';
 
-export const browseProjects = async (filter?: ProjectTypes.ProjectFilter) => {
+const browseProjects = async (filter?: ProjectTypes.ProjectFilter) => {
   revalidateTag('projects');
   let newFilter: ProjectTypes.ProjectFilter = {};
 
@@ -26,7 +26,7 @@ export const browseProjects = async (filter?: ProjectTypes.ProjectFilter) => {
     });
 };
 
-export const deleteProject = async (projectName: string) => {
+const deleteProject = async (projectName: string) => {
   revalidateTag('projects');
   const request = new Request(`${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_URL as string}/api/project`, {
     method: 'DELETE',
@@ -40,7 +40,7 @@ export const deleteProject = async (projectName: string) => {
   return makeRequest<boolean>(request, ['projects']);
 };
 
-export const updateProject = async (project: ProjectTypes.ProjectUpdate) => {
+const updateProject = async (project: ProjectTypes.ProjectUpdate) => {
   revalidateTag('projects');
   const request = new Request(`${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_URL as string}/api/project`, {
     method: 'PUT',
@@ -53,7 +53,7 @@ export const updateProject = async (project: ProjectTypes.ProjectUpdate) => {
   return makeRequest<ProjectTypes.ProjectType>(request, ['projects']);
 };
 
-export const createProject = async (project: ProjectTypes.ProjectCreate) => {
+const createProject = async (project: ProjectTypes.ProjectCreate) => {
   const newProject = {
     projectName: project.name,
     projectDescription: project.description,
@@ -69,7 +69,7 @@ export const createProject = async (project: ProjectTypes.ProjectCreate) => {
   return makeRequest<ProjectTypes.ProjectType>(request, ['projects']);
 };
 
-export const findOneProject = async (projectName: string) => {
+const findOneProject = async (projectName: string) => {
   const request = new Request(
     `${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_URL as string}/api/project/${projectName}`,
     {
@@ -81,4 +81,12 @@ export const findOneProject = async (projectName: string) => {
     }
   );
   return makeRequest<ProjectTypes.ProjectType>(request, ['projects']);
+};
+
+export {
+  createProject,
+  browseProjects,
+  deleteProject,
+  updateProject,
+  findOneProject
 };

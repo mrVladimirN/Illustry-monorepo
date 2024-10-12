@@ -14,10 +14,11 @@ import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface SunburstViewProp extends WithLegend, WithOptions {
+type SunburstViewProp = {
   nodes: VisualizationTypes.HierarchyNode[];
   categories: string[]
-}
+} & WithLegend
+  & WithOptions
 const SunburstView = ({ nodes, categories, legend }: SunburstViewProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';

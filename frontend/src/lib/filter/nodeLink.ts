@@ -1,8 +1,7 @@
 import { VisualizationTypes } from '@illustry/types';
-// eslint-disable-next-line import/no-cycle
 import { evaluateCondition } from './generic';
 
-export const nodeLinksWords = [
+const nodeLinksWords = [
   'categories',
   'sources',
   'targets',
@@ -50,12 +49,13 @@ const applyNodeNameFilter = (
           }
         }
       });
+
       if (filterType === 'categories' || filterType === 'names') {
         const filteredNodes = defaultData.nodes.filter(
           (node) => (included.length
-              && included.includes(
-                filterType === 'categories' ? node.category : node.name
-              ))
+            && included.includes(
+              filterType === 'categories' ? node.category : node.name
+            ))
             || (excluded.length
               && !excluded.includes(
                 filterType === 'categories' ? node.category : node.name
@@ -71,9 +71,9 @@ const applyNodeNameFilter = (
       }
       const filteredLinks = defaultData.links.filter(
         (link) => (included.length
-            && included.includes(
-              filterType === 'sources' ? link.source : link.target
-            ))
+          && included.includes(
+            filterType === 'sources' ? link.source : link.target
+          ))
           || (excluded.length
             && !excluded.includes(
               filterType === 'sources' ? link.source : link.target
@@ -133,7 +133,7 @@ const applyValuesFilter = (
   }
 };
 
-export const applyNodeLinkFilter = (
+const applyNodeLinkFilter = (
   expressions: string[],
   defaultData: {
     nodes: VisualizationTypes.Node[];
@@ -208,3 +208,5 @@ export const applyNodeLinkFilter = (
   }
   return newData;
 };
+
+export { nodeLinksWords, applyNodeLinkFilter };

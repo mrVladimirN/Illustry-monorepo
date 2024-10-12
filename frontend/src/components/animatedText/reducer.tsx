@@ -1,16 +1,16 @@
-export type State = {
-    speed: number
-    text: string
-    count: number
-  }
+type State = {
+  speed: number
+  text: string
+  count: number
+}
 
-export type Action =
-    | { type: 'DELAY'; payload: number }
-    | { type: 'TYPE'; payload: string; speed: number }
-    | { type: 'DELETE'; payload: string; speed: number }
-    | { type: 'COUNT' }
+type Action =
+  | { type: 'DELAY'; payload: number }
+  | { type: 'TYPE'; payload: string; speed: number }
+  | { type: 'DELETE'; payload: string; speed: number }
+  | { type: 'COUNT' }
 
-export function reducer(state: State, action: Action): State {
+const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case 'TYPE':
       return {
@@ -37,4 +37,8 @@ export function reducer(state: State, action: Action): State {
     default:
       return state;
   }
-}
+};
+
+export { reducer };
+
+export type { State, Action };

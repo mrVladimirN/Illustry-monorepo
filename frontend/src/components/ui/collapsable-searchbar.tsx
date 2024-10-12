@@ -7,8 +7,8 @@ import {
   SetStateAction,
   useState
 } from 'react';
-import { visualizationTypesEnum } from '@/lib/validation/visualizations';
-import { parseFilter } from '@/lib/filter/generic';
+import { VisualizationTypes } from '@illustry/types';
+import parseFilter from '@/lib/filter';
 import { axisWords } from '@/lib/filter/axis';
 import { catchError } from '@/lib/utils';
 import { calendarWords } from '@/lib/filter/calendar';
@@ -21,10 +21,10 @@ import { timelineWords } from '@/lib/filter/timeline';
 import { hierarchyWords } from '@/lib/filter/hierarchy';
 import { Button } from './button';
 
-interface CollapsableSearchBarProps<T> {
+type CollapsableSearchBarProps<T> = {
   data: T;
   setFilteredData: Dispatch<SetStateAction<T>>;
-  type: visualizationTypesEnum;
+  type: VisualizationTypes.VisualizationTypesEnum;
 }
 
 const CollapsableSearchBar = <
@@ -49,34 +49,34 @@ const CollapsableSearchBar = <
     e.preventDefault();
     let words: string[] = [];
     switch (type) {
-      case visualizationTypesEnum.LINE_CHART:
-      case visualizationTypesEnum.BAR_CHART:
+      case VisualizationTypes.VisualizationTypesEnum.LINE_CHART:
+      case VisualizationTypes.VisualizationTypesEnum.BAR_CHART:
         words = axisWords;
         break;
-      case visualizationTypesEnum.CALENDAR:
+      case VisualizationTypes.VisualizationTypesEnum.CALENDAR:
         words = calendarWords;
         break;
-      case visualizationTypesEnum.FORCE_DIRECTED_GRAPH:
-      case visualizationTypesEnum.MATRIX:
-      case visualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
-      case visualizationTypesEnum.SANKEY:
+      case VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH:
+      case VisualizationTypes.VisualizationTypesEnum.MATRIX:
+      case VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
+      case VisualizationTypes.VisualizationTypesEnum.SANKEY:
         words = nodeLinksWords;
         break;
-      case visualizationTypesEnum.FUNNEL:
-      case visualizationTypesEnum.PIE_CHART:
+      case VisualizationTypes.VisualizationTypesEnum.FUNNEL:
+      case VisualizationTypes.VisualizationTypesEnum.PIE_CHART:
         words = funnelPieWords;
         break;
-      case visualizationTypesEnum.WORD_CLOUD:
+      case VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD:
         words = wordCloudWords;
         break;
-      case visualizationTypesEnum.SCATTER:
+      case VisualizationTypes.VisualizationTypesEnum.SCATTER:
         words = scatterWords;
         break;
-      case visualizationTypesEnum.TIMELINE:
+      case VisualizationTypes.VisualizationTypesEnum.TIMELINE:
         words = timelineWords;
         break;
-      case visualizationTypesEnum.TREEMAP:
-      case visualizationTypesEnum.SUNBURST:
+      case VisualizationTypes.VisualizationTypesEnum.TREEMAP:
+      case VisualizationTypes.VisualizationTypesEnum.SUNBURST:
         words = hierarchyWords;
         break;
       default:

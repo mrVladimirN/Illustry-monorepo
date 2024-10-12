@@ -2,7 +2,6 @@
 
 import * as DialogPrimitive from '@radix-ui/react-dialog';
 import { X } from 'lucide-react';
-
 import {
   ComponentPropsWithoutRef,
   ElementRef,
@@ -11,7 +10,7 @@ import {
 } from 'react';
 import { cn } from '@/lib/utils';
 
-export interface DialogPosition {
+type DialogPosition = {
   position?: 'default' | 'top'
 }
 
@@ -145,3 +144,4 @@ export {
   DialogTitle,
   DialogDescription
 };
+export type { DialogPosition };

@@ -5,15 +5,15 @@ import { usePathname } from 'next/navigation';
 import {
   Dispatch, ReactNode, SetStateAction, useState
 } from 'react';
-import { siteConfig } from '@/config/site';
+import siteConfig from '@/config/site';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Icons } from '@/components/icons';
+import Icons from '@/components/icons';
 import ThemeToggle from './theme-toggle';
 
-interface NavItem {
+type NavItem = {
   title: string;
   href?: string;
   disabled?: boolean;
@@ -23,19 +23,19 @@ interface NavItem {
   description?: string;
 }
 
-interface NavItemWithChildren extends NavItem {
+type NavItemWithChildren = {
   items: NavItemWithChildren[];
-}
+} & NavItem
 
-interface NavItemWithOptionalChildren extends NavItem {
+type NavItemWithOptionalChildren = {
   items?: NavItemWithChildren[];
-}
+} & NavItem
 type MainNavItem = NavItemWithOptionalChildren;
-interface MobileNavProps {
+type MobileNavProps = {
   items?: MainNavItem[];
 }
 
-interface MobileLinkProps {
+type MobileLinkProps = {
   children?: ReactNode;
   href: string;
   disabled?: boolean;
@@ -43,14 +43,13 @@ interface MobileLinkProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-function MobileLink({
+const MobileLink = ({
   children,
   href,
   disabled,
   pathname,
   setIsOpen
-}: MobileLinkProps) {
-  return (
+}: MobileLinkProps) => (
     <Link
       href={href}
       className={cn(
@@ -63,9 +62,8 @@ function MobileLink({
     >
       {children}
     </Link>
-  );
-}
-function MobileNav({ items }: MobileNavProps) {
+);
+const MobileNav = ({ items }: MobileNavProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   return (
@@ -112,6 +110,6 @@ function MobileNav({ items }: MobileNavProps) {
       </SheetContent>
     </Sheet>
   );
-}
+};
 
 export default MobileNav;

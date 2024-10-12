@@ -2,13 +2,13 @@
 /* eslint-disable no-unused-vars */
 import { Dispatch, RefObject, SetStateAction } from 'react';
 import { useThemeColors } from '@/components/theme-provider';
-import { Icons } from '@/components/icons';
+import Icons from '@/components/icons';
 import ColorPicker from '../colorPicker';
 import {
   Tabs, TabsContent, TabsList, TabsTrigger
 } from '../tabs';
 
-interface GenericThemesProps {
+type GenericThemesProps = {
   activeColorPickerIndex: number | null;
   handleColorChange: (
     newColor: string,

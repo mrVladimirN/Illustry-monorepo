@@ -16,10 +16,11 @@ import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface CalendarGraphProp extends WithLegend, WithOptions {
+type CalendarGraphProp = {
   categories: string[];
   calendar: VisualizationTypes.CalendarType[];
-}
+} & WithLegend
+  & WithOptions
 const CalendarGraphView = ({ categories, calendar, legend }: CalendarGraphProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';

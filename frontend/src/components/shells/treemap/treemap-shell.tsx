@@ -4,12 +4,16 @@ import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import { computeCategories } from '@/lib/visualizations/hierarchy-charts/helper';
 import FilteredTreemapShellView from './filter-treemap-shell';
 
-interface TreeMapShellProp extends WithLegend, WithOptions, WithFilter {
+type TreeMapShellProp = {
   data: VisualizationTypes.HierarchyData;
-}
+} & WithLegend
+  & WithOptions
+  & WithFilter
+
 const TreeMapView = dynamic(() => import('@/components/views/treemap-chart'), {
   ssr: false
 });
+
 const TreeMapShellView = ({
   data,
   legend,
@@ -40,4 +44,5 @@ const TreeMapShellView = ({
     </>
   );
 };
+
 export default TreeMapShellView;

@@ -61,9 +61,9 @@ import {
   type LucideProps
 } from 'lucide-react';
 
-export type Icon = LucideIcon;
+type Icon = LucideIcon;
 
-export const Icons = {
+const Icons = {
   sun: SunMedium,
   moon: Moon,
   star: Star,
@@ -285,3 +285,6 @@ export const Icons = {
     </svg>
   )
 };
+
+export type { Icon };
+export default Icons;

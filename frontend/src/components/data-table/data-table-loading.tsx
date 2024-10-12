@@ -8,19 +8,19 @@ import {
   TableRow
 } from '@/components/ui/table';
 
-interface DataTableLoadingProps {
+type DataTableLoadingProps = {
   columnCount: number;
   rowCount?: number;
   isNewRowCreatable?: boolean;
   isRowsDeletable?: boolean;
 }
 
-function DataTableLoading({
+const DataTableLoading = ({
   columnCount,
   rowCount = 10,
   isNewRowCreatable = false,
   isRowsDeletable = false
-}: DataTableLoadingProps) {
+}: DataTableLoadingProps) => {
   const handleDeleteSkeleton = (
     rowsDeletable: boolean,
     newRowCreatable: boolean
@@ -92,6 +92,6 @@ function DataTableLoading({
       </div>
     </div>
   );
-}
+};
 
 export default DataTableLoading;

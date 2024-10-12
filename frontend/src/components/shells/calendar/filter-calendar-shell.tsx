@@ -4,13 +4,14 @@ import { VisualizationTypes } from '@illustry/types';
 import { Dispatch, SetStateAction, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
-import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
-interface FilteredCalendarShellProp extends WithLegend, WithOptions {
+type FilteredCalendarShellProp = {
   categories: string[];
   calendar: VisualizationTypes.CalendarType[];
-}
+} & WithLegend
+  & WithOptions
+
 const CalendarView = dynamic(
   () => import('@/components/views/calendar-graph'),
   {
@@ -30,7 +31,6 @@ const FilteredCalendarShellView = ({
     categories,
     calendar
   });
-
   return (
     <>
       <CollapsableSearchBar
@@ -46,7 +46,7 @@ const FilteredCalendarShellView = ({
             }>
           >
         }
-        type={visualizationTypesEnum.CALENDAR}
+        type={VisualizationTypes.VisualizationTypesEnum.CALENDAR}
       />
       <CalendarView
         options={options}
@@ -57,4 +57,5 @@ const FilteredCalendarShellView = ({
     </>
   );
 };
+
 export default FilteredCalendarShellView;

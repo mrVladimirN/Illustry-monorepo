@@ -21,11 +21,12 @@ import {
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { useThemeColors } from '../theme-provider';
 
-interface HierarchicalEdgeBundlingGraphProp extends WithLegend, WithOptions {
+type HierarchicalEdgeBundlingGraphProp = {
   nodes: VisualizationTypes.Node[],
   links: VisualizationTypes.Link[],
   containered?: boolean
-}
+} & WithLegend
+  & WithOptions
 
 const createHedge = (
   nodes: VisualizationTypes.Node[],
@@ -68,10 +69,10 @@ const createHedge = (
       node,
       link,
       tooltip,
-        colorin as string,
-        colorout as string,
-        c[3] as string,
-        c[4] as string
+      colorin as string,
+      colorout as string,
+      c[3] as string,
+      c[4] as string
     ))
     .on('mouseout', () => {
       onNodeOrLinkMouseOut(link, node, tooltip, c[2] as string);
@@ -84,9 +85,9 @@ const createHedge = (
       node,
       link,
       tooltip,
-        colorin as string,
-        colorout as string,
-        c[2] as string
+      colorin as string,
+      colorout as string,
+      c[2] as string
     ))
     .on('mousemove', () => onMouseMove(tooltip))
     .on('mouseout', () => {
@@ -120,7 +121,6 @@ const HierarchicalEdgeBundlingGraphView = ({
       select('#hedgeBundleSvg').remove();
       select('.my-tooltip').remove();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [nodes, links, JSON.stringify(colors)]);
 
   return (

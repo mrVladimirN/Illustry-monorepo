@@ -3,12 +3,12 @@ import { VisualizationTypes } from '@illustry/types';
 import { findOneVisualization } from '@/app/_actions/visualization';
 import HubShell from '@/components/shells/hub-shell';
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: 'Visualizations',
   description: 'Manage your Visualizations'
 };
 
-interface VisualizationsProps {
+type VisualizationsProps = {
   searchParams: {
     [key: string]: string | string[] | undefined;
   };
@@ -28,3 +28,4 @@ const Hub = async ({ searchParams }: VisualizationsProps) => {
 };
 
 export default Hub;
+export { metadata };

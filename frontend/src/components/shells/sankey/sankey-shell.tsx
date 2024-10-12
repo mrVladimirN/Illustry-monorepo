@@ -6,13 +6,17 @@ import {
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import FilteredSankeyGraphShellView from './filter-sankey-shell';
 
-interface SankeyGraphShellProp extends WithLegend, WithOptions, WithFilter {
+type SankeyGraphShellProp = {
   data: VisualizationTypes.NodeLinkData;
-}
+} & WithLegend
+  & WithOptions
+  & WithFilter
+
 const SankeyGraphView = dynamic(
   () => import('@/components/views/sankey-diagram'),
   { ssr: false }
 );
+
 const SankeyGraphShellView = ({
   data,
   legend,
@@ -21,7 +25,6 @@ const SankeyGraphShellView = ({
 }: SankeyGraphShellProp) => {
   const { nodes, links } = data;
   const newLinks = computeLinksSankey(links);
-
   return (
     <>
       {filter ? (
@@ -44,4 +47,5 @@ const SankeyGraphShellView = ({
     </>
   );
 };
+
 export default SankeyGraphShellView;

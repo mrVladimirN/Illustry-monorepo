@@ -1,7 +1,6 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable no-unused-expressions */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-sequences */
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -17,11 +16,12 @@ import {
 } from 'd3';
 
 // Sankey transformers
-export const computeCategoriesSankey = (nodes: VisualizationTypes.Node[]) => [
+const computeCategoriesSankey = (nodes: VisualizationTypes.Node[]) => [
   ...new Set(
     nodes.map((node) => node.category)
   )
 ];
+
 const computePropertiesForToolTip = (
   properties: Record<string, unknown>,
   value?: number | string
@@ -51,7 +51,8 @@ const computePropertiesForToolTip = (
 
   return prop;
 };
-export const computeNodesSankey = (
+
+const computeNodesSankey = (
   nodes: VisualizationTypes.Node[],
   categories: string[],
   colors: string[]
@@ -70,7 +71,7 @@ export const computeNodesSankey = (
   }));
 };
 
-export const computeLinksSankey = (links: VisualizationTypes.Link[]): VisualizationTypes.Link[] => links.map((link) => ({
+const computeLinksSankey = (links: VisualizationTypes.Link[]): VisualizationTypes.Link[] => links.map((link) => ({
   source: link.source,
   target: link.target,
   value: link.value,
@@ -79,13 +80,13 @@ export const computeLinksSankey = (links: VisualizationTypes.Link[]): Visualizat
 
 // FLG transformers
 
-export const computeCategoriesFLG = (nodes: VisualizationTypes.Node[], colors: string[]) => [
+const computeCategoriesFLG = (nodes: VisualizationTypes.Node[], colors: string[]) => [
   ...new Set(
     nodes.map((node) => node.category)
   )
 ].map((node, index) => ({ name: node, itemStyle: { color: colors[index] } }));
 
-export const computeNodesFLG = (
+const computeNodesFLG = (
   nodes: VisualizationTypes.Node[],
   categories: {
     name: string;
@@ -101,7 +102,7 @@ export const computeNodesFLG = (
   };
 });
 
-export const computeLinksFLG = (links: VisualizationTypes.Link[], nodes: VisualizationTypes.Node[]) => links.map((link) => {
+const computeLinksFLG = (links: VisualizationTypes.Link[], nodes: VisualizationTypes.Node[]) => links.map((link) => {
   const source = nodes.findIndex((node) => node.name === link.source);
   const target = nodes.findIndex((node) => node.name === link.target);
   return {
@@ -112,7 +113,7 @@ export const computeLinksFLG = (links: VisualizationTypes.Link[], nodes: Visuali
   };
 });
 
-export const assignToComponents = (
+const assignToComponents = (
   d: { category: string; name: string },
   map: any
 ) => {
@@ -144,7 +145,7 @@ export const assignToComponents = (
   return n;
 };
 
-export const packageHierarchy = (nodes: VisualizationTypes.Node[]) => {
+const packageHierarchy = (nodes: VisualizationTypes.Node[]) => {
   const map: any = {};
   map['@root'] = {
     name: '@root',
@@ -159,7 +160,7 @@ export const packageHierarchy = (nodes: VisualizationTypes.Node[]) => {
   return hierarchy(map['@root']);
 };
 
-function createLinks(nodes: HierarchyNode<any>[], links: VisualizationTypes.Link[]) {
+const createLinks = (nodes: HierarchyNode<any>[], links: VisualizationTypes.Link[]) => {
   const map: any = {};
   const imports: any[] = [];
 
@@ -185,9 +186,9 @@ function createLinks(nodes: HierarchyNode<any>[], links: VisualizationTypes.Link
   });
 
   return imports;
-}
+};
 
-export const createHebLinks = (
+const createHebLinks = (
   link: any,
   root: HierarchyNode<any>,
   links: VisualizationTypes.Link[],
@@ -198,14 +199,16 @@ export const createHebLinks = (
   .enter()
   .append('path')
   .each((d: any) => {
-    (d.source = d[0]), (d.target = d[d.length - 1]);
+    const [firstEl] = d;
+    (d.source = firstEl), (d.target = d[d.length - 1]);
   })
   .attr('class', 'link')
   .attr('d', line)
   .style('stroke', color)
   .style('stroke-opacity', 0.4)
   .style('fill', 'none');
-export const createHebNodes = (
+
+const createHebNodes = (
   node: any,
   root: HierarchyNode<any>,
   color: string
@@ -226,22 +229,24 @@ export const createHebNodes = (
   .style('font', ' 300 11px "Helvetica Neue", Helvetica, Arial, sans-serif')
   .text((d: { data: { key: string } }) => d.data.key);
 
-export const createToolTip = () => select('#tooltip')
+const createToolTip = () => select('#tooltip')
   .append('div')
   .attr('class', 'my-tooltip')
   .style('visibility', 'hidden')
   .style('max-width', `${500}px`)
   .style('word-wrap', 'break-word')
   .text('tooltip');
-export const onMouseMove = (tooltip: any) => {
+
+const onMouseMove = (tooltip: any) => {
   tooltip.style('opacity', 1);
   return tooltip;
 };
-export const onNodeClick = (tooltip: any) => {
+
+const onNodeClick = (tooltip: any) => {
   tooltip.style('visibility', 'hidden');
 };
 
-export const onNodeOrLinkMouseOut = (
+const onNodeOrLinkMouseOut = (
   link: any,
   node: any,
   tooltip: any,
@@ -256,7 +261,8 @@ export const onNodeOrLinkMouseOut = (
 
   tooltip.style('visibility', 'hidden');
 };
-export const onLinkMouseOver = (
+
+const onLinkMouseOver = (
   l: any,
   node: any,
   link: any,
@@ -297,7 +303,7 @@ export const onLinkMouseOver = (
   return tooltip.style('visibility', 'visible').style('opacity', 1);
 };
 
-export const onNodeMouseOver = (
+const onNodeMouseOver = (
   d: any,
   node: any,
   link: any,
@@ -376,6 +382,7 @@ border-radius: 6px; padding: 5px 0; position: absolute; z-index: 1;">${obj && Ob
   )
     .map(([k, v]) => `${k}:${v}</br>`)
     .join(' ')}</span>`;
+
 const constructMatrixStyle = (object: object) => `${object && Object.entries(object)
   .map(([k, v]) => `${k}:${v}`)
   .join(';')};width:10%;text-align:center; border: 1px solid #ddd ;`;
@@ -393,7 +400,8 @@ const constructMatrixToolTipAndStyle = (
     : 'width:10%;text-align:center; border: 1px solid #ddd ;'
   }>${tooltip?.length ? tooltip : ''}${name}</${htmlElement}>`;
 };
-export const categoryMap = (
+
+const categoryMap = (
   nodes: VisualizationTypes.Node[]
 ) => nodes.reduce((map: Record<string, VisualizationTypes.Node[]>, node) => {
   const { category } = node;
@@ -405,6 +413,7 @@ export const categoryMap = (
   }
   return map;
 }, {});
+
 const constructPropertiesMatrix = (
   htmlElement: string,
   value: string | number,
@@ -463,6 +472,7 @@ const constructPropertiesMatrix = (
   }
   return finalConstruction;
 };
+
 const createRightHeaderString = (spacesForEmptyTd: number, headers: VisualizationTypes.Node[]) => {
   let firstRow = ' <tr id="header" ><th> </th>';
   for (let i = 0; i < spacesForEmptyTd; i += 1) {
@@ -479,6 +489,7 @@ const createRightHeaderString = (spacesForEmptyTd: number, headers: Visualizatio
   firstRow += '</tr> ';
   return firstRow;
 };
+
 const populateRightPropertiesString = (group2: VisualizationTypes.Node[], label: string) => {
   let finalProduct = '';
   group2.forEach((g2: VisualizationTypes.Node) => {
@@ -503,11 +514,9 @@ const populateRightPropertiesString = (group2: VisualizationTypes.Node[], label:
   return finalProduct;
 };
 
-function getTextContent(td: HTMLElement) {
-  return td.lastChild?.textContent ? td.lastChild?.textContent : '';
-}
+const getTextContent = (td: HTMLElement) => (td.lastChild?.textContent ? td.lastChild?.textContent : '');
 
-function getSwappedIndexes(arr: number[], dir: string) {
+const getSwappedIndexes = (arr: number[], dir: string) => {
   // Create an array of indices and sort it based on the values in 'arr'
   const indices = Array.from(arr.keys());
   indices.sort((a, b) => {
@@ -517,7 +526,7 @@ function getSwappedIndexes(arr: number[], dir: string) {
     return (arr[b] as number) - (arr[a] as number);
   });
   return indices;
-}
+};
 
 const sortUpperTable = (n: number, newDir: string) => {
   const table = document.getElementById('myTable') as HTMLElement;
@@ -567,7 +576,8 @@ const sortUpperTable = (n: number, newDir: string) => {
     }
   }
 };
-export const sortColumns = () => {
+
+const sortColumns = () => {
   const sortable = document.querySelectorAll('.sortableCol');
   sortable.forEach((s: any, sIndex) => {
     s.addEventListener('click', () => {
@@ -622,7 +632,8 @@ const sortLowerTable = (n: number, newDir: string) => {
     tbody?.appendChild(row);
   });
 };
-export const addStyleTooltipWithHover = () => {
+
+const addStyleTooltipWithHover = () => {
   const sortableItems = document.querySelectorAll(
     '.right-sortable-items, .left-sortable-items'
   );
@@ -645,7 +656,8 @@ export const addStyleTooltipWithHover = () => {
     }
   });
 };
-export const sortRows = () => {
+
+const sortRows = () => {
   const sortable = document.querySelectorAll('.sortableRow');
   sortable.forEach((s: any, sIndex) => {
     s.addEventListener('click', () => {
@@ -737,7 +749,7 @@ const createLeftPropertiesString = (
   let finalProduct = '';
   group1.forEach((g1) => {
     const row = '<tr class = "sortus">'
-    + `<td style = "font-weight:bold;width: 10%;text-align:center;border: 1px solid #ddd ; ">${g1.name}</td>`;
+      + `<td style = "font-weight:bold;width: 10%;text-align:center;border: 1px solid #ddd ; ">${g1.name}</td>`;
     finalProduct += row;
     labels.forEach((label) => {
       const foundLabel = g1.labels?.find(
@@ -765,7 +777,7 @@ const createLeftPropertiesString = (
   return finalProduct;
 };
 
-export const createHeadersAndPropertiesString = (
+const createHeadersAndPropertiesString = (
   group1: VisualizationTypes.Node[],
   group2: VisualizationTypes.Node[],
   links: any[]
@@ -804,4 +816,27 @@ export const createHeadersAndPropertiesString = (
     }${leftProperties
     }</tbody>`;
   return tableString;
+};
+
+export {
+  computeCategoriesSankey,
+  computeNodesSankey,
+  computeLinksSankey,
+  sortColumns,
+  sortRows,
+  addStyleTooltipWithHover,
+  createHeadersAndPropertiesString,
+  computeCategoriesFLG,
+  computeLinksFLG,
+  computeNodesFLG,
+  packageHierarchy,
+  createHebLinks,
+  createHebNodes,
+  createToolTip,
+  onLinkMouseOver,
+  onMouseMove,
+  onNodeClick,
+  onNodeMouseOver,
+  onNodeOrLinkMouseOut,
+  categoryMap
 };

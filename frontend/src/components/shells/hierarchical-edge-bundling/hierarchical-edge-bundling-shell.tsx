@@ -3,14 +3,18 @@ import { VisualizationTypes } from '@illustry/types';
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import FilteredHierarchicalEdgeBundlingGraphShellView from './filter-hierarchical-edge-bundling-shell';
 
-interface HierarchicalEdgeBundlingShellProp extends WithLegend, WithOptions, WithFilter {
+type HierarchicalEdgeBundlingShellProp = {
   data: VisualizationTypes.NodeLinkData;
   containered: boolean
-}
+} & WithLegend
+  & WithOptions
+  & WithFilter
+
 const HierarchicalEdgeBundlingGraphView = dynamic(
   () => import('@/components/views/hierarchical-edge-bundling'),
   { ssr: false }
 );
+
 const HierarchicalEdgeBundlingShellView = ({
   data,
   legend,
@@ -42,4 +46,5 @@ const HierarchicalEdgeBundlingShellView = ({
     </>
   );
 };
+
 export default HierarchicalEdgeBundlingShellView;

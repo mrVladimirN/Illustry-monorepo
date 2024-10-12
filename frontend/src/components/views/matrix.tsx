@@ -13,10 +13,11 @@ import {
 import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { useThemeColors } from '@/components/theme-provider';
 
-interface MatrixProp extends WithLegend, WithOptions {
+type MatrixProp = {
   nodes: VisualizationTypes.Node[];
   links: VisualizationTypes.Link[];
-}
+} & WithLegend
+  & WithOptions
 const createMatrix = (nodes: VisualizationTypes.Node[], links: VisualizationTypes.Link[]) => {
   const categories = categoryMap(nodes);
   const categoriesKeys: string[] = Object.keys(categories);

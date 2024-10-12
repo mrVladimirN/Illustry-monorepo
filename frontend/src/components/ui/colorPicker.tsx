@@ -1,6 +1,6 @@
 import { HexColorPicker } from 'react-colorful';
 
-interface ColorPickerProps {
+type ColorPickerProps = {
   initialColor: string;
   // eslint-disable-next-line no-unused-vars
   changeColor: ((newColor: string) => void) | undefined;

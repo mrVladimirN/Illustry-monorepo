@@ -1,8 +1,7 @@
 import { VisualizationTypes } from '@illustry/types';
-// eslint-disable-next-line import/no-cycle
 import { evaluateCondition } from './generic';
 
-export const wordCloudWords = ['values'];
+const wordCloudWords = ['values'];
 
 const applyValuesFilter = (
   valuesFilter: string,
@@ -36,8 +35,7 @@ const applyValuesFilter = (
   }
 };
 
-// eslint-disable-next-line max-len
-export const applyWordCloudFilter = (expressions: string[], defaultData: VisualizationTypes.WordType[]) => {
+const applyWordCloudFilter = (expressions: string[], defaultData: VisualizationTypes.WordType[]) => {
   let newData: VisualizationTypes.WordType[] = [];
   let valuesFilter: string = '';
   expressions.forEach((expression, index) => {
@@ -58,3 +56,5 @@ export const applyWordCloudFilter = (expressions: string[], defaultData: Visuali
   }
   return newData;
 };
+
+export { wordCloudWords, applyWordCloudFilter };

@@ -3,12 +3,16 @@ import { VisualizationTypes } from '@illustry/types';
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import FilteredTimelineShellView from './filter-timeline-shell';
 
-interface TimelineShellProp extends WithLegend, WithOptions, WithFilter {
+type TimelineShellProp = {
   data: VisualizationTypes.TimelineData;
-}
+} & WithLegend
+  & WithOptions
+  & WithFilter
+
 const TimelineGraphView = dynamic(() => import('@/components/views/timeline'), {
   ssr: false
 });
+
 const TimelineShellView = ({
   data,
   legend,
@@ -29,4 +33,5 @@ const TimelineShellView = ({
     )}
   </>
 );
+
 export default TimelineShellView;

@@ -1,14 +1,13 @@
 'use client';
 
 import { ColumnDef } from '@tanstack/react-table';
-
-import { catchError, formatDate } from '@/lib/utils';
 import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { toast } from 'sonner';
-import { deleteProject } from '@/app/_actions/project';
 import { ProjectTypes } from '@illustry/types';
 import { useMemo, useState, useTransition } from 'react';
+import { deleteProject } from '@/app/_actions/project';
+import { catchError, formatDate } from '@/lib/utils';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -22,11 +21,12 @@ import Checkbox from '../ui/checkbox';
 import DataTable from '../data-table/data-table';
 import DataTableColumnHeader from '../data-table/data-table-column-header';
 
-interface ProjectsTableShellProps {
+type ProjectsTableShellProps = {
   data?: ProjectTypes.ProjectType[];
   pageCount?: number;
 }
-function ProjectsTableShell({ data, pageCount }: ProjectsTableShellProps) {
+
+const ProjectsTableShell = ({ data, pageCount }: ProjectsTableShellProps) => {
   const [isPending, startTransition] = useTransition();
   const [selectedRowNames, setSelectedRowNames] = useState<string[]>([]);
   const columns = useMemo<ColumnDef<ProjectTypes.ProjectType, unknown>[]>(
@@ -69,7 +69,6 @@ function ProjectsTableShell({ data, pageCount }: ProjectsTableShellProps) {
           <DataTableColumnHeader column={column} title="Name" />
         )
       },
-
       {
         accessorKey: 'description',
         header: ({ column }) => (
@@ -117,9 +116,7 @@ function ProjectsTableShell({ data, pageCount }: ProjectsTableShellProps) {
               <DropdownMenuItem asChild>
                 <Link href={`/projects/${row.original.name}`}>Edit</Link>
               </DropdownMenuItem>
-
               <DropdownMenuSeparator />
-
               <DropdownMenuItem
                 onClick={() => {
                   startTransition(() => {
@@ -144,7 +141,8 @@ function ProjectsTableShell({ data, pageCount }: ProjectsTableShellProps) {
     ],
     [data, isPending]
   );
-  function deleteSelectedRows() {
+
+  const deleteSelectedRows = () => {
     toast.promise(
       Promise.all(selectedRowNames.map((name) => deleteProject(name))),
       {
@@ -159,7 +157,8 @@ function ProjectsTableShell({ data, pageCount }: ProjectsTableShellProps) {
         }
       }
     );
-  }
+  };
+
   return (
     <DataTable
       columns={columns}
@@ -170,6 +169,6 @@ function ProjectsTableShell({ data, pageCount }: ProjectsTableShellProps) {
       deleteRowsAction={deleteSelectedRows}
     />
   );
-}
+};
 
 export default ProjectsTableShell;

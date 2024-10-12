@@ -10,10 +10,11 @@ import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface ScatterProp extends WithLegend, WithOptions {
+type ScatterProp = {
   points: (string | number)[][];
   categories: string[];
-}
+} & WithLegend
+  & WithOptions
 const ScatterView = ({ points, categories, legend }: ScatterProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';

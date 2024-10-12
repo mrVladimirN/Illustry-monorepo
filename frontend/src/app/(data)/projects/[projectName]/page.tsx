@@ -2,20 +2,20 @@ import type { Metadata } from 'next';
 import UpdateProjectForm from '@/components/form/update-project-form';
 import { findOneProject } from '@/app/_actions/project';
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: 'Update Project',
   description: 'Update a product'
 };
 
-interface UpdateProjectPageProps {
+type UpdateProjectPageProps = {
   params: {
     projectName: string;
   };
 }
 
-export default async function UpdateProjectPage({
+const UpdateProjectPage = async ({
   params
-}: UpdateProjectPageProps) {
+}: UpdateProjectPageProps) => {
   const currentProject = params && params.projectName
     ? await findOneProject(params.projectName)
     : undefined;
@@ -26,4 +26,7 @@ export default async function UpdateProjectPage({
       </div>
     </div>
   );
-}
+};
+
+export default UpdateProjectPage;
+export { metadata };

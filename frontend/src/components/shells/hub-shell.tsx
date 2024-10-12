@@ -15,11 +15,11 @@ import TimelineShellView from './timeline/timeline-shell';
 import MatrixShellView from './matrix/matrix-shell';
 import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/hierarchical-edge-bundling-shell';
 
-interface HubShellProps {
+type HubShellProps = {
   data?: VisualizationTypes.VisualizationType;
 }
 
-function HubShell({ data }: HubShellProps) {
+const HubShell = ({ data }: HubShellProps) => {
   const renderGraph = () => {
     if (data) {
       switch (data.type) {
@@ -188,6 +188,6 @@ function HubShell({ data }: HubShellProps) {
   };
 
   return <div>{renderGraph()}</div>;
-}
+};
 
 export default HubShell;

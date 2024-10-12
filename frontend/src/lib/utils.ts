@@ -3,15 +3,12 @@ import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 import * as z from 'zod';
 
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
+const cn = (...inputs: ClassValue[]) => twMerge(clsx(inputs));
 
-export function formatDate(date: Date | string) {
-  return `${new Date(date).getUTCFullYear()}/${new Date(date).getUTCMonth() + 1}/${new Date(date).getUTCDate()}`;
-}
+// eslint-disable-next-line max-len
+const formatDate = (date: Date | string) => `${new Date(date).getUTCFullYear()}/${new Date(date).getUTCMonth() + 1}/${new Date(date).getUTCDate()}`;
 
-export function catchError(err: unknown) {
+const catchError = (err: unknown) => {
   if (err instanceof z.ZodError) {
     const errors = err.issues.map((issue) => issue.message);
     return toast.error(errors.join('\n'));
@@ -19,7 +16,13 @@ export function catchError(err: unknown) {
     return toast.error(err.message);
   }
   return toast.error('Something went wrong, please try again later.');
-}
-export function cloneDeep<T>(source: T): T {
-  return JSON.parse(JSON.stringify(source));
-}
+};
+
+const cloneDeep = <T, >(source: T): T => JSON.parse(JSON.stringify(source));
+
+export {
+  cn,
+  formatDate,
+  catchError,
+  cloneDeep
+};

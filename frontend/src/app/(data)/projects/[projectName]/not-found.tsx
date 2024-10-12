@@ -1,8 +1,7 @@
 import { Shell } from '@/components/shells/shell';
 import ErrorCard from '@/components/ui/error-card';
 
-export default function ProductNotFound() {
-  return (
+const ProjecttNotFound = () => (
     <Shell variant="centered">
       <ErrorCard
         title="Project not found"
@@ -11,5 +10,6 @@ export default function ProductNotFound() {
         retryLinkText="Go to Products"
       />
     </Shell>
-  );
-}
+);
+
+export default ProjecttNotFound;

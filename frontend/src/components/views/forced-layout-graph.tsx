@@ -15,10 +15,11 @@ import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface ForcedLayoutGraphProp extends WithLegend, WithOptions {
+type ForcedLayoutGraphProp = {
   nodes: VisualizationTypes.Node[];
   links: VisualizationTypes.Link[];
-}
+} & WithLegend
+  & WithOptions
 const ForcedLayoutGraphView = ({
   nodes,
   links,

@@ -3,12 +3,16 @@ import { VisualizationTypes } from '@illustry/types';
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import FilteredMatrixShellView from './filter-matrix-shell';
 
-interface MatrixShellProp extends WithLegend, WithOptions, WithFilter {
+type MatrixShellProp = {
   data: VisualizationTypes.NodeLinkData;
-}
+} & WithLegend
+  & WithOptions
+  & WithFilter
+
 const MatrixGraphView = dynamic(() => import('@/components/views/matrix'), {
   ssr: false
 });
+
 const MatrixShellView = ({
   data, legend, options, filter
 }: MatrixShellProp) => {
@@ -35,4 +39,5 @@ const MatrixShellView = ({
     </>
   );
 };
+
 export default MatrixShellView;

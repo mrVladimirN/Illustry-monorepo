@@ -5,7 +5,6 @@ import {
   DoubleArrowRightIcon
 } from '@radix-ui/react-icons';
 import { type Table } from '@tanstack/react-table';
-
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -15,16 +14,15 @@ import {
   SelectValue
 } from '@/components/ui/select';
 
-interface DataTablePaginationProps<TData> {
+type DataTablePaginationProps<TData> = {
   table: Table<TData>;
   pageSizeOptions?: number[];
 }
 
-function DataTablePagination<TData>({
+const DataTablePagination = <TData, >({
   table,
   pageSizeOptions = [10, 20, 30, 40, 50]
-}: DataTablePaginationProps<TData>) {
-  return (
+}: DataTablePaginationProps<TData>) => (
     <div className="flex w-full flex-col items-center justify-between gap-4 overflow-auto px-2 py-1 sm:flex-row sm:gap-8">
       <div className="flex-1 whitespace-nowrap text-sm text-muted-foreground">
         {table.getFilteredSelectedRowModel().rows.length} of{' '}
@@ -104,6 +102,5 @@ function DataTablePagination<TData>({
       </div>
     </div>
   );
-}
 
 export default DataTablePagination;

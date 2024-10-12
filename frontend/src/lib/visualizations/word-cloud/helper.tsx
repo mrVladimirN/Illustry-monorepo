@@ -1,6 +1,6 @@
 import { VisualizationTypes } from '@illustry/types';
 
-export const computePropertiesForToolTip = (
+const computePropertiesForToolTip = (
   properties: Record<string, unknown>,
   value?: number | string
 ) => {
@@ -61,7 +61,8 @@ const computeColor = (nr: number, meanValue: number, colors: string[]) => {
   }
   return '';
 };
-export const computeWords = (words: VisualizationTypes.WordType[], colors: string[]) => {
+
+const computeWords = (words: VisualizationTypes.WordType[], colors: string[]) => {
   const values = words.map((word) => word.value);
   const meanValue = calculateMeanValue(values);
 
@@ -72,4 +73,9 @@ export const computeWords = (words: VisualizationTypes.WordType[], colors: strin
       color: computeColor(word.value, meanValue, colors)
     }
   }));
+};
+
+export {
+  computePropertiesForToolTip,
+  computeWords
 };

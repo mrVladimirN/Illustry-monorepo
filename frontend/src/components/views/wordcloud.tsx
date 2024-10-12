@@ -15,9 +15,10 @@ import { WithLegend, WithOptions } from '@/lib/types/utils';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface WordCloudProp extends WithLegend, WithOptions {
+type WordCloudProp = {
   words: VisualizationTypes.WordType[];
-}
+} & WithLegend
+  & WithOptions
 const WordCloudView = ({ words }: WordCloudProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';

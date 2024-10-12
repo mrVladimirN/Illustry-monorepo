@@ -4,19 +4,21 @@ import { VisualizationTypes } from '@illustry/types';
 import { Dispatch, SetStateAction, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
-import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
-interface FilteredMatrixShellProp extends WithLegend, WithOptions {
+type FilteredMatrixShellProp = {
   nodes: VisualizationTypes.Node[];
   links: VisualizationTypes.Link[];
-}
+} & WithLegend
+  & WithOptions
+
 const MatrixView = dynamic(
   () => import('@/components/views/matrix'),
   {
     ssr: false
   }
 );
+
 const FilteredMatrixShellView = ({
   nodes,
   links,
@@ -30,7 +32,6 @@ const FilteredMatrixShellView = ({
     nodes,
     links
   });
-
   return (
     <>
       <CollapsableSearchBar
@@ -46,7 +47,7 @@ const FilteredMatrixShellView = ({
             }>
           >
         }
-        type={visualizationTypesEnum.MATRIX}
+        type={VisualizationTypes.VisualizationTypesEnum.MATRIX}
       />
       <MatrixView
         options={options}
@@ -57,4 +58,5 @@ const FilteredMatrixShellView = ({
     </>
   );
 };
+
 export default FilteredMatrixShellView;

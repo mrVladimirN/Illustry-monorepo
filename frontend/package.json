@@ -55,8 +55,7 @@
     "tailwind-merge": "2.0.0",
     "tailwindcss-animate": "1.0.7",
     "uuid": "9.0.1",
-    "zod": "3.22.4",
-    "zod-error": "1.5.0"
+    "zod": "3.22.4"
   },
   "devDependencies": {
     "@tailwindcss/typography": "0.5.10",
@@ -68,7 +67,7 @@
     "@types/react-vertical-timeline-component": "3.3.6",
     "@types/uuid": "9.0.7",
     "@typescript-eslint/eslint-plugin": "6.21.0",
-    "@illustry/types": "0.1.3",
+    "@illustry/types": "0.1.9",
     "eslint": "8.57.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-plugin-import": "2.29.0",

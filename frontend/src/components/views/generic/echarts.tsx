@@ -1,9 +1,7 @@
 'use client';
 
 import { useRef, useEffect, JSX } from 'react';
-
 import 'echarts-wordcloud';
-// Import the echarts core module, which provides the necessary interfaces for using echarts.
 import * as echarts from 'echarts/core';
 import {
   SankeyChart,
@@ -17,7 +15,6 @@ import {
   SunburstChart,
   FunnelChart
 } from 'echarts/charts';
-// Import the tooltip, title, rectangular coordinate system, dataset and transform components
 import {
   TooltipComponent,
   GridComponent,
@@ -28,16 +25,14 @@ import {
   CalendarComponent,
   ToolboxComponent
 } from 'echarts/components';
-
 import { SVGRenderer } from 'echarts/renderers';
-
 import {
   EChartsOption,
   SetOptionOpts,
   WordCloudSeriesOption
 } from 'echarts';
 
-export interface ReactEChartsProps<T> {
+type ReactEChartsProps<T> = {
   option: T;
   className?: string;
   settings?: SetOptionOpts;
@@ -85,14 +80,12 @@ const ReactEcharts = <T extends EChartsOption | WordCloudSeriesOption>({
       chart = echarts.init(chartRef.current, theme);
     }
 
-    // Add chart resize listener
-    // ResizeObserver is leading to a bit janky UX
-    function resizeChart() {
+    const resizeChart = () => {
       chart?.resize();
-    }
+    };
+
     window.addEventListener('resize', resizeChart);
 
-    // Return cleanup function
     return () => {
       chart?.dispose();
       window.removeEventListener('resize', resizeChart);

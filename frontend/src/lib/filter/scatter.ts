@@ -1,7 +1,6 @@
-// eslint-disable-next-line import/no-cycle
 import { evaluateCondition } from './generic';
 
-export const scatterWords = [
+const scatterWords = [
   'categories',
   'xCoord',
   'yCoord'
@@ -16,7 +15,7 @@ const applyCategoriesFilter = (categoriesFilter: string, defaultData: {
 
   try {
     if (categoriesFilter === '') {
-      throw Error('No CategoriesFilter');
+      throw Error('No Categories Filter');
     }
     const matches = categoriesFilter.match(/categories\s*([!=]+)\s*\[([^\]]+)\]/g);
 
@@ -93,7 +92,7 @@ const applyPointsFilter = (
   }
 };
 
-export const applyScatterFilter = (
+const applyScatterFilter = (
   expressions: string[],
   defaultData: {
     points: (string | number)[][];
@@ -144,3 +143,5 @@ export const applyScatterFilter = (
   }
   return newData;
 };
+
+export { scatterWords, applyScatterFilter };

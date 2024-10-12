@@ -7,12 +7,16 @@ import {
 } from '@/lib/visualizations/scatter/helper';
 import FilteredScatterGraphShellView from './filter-scatter-shell';
 
-interface ScatterShellProp extends WithLegend, WithOptions, WithFilter {
+type ScatterShellProp = {
   data: VisualizationTypes.ScatterData;
-}
+} & WithLegend
+  & WithOptions
+  & WithFilter
+
 const ScatterGraphView = dynamic(() => import('@/components/views/scatter'), {
   ssr: false
 });
+
 const ScatterShellView = ({
   data,
   legend,
@@ -44,4 +48,5 @@ const ScatterShellView = ({
     </>
   );
 };
+
 export default ScatterShellView;

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
-import { siteConfig } from '@/config/site';
+import siteConfig from '@/config/site';
 import { cn } from '@/lib/utils';
 import {
   NavigationMenu,
@@ -12,10 +12,10 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle
 } from '@/components/ui/navigation-menu';
-import { Icons } from '@/components/icons';
+import Icons from '@/components/icons';
 import ThemeToggle from './theme-toggle';
 
-interface NavItem {
+type NavItem = {
   title: string;
   href?: string;
   disabled?: boolean;
@@ -25,20 +25,19 @@ interface NavItem {
   description?: string;
 }
 
-interface NavItemWithChildren extends NavItem {
+type NavItemWithChildren = {
   items: NavItemWithChildren[];
-}
+} & NavItem
 
-interface NavItemWithOptionalChildren extends NavItem {
+type NavItemWithOptionalChildren = {
   items?: NavItemWithChildren[];
-}
+} & NavItem
 type MainNavItem = NavItemWithOptionalChildren;
-interface MainNavProps {
+type MainNavProps = {
   items?: MainNavItem[];
 }
 
-function MainNav({ items }: MainNavProps) {
-  return (
+const MainNav = ({ items }: MainNavProps) => (
     <div className="hidden gap-6 lg:flex">
       <Link
         aria-label="Home"
@@ -82,8 +81,7 @@ function MainNav({ items }: MainNavProps) {
         <ThemeToggle />
       </div>
     </div>
-  );
-}
+);
 
 const ListItem = forwardRef<
   ElementRef<'a'>,
@@ -111,6 +109,7 @@ const ListItem = forwardRef<
     </NavigationMenuLink>
   </li>
 ));
+
 ListItem.displayName = 'ListItem';
 
 export default MainNav;

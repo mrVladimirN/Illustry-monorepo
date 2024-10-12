@@ -14,10 +14,11 @@ import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface SankeyGraphProp extends WithLegend, WithOptions {
-links: VisualizationTypes.Link[],
-nodes: VisualizationTypes.Node[],
-}
+type SankeyGraphProp = {
+  links: VisualizationTypes.Link[],
+  nodes: VisualizationTypes.Node[],
+} & WithLegend
+  & WithOptions
 const SankeyGraphView = ({
   links,
   nodes,

@@ -8,25 +8,14 @@ import {
   useState
 } from 'react';
 import {
-  VisualizationTypes
+  VisualizationTypes,
+  ValidatorSchemas
 } from '@illustry/types';
-import { generateErrorMessage } from 'zod-error';
-import { siteConfig } from '@/config/site';
+import siteConfig from '@/config/site';
 import { catchError } from '@/lib/utils';
-import {
-  axisChartDataSchema,
-  calendarDataSchema,
-  hierarchySchema,
-  nodeLinkDataSchema,
-  pieChartFunnelDataSchema,
-  scatterDataSchema,
-  timelineDataSchema,
-  wordCloudDataSchema
-} from '@/lib/validation/visualizations';
-import prettifyZodError from '@/lib/validation/prettifyError';
 import { Button } from '../ui/button';
 import PresetSelector from '../ui/playground/preset-selector';
-import { Textarea } from '../ui/textarea';
+import Textarea from '../ui/textarea';
 import Separator from '../ui/separator';
 import Fallback from '../ui/fallback';
 import { ShowDiagramState } from './theme-shell';
@@ -44,7 +33,7 @@ import TimelineShellView from './timeline/timeline-shell';
 import MatrixShellView from './matrix/matrix-shell';
 import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/hierarchical-edge-bundling-shell';
 
-function PlaygroundShell() {
+const PlaygroundShell = () => {
   const [showDiagram, setShowDiagram] = useState<ShowDiagramState>({
     sankey: false,
     heb: false,
@@ -63,12 +52,10 @@ function PlaygroundShell() {
   });
   const [textareaValue, setTextareaValue] = useState<string>();
   const [isSubmitable, setIsSubmitable] = useState<boolean>(false);
-  const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-    setIsSubmitable(false);
-    setTimeout(() => {
-      setTextareaValue(event.target.value);
-    }, 100);
-  };
+ const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+  setTextareaValue(event.target.value);
+  setIsSubmitable(false);
+};
   const getActiveDiagramKey = (): keyof ShowDiagramState | null => {
     const activeKeys = Object.keys(showDiagram).filter(
       (key) => showDiagram[key as keyof ShowDiagramState]
@@ -85,26 +72,34 @@ function PlaygroundShell() {
       case 'flg':
       case 'sankey':
       case 'matrix':
-        return nodeLinkDataSchema.safeParse(data);
+        ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.nodeLinkDataSchema, data);
+        break;
       case 'calendar':
-        return calendarDataSchema.safeParse(data);
+        ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.calendarDataSchema, data);
+        break;
       case 'wordCloud':
-        return wordCloudDataSchema.safeParse(data);
+        ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.wordCloudDataSchema, data);
+        break;
       case 'lineChart':
       case 'barChart':
-        return axisChartDataSchema.safeParse(data);
+        ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.axisChartDataSchema, data);
+        break;
       case 'pieChart':
       case 'funnel':
-        return pieChartFunnelDataSchema.safeParse(data);
+        ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.pieChartFunnelDataSchema, data);
+        break;
       case 'scatter':
-        return scatterDataSchema.safeParse(data);
+        ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.scatterDataSchema, data);
+        break;
       case 'treemap':
       case 'sunburst':
-        return hierarchySchema.safeParse(data);
+        ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.hierarchySchema, data);
+        break;
       case 'timeline':
-        return timelineDataSchema.safeParse(data);
+        ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.timelineDataSchema, data);
+        break;
       default:
-        return null;
+        break;
     }
   };
   const handleSubmit = () => {
@@ -112,14 +107,7 @@ function PlaygroundShell() {
       const data = JSON.parse(textareaValue as string);
       setIsSubmitable(true);
       const activeKey = getActiveDiagramKey();
-      const valid = toShowDiagram(activeKey as string, data);
-      if (valid && !valid.success) {
-        const errorMessage = generateErrorMessage(
-          valid.error.issues,
-          prettifyZodError()
-        );
-        throw new Error(errorMessage);
-      }
+      toShowDiagram(activeKey as string, data);
     } catch (error) {
       setIsSubmitable(false);
       catchError(error);
@@ -279,7 +267,7 @@ function PlaygroundShell() {
           <div className="w-[50%] md:w-1/3 p-4">
             <div className="container h-[93%] py-6 bg-gray-50 rounded-3xl dark:bg-gray-800">
               <Textarea
-                defaultValue={textareaValue}
+                value={textareaValue}
                 onChange={handleTextareaChange}
                 className="w-full h-[90%] flex-1 p-4 border-gray-300 bg-gray-50 rounded-3xl
                  dark:border-gray-700 dark:bg-gray-800 md:min-h-[530px] lg:min-h-[530px]"
@@ -298,6 +286,6 @@ function PlaygroundShell() {
       </div>
     </>
   );
-}
+};
 
 export default PlaygroundShell;

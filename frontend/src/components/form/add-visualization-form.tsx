@@ -1,6 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable import/no-cycle */
-/* eslint-disable no-unused-vars */
 
 'use client';
 
@@ -8,42 +6,24 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import type { z } from 'zod';
-import { VisualizationTypes, FileTypes } from '@illustry/types';
+import { VisualizationTypes, FileTypes, ValidatorSchemas } from '@illustry/types';
 import { useState, useTransition } from 'react';
 import { ExtFile } from '@files-ui/react';
 import { catchError } from '@/lib/utils';
 import 'dotenv/config';
 import { Form } from '@/components/ui/form';
-import {
-  csvSchema,
-  excelSchema,
-  jsonSchema,
-  visualizationSchema,
-  visualizationTypesEnum
-} from '@/lib/validation/visualizations';
 import { createOrUpdateVisualization } from '@/app/_actions/visualization';
 import { Tabs, TabsList, TabsTrigger } from '../ui/tabs';
 import MappingTab from '../ui/tabs/mappingTab/mappingTab';
 import TypeTab from '../ui/tabs/typeTab/typeTab';
+import { CSVType, ExcelType, Inputs } from './types';
 
-export type Inputs = z.infer<typeof visualizationSchema>;
-export type ExcelType = z.infer<typeof excelSchema>;
-export type JSONType = z.infer<typeof jsonSchema>;
-export type CSVType = z.infer<typeof csvSchema>;
-// eslint-disable-next-line no-shadow
-export enum fileTypes {
-  JSON = 'JSON',
-  EXCEL = 'EXCEL',
-  CSV = 'CSV',
-  XML = 'XML',
-}
-export function AddVisualizationForm() {
+const AddVisualizationForm = () => {
   const router = useRouter();
   const [files, setFiles] = useState<ExtFile[]>([]);
   const [isPending, startTransition] = useTransition();
   const [selectedFileType, setSelectedFileType] = useState<string>(
-    fileTypes.JSON
+    FileTypes.FileType.JSON
   );
 
   const updateFiles = (incomingFiles: ExtFile[]) => {
@@ -55,9 +35,9 @@ export function AddVisualizationForm() {
   };
 
   const form = useForm<Inputs>({
-    resolver: zodResolver(visualizationSchema),
+    resolver: zodResolver(ValidatorSchemas.visualizationTypeSchema),
     defaultValues: {
-      fileType: fileTypes.JSON
+      fileType: FileTypes.FileType.JSON
     }
   });
 
@@ -111,7 +91,7 @@ export function AddVisualizationForm() {
       setSelectedFileType(value);
       form.reset({
         fileType: value as any,
-        type: visualizationTypesEnum.WORD_CLOUD,
+        type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
         name: '',
         tags: '',
         includeHeaders: false,
@@ -156,4 +136,6 @@ export function AddVisualizationForm() {
       </Form>
     </div>
   );
-}
+};
+
+export default AddVisualizationForm;

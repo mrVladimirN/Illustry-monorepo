@@ -4,13 +4,17 @@ import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import { computeCategoriesCalendar } from '@/lib/visualizations/calendar/helper';
 import FilteredCalendarShellView from './filter-calendar-shell';
 
-interface CalendarGraphShellProp extends WithLegend, WithOptions, WithFilter {
+type CalendarGraphShellProp = {
   data: VisualizationTypes.CalendarData;
-}
+} & WithLegend
+  & WithOptions
+  & WithFilter
+
 const CalendarGraphView = dynamic(
   () => import('@/components/views/calendar-graph'),
   { ssr: false }
 );
+
 const CalendarGraphShellView = ({
   data,
   legend,
@@ -42,4 +46,5 @@ const CalendarGraphShellView = ({
     </>
   );
 };
+
 export default CalendarGraphShellView;

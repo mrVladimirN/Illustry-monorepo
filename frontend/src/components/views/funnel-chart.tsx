@@ -11,9 +11,10 @@ import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface FunnelProp extends WithLegend, WithOptions {
+type FunnelProp = {
   data: VisualizationTypes.FunnelData;
-}
+} & WithLegend
+  & WithOptions
 const FunnelView = ({ data, legend }: FunnelProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';

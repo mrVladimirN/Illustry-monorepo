@@ -2,10 +2,12 @@ import { VisualizationTypes } from '@illustry/types';
 import dynamic from 'next/dynamic';
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 
-interface AxisChartsShellProp extends WithLegend, WithOptions, WithFilter {
+type AxisChartsShellProp = {
   data: VisualizationTypes.AxisChartData;
   type: 'line' | 'bar';
-}
+} & WithLegend
+  & WithOptions
+  & WithFilter
 
 const AxisChartsView = dynamic(() => import('@/components/views/axis-charts'), {
   ssr: false

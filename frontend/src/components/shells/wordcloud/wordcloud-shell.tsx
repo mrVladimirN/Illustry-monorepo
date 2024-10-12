@@ -3,13 +3,17 @@ import dynamic from 'next/dynamic';
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import FilteredWordCloudGraphShellView from './filter-wordcloud-shell';
 
-interface WordCloudShellProp extends WithLegend, WithOptions, WithFilter {
+type WordCloudShellProp = {
   data: VisualizationTypes.WordCloudData;
-}
+} & WithLegend
+  & WithOptions
+  & WithFilter
+
 const WordCloudGraphView = dynamic(
   () => import('@/components/views/wordcloud'),
   { ssr: false }
 );
+
 const WordCloudShellView = ({
   data, legend, options, filter
 }: WordCloudShellProp) => {
@@ -19,14 +23,14 @@ const WordCloudShellView = ({
       {filter ? (
         <FilteredWordCloudGraphShellView
           options={options}
-          words= {words}
+          words={words}
           legend={legend}
         />
       ) : (
         <>
           <WordCloudGraphView
             options={options}
-            words= {words}
+            words={words}
             legend={legend}
           />
         </>
@@ -34,4 +38,5 @@ const WordCloudShellView = ({
     </>
   );
 };
+
 export default WordCloudShellView;

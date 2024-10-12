@@ -1,11 +1,11 @@
 import { ReactNode } from 'react';
 import SiteHeader from '@/components/layouts/site-header';
 
-interface IntroLayoutProps {
+type PlaygroundLayoutProps = {
   children: ReactNode
 }
 
-export default async function IntroLayout({ children }: IntroLayoutProps) {
+const PlaygroundLayout = ({ children }: PlaygroundLayoutProps) => {
   return (
     <div className="relative flex min-h-screen flex-col" >
       <SiteHeader />
@@ -13,4 +13,6 @@ export default async function IntroLayout({ children }: IntroLayoutProps) {
       {/* <SiteFooter /> */}
     </div>
   );
-}
+};
+
+export default PlaygroundLayout;

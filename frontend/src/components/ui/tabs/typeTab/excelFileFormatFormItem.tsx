@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-
 import { ExtFile } from '@files-ui/react';
 import { UseFormReturn } from 'react-hook-form';
 import {
@@ -7,21 +6,19 @@ import {
   FormControl,
   FormItem,
   UncontrolledFormMessage
-
 } from '@/components/ui/form';
+import { Inputs } from '@/components/form/types';
 import FileUpload from '../../file-upload';
-// eslint-disable-next-line import/no-cycle
-import { Inputs } from '../../../form/add-visualization-form';
 
-interface VisualizationFileUploadProps {
-  form: UseFormReturn<Inputs>; // Include the form context
+type VisualizationFileUploadProps = {
+  form: UseFormReturn<Inputs>;
   acceptedFiles: ExtFile[];
   updateFiles: (files: ExtFile[]) => void;
   removeFile: (id: string | number | undefined) => void;
 }
 
 const ExcelFileFormatter = ({
-  form, // Include the form context
+  form,
   acceptedFiles,
   updateFiles,
   removeFile

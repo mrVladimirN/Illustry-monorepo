@@ -5,7 +5,7 @@ import { CaretSortIcon, CheckIcon } from '@radix-ui/react-icons';
 import { PopoverProps } from '@radix-ui/react-popover';
 import { cn } from '@/lib/utils';
 import { ShowDiagramState } from '@/components/shells/theme-shell';
-import { siteConfig } from '@/config/site';
+import siteConfig from '@/config/site';
 import { Popover, PopoverContent, PopoverTrigger } from '../popover';
 import { Button } from '../button';
 import {
@@ -16,26 +16,25 @@ import {
   CommandItem
 } from '../command';
 
-export interface VisualizationPresentation {
+type VisualizationPresentation = {
   id: string;
   name: string;
 }
-interface PresetSelectorProps extends PopoverProps {
+type PresetSelectorProps = {
   presets: VisualizationPresentation[];
   setShowDiagram: Dispatch<SetStateAction<ShowDiagramState>>;
   setTextareaValue: Dispatch<SetStateAction<string>>;
   setIsSubmitable: Dispatch<SetStateAction<boolean>>;
-}
+} & PopoverProps
 
-function PresetSelector({
+const PresetSelector = ({
   presets,
   setShowDiagram,
   setTextareaValue,
   setIsSubmitable,
   ...props
-}: PresetSelectorProps) {
+}: PresetSelectorProps) => {
   const [open, setOpen] = useState(false);
-  // eslint-disable-next-line max-len
   const [selectedPreset, setSelectedPreset] = useState<VisualizationPresentation>();
   const toShowDiagram = (name: string) => {
     switch (name) {
@@ -146,12 +145,11 @@ function PresetSelector({
               <CommandItem
                 key={preset.id}
                 onSelect={() => {
+                  const presetData = toShowDiagram(preset.name);
                   setSelectedPreset(preset);
                   setOpen(false);
-                  setShowDiagramHandler(
-                    toShowDiagram(preset.name)?.name as keyof ShowDiagramState
-                  );
-                  setTextareaValue(toShowDiagram(preset.name)?.value as string);
+                  setShowDiagramHandler(presetData?.name as keyof ShowDiagramState);
+                  setTextareaValue(presetData?.value || '');
                   setIsSubmitable(false);
                 }}
               >
@@ -171,6 +169,6 @@ function PresetSelector({
       </PopoverContent>
     </Popover>
   );
-}
-
+};
+export type { VisualizationPresentation };
 export default PresetSelector;

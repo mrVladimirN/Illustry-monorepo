@@ -11,10 +11,12 @@ import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface AxisChartProp extends WithLegend, WithOptions {
+type AxisChartProp = {
   data: VisualizationTypes.AxisChartData;
   type: 'line' | 'bar';
-}
+} & WithLegend
+  & WithOptions
+
 const AxisChartView = ({ data, type, legend }: AxisChartProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';

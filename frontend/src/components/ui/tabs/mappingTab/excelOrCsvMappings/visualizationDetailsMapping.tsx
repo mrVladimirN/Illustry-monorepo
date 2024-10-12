@@ -1,15 +1,14 @@
-/* eslint-disable import/no-cycle */
 import { UseFormReturn } from 'react-hook-form';
-import { Inputs } from '@/components/form/add-visualization-form';
-import { Input } from '@/components/ui/input';
+import Input from '@/components/ui/input';
+import { Inputs } from '@/components/form/types';
 
-interface ExcelOrCsvVisualizationMappingProps {
+type ExcelOrCsvVisualizationMappingProps = {
   form: UseFormReturn<Inputs>;
 }
-function ExcelOrCsvVisualizationMapping({
+
+const ExcelOrCsvVisualizationMapping = ({
   form
-}: ExcelOrCsvVisualizationMappingProps) {
-  return (
+}: ExcelOrCsvVisualizationMappingProps) => (
     <>
       <div className="flex items-center space-x-4">
         <div className="w-20">Visualization Name:</div>
@@ -52,7 +51,6 @@ function ExcelOrCsvVisualizationMapping({
         </div>
       </div>
     </>
-  );
-}
+);
 
 export default ExcelOrCsvVisualizationMapping;

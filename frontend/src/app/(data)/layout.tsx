@@ -1,16 +1,16 @@
 import { ReactNode } from 'react';
 import SiteHeader from '@/components/layouts/site-header';
 
-interface IntroLayoutProps {
+type DataLayoutProps = {
   children: ReactNode
 }
 
-export default async function IntroLayout({ children }: IntroLayoutProps) {
-  return (
+const DataLayout = ({ children }: DataLayoutProps) => (
     <div className="relative flex min-h-screen flex-col" >
       <SiteHeader />
       <main className="flex-1">{children}</main>
       {/* <SiteFooter /> */}
     </div>
-  );
-}
+);
+
+export default DataLayout;

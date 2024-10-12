@@ -1,18 +1,18 @@
-interface LegendProps {
+type LegendProps = {
   legendData: { [key: string]: string };
-  maxItemsPerRow?: number; // Define the maximum number of items per row
+  maxItemsPerRow?: number;
 }
 
 const Legend = ({ legendData, maxItemsPerRow }: LegendProps) => {
   const legendItems = Object.keys(legendData);
-  const itemsPerRow = maxItemsPerRow || 10; // Define the maximum number of items per row
+  const itemsPerRow = maxItemsPerRow || 10;
 
   return (
     <div
       className="flex flex-wrap justify-center items-center"
       style={{
         flexWrap: 'wrap',
-        justifyContent: 'flex-start' // Start each new row from the left
+        justifyContent: 'flex-start'
       }}
     >
       {legendItems.map((name, index) => (
@@ -20,7 +20,7 @@ const Legend = ({ legendData, maxItemsPerRow }: LegendProps) => {
           key={index}
           className="flex items-center mx-2"
           style={{
-            flex: `1 0 calc(100% / ${itemsPerRow})` // Distribute evenly and prevent item from growing
+            flex: `1 0 calc(100% / ${itemsPerRow})`
           }}
         >
           <div

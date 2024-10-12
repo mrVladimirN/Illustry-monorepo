@@ -3,16 +3,17 @@ import dynamic from 'next/dynamic';
 import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
 import FilteredForcedLayoutGraphShellView from './filter-forced-layout-graph-shell';
 
-interface ForcedLayoutGraphShellProp
-  extends WithLegend,
-    WithOptions,
-    WithFilter {
+type ForcedLayoutGraphShellProp = {
   data: VisualizationTypes.NodeLinkData;
-}
+} & WithLegend
+  & WithOptions
+  & WithFilter
+
 const ForcedLayoutGraphView = dynamic(
   () => import('@/components/views/forced-layout-graph'),
   { ssr: false }
 );
+
 const ForcedLayoutGraphShellView = ({
   data,
   legend,
@@ -42,4 +43,5 @@ const ForcedLayoutGraphShellView = ({
     </>
   );
 };
+
 export default ForcedLayoutGraphShellView;

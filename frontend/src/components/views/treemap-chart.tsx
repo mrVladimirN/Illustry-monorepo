@@ -17,10 +17,11 @@ import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface TreeMapProp extends WithLegend, WithOptions {
+type TreeMapProp = {
   categories: string[];
   nodes: VisualizationTypes.HierarchyNode[];
-}
+} & WithLegend
+  & WithOptions
 const TreeMapView = ({ nodes, categories, legend }: TreeMapProp) => {
   const maxDepth = computeMaxDepth(nodes);
   const meanValue = calculateMeanValue(computeUniqueValues(nodes));

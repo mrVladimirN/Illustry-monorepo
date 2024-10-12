@@ -14,7 +14,6 @@ import {
   type SortingState,
   type VisibilityState
 } from '@tanstack/react-table';
-
 import {
   ComponentType,
   MouseEventHandler,
@@ -34,22 +33,22 @@ import {
 import DataTablePagination from '@/components/data-table/data-table-pagination';
 import DataTableToolbar from '@/components/data-table/data-table-toolbar';
 
-interface Option {
+type Option = {
   label: string;
   value: string;
   icon?: ComponentType<{ className?: string }>;
 }
 
-interface DataTableSearchableColumn<TData> {
+type DataTableSearchableColumn<TData> = {
   id: keyof TData;
   title: string;
 }
 
-interface DataTableFilterableColumn<TData>
-  extends DataTableSearchableColumn<TData> {
+type DataTableFilterableColumn<TData> = {
   options: Option[];
-}
-interface DataTableProps<TData, TValue> {
+} & DataTableSearchableColumn<TData>
+
+type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   pageCount: number;
@@ -57,14 +56,15 @@ interface DataTableProps<TData, TValue> {
   newRowLink?: string;
   deleteRowsAction?: MouseEventHandler<HTMLButtonElement>;
 }
-function DataTable<TData, TValue>({
+
+const DataTable = <TData, TValue>({
   columns,
   data,
   pageCount,
   filterableColumns = [],
   newRowLink,
   deleteRowsAction
-}: DataTableProps<TData, TValue>) {
+}: DataTableProps<TData, TValue>) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -132,8 +132,6 @@ function DataTable<TData, TValue>({
         scroll: false
       }
     );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageIndex, pageSize]);
 
   // Handle server-side sorting
@@ -156,13 +154,10 @@ function DataTable<TData, TValue>({
         scroll: false
       }
     );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sorting]);
 
   // Handle server-side filtering
 
-  // eslint-disable-next-line max-len
   const filterableColumnFilters = columnFilters.filter((filter) => filterableColumns.find((c) => c.id === filter.id));
 
   useEffect(() => {
@@ -192,7 +187,6 @@ function DataTable<TData, TValue>({
         });
       }
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterableColumnFilters]);
 
   const table = useReactTable({
@@ -281,6 +275,6 @@ function DataTable<TData, TValue>({
       <DataTablePagination table={table} />
     </div>
   );
-}
+};
 
 export default DataTable;

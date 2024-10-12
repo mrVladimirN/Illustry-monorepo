@@ -11,9 +11,10 @@ import Legend from '../ui/legend';
 import { useThemeColors } from '../theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface PieProp extends WithLegend, WithOptions {
+type PieProp = {
   data: VisualizationTypes.PieChartData;
-}
+} & WithLegend
+  & WithOptions
 const PieView = ({ data, legend }: PieProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';

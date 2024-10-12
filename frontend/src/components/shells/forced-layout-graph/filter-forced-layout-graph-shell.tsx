@@ -4,19 +4,21 @@ import { VisualizationTypes } from '@illustry/types';
 import { Dispatch, SetStateAction, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { WithLegend, WithOptions } from '@/lib/types/utils';
-import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
-interface FilteredForcedLayoutGraphShellProp extends WithLegend, WithOptions {
+type FilteredForcedLayoutGraphShellProp = {
   nodes: VisualizationTypes.Node[];
   links: VisualizationTypes.Link[];
-}
+} & WithLegend
+  & WithOptions
+
 const ForcedLayoutGraphView = dynamic(
   () => import('@/components/views/forced-layout-graph'),
   {
     ssr: false
   }
 );
+
 const FilteredForcedLayoutGraphShellView = ({
   nodes,
   links,
@@ -30,7 +32,6 @@ const FilteredForcedLayoutGraphShellView = ({
     nodes,
     links
   });
-
   return (
     <>
       <CollapsableSearchBar
@@ -41,12 +42,12 @@ const FilteredForcedLayoutGraphShellView = ({
         setFilteredData={
           setFilteredData as Dispatch<
             SetStateAction<{
-                nodes: VisualizationTypes.Node[];
-                links: VisualizationTypes.Link[];
-              }>
+              nodes: VisualizationTypes.Node[];
+              links: VisualizationTypes.Link[];
+            }>
           >
         }
-        type={visualizationTypesEnum.FORCE_DIRECTED_GRAPH}
+        type={VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH}
       />
       <ForcedLayoutGraphView
         options={options}
@@ -57,4 +58,5 @@ const FilteredForcedLayoutGraphShellView = ({
     </>
   );
 };
+
 export default FilteredForcedLayoutGraphShellView;

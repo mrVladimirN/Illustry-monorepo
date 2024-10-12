@@ -16,17 +16,17 @@ import {
   DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 
-interface DataTableColumnHeaderProps<TData, TValue>
-  extends HTMLAttributes<HTMLDivElement> {
-  column: Column<TData, TValue>;
-  title: string;
-}
+type DataTableColumnHeaderProps<TData, TValue>
+  = {
+    column: Column<TData, TValue>;
+    title: string;
+  } & HTMLAttributes<HTMLDivElement>
 
-function DataTableColumnHeader<TData, TValue>({
+const DataTableColumnHeader = <TData, TValue>({
   column,
   title,
   className
-}: DataTableColumnHeaderProps<TData, TValue>) {
+}: DataTableColumnHeaderProps<TData, TValue>) => {
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
   }
@@ -100,6 +100,6 @@ function DataTableColumnHeader<TData, TValue>({
       </DropdownMenu>
     </div>
   );
-}
+};
 
 export default DataTableColumnHeader;

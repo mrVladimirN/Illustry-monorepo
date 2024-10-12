@@ -1,12 +1,11 @@
 import { ReactNode } from 'react';
 import SiteHeader from '@/components/layouts/site-header';
 
-interface IntroLayoutProps {
+type HubLayoutProps = {
   children: ReactNode;
 }
 
-export default function IntroLayout({ children }: IntroLayoutProps) {
-  return (
+const HubLayout = ({ children }: HubLayoutProps) => (
     <>
       <div className="relative flex min-h-screen flex-col">
         <SiteHeader />
@@ -14,5 +13,6 @@ export default function IntroLayout({ children }: IntroLayoutProps) {
         {/* <SiteFooter /> */}
       </div>
     </>
-  );
-}
+);
+
+export default HubLayout;

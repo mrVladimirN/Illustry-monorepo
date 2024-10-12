@@ -12,9 +12,10 @@ import { WithLegend, WithOptions } from '@/lib/types/utils';
 import TimelineAccordion from './timeline/timelineAccordion';
 import TimelineElement from './timeline/timelineElement';
 
-interface TimelineProp extends WithLegend, WithOptions {
+type TimelineProp = {
   data: VisualizationTypes.TimelineData;
-}
+} & WithLegend
+  & WithOptions
 
 const TimelineView = ({
   data
@@ -60,7 +61,7 @@ const TimelineView = ({
             key={date}
           >
             <h3 className="vertical-timeline-element-title text-gray-700 dark:text-gray-400
-               text-center my-2 text-xm md:text-xl">
+                text-center my-2 text-xm md:text-xl">
               {data[date]?.summary?.title}
             </h3>
             <span className="capitalize font-medium text-gray-700 dark:text-gray-400 xs:text-sm">
