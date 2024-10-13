@@ -93,7 +93,6 @@ const UpdateProjectForm = ({ project }: UpdateProjectFormProps) => {
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
-
                 <FormMessage />
                 <FormLabel>Make this project active</FormLabel>
               </FormItem>

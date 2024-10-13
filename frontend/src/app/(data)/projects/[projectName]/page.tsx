@@ -4,7 +4,7 @@ import { findOneProject } from '@/app/_actions/project';
 
 const metadata: Metadata = {
   title: 'Update Project',
-  description: 'Update a product'
+  description: 'Update a project'
 };
 
 type UpdateProjectPageProps = {

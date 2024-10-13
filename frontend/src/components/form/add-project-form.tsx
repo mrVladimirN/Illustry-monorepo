@@ -26,7 +26,6 @@ const AddProjectForm = () => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  // react-hook-form
   const form = useForm<ProjectTypes.ProjectCreate>({
     resolver: zodResolver(ValidatorSchemas.projectCreateSchema),
     defaultValues: {
@@ -100,7 +99,6 @@ const AddProjectForm = () => {
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
-
                 <FormMessage />
                 <FormLabel>Make this project active</FormLabel>
               </FormItem>

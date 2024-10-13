@@ -70,18 +70,18 @@ const createDashboard = async (dashboard: DashboardTypes.DashboardCreate) => {
   return makeRequest<DashboardTypes.DashboardType>(request, ['dashboards']);
 };
 
-const findOneDashboard = async (dashboardName: string) => {
+const findOneDashboard = async (dashboardName: string, fullVisualization: boolean = false) => {
   const request = new Request(
-    `${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_URL as string}/api/project/${dashboardName}`,
+    `${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_URL as string}/api/dashboard/${dashboardName}`,
     {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ name: dashboardName })
+      body: JSON.stringify({ name: dashboardName, fullVisualization })
     }
   );
-  return makeRequest<DashboardTypes.DashboardType>(request, ['projects']);
+  return makeRequest<DashboardTypes.DashboardType>(request, ['dashboards']);
 };
 
 export {

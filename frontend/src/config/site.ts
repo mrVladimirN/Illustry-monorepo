@@ -18,6 +18,12 @@ const siteConfig = {
       items: []
     },
     {
+      title: 'Dashboards',
+      href:'/dashboards',
+      description: 'All dashboards',
+      items:[]
+    },
+    {
       title: 'Theme',
       href: '/theme',
       description: 'Set theme',

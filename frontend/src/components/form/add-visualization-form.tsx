@@ -35,13 +35,13 @@ const AddVisualizationForm = () => {
   };
 
   const form = useForm<Inputs>({
-    resolver: zodResolver(ValidatorSchemas.visualizationTypeSchema),
+    resolver: zodResolver(ValidatorSchemas.visualizationFileSchema),
     defaultValues: {
       fileType: FileTypes.FileType.JSON
     }
   });
 
-  async function onSubmit(data: Inputs) {
+  const onSubmit = async (data: Inputs) => {
     startTransition(async () => {
       try {
         if (files.length > 0) {
@@ -84,7 +84,7 @@ const AddVisualizationForm = () => {
         catchError(err);
       }
     });
-  }
+  };
 
   const handleFileTypeChange = (value: string) => {
     if (value !== selectedFileType) {

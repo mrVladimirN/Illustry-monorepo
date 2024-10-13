@@ -7,7 +7,7 @@ const ProjecttNotFound = () => (
         title="Project not found"
         description="The project may have expired "
         retryLink={'/projects'}
-        retryLinkText="Go to Products"
+        retryLinkText="Go to Projects"
       />
     </Shell>
 );
