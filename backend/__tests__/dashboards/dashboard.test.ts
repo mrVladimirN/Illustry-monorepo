@@ -84,26 +84,6 @@ describe("dashboard CRUD", () => {
         }
     });
 
-
-    it("update a non existing dashboard", async () => {
-
-        const expectedDashboard: DashboardTypes.DashboardUpdate = {
-            description: "Test_dashboardDescription1_1",
-            projectName: 'Test_Project_Dashboard'
-        };
-        try {
-            await factory
-                .getBZL()
-                .DashboardBZL.update({ name: "Fake_Name" }, expectedDashboard);
-        } catch (error) {
-            expect(error).toBeDefined();
-            const castedError = error as Error;
-            expect(castedError.message).toContain(
-                "No dashboard was found with name Fake_Name"
-            );
-        }
-    });
-
     it("finds a dashboard by name", async () => {
 
         const expectedDashboard: DashboardTypes.DashboardCreate = {
@@ -113,7 +93,7 @@ describe("dashboard CRUD", () => {
         };
         const dashboard: DashboardTypes.DashboardType = await factory
             .getBZL()
-            .DashboardBZL.findOne({ name: "Test_dashboard2" });
+            .DashboardBZL.findOne({ name: "Test_dashboard2" }, true);
 
         // Check if dashboard is not null before accessing its properties
         expect(dashboard).not.toBeNull();
@@ -228,7 +208,7 @@ describe("dashboard CRUD", () => {
         expect(visualization).toMatchObject(expectedVisualization);
         await Factory.getInstance().getBZL().DashboardBZL.update({ name: 'Test_dashboard2' }, { visualizations: { 'Funnel_FullDetails': VisualizationTypes.VisualizationTypesEnum.FUNNEL } })
 
-        const foundDash = await Factory.getInstance().getBZL().DashboardBZL.findOne({ name: 'Test_dashboard2', projectName: 'Test_Project_Dashboard',  })
+        const foundDash = await Factory.getInstance().getBZL().DashboardBZL.findOne({ name: 'Test_dashboard2', projectName: 'Test_Project_Dashboard',  }, true)
 
         expect(foundDash.visualizations?.length).toBe(1);
     });

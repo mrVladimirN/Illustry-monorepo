@@ -10,22 +10,20 @@ const create = async (
 ): Promise<void> => {
   try {
     const {
-      dashboardName,
-      dashboardDescription,
       name,
+      description,
       visualizations
     } = request.body;
 
-    const dashboard: DashboardTypes.DashboardCreate = {
-      name: dashboardName,
-      description: dashboardDescription,
-      projectName: name,
+    const dashboard: DashboardTypes.DashboardUpdate = {
+      name,
+      description,
       visualizations
     };
 
-    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.dashboardCreateSchema, dashboard);
+    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.dashboardUpdateSchema, dashboard);
 
-    await Factory.getInstance().getBZL().DashboardBZL.create(dashboard);
+    await Factory.getInstance().getBZL().DashboardBZL.create(dashboard as DashboardTypes.DashboardCreate);
 
     returnResponse(response, null, { dashboard }, next);
   } catch (err) {
@@ -75,17 +73,16 @@ const findOne = async (
 ): Promise<void> => {
   try {
     const { params: { name } } = request;
-
+    const { fullVisualizations } = request.body;
     const dashboardFilter: DashboardTypes.DashboardFilter = {
       name
     };
-
     ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.dashboardFilterSchema, dashboardFilter);
 
     const data = await Factory.getInstance()
       .getBZL()
       .DashboardBZL
-      .findOne(dashboardFilter);
+      .findOne(dashboardFilter, fullVisualizations);
 
     returnResponse(response, null, data, next);
   } catch (err) {

@@ -170,7 +170,23 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
   }
 
   async delete(filter: VisualizationTypes.VisualizationFilter): Promise<boolean> {
-    const queryFilter: UtilTypes.ExtendedMongoQuery = filter ? this.dbaccInstance.Visualization.createFilter(filter) : {};
+    const projectBZL = Factory.getInstance().getBZL().ProjectBZL;
+
+    const { projects } = await projectBZL.browse({ isActive: true } as ProjectTypes.ProjectFilter);
+
+    if (!projects || projects.length === 0) {
+      throw new Error('No active project');
+    }
+
+    const activeProjectName = projects[0].name;
+
+    const updatedFilter: VisualizationTypes.VisualizationFilter = {
+      ...filter,
+      projectName: activeProjectName
+    };
+    const queryFilter: UtilTypes.ExtendedMongoQuery = updatedFilter
+      ? this.dbaccInstance.Visualization.createFilter(updatedFilter)
+      : {};
 
     await this.dbaccInstance.Visualization.deleteMany(queryFilter);
 
