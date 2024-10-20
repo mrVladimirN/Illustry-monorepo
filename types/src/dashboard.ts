@@ -65,4 +65,4 @@ type DashboardFilter = {
     };
 }
 
-export { DashboardFilter, DashboardUpdate, ExtendedDashboardType, DashboardType, DashboardCreate }
+export { DashboardFilter, DashboardUpdate, ExtendedDashboardType, DashboardType, DashboardCreate, Layout }
