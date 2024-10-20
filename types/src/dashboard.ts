@@ -6,13 +6,28 @@ import {
     DeepPartial,
 } from "./utils";
 
+type Layout = {
+    i: string,
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+    minW: number,
+    minH: number
+};
+
 type DashboardData = {
     name: string;
     projectName: string;
     description?: string;
     createdAt?: Date;
     updatedAt?: Date;
-    visualizations?: { [name: string]: string } | VisualizationTypes.VisualizationType[];
+    visualizations?: {
+        [name: string]: string
+    } | VisualizationTypes.VisualizationType[];
+    layouts?: {
+        [name: string]: Layout
+    }
 }
 
 type DashboardCreate =
@@ -38,6 +53,8 @@ type DashboardUpdate = DeepPartial<DashboardType>
 type DashboardFilter = {
     name?: string;
     projectName?: string;
+    visualizationName?: string;
+    visualizationType?: string;
     text?: string;
     page?: number;
     per_page?: number;
