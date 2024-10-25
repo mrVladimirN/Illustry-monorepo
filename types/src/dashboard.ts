@@ -25,9 +25,7 @@ type DashboardData = {
     visualizations?: {
         [name: string]: string
     } | VisualizationTypes.VisualizationType[];
-    layouts?: {
-        [name: string]: Layout
-    }
+    layouts?: Layout[]
 }
 
 type DashboardCreate =
