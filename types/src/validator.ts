@@ -314,13 +314,24 @@ const projectFilterSchema = z.object({
         .optional()
 });
 
+const layoutSchema = z.object({
+    i: stringSchema,
+    x: numberSchema,
+    y: numberSchema,
+    w: numberSchema,
+    h: numberSchema,
+    minW: numberSchema,
+    minH: numberSchema
+});
+
 const dashboardDataSchema = z.object({
     name: stringSchema,
     projectName: stringSchema,
     description: stringSchema.optional(),
     createdAt: dateSchema.optional(),
     updatedAt: dateSchema.optional(),
-    visualizations: z.record(z.string()).optional()
+    visualizations: z.record(z.string()).optional(),
+    layouts: z.array(layoutSchema).optional()
 });
 
 const dashboardCreateSchema = dashboardDataSchema
@@ -354,6 +365,8 @@ const dashboardFilterSchema = z.object({
     name: stringSchema.optional(),
     text: stringSchema.optional(),
     projectName: stringSchema.optional(),
+    visualizationType: stringSchema.optional(),
+    visualizationName: stringSchema.optional(),
     page: numberSchema.optional(),
     per_page: numberSchema.optional(),
     sort: z
