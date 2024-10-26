@@ -40,7 +40,8 @@ const update = async (
     const {
       name,
       description,
-      visualizations
+      visualizations,
+      layouts
     } = request.body;
 
     const dashboardFilter: DashboardTypes.DashboardFilter = {
@@ -49,12 +50,12 @@ const update = async (
 
     const dashboard: DashboardTypes.DashboardUpdate = {
       description,
-      visualizations
+      visualizations,
+      layouts
     };
 
     ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.dashboardUpdateSchema, dashboard);
     ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.dashboardFilterSchema, dashboardFilter);
-
     const data = await Factory.getInstance()
       .getBZL()
       .DashboardBZL
