@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import {
-  VisualizationTypes, ProjectTypes, FileTypes, UtilTypes, GenericTypes, ValidatorSchemas
+  VisualizationTypes, ProjectTypes, FileTypes, UtilTypes, GenericTypes, ValidatorSchemas,
+  DashboardTypes
 } from '@illustry/types';
 import {
   excelFilesToVisualizations,
@@ -188,8 +189,48 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
       ? this.dbaccInstance.Visualization.createFilter(updatedFilter)
       : {};
 
-    await this.dbaccInstance.Visualization.deleteMany(queryFilter);
+    const dashboardUpdateFilter: UtilTypes.ExtendedMongoQuery = this.dbaccInstance.Dashboard.createFilter(
+      {
+        projectName: activeProjectName,
+        visualizationName: filter.name,
+        visualizationType: filter.type as string
+      }
+    );
 
+    const { dashboards } = await this.dbaccInstance.Dashboard.browse(dashboardUpdateFilter, true);
+    if (dashboards) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const dashboard of dashboards) {
+        if (dashboard.visualizations) {
+          delete (dashboard.visualizations as { [name: string]: string; })[`${filter.name}_${filter.type}` as string];
+          let reindexedLayouts:DashboardTypes.Layout[] = [];
+          if (dashboard.layouts) {
+            const updatedLayouts = dashboard.layouts.filter((layout) => layout.i !== filter.name);
+
+            reindexedLayouts = updatedLayouts.map((layout, index) => ({
+              ...layout,
+              i: String(index)
+            }));
+          }
+          const dashboardFilter: UtilTypes.ExtendedMongoQuery = this.dbaccInstance.Dashboard.createFilter(
+            {
+              name: dashboard.name
+            }
+          );
+          // eslint-disable-next-line no-await-in-loop
+          await this.dbaccInstance.Dashboard.update(
+            dashboardFilter,
+            {
+              $set: {
+                visualizations: dashboard.visualizations,
+                layouts: reindexedLayouts
+              }
+            }
+          );
+        }
+      }
+    }
+    await this.dbaccInstance.Visualization.deleteMany(queryFilter);
     return true;
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "@dxworks/illustry-server",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A hub for visualizing data about software systems",
   "keywords": [
     "dxworks",
@@ -24,7 +24,7 @@
     "webpack": "webpack --config webpack.config.js"
   },
   "dependencies": {
-    "@illustry/types": "0.1.9",
+    "@illustry/types": "0.1.13",
     "bunyan": "1.8.15",
     "cors": "2.8.5",
     "dotenv": "16.3.1",

@@ -60,7 +60,6 @@ class DashboardBZL implements GenericTypes.BaseBZL<
       ...filter,
       projectName: activeProjectName
     };
-
     const queryFilter: UtilTypes.ExtendedMongoQuery = this.dbaccInstance.Dashboard.createFilter(updatedFilter);
     const foundDashboard = await this.dbaccInstance.Dashboard.findOne(queryFilter);
     if (!foundDashboard) {
@@ -71,18 +70,18 @@ class DashboardBZL implements GenericTypes.BaseBZL<
     } else {
       const visualizationsData: VisualizationTypes.VisualizationType[] = [];
       const { visualizations, projectName } = foundDashboard;
-
       if (visualizations && fullVisualizations) {
         // eslint-disable-next-line no-restricted-syntax
-        for (const vizusalization of Object.keys(visualizations)) {
+        for (const vis of Object.keys(visualizations)) {
+          const splittedVis = vis.split('_');
           // eslint-disable-next-line no-await-in-loop
           const visualizationData = await Factory.getInstance()
             .getBZL()
             .VisualizationBZL
             .findOne({
-              type: (visualizations as { [name: string]: string })[vizusalization],
+              type: (visualizations as { [name: string]: string })[vis],
               projectName,
-              name: vizusalization
+              name: splittedVis.slice(0, splittedVis.length - 1).join('_')
             });
 
           visualizationsData.push(visualizationData);
@@ -111,7 +110,6 @@ class DashboardBZL implements GenericTypes.BaseBZL<
     };
 
     const queryFilter: UtilTypes.ExtendedMongoQuery = this.dbaccInstance.Dashboard.createFilter(updatedFilter);
-
     const dashboards = await this.dbaccInstance.Dashboard.browse(queryFilter);
     return dashboards;
   }
@@ -135,7 +133,9 @@ class DashboardBZL implements GenericTypes.BaseBZL<
     };
 
     const queryFilter: UtilTypes.ExtendedMongoQuery = this.dbaccInstance.Dashboard.createFilter(updatedFilter);
-
+    if (!dashboard.visualizations && dashboard.layouts) {
+      return this.dbaccInstance.Dashboard.partialUpdate(queryFilter, dashboard);
+    }
     return this.dbaccInstance.Dashboard.update(queryFilter, dashboard);
   }
 

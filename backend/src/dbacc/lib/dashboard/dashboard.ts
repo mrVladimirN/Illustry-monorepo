@@ -51,6 +51,11 @@ class Dashboard implements GenericTypes.BaseLib<
         ]
       });
     }
+    if (filter.visualizationName && filter.visualizationType) {
+      (query.$and as Array<object>).push({
+        [`visualizations.${filter.visualizationName}_${filter.visualizationType}`]: filter.visualizationType
+      });
+    }
     if ((query.$and as Array<object>).length === 0) delete query.$and;
 
     let skip: number = 0;
@@ -77,56 +82,89 @@ class Dashboard implements GenericTypes.BaseLib<
   }
 
   create(data: DashboardTypes.DashboardCreate): Promise<DashboardTypes.DashboardType> {
-    return Promise.resolve()
-      .then(() => {
-        const finalData = { ...data };
-        if (!finalData.createdAt) {
-          finalData.createdAt = new Date();
-          finalData.updatedAt = new Date();
-        }
-        return this.modelInstance.DashboardModel.create(finalData);
-      });
+    const finalData = { ...data };
+    if (!finalData.createdAt) {
+      finalData.createdAt = new Date();
+      finalData.updatedAt = new Date();
+    }
+    return this.modelInstance.DashboardModel.create(finalData);
   }
 
   findOne(filter: UtilTypes.ExtendedMongoQuery): Promise<DashboardTypes.DashboardType | null> {
-    return Promise.resolve()
-      .then(() => this.modelInstance.DashboardModel.findOne(filter.query));
+    return this.modelInstance.DashboardModel.findOne(filter.query, {
+      __v: 0,
+      _id: 0
+    }).exec();
   }
 
-  browse(filter: UtilTypes.ExtendedMongoQuery): Promise<DashboardTypes.ExtendedDashboardType> {
-    return Promise.resolve()
-      .then(() => this.modelInstance.DashboardModel.find(
-        filter.query ? filter.query : {},
-        {
-          __v: 0,
-          _id: 0,
-          data: 0,
-          projectName: 0
-        },
-        {
-          sort: filter.sort ? filter.sort : { name: 1 },
-          skip: filter && filter.page ? Number(filter.page) : 0,
-          limit: filter.per_page
-        }
-      ))
-      .then(async (res) => {
-        const count = await this.modelInstance.DashboardModel.countDocuments(
-          filter.query ? filter.query : {}
-        );
-        return {
-          dashboards: res,
-          pagination: {
-            count,
-            pageCount:
-              count > 0
-                ? count / (filter.per_page ? filter.per_page : PAGE_SIZE)
-                : 1
-          }
-        };
-      });
+  async browse(filter: UtilTypes.ExtendedMongoQuery, withVisualizations = false): Promise<DashboardTypes.ExtendedDashboardType> {
+    const projection: Record<string, number> = {
+      __v: 0,
+      _id: 0,
+      projectName: 0
+    };
+
+    if (!withVisualizations) {
+      projection.visualizations = 0;
+    }
+
+    const res = await this.modelInstance.DashboardModel.find(
+      filter.query ? filter.query : {},
+      projection,
+      {
+        sort: filter.sort ? filter.sort : { name: 1 },
+        skip: filter && filter.page ? Number(filter.page) : 0,
+        limit: filter.per_page
+      }
+    ).exec();
+    const count = await this.modelInstance.DashboardModel.countDocuments(
+      filter.query ? filter.query : {}
+    ).exec();
+    return {
+      dashboards: res,
+      pagination: {
+        count,
+        pageCount:
+          count > 0
+            ? count / (filter.per_page ? filter.per_page : PAGE_SIZE)
+            : 1
+      }
+    };
+  }
+
+  async updateMany(
+    filter: UtilTypes.ExtendedMongoQuery,
+    data: Record<string, unknown>
+  ): Promise<number> {
+    const finalData = { ...data };
+
+    if (!finalData.updatedAt) {
+      finalData.updatedAt = new Date();
+    }
+    const result = await this.modelInstance.DashboardModel.updateMany(
+      filter.query,
+      data
+    ).exec();
+    return result.modifiedCount;
   }
 
   update(
+    filter: UtilTypes.ExtendedMongoQuery,
+    data: DashboardTypes.DashboardUpdate | Record<string, unknown>
+  ): Promise<DashboardTypes.DashboardType | null> {
+    const finalData = { ...data };
+    if (!finalData.createdAt) {
+      finalData.createdAt = new Date();
+    }
+    finalData.updatedAt = new Date();
+    return this.modelInstance.DashboardModel.findOneAndUpdate(
+      filter.query,
+      finalData,
+      { upsert: true, new: true }
+    ).exec();
+  }
+
+  partialUpdate(
     filter: UtilTypes.ExtendedMongoQuery,
     data: DashboardTypes.DashboardUpdate
   ): Promise<DashboardTypes.DashboardType | null> {
@@ -135,23 +173,20 @@ class Dashboard implements GenericTypes.BaseLib<
       finalData.createdAt = new Date();
     }
     finalData.updatedAt = new Date();
-    return Promise.resolve()
-      .then(() => this.modelInstance.DashboardModel.findOneAndUpdate(
-        filter.query,
-        finalData,
-        { upsert: true, new: true }
-      ));
+    return this.modelInstance.DashboardModel.findOneAndUpdate(
+      filter.query,
+      { $set: { updatedAt: new Date(), layouts: data.layouts } },
+      { upsert: true, new: true }
+    ).exec();
   }
 
   async delete(filter: UtilTypes.ExtendedMongoQuery): Promise<boolean> {
-    await Promise.resolve()
-      .then(() => this.modelInstance.DashboardModel.deleteOne(filter.query));
+    await this.modelInstance.DashboardModel.deleteOne(filter.query).exec();
     return true;
   }
 
   async deleteMany(filter: UtilTypes.ExtendedMongoQuery): Promise<boolean> {
-    await Promise.resolve()
-      .then(() => this.modelInstance.DashboardModel.deleteMany(filter.query));
+    await this.modelInstance.DashboardModel.deleteMany(filter.query).exec();
     return true;
   }
 }

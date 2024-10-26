@@ -93,53 +93,46 @@ class Visualization implements GenericTypes.BaseLib<
   }
 
   create(data: VisualizationTypes.VisualizationCreate): Promise<VisualizationTypes.VisualizationType> {
-    return Promise.resolve()
-      .then(() => {
-        const finalData = { ...data };
-        if (!finalData.createdAt) {
-          finalData.createdAt = new Date();
-          finalData.updatedAt = new Date();
-        }
-        return this.modelInstance.VisualizationModel.create(finalData);
-      });
+    const finalData = { ...data };
+    if (!finalData.createdAt) {
+      finalData.createdAt = new Date();
+      finalData.updatedAt = new Date();
+    }
+    return this.modelInstance.VisualizationModel.create(finalData);
   }
 
   findOne(filter: UtilTypes.ExtendedMongoQuery): Promise<VisualizationTypes.VisualizationType | null> {
-    return Promise.resolve()
-      .then(() => this.modelInstance.VisualizationModel.findOne(filter.query));
+    return this.modelInstance.VisualizationModel.findOne(filter.query).exec();
   }
 
-  browse(filter: UtilTypes.ExtendedMongoQuery): Promise<VisualizationTypes.ExtendedVisualizationType> {
-    return Promise.resolve()
-      .then(() => this.modelInstance.VisualizationModel.find(
-        filter.query ? filter.query : {},
-        {
-          __v: 0,
-          _id: 0,
-          data: 0,
-          projectName: 0
-        },
-        {
-          sort: filter.sort ? filter.sort : { name: 1 },
-          skip: filter && filter.page ? Number(filter.page) : 0,
-          limit: filter.per_page
-        }
-      ))
-      .then(async (res) => {
-        const count = await this.modelInstance.VisualizationModel.countDocuments(
-          filter.query ? filter.query : {}
-        );
-        return {
-          visualizations: res,
-          pagination: {
-            count,
-            pageCount:
-              count > 0
-                ? count / (filter.per_page ? filter.per_page : PAGE_SIZE)
-                : 1
-          }
-        };
-      });
+  async browse(filter: UtilTypes.ExtendedMongoQuery): Promise<VisualizationTypes.ExtendedVisualizationType> {
+    const res = await this.modelInstance.VisualizationModel.find(
+      filter.query ? filter.query : {},
+      {
+        __v: 0,
+        _id: 0,
+        data: 0,
+        projectName: 0
+      },
+      {
+        sort: filter.sort ? filter.sort : { name: 1 },
+        skip: filter && filter.page ? Number(filter.page) : 0,
+        limit: filter.per_page
+      }
+    ).exec();
+    const count = await this.modelInstance.VisualizationModel.countDocuments(
+      filter.query ? filter.query : {}
+    );
+    return {
+      visualizations: res,
+      pagination: {
+        count,
+        pageCount:
+          count > 0
+            ? count / (filter.per_page ? filter.per_page : PAGE_SIZE)
+            : 1
+      }
+    };
   }
 
   update(
@@ -151,23 +144,20 @@ class Visualization implements GenericTypes.BaseLib<
       finalData.createdAt = new Date();
     }
     finalData.updatedAt = new Date();
-    return Promise.resolve()
-      .then(() => this.modelInstance.VisualizationModel.findOneAndUpdate(
-        filter.query,
-        finalData,
-        { upsert: true, new: true }
-      ));
+    return this.modelInstance.VisualizationModel.findOneAndUpdate(
+      filter.query,
+      finalData,
+      { upsert: true, new: true }
+    ).exec();
   }
 
   async delete(filter: UtilTypes.ExtendedMongoQuery): Promise<boolean> {
-    await Promise.resolve()
-      .then(() => this.modelInstance.VisualizationModel.deleteOne(filter.query));
+    await this.modelInstance.VisualizationModel.deleteOne(filter.query).exec();
     return true;
   }
 
   async deleteMany(filter: UtilTypes.ExtendedMongoQuery): Promise<boolean> {
-    await Promise.resolve()
-      .then(() => this.modelInstance.VisualizationModel.deleteMany(filter.query));
+    await this.modelInstance.VisualizationModel.deleteMany(filter.query).exec();
     return true;
   }
 }

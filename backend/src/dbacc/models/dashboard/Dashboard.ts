@@ -22,6 +22,7 @@ class Dashboard {
           default: ''
         },
         visualizations: { type: Schema.Types.Mixed, required: false },
+        layouts: { type: [Schema.Types.Mixed], required: false },
         createdAt: { type: Date, required: false },
         updatedAt: { type: Date, required: false }
       });

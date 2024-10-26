@@ -71,105 +71,95 @@ class Project implements GenericTypes.BaseLib<
     };
   }
 
-  create(data: ProjectTypes.ProjectCreate): Promise<ProjectTypes.ProjectType> {
-    return Promise.resolve()
-      .then(() => {
-        const finalData: ProjectTypes.ProjectCreate = { ...data };
-        if (!finalData.createdAt) {
-          finalData.createdAt = new Date();
-          finalData.updatedAt = new Date();
-        }
-        if (!finalData.isActive) {
-          return this.modelInstance.ProjectModel.create(finalData);
-        }
-        return this.modelInstance.ProjectModel.updateMany(
-          {},
-          { $set: { isActive: false } }
-        ).then(() => this.modelInstance.ProjectModel.create(finalData));
-      });
+  async create(data: ProjectTypes.ProjectCreate): Promise<ProjectTypes.ProjectType> {
+    const finalData: ProjectTypes.ProjectCreate = { ...data };
+    if (!finalData.createdAt) {
+      finalData.createdAt = new Date();
+      finalData.updatedAt = new Date();
+    }
+    if (!finalData.isActive) {
+      return this.modelInstance.ProjectModel.create(finalData);
+    }
+    await this.modelInstance.ProjectModel.updateMany(
+      {},
+      { $set: { isActive: false } }
+    ).exec();
+    return this.modelInstance.ProjectModel.create(finalData);
   }
 
   findOne(filter: UtilTypes.ExtendedMongoQuery): Promise<ProjectTypes.ProjectType | null> {
-    return Promise.resolve()
-      .then(() => this.modelInstance.ProjectModel.findOne(filter.query, {
+    return this.modelInstance.ProjectModel.findOne(filter.query, {
+      __v: 0,
+      _id: 0
+    }).exec();
+  }
+
+  async browse(filter: UtilTypes.ExtendedMongoQuery): Promise<ProjectTypes.ExtendedProjectType> {
+    const res = await this.modelInstance.ProjectModel.find(
+      filter.query ? filter.query : {},
+      {
         __v: 0,
         _id: 0
-      }));
+      },
+      {
+        sort: filter.sort ? filter.sort : { name: 1 },
+        skip: filter && filter.page ? filter.page : 0,
+        limit: filter.per_page
+      }
+    ).exec();
+    const count = await this.modelInstance.ProjectModel.countDocuments(
+      filter.query ? filter.query : {}
+    ).exec();
+    return {
+      projects: res,
+      pagination: {
+        count,
+        pageCount:
+          count > 0
+            ? count / (filter.per_page ? filter.per_page : PAGE_SIZE)
+            : 1
+      }
+    };
   }
 
-  browse(filter: UtilTypes.ExtendedMongoQuery): Promise<ProjectTypes.ExtendedProjectType> {
-    return Promise.resolve()
-      .then(() => this.modelInstance.ProjectModel.find(
-        filter.query ? filter.query : {},
-        {
-          __v: 0,
-          _id: 0
-        },
-        {
-          sort: filter.sort ? filter.sort : { name: 1 },
-          skip: filter && filter.page ? filter.page : 0,
-          limit: filter.per_page
-        }
-      ))
-      .then(async (res) => {
-        const count = await this.modelInstance.ProjectModel.countDocuments(
-          filter.query ? filter.query : {}
-        );
-        return {
-          projects: res,
-          pagination: {
-            count,
-            pageCount:
-              count > 0
-                ? count / (filter.per_page ? filter.per_page : PAGE_SIZE)
-                : 1
-          }
-        };
-      });
-  }
-
-  update(
+  async update(
     filter: UtilTypes.ExtendedMongoQuery,
     data: ProjectTypes.ProjectUpdate
   ): Promise<ProjectTypes.ProjectType | null> {
-    return Promise.resolve()
-      .then(async () => {
-        const foundProject = await this.findOne(filter);
-        const finalData: ProjectTypes.ProjectUpdate = { ...data };
-        if (foundProject) {
-          if (!finalData.createdAt) {
-            finalData.createdAt = new Date();
-          }
+    const foundProject = await this.findOne(filter);
+    const finalData: ProjectTypes.ProjectUpdate = { ...data };
+    if (foundProject) {
+      if (!finalData.createdAt) {
+        finalData.createdAt = new Date();
+      }
+    }
+    finalData.updatedAt = new Date();
+    if (!data.isActive) {
+      return this.modelInstance.ProjectModel.findOneAndUpdate(
+        filter.query,
+        data,
+        {
+          upsert: true,
+          new: true
         }
-        finalData.updatedAt = new Date();
-        if (!data.isActive) {
-          return this.modelInstance.ProjectModel.findOneAndUpdate(
-            filter.query,
-            data,
-            {
-              upsert: true,
-              new: true
-            }
-          );
-        }
-        return this.modelInstance.ProjectModel.updateMany(
-          {},
-          { $set: { isActive: false } }
-        )
-          .then(() => this.modelInstance.ProjectModel.findOneAndUpdate(
-            filter.query,
-            data,
-            {
-              upsert: true,
-              new: true
-            }
-          ));
-      });
+      );
+    }
+    await this.modelInstance.ProjectModel.updateMany(
+      {},
+      { $set: { isActive: false } }
+    ).exec();
+    return this.modelInstance.ProjectModel.findOneAndUpdate(
+      filter.query,
+      data,
+      {
+        upsert: true,
+        new: true
+      }
+    ).exec();
   }
 
   async delete(filter: UtilTypes.ExtendedMongoQuery): Promise<boolean> {
-    await Promise.resolve()
-      .then(() => this.modelInstance.ProjectModel.deleteOne(filter.query));
+    await this.modelInstance.ProjectModel.deleteOne(filter.query).exec();
     return true;
   }
 }
