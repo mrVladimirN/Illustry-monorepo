@@ -11,7 +11,7 @@ import {
   ThemeColors,
   useThemeColors,
   useThemeColorsDispach
-} from '../theme-provider';
+} from '../providers/theme-provider';
 import {
   AccordionContent,
   Accordion,
@@ -449,6 +449,7 @@ const ThemeShell = () => {
       {showDiagram.sankey && (
         <div className="flex-grow p-4">
           <SankeyGraphShellView
+            fullScreen={true}
             data={siteConfig.nodeLink}
             legend={false}
             options={false}
@@ -464,6 +465,7 @@ const ThemeShell = () => {
               legend={false}
               options={false}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -476,6 +478,7 @@ const ThemeShell = () => {
               legend={false}
               options={false}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -488,6 +491,7 @@ const ThemeShell = () => {
               legend={false}
               options={false}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -500,7 +504,7 @@ const ThemeShell = () => {
               legend={false}
               options={false}
               filter={false}
-              containered={true}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -514,6 +518,7 @@ const ThemeShell = () => {
               options={false}
               type={'line'}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -527,6 +532,7 @@ const ThemeShell = () => {
               options={false}
               type={'bar'}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -539,6 +545,7 @@ const ThemeShell = () => {
               legend={false}
               options={false}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -551,6 +558,7 @@ const ThemeShell = () => {
               legend={false}
               options={false}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -563,6 +571,7 @@ const ThemeShell = () => {
               legend={false}
               options={false}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -575,6 +584,7 @@ const ThemeShell = () => {
               legend={false}
               options={false}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -587,6 +597,7 @@ const ThemeShell = () => {
               legend={false}
               options={false}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>

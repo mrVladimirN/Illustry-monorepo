@@ -19,9 +19,9 @@ const UpdateDashboardPage = async ({
 }: UpdateDashboardPageProps) => {
   const { dashboardName } = params;
   const currentDashboard = await findOneDashboard(dashboardName, false);
-  const visualizations = await browseVisualizations({});
+  const visualizations = await browseVisualizations({ per_page: 100 });
   const visualizationsObject = visualizations ? visualizations.visualizations?.reduce((acc, { name, type }) => {
-    acc[name] = `${name}(${type})`;
+    acc[`${name}(${type})`] = `${name}(${type})`;
     return acc;
   }, {} as Record<string, string>) : {};
   return (

@@ -3,7 +3,7 @@
 import { VisualizationTypes } from '@illustry/types';
 import { Dispatch, SetStateAction, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
 type FilteredMatrixShellProp = {
@@ -11,6 +11,7 @@ type FilteredMatrixShellProp = {
   links: VisualizationTypes.Link[];
 } & WithLegend
   & WithOptions
+  & WithFullScreen
 
 const MatrixView = dynamic(
   () => import('@/components/views/matrix'),
@@ -23,7 +24,8 @@ const FilteredMatrixShellView = ({
   nodes,
   links,
   legend,
-  options
+  options,
+  fullScreen
 }: FilteredMatrixShellProp) => {
   const [filteredData, setFilteredData] = useState<{
     nodes: VisualizationTypes.Node[];
@@ -54,6 +56,7 @@ const FilteredMatrixShellView = ({
         nodes={filteredData.nodes}
         links={filteredData.links}
         legend={legend}
+        fullScreen={fullScreen}
       />
     </>
   );

@@ -8,7 +8,8 @@ import Toaster from '@/components/ui/toaster';
 import {
   ThemeColorsProvider,
   ThemeProvider
-} from '@/components/theme-provider';
+} from '@/components/providers/theme-provider';
+import { ActiveProjectProvider } from '@/components/providers/active-project-provider';
 
 const metadata: Metadata = {
   title: {
@@ -38,25 +39,27 @@ interface RootLayoutProps {
 }
 
 const RootLayout = ({ children }: RootLayoutProps) => (
-    <>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body
-          className={cn(
-            'min-h-screen bg-background font-sans antialiased',
-            fontSans.variable,
-            fontMono.variable
-          )}
-        >
+  <>
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body
+        className={cn(
+          'min-h-screen bg-background font-sans antialiased',
+          fontSans.variable,
+          fontMono.variable
+        )}
+      >
+        <ActiveProjectProvider>
           <ThemeColorsProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               {children}
             </ThemeProvider>
           </ThemeColorsProvider>
-          <Toaster />
-        </body>
-      </html>
-    </>
+        </ActiveProjectProvider>
+        <Toaster />
+      </body>
+    </html>
+  </>
 );
 
 export default RootLayout;

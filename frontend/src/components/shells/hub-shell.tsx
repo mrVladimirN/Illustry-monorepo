@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { VisualizationTypes } from '@illustry/types';
+import { WithFilter, WithFullScreen, WithLegend } from '@/lib/types/utils';
 import Fallback from '../ui/fallback';
 import SankeyGraphShellView from './sankey/sankey-shell';
 import WordCloudShellView from './wordcloud/wordcloud-shell';
@@ -17,9 +18,13 @@ import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/hier
 
 type HubShellProps = {
   data?: VisualizationTypes.VisualizationType;
-}
+} & WithFullScreen
+  & WithLegend
+  & WithFilter
 
-const HubShell = ({ data }: HubShellProps) => {
+const HubShell = ({
+  data, fullScreen, filter, legend
+}: HubShellProps) => {
   const renderGraph = () => {
     if (data) {
       switch (data.type) {
@@ -28,10 +33,10 @@ const HubShell = ({ data }: HubShellProps) => {
             <Suspense fallback={<Fallback />}>
               <HierarchicalEdgeBundlingShellView
                 data={data.data as VisualizationTypes.NodeLinkData}
-                legend={true}
+                legend={legend}
                 options={true}
-                filter={true}
-                containered={false}
+                filter={filter}
+                fullScreen={fullScreen}
               />
             </Suspense>
           );
@@ -40,9 +45,10 @@ const HubShell = ({ data }: HubShellProps) => {
             <Suspense fallback={<Fallback />}>
               <ForcedLayoutGraphShellView
                 data={data.data as VisualizationTypes.NodeLinkData}
-                legend={true}
+                legend={legend}
                 options={true}
-                filter={true}
+                filter={filter}
+                fullScreen={fullScreen}
               />
             </Suspense>
           );
@@ -50,10 +56,11 @@ const HubShell = ({ data }: HubShellProps) => {
           return (
             <Suspense fallback={<Fallback />}>
               <SankeyGraphShellView
+                fullScreen={fullScreen}
                 data={data.data as VisualizationTypes.NodeLinkData}
-                legend={true}
+                legend={legend}
                 options={true}
-                filter={true}
+                filter={filter}
               />
             </Suspense>
           );
@@ -62,9 +69,10 @@ const HubShell = ({ data }: HubShellProps) => {
             <Suspense fallback={<Fallback />}>
               <CalendarGraphShellView
                 data={data.data as VisualizationTypes.CalendarData}
-                legend={true}
+                legend={legend}
                 options={true}
-                filter={true}
+                filter={filter}
+                fullScreen={fullScreen}
               />
             </Suspense>
           );
@@ -73,9 +81,10 @@ const HubShell = ({ data }: HubShellProps) => {
             <Suspense fallback={<Fallback />}>
               <WordCloudShellView
                 data={data.data as VisualizationTypes.WordCloudData}
-                legend={true}
+                legend={legend}
                 options={true}
-                filter={true}
+                filter={filter}
+                fullScreen={fullScreen}
               />
             </Suspense>
           );
@@ -84,9 +93,10 @@ const HubShell = ({ data }: HubShellProps) => {
             <Suspense fallback={<Fallback />}>
               <MatrixShellView
                 data={data.data as VisualizationTypes.NodeLinkData}
-                legend={true}
+                legend={legend}
                 options={true}
-                filter={false}
+                filter={filter}
+                fullScreen={fullScreen}
               />
             </Suspense>
           );
@@ -95,10 +105,11 @@ const HubShell = ({ data }: HubShellProps) => {
             <Suspense fallback={<Fallback />}>
               <AxisChartsShellView
                 data={data.data as VisualizationTypes.AxisChartData}
-                legend={true}
-                options={true}
+                legend={legend}
                 type="line"
-                filter={true}
+                options={true}
+                filter={filter}
+                fullScreen={fullScreen}
               />
             </Suspense>
           );
@@ -107,10 +118,11 @@ const HubShell = ({ data }: HubShellProps) => {
             <Suspense fallback={<Fallback />}>
               <AxisChartsShellView
                 data={data.data as VisualizationTypes.AxisChartData}
-                legend={true}
-                options={true}
                 type="bar"
-                filter={true}
+                legend={legend}
+                options={true}
+                filter={filter}
+                fullScreen={fullScreen}
               />
             </Suspense>
           );
@@ -119,9 +131,10 @@ const HubShell = ({ data }: HubShellProps) => {
             <Suspense fallback={<Fallback />}>
               <PieChartShellView
                 data={data.data as VisualizationTypes.PieChartData}
-                legend={true}
+                legend={legend}
                 options={true}
-                filter={true}
+                filter={filter}
+                fullScreen={fullScreen}
               />
             </Suspense>
           );
@@ -130,9 +143,10 @@ const HubShell = ({ data }: HubShellProps) => {
             <Suspense fallback={<Fallback />}>
               <FunnelShellView
                 data={data.data as VisualizationTypes.FunnelData}
-                legend={true}
+                legend={legend}
                 options={true}
-                filter={true}
+                filter={filter}
+                fullScreen={fullScreen}
               />
             </Suspense>
           );
@@ -141,9 +155,10 @@ const HubShell = ({ data }: HubShellProps) => {
             <Suspense fallback={<Fallback />}>
               <ScatterShellView
                 data={data.data as VisualizationTypes.ScatterData}
-                legend={true}
+                legend={legend}
                 options={true}
-                filter={true}
+                filter={filter}
+                fullScreen={fullScreen}
               />
             </Suspense>
           );
@@ -152,9 +167,10 @@ const HubShell = ({ data }: HubShellProps) => {
             <Suspense fallback={<Fallback />}>
               <TreeMapShellView
                 data={data.data as VisualizationTypes.HierarchyData}
-                legend={true}
+                legend={legend}
                 options={true}
                 filter={false}
+                fullScreen={fullScreen}
               />
             </Suspense>
           );
@@ -163,9 +179,10 @@ const HubShell = ({ data }: HubShellProps) => {
             <Suspense fallback={<Fallback />}>
               <SunBurstShellView
                 data={data.data as VisualizationTypes.HierarchyData}
-                legend={true}
+                legend={legend}
                 options={true}
                 filter={false}
+                fullScreen={fullScreen}
               />
             </Suspense>
           );
@@ -174,9 +191,10 @@ const HubShell = ({ data }: HubShellProps) => {
             <Suspense fallback={<Fallback />}>
               <TimelineShellView
                 data={data.data as VisualizationTypes.TimelineData}
-                legend={true}
+                legend={legend}
                 options={true}
-                filter={true}
+                filter={filter}
+                fullScreen={fullScreen}
               />
             </Suspense>
           );

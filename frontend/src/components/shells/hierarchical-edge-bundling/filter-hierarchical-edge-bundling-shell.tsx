@@ -3,7 +3,7 @@
 import { VisualizationTypes } from '@illustry/types';
 import { Dispatch, SetStateAction, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
 type FilteredHierarchicalEdgeBundlingGraphShellProp = {
@@ -11,6 +11,7 @@ type FilteredHierarchicalEdgeBundlingGraphShellProp = {
   links: VisualizationTypes.Link[];
 } & WithLegend
   & WithOptions
+  & WithFullScreen
 
 const HierarchicalEdgeBundlingGraphView = dynamic(
   () => import('@/components/views/hierarchical-edge-bundling'),
@@ -21,7 +22,8 @@ const FilteredHierarchicalEdgeBundlingGraphShellView = ({
   nodes,
   links,
   legend,
-  options
+  options,
+  fullScreen
 }: FilteredHierarchicalEdgeBundlingGraphShellProp) => {
   const [filteredData, setFilteredData] = useState<{
     nodes: VisualizationTypes.Node[];
@@ -52,7 +54,7 @@ const FilteredHierarchicalEdgeBundlingGraphShellView = ({
         nodes={filteredData.nodes}
         links={filteredData.links}
         legend={legend}
-        containered={false}
+        fullScreen={fullScreen}
       />
     </>
   );

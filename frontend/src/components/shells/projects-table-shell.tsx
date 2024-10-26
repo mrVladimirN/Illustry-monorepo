@@ -5,7 +5,9 @@ import { DotsHorizontalIcon } from '@radix-ui/react-icons';
 import Link from 'next/link';
 import { toast } from 'sonner';
 import { ProjectTypes } from '@illustry/types';
-import { useMemo, useState, useTransition } from 'react';
+import {
+  useMemo, useState, useTransition, useEffect
+} from 'react';
 import { deleteProject } from '@/app/_actions/project';
 import { catchError, formatDate } from '@/lib/utils';
 import { Button } from '../ui/button';
@@ -20,6 +22,7 @@ import {
 import Checkbox from '../ui/checkbox';
 import DataTable from '../data-table/data-table';
 import DataTableColumnHeader from '../data-table/data-table-column-header';
+import { useActiveProjectDispatch } from '../providers/active-project-provider';
 
 type ProjectsTableShellProps = {
   data?: ProjectTypes.ProjectType[];
@@ -29,6 +32,13 @@ type ProjectsTableShellProps = {
 const ProjectsTableShell = ({ data, pageCount }: ProjectsTableShellProps) => {
   const [isPending, startTransition] = useTransition();
   const [selectedRowNames, setSelectedRowNames] = useState<string[]>([]);
+  const dispatch = useActiveProjectDispatch();
+
+  useEffect(() => {
+    const hasActiveProject = data?.some((project) => project.isActive) ?? false;
+    dispatch({ type: 'SET_ACTIVE_PROJECT', payload: hasActiveProject });
+  }, [dispatch, data]);
+
   const columns = useMemo<ColumnDef<ProjectTypes.ProjectType, unknown>[]>(
     () => [
       {

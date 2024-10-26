@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';
 import siteConfig from '@/config/site';
 import { cn } from '@/lib/utils';
 import {
@@ -14,30 +13,23 @@ import {
 } from '@/components/ui/navigation-menu';
 import Icons from '@/components/icons';
 import ThemeToggle from './theme-toggle';
+import { useActiveProject } from '../providers/active-project-provider';
 
 type NavItem = {
   title: string;
   href?: string;
+  clickableNoActiveProject?: boolean;
   disabled?: boolean;
-  external?: boolean;
-  icon?: keyof typeof Icons;
-  label?: string;
-  description?: string;
 }
 
-type NavItemWithChildren = {
-  items: NavItemWithChildren[];
-} & NavItem
-
-type NavItemWithOptionalChildren = {
-  items?: NavItemWithChildren[];
-} & NavItem
-type MainNavItem = NavItemWithOptionalChildren;
 type MainNavProps = {
-  items?: MainNavItem[];
+  items?: NavItem[];
 }
 
-const MainNav = ({ items }: MainNavProps) => (
+const MainNav = ({ items }: MainNavProps) => {
+  const { activeProject } = useActiveProject();
+
+  return (
     <div className="hidden gap-6 lg:flex">
       <Link
         aria-label="Home"
@@ -51,65 +43,34 @@ const MainNav = ({ items }: MainNavProps) => (
       </Link>
       <NavigationMenu>
         <NavigationMenuList>
-          {items?.[0]?.items ? (
-            <Link href="/projects" legacyBehavior passHref>
-              <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="h-auto" id="a">
-                    {items[0].title}
-                  </NavigationMenuTrigger>
-                </NavigationMenuItem>
-              </NavigationMenuLink>
-            </Link>
-          ) : null}
-          {items
-            ?.filter((item) => item.title !== items[0]?.title)
-            .map((item) => (
-              <Link key={item.title} href={item.href ? item.href : '/'} legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  <NavigationMenuItem key={item.title}>
+          {items?.map((item) => {
+            const isDisabled = !activeProject && !item.clickableNoActiveProject;
+            return (
+              <NavigationMenuItem key={item.title}>
+                <NavigationMenuLink asChild>
+                  <Link
+                    href={item.href ? item.href : '/'}
+                    aria-disabled={isDisabled}
+                    className={cn(
+                      navigationMenuTriggerStyle(),
+                      isDisabled ? 'pointer-events-none opacity-50' : ''
+                    )}
+                  >
                     <NavigationMenuTrigger className="h-auto capitalize">
                       {item.title}
                     </NavigationMenuTrigger>
-                  </NavigationMenuItem>
+                  </Link>
                 </NavigationMenuLink>
-              </Link>
-            ))}
+              </NavigationMenuItem>
+            );
+          })}
         </NavigationMenuList>
       </NavigationMenu>
       <div className="flex flex-1 items-center justify-end space-x-4">
         <ThemeToggle />
       </div>
     </div>
-);
-
-const ListItem = forwardRef<
-  ElementRef<'a'>,
-  ComponentPropsWithoutRef<'a'>
->(({
-  className, title, children, href, ...props
-}, ref) => (
-  <li>
-    <NavigationMenuLink asChild>
-      <Link
-        ref={ref}
-        href={String(href)}
-        className={cn(
-          'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors',
-          'hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
-          className
-        )}
-        {...props}
-      >
-        <div className="text-sm font-medium leading-none">{title}</div>
-        <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-          {children}
-        </p>
-      </Link>
-    </NavigationMenuLink>
-  </li>
-));
-
-ListItem.displayName = 'ListItem';
+  );
+};
 
 export default MainNav;

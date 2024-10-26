@@ -110,7 +110,7 @@ const AddDashboardForm = ({ visualizations }: AddDashboardFormProps) => {
                           const name = value.match(/^[^(]+/)?.[0];
                           const type = value.match(/\(([^)]+)\)/)?.[1];
                           if (name && type) {
-                            acc[name] = type;
+                            acc[`${name}_${type}`] = type;
                           }
                           return acc;
                         },

@@ -8,6 +8,10 @@ type WithOptions = {
   options: boolean;
 }
 
+type WithFullScreen = {
+  fullScreen: boolean
+}
+
 type WithFilter = {
   filter: boolean;
 }
@@ -38,5 +42,6 @@ export type {
   WithLegend,
   WithOptions,
   WithFilter,
+  WithFullScreen,
   AllVisualizationsShell
 };

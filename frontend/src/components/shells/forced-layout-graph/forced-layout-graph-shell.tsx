@@ -1,6 +1,8 @@
 import { VisualizationTypes } from '@illustry/types';
 import dynamic from 'next/dynamic';
-import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
+import {
+  WithFilter, WithFullScreen, WithLegend, WithOptions
+} from '@/lib/types/utils';
 import FilteredForcedLayoutGraphShellView from './filter-forced-layout-graph-shell';
 
 type ForcedLayoutGraphShellProp = {
@@ -8,6 +10,7 @@ type ForcedLayoutGraphShellProp = {
 } & WithLegend
   & WithOptions
   & WithFilter
+  & WithFullScreen
 
 const ForcedLayoutGraphView = dynamic(
   () => import('@/components/views/forced-layout-graph'),
@@ -18,7 +21,8 @@ const ForcedLayoutGraphShellView = ({
   data,
   legend,
   options,
-  filter
+  filter,
+  fullScreen
 }: ForcedLayoutGraphShellProp) => {
   const { nodes, links } = data;
   return (
@@ -29,6 +33,7 @@ const ForcedLayoutGraphShellView = ({
           nodes={nodes}
           links={links}
           legend={legend}
+          fullScreen={fullScreen}
         />
       ) : (
         <>
@@ -37,6 +42,7 @@ const ForcedLayoutGraphShellView = ({
             nodes={nodes}
             links={links}
             legend={legend}
+            fullScreen={fullScreen}
           />
         </>
       )}

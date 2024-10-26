@@ -1,6 +1,8 @@
 import { VisualizationTypes } from '@illustry/types';
 import dynamic from 'next/dynamic';
-import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
+import {
+  WithFilter, WithFullScreen, WithLegend, WithOptions
+} from '@/lib/types/utils';
 import { computeCategoriesCalendar } from '@/lib/visualizations/calendar/helper';
 import FilteredCalendarShellView from './filter-calendar-shell';
 
@@ -9,6 +11,7 @@ type CalendarGraphShellProp = {
 } & WithLegend
   & WithOptions
   & WithFilter
+  & WithFullScreen
 
 const CalendarGraphView = dynamic(
   () => import('@/components/views/calendar-graph'),
@@ -19,7 +22,8 @@ const CalendarGraphShellView = ({
   data,
   legend,
   options,
-  filter
+  filter,
+  fullScreen
 }: CalendarGraphShellProp) => {
   const { calendar } = data;
   const categories = computeCategoriesCalendar(calendar);
@@ -32,6 +36,7 @@ const CalendarGraphShellView = ({
           calendar={calendar}
           categories={categories}
           legend={legend}
+          fullScreen={fullScreen}
         />
       ) : (
         <>
@@ -40,6 +45,7 @@ const CalendarGraphShellView = ({
             calendar={calendar}
             categories={categories}
             legend={legend}
+            fullScreen={fullScreen}
           />
         </>
       )}

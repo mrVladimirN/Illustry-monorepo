@@ -1,6 +1,8 @@
 import dynamic from 'next/dynamic';
 import { VisualizationTypes } from '@illustry/types';
-import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
+import {
+  WithFilter, WithFullScreen, WithLegend, WithOptions
+} from '@/lib/types/utils';
 import FilteredMatrixShellView from './filter-matrix-shell';
 
 type MatrixShellProp = {
@@ -8,13 +10,18 @@ type MatrixShellProp = {
 } & WithLegend
   & WithOptions
   & WithFilter
+  & WithFullScreen
 
 const MatrixGraphView = dynamic(() => import('@/components/views/matrix'), {
   ssr: false
 });
 
 const MatrixShellView = ({
-  data, legend, options, filter
+  data,
+  legend,
+  options,
+  filter,
+  fullScreen
 }: MatrixShellProp) => {
   const { nodes, links } = data;
   return (
@@ -25,6 +32,7 @@ const MatrixShellView = ({
           nodes={nodes}
           links={links}
           legend={legend}
+          fullScreen={fullScreen}
         />
       ) : (
         <>
@@ -33,6 +41,7 @@ const MatrixShellView = ({
             nodes={nodes}
             links={links}
             legend={legend}
+            fullScreen={fullScreen}
           />
         </>
       )}

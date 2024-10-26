@@ -1,6 +1,8 @@
 import { VisualizationTypes } from '@illustry/types';
 import dynamic from 'next/dynamic';
-import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
+import {
+  WithFilter, WithFullScreen, WithLegend, WithOptions
+} from '@/lib/types/utils';
 import {
   computeCategoriesScatter,
   computePoints
@@ -12,6 +14,7 @@ type ScatterShellProp = {
 } & WithLegend
   & WithOptions
   & WithFilter
+  & WithFullScreen
 
 const ScatterGraphView = dynamic(() => import('@/components/views/scatter'), {
   ssr: false
@@ -21,7 +24,8 @@ const ScatterShellView = ({
   data,
   legend,
   options,
-  filter
+  filter,
+  fullScreen
 }: ScatterShellProp) => {
   const { points } = data;
   const computedPoints = computePoints(points);
@@ -34,6 +38,7 @@ const ScatterShellView = ({
           points={computedPoints}
           categories={categories}
           legend={legend}
+          fullScreen={fullScreen}
         />
       ) : (
         <>
@@ -42,6 +47,7 @@ const ScatterShellView = ({
             points={computedPoints}
             categories={categories}
             legend={legend}
+            fullScreen={fullScreen}
           />
         </>
       )}

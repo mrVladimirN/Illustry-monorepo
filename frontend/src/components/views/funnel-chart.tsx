@@ -1,21 +1,22 @@
 'use client';
 
-import { EChartsOption } from 'echarts';
 import { VisualizationTypes } from '@illustry/types';
 import {
   computeLegendColors,
   computeValues
 } from '@/lib/visualizations/pieFunnel/helper';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
-import { useThemeColors } from '../theme-provider';
+import { useThemeColors } from '../providers/theme-provider';
 import ReactEcharts from './generic/echarts';
 
 type FunnelProp = {
   data: VisualizationTypes.FunnelData;
 } & WithLegend
   & WithOptions
-const FunnelView = ({ data, legend }: FunnelProp) => {
+  & WithFullScreen
+
+const FunnelView = ({ data, legend, fullScreen }: FunnelProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';
@@ -23,7 +24,7 @@ const FunnelView = ({ data, legend }: FunnelProp) => {
     ? activeTheme.funnel.dark.colors
     : activeTheme.funnel.light.colors;
 
-  const option: EChartsOption = {
+  const option = {
     tooltip: {
       trigger: 'item'
     },
@@ -53,11 +54,18 @@ const FunnelView = ({ data, legend }: FunnelProp) => {
       }
     ]
   };
+  const height = fullScreen ? '73.5vh' : '35vh';
   return (
     <div className="relative mt-[4%] flex flex-col items-center">
       {legend && <Legend legendData={computeLegendColors(data, colors)} />}
-      <div className="w-full mt-4 h-[80vh]">
-        <ReactEcharts option={option} className="w-full h-full" />
+      <div className="w-full h-full">
+        <ReactEcharts
+          option={option}
+          className="w-full sm:h-120 lg:h-160"
+          style={{
+            height
+          }}
+        />
       </div>
     </div>
   );

@@ -1,6 +1,8 @@
 import dynamic from 'next/dynamic';
 import { VisualizationTypes } from '@illustry/types';
-import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
+import {
+  WithFilter, WithFullScreen, WithLegend, WithOptions
+} from '@/lib/types/utils';
 import FilteredTimelineShellView from './filter-timeline-shell';
 
 type TimelineShellProp = {
@@ -8,6 +10,7 @@ type TimelineShellProp = {
 } & WithLegend
   & WithOptions
   & WithFilter
+  & WithFullScreen
 
 const TimelineGraphView = dynamic(() => import('@/components/views/timeline'), {
   ssr: false
@@ -17,7 +20,8 @@ const TimelineShellView = ({
   data,
   legend,
   options,
-  filter
+  filter,
+  fullScreen
 }: TimelineShellProp) => (
   <>
     {filter ? (
@@ -25,10 +29,16 @@ const TimelineShellView = ({
         options={options}
         data={data}
         legend={legend}
+        fullScreen={fullScreen}
       />
     ) : (
       <>
-        <TimelineGraphView options={options} data={data} legend={legend} />
+        <TimelineGraphView
+          options={options}
+          data={data}
+          legend={legend}
+          fullScreen={fullScreen}
+        />
       </>
     )}
   </>

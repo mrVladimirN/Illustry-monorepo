@@ -3,7 +3,7 @@
 import { VisualizationTypes } from '@illustry/types';
 import { Dispatch, SetStateAction, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
 type FilteredSunburstShellViewProp = {
@@ -11,6 +11,7 @@ type FilteredSunburstShellViewProp = {
   nodes: VisualizationTypes.HierarchyNode[];
 } & WithLegend
   & WithOptions
+  & WithFullScreen
 
 const SunburstView = dynamic(
   () => import('@/components/views/sunburst-chart'),
@@ -21,7 +22,8 @@ const FilteredSunburstShellView = ({
   categories,
   nodes,
   legend,
-  options
+  options,
+  fullScreen
 }: FilteredSunburstShellViewProp) => {
   const [filteredData, setFilteredData] = useState<{
     categories: string[];
@@ -45,7 +47,9 @@ const FilteredSunburstShellView = ({
       <>
         <SunburstView options={options}
           nodes={filteredData.nodes}
-          categories={filteredData.categories} legend={legend} />
+          categories={filteredData.categories}
+          legend={legend}
+          fullScreen={fullScreen} />
       </>
     </>
   );

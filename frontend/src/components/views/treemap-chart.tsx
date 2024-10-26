@@ -1,8 +1,7 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 'use client';
 
-import { EChartsOption } from 'echarts';
 import { VisualizationTypes } from '@illustry/types';
 import {
   calculateMeanValue,
@@ -12,9 +11,9 @@ import {
   createLevels
 } from '@/lib/visualizations/hierarchy-charts/helper';
 import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
-import { useThemeColors } from '../theme-provider';
+import { useThemeColors } from '../providers/theme-provider';
 import ReactEcharts from './generic/echarts';
 
 type TreeMapProp = {
@@ -22,7 +21,11 @@ type TreeMapProp = {
   nodes: VisualizationTypes.HierarchyNode[];
 } & WithLegend
   & WithOptions
-const TreeMapView = ({ nodes, categories, legend }: TreeMapProp) => {
+  & WithFullScreen
+
+const TreeMapView = ({
+  nodes, categories, legend, fullScreen
+}: TreeMapProp) => {
   const maxDepth = computeMaxDepth(nodes);
   const meanValue = calculateMeanValue(computeUniqueValues(nodes));
   const levels = createLevels(maxDepth);
@@ -33,13 +36,11 @@ const TreeMapView = ({ nodes, categories, legend }: TreeMapProp) => {
     ? activeTheme.treeMap.dark.colors
     : activeTheme.treeMap.light.colors;
 
-  const option: EChartsOption = {
+  const option = {
     tooltip: {
       trigger: 'item',
       triggerOn: 'mousemove',
-      // @ts-ignore
-      formatter(params) {
-        // @ts-ignore
+      formatter(params: any) {
         return params.data.prop;
       }
     },
@@ -53,13 +54,20 @@ const TreeMapView = ({ nodes, categories, legend }: TreeMapProp) => {
       }
     ]
   };
+  const height = fullScreen ? '73.5vh' : '35vh';
   return (
     <div className="relative mt-[4%] flex flex-col items-center">
       {legend && (
         <Legend legendData={computeLegendColors(categories, colors)} />
       )}
-      <div className="w-full mt-4 h-[80vh]">
-        <ReactEcharts option={option} className="w-full h-full" />
+      <div className="w-full h-full">
+        <ReactEcharts
+          option={option}
+          className="w-full sm:h-120 lg:h-160"
+          style={{
+            height
+          }}
+        />
       </div>
     </div>
   );

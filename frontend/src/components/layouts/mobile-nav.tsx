@@ -12,10 +12,12 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import Icons from '@/components/icons';
 import ThemeToggle from './theme-toggle';
+import { useActiveProject } from '../providers/active-project-provider';
 
 type NavItem = {
   title: string;
   href?: string;
+  clickableNoActiveProject?: boolean;
   disabled?: boolean;
   external?: boolean;
   icon?: keyof typeof Icons;
@@ -50,22 +52,24 @@ const MobileLink = ({
   pathname,
   setIsOpen
 }: MobileLinkProps) => (
-    <Link
-      href={href}
-      className={cn(
-        'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors',
-        'hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
-        pathname === href,
-        disabled && 'pointer-events-none opacity-60'
-      )}
-      onClick={() => setIsOpen(false)}
-    >
-      {children}
-    </Link>
+  <Link
+    href={href}
+    className={cn(
+      'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors',
+      'hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
+      pathname === href,
+      disabled && 'pointer-events-none opacity-60'
+    )}
+    onClick={() => setIsOpen(false)}
+  >
+    {children}
+  </Link>
 );
+
 const MobileNav = ({ items }: MobileNavProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const { activeProject } = useActiveProject();
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild suppressHydrationWarning>
@@ -99,7 +103,7 @@ const MobileNav = ({ items }: MobileNavProps) => {
                 href={item.href ? item.href : '/'}
                 pathname={pathname}
                 setIsOpen={setIsOpen}
-                disabled={item.disabled}
+                disabled={!activeProject && !item.clickableNoActiveProject}
               >
                 {item.title}
               </MobileLink>

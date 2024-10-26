@@ -3,7 +3,7 @@
 import { VisualizationTypes } from '@illustry/types';
 import { Dispatch, SetStateAction, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
 type FilteredForcedLayoutGraphShellProp = {
@@ -11,6 +11,7 @@ type FilteredForcedLayoutGraphShellProp = {
   links: VisualizationTypes.Link[];
 } & WithLegend
   & WithOptions
+  & WithFullScreen
 
 const ForcedLayoutGraphView = dynamic(
   () => import('@/components/views/forced-layout-graph'),
@@ -23,7 +24,8 @@ const FilteredForcedLayoutGraphShellView = ({
   nodes,
   links,
   legend,
-  options
+  options,
+  fullScreen
 }: FilteredForcedLayoutGraphShellProp) => {
   const [filteredData, setFilteredData] = useState<{
     nodes: VisualizationTypes.Node[];
@@ -54,6 +56,7 @@ const FilteredForcedLayoutGraphShellView = ({
         nodes={filteredData.nodes}
         links={filteredData.links}
         legend={legend}
+        fullScreen={fullScreen}
       />
     </>
   );

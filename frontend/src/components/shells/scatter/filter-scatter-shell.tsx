@@ -3,7 +3,7 @@
 import { Dispatch, SetStateAction, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { VisualizationTypes } from '@illustry/types';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
 type FilteredScatterShellViewProp = {
@@ -11,6 +11,7 @@ type FilteredScatterShellViewProp = {
   categories: string[];
 } & WithLegend
   & WithOptions
+  & WithFullScreen
 
 const ScatterGraphView = dynamic(
   () => import('@/components/views/scatter'),
@@ -21,7 +22,8 @@ const FilteredScatterGraphShellView = ({
   points,
   categories,
   legend,
-  options
+  options,
+  fullScreen
 }: FilteredScatterShellViewProp) => {
   const [filteredData, setFilteredData] = useState<{
     points:(string | number)[][];
@@ -53,6 +55,7 @@ const FilteredScatterGraphShellView = ({
           points={filteredData.points}
           categories={filteredData.categories}
           legend={legend}
+          fullScreen={fullScreen}
         />
       </>
     </>

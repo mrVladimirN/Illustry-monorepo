@@ -2,7 +2,6 @@
 
 'use client';
 
-import { EChartsOption, SeriesOption } from 'echarts';
 import { CalendarOption } from 'echarts/types/dist/shared';
 import { VisualizationTypes } from '@illustry/types';
 import {
@@ -11,9 +10,9 @@ import {
   computeLegendColors,
   computePropertiesForToolTip
 } from '@/lib/visualizations/calendar/helper';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
-import { useThemeColors } from '../theme-provider';
+import { useThemeColors } from '../providers/theme-provider';
 import ReactEcharts from './generic/echarts';
 
 type CalendarGraphProp = {
@@ -21,6 +20,8 @@ type CalendarGraphProp = {
   calendar: VisualizationTypes.CalendarType[];
 } & WithLegend
   & WithOptions
+  & WithFullScreen
+
 const CalendarGraphView = ({ categories, calendar, legend }: CalendarGraphProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
@@ -30,16 +31,14 @@ const CalendarGraphView = ({ categories, calendar, legend }: CalendarGraphProp) 
     : activeTheme.calendar.light.colors;
   const textColor = isDarkTheme ? '#888' : '#333';
   const computedCalendar = computeCalendar(calendar, textColor);
-  const option: EChartsOption = {
+  const option = {
     tooltip: {
       trigger: 'item',
       triggerOn: 'mousemove',
-
-      formatter(params) {
-        // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      formatter(params: any) {
         if (params && params.data && params.data.length) {
           const element = (calendar as VisualizationTypes.CalendarType[]).find((el) =>
-            // @ts-ignore
             // eslint-disable-next-line implicit-arrow-linebreak
             el.date === params.data[0]);
           if (element) {
@@ -69,7 +68,7 @@ const CalendarGraphView = ({ categories, calendar, legend }: CalendarGraphProp) 
     },
 
     calendar: computedCalendar.calendar as CalendarOption,
-    series: computedCalendar.series as SeriesOption
+    series: computedCalendar.series
   };
   const canvasHeight = `${computedCalendar.calendar.length * 35}vh`;
   return (

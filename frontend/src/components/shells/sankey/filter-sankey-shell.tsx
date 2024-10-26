@@ -3,7 +3,7 @@
 import { VisualizationTypes } from '@illustry/types';
 import { Dispatch, SetStateAction, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
 type FilteredSankeyGraphShellProp = {
@@ -11,6 +11,7 @@ type FilteredSankeyGraphShellProp = {
   links: VisualizationTypes.Link[];
 } & WithLegend
   & WithOptions
+  & WithFullScreen
 
 const SankeyGraphView = dynamic(
   () => import('@/components/views/sankey-diagram'),
@@ -20,6 +21,7 @@ const SankeyGraphView = dynamic(
 const FilteredSankeyGraphShellView = ({
   nodes,
   links,
+  fullScreen = true,
   legend,
   options
 }: FilteredSankeyGraphShellProp) => {
@@ -48,6 +50,7 @@ const FilteredSankeyGraphShellView = ({
         type={VisualizationTypes.VisualizationTypesEnum.SANKEY}
       />
       <SankeyGraphView
+        fullScreen={fullScreen}
         options={options}
         nodes={filteredData.nodes}
         links={filteredData.links}

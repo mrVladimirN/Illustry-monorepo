@@ -52,10 +52,10 @@ const PlaygroundShell = () => {
   });
   const [textareaValue, setTextareaValue] = useState<string>();
   const [isSubmitable, setIsSubmitable] = useState<boolean>(false);
- const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
-  setTextareaValue(event.target.value);
-  setIsSubmitable(false);
-};
+  const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setTextareaValue(event.target.value);
+    setIsSubmitable(false);
+  };
   const getActiveDiagramKey = (): keyof ShowDiagramState | null => {
     const activeKeys = Object.keys(showDiagram).filter(
       (key) => showDiagram[key as keyof ShowDiagramState]
@@ -121,6 +121,7 @@ const PlaygroundShell = () => {
             <Suspense fallback={<Fallback />}>
               {key === 'barChart' && isSubmitable && (
                 <AxisChartsShellView
+                  fullScreen={true}
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.AxisChartData}
                   legend={false}
                   options={false}
@@ -130,6 +131,7 @@ const PlaygroundShell = () => {
               )}
               {key === 'lineChart' && isSubmitable && (
                 <AxisChartsShellView
+                  fullScreen={true}
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.AxisChartData}
                   legend={false}
                   options={false}
@@ -140,6 +142,7 @@ const PlaygroundShell = () => {
               {key === 'sankey' && isSubmitable && (
                 <SankeyGraphShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.NodeLinkData}
+                  fullScreen={true}
                   legend={false}
                   options={false}
                   filter={false}
@@ -151,7 +154,7 @@ const PlaygroundShell = () => {
                   legend={false}
                   options={false}
                   filter={false}
-                  containered={true}
+                  fullScreen={true}
                 />
               )}
               {key === 'flg' && isSubmitable && (
@@ -160,12 +163,14 @@ const PlaygroundShell = () => {
                   legend={false}
                   options={false}
                   filter={false}
+                  fullScreen={true}
                 />
               )}
               {key === 'matrix' && isSubmitable && (
                 <MatrixShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.NodeLinkData}
                   legend={false}
+                  fullScreen={true}
                   options={false}
                   filter={false}
                 />
@@ -173,6 +178,7 @@ const PlaygroundShell = () => {
               {key === 'wordCloud' && isSubmitable && (
                 <WordCloudShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.WordCloudData}
+                  fullScreen={true}
                   legend={false}
                   options={false}
                   filter={false}
@@ -181,6 +187,7 @@ const PlaygroundShell = () => {
               {key === 'funnel' && isSubmitable && (
                 <FunnelShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.FunnelData}
+                  fullScreen={true}
                   legend={false}
                   options={false}
                   filter={false}
@@ -189,6 +196,7 @@ const PlaygroundShell = () => {
               {key === 'pieChart' && isSubmitable && (
                 <PieChartShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.FunnelData}
+                  fullScreen={true}
                   legend={false}
                   options={false}
                   filter={false}
@@ -197,6 +205,7 @@ const PlaygroundShell = () => {
               {key === 'scatter' && isSubmitable && (
                 <ScatterShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.ScatterData}
+                  fullScreen={true}
                   legend={false}
                   options={false}
                   filter={false}
@@ -206,6 +215,7 @@ const PlaygroundShell = () => {
                 <SunBurstShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.HierarchyData}
                   legend={false}
+                  fullScreen={true}
                   options={false}
                   filter={false}
                 />
@@ -213,6 +223,7 @@ const PlaygroundShell = () => {
               {key === 'timeline' && isSubmitable && (
                 <TimelineShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.TimelineData}
+                  fullScreen={true}
                   legend={false}
                   options={false}
                   filter={false}
@@ -223,6 +234,7 @@ const PlaygroundShell = () => {
                 <TreeMapShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.HierarchyData}
                   legend={false}
+                  fullScreen={true}
                   options={false}
                   filter={false}
                 />
@@ -231,6 +243,7 @@ const PlaygroundShell = () => {
                 <CalendarGraphShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.CalendarData}
                   legend={false}
+                  fullScreen={true}
                   options={false}
                   filter={false}
                 />

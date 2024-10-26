@@ -3,13 +3,14 @@
 import { VisualizationTypes } from '@illustry/types';
 import { Dispatch, SetStateAction, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
 type FilteredPieChartShellProp = {
   data: VisualizationTypes.PieChartData
 } & WithLegend
   & WithOptions
+  & WithFullScreen
 
 const PieChartGraphView = dynamic(
   () => import('@/components/views/pie-chart'),
@@ -19,7 +20,8 @@ const PieChartGraphView = dynamic(
 const FilteredPieChartGraphShellView = ({
   data,
   legend,
-  options
+  options,
+  fullScreen
 }: FilteredPieChartShellProp) => {
   const [filteredData, setFilteredData] = useState<VisualizationTypes.PieChartData>(data);
 
@@ -35,7 +37,11 @@ const FilteredPieChartGraphShellView = ({
         type={VisualizationTypes.VisualizationTypesEnum.PIE_CHART}
       />
       <>
-        <PieChartGraphView options={options} data={filteredData} legend={legend} />
+        <PieChartGraphView
+          options={options}
+          data={filteredData}
+          legend={legend}
+          fullScreen={fullScreen} />
       </>
     </>
   );

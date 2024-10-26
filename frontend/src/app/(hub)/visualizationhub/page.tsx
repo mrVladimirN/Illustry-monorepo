@@ -22,7 +22,7 @@ const Hub = async ({ searchParams }: VisualizationsProps) => {
   } as VisualizationTypes.VisualizationFilter);
   return (
     <>
-      <HubShell data={visualization}></HubShell>
+      <HubShell data={visualization} fullScreen={true} filter={true} legend={true}></HubShell>
     </>
   );
 };

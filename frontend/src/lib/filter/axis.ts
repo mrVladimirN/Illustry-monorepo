@@ -119,9 +119,9 @@ const applyAxisFilter = (expressions: string[], defaultData: VisualizationTypes.
   if (valuesFilter !== '') {
     newData.values = applyValuesFilter(
       valuesFilter,
-      validValuesPosition.length ?
-        validValuesPosition :
-        Array.from({ length: initialHeaders.length }, (_, i) => i),
+      validValuesPosition.length
+        ? validValuesPosition
+        : Array.from({ length: initialHeaders.length }, (_, i) => i),
       defaultData
     );
   }

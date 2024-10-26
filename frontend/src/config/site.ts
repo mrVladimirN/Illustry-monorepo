@@ -9,31 +9,36 @@ const siteConfig = {
       title: 'Projects',
       href: '/projects',
       description: 'All projects',
-      items: []
+      items: [],
+      clickableNoActiveProject: true
     },
     {
       title: 'Visualizations',
       href: '/visualizations',
       description: 'All visualizations',
-      items: []
+      items: [],
+      clickableNoActiveProject: false
     },
     {
       title: 'Dashboards',
-      href:'/dashboards',
+      href: '/dashboards',
       description: 'All dashboards',
-      items:[]
+      items: [],
+      clickableNoActiveProject: false
     },
     {
       title: 'Theme',
       href: '/theme',
       description: 'Set theme',
-      items: []
+      items: [],
+      clickableNoActiveProject: true
     },
     {
       title: 'Playground',
       href: '/playground',
       description: 'Playground ',
-      items: []
+      items: [],
+      clickableNoActiveProject: true
     }
   ],
   nodeLink: {

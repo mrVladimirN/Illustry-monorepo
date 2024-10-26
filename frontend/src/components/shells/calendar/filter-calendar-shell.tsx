@@ -3,7 +3,7 @@
 import { VisualizationTypes } from '@illustry/types';
 import { Dispatch, SetStateAction, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
 type FilteredCalendarShellProp = {
@@ -11,6 +11,7 @@ type FilteredCalendarShellProp = {
   calendar: VisualizationTypes.CalendarType[];
 } & WithLegend
   & WithOptions
+  & WithFullScreen
 
 const CalendarView = dynamic(
   () => import('@/components/views/calendar-graph'),
@@ -22,7 +23,8 @@ const FilteredCalendarShellView = ({
   categories,
   calendar,
   legend,
-  options
+  options,
+  fullScreen
 }: FilteredCalendarShellProp) => {
   const [filteredData, setFilteredData] = useState<{
     categories: string[];
@@ -53,6 +55,7 @@ const FilteredCalendarShellView = ({
         calendar={filteredData.calendar}
         categories={filteredData.categories}
         legend={legend}
+        fullScreen={fullScreen}
       />
     </>
   );

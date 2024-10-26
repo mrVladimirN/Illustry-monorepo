@@ -3,7 +3,7 @@
 import { VisualizationTypes } from '@illustry/types';
 import { Dispatch, SetStateAction, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
 type FilteredTreemapShellViewProp = {
@@ -11,6 +11,7 @@ type FilteredTreemapShellViewProp = {
   nodes: VisualizationTypes.HierarchyNode[];
 } & WithLegend
   & WithOptions
+  & WithFullScreen
 
 const TreeMapView = dynamic(
   () => import('@/components/views/treemap-chart'),
@@ -21,7 +22,8 @@ const FilteredTreemapShellView = ({
   categories,
   nodes,
   legend,
-  options
+  options,
+  fullScreen
 }: FilteredTreemapShellViewProp) => {
   const [filteredData, setFilteredData] = useState<{
     categories: string[];
@@ -44,7 +46,10 @@ const FilteredTreemapShellView = ({
       <>
         <TreeMapView options={options}
           nodes={filteredData.nodes}
-          categories={filteredData.categories} legend={legend} />
+          categories={filteredData.categories}
+          legend={legend}
+          fullScreen={fullScreen}
+        />
       </>
     </>
   );

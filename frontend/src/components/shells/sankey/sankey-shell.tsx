@@ -3,7 +3,9 @@ import dynamic from 'next/dynamic';
 import {
   computeLinksSankey
 } from '@/lib/visualizations/node-link/helper';
-import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
+import {
+  WithFilter, WithFullScreen, WithLegend, WithOptions
+} from '@/lib/types/utils';
 import FilteredSankeyGraphShellView from './filter-sankey-shell';
 
 type SankeyGraphShellProp = {
@@ -11,6 +13,7 @@ type SankeyGraphShellProp = {
 } & WithLegend
   & WithOptions
   & WithFilter
+  & WithFullScreen
 
 const SankeyGraphView = dynamic(
   () => import('@/components/views/sankey-diagram'),
@@ -19,6 +22,7 @@ const SankeyGraphView = dynamic(
 
 const SankeyGraphShellView = ({
   data,
+  fullScreen = true,
   legend,
   options,
   filter
@@ -29,6 +33,7 @@ const SankeyGraphShellView = ({
     <>
       {filter ? (
         <FilteredSankeyGraphShellView
+          fullScreen={fullScreen}
           options={options}
           nodes={nodes}
           links={newLinks}
@@ -37,6 +42,7 @@ const SankeyGraphShellView = ({
       ) : (
         <>
           <SankeyGraphView
+            fullScreen={fullScreen}
             options={options}
             nodes={nodes}
             links={newLinks}

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable no-unused-vars */
 import { Dispatch, RefObject, SetStateAction } from 'react';
-import { useThemeColors } from '@/components/theme-provider';
+import { useThemeColors } from '@/components/providers/theme-provider';
 import Icons from '@/components/icons';
 import ColorPicker from '../colorPicker';
 import {

@@ -3,13 +3,14 @@
 import { VisualizationTypes } from '@illustry/types';
 import { Dispatch, SetStateAction, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
 type FilteredWordCloudShellProp = {
   words: VisualizationTypes.WordType[]
 } & WithLegend
   & WithOptions
+  & WithFullScreen
 
 const WordCloudGraphView = dynamic(
   () => import('@/components/views/wordcloud'),
@@ -19,7 +20,8 @@ const WordCloudGraphView = dynamic(
 const FilteredWordCloudGraphShellView = ({
   words,
   legend,
-  options
+  options,
+  fullScreen
 }: FilteredWordCloudShellProp) => {
   const [filteredData, setFilteredData] = useState<VisualizationTypes.WordType[]>(words);
   return (
@@ -34,7 +36,11 @@ const FilteredWordCloudGraphShellView = ({
         type={VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD}
       />
       <>
-        <WordCloudGraphView options={options} words={filteredData} legend={legend} />
+        <WordCloudGraphView
+          options={options}
+          words={filteredData}
+          legend={legend}
+          fullScreen={fullScreen} />
       </>
     </>
   );
