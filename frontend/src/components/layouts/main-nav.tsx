@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import siteConfig from '@/config/site';
 import { cn } from '@/lib/utils';
 import {
@@ -27,8 +28,18 @@ type MainNavProps = {
 }
 
 const MainNav = ({ items }: MainNavProps) => {
-  const { activeProject } = useActiveProject();
+  const [isMounted, setIsMounted] = useState(false);
+  const activeProject = useActiveProject();
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  if (!isMounted) {
+    return <Icons.spinner
+    className="mr-2 h-4 w-4 animate-spin"
+    aria-hidden="true"
+  />;
+  }
   return (
     <div className="hidden gap-6 lg:flex">
       <Link

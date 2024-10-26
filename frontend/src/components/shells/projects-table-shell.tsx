@@ -35,8 +35,10 @@ const ProjectsTableShell = ({ data, pageCount }: ProjectsTableShellProps) => {
   const dispatch = useActiveProjectDispatch();
 
   useEffect(() => {
-    const hasActiveProject = data?.some((project) => project.isActive) ?? false;
-    dispatch({ type: 'SET_ACTIVE_PROJECT', payload: hasActiveProject });
+    if (dispatch) {
+      const hasActiveProject = data?.some((project) => project.isActive) ?? false;
+      dispatch({ type: 'SET_ACTIVE_PROJECT', payload: hasActiveProject });
+    }
   }, [dispatch, data]);
 
   const columns = useMemo<ColumnDef<ProjectTypes.ProjectType, unknown>[]>(

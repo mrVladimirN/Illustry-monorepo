@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  Dispatch, ReactNode, SetStateAction, useState
+  Dispatch, ReactNode, SetStateAction, useEffect, useState
 } from 'react';
 import siteConfig from '@/config/site';
 import { cn } from '@/lib/utils';
@@ -69,7 +69,18 @@ const MobileLink = ({
 const MobileNav = ({ items }: MobileNavProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
-  const { activeProject } = useActiveProject();
+  const [isMounted, setIsMounted] = useState(false);
+  const activeProject = useActiveProject();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  if (!isMounted) {
+    return <Icons.spinner
+      className="mr-2 h-4 w-4 animate-spin"
+      aria-hidden="true"
+    />;
+  }
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild suppressHydrationWarning>

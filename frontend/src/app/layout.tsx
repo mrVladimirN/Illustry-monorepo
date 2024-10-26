@@ -49,13 +49,14 @@ const RootLayout = ({ children }: RootLayoutProps) => (
           fontMono.variable
         )}
       >
-        <ActiveProjectProvider>
-          <ThemeColorsProvider>
+
+        <ThemeColorsProvider>
+          <ActiveProjectProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               {children}
             </ThemeProvider>
-          </ThemeColorsProvider>
-        </ActiveProjectProvider>
+          </ActiveProjectProvider>
+        </ThemeColorsProvider>
         <Toaster />
       </body>
     </html>

@@ -19,8 +19,9 @@ type VisualizationData = {
 const ResizableDashboard = ({ dashboard }: VisualizationData) => {
   const router = useRouter();
   const pathname = usePathname();
-  const initialLayout = dashboard.layouts?.length ? dashboard.layouts
-    : (dashboard.visualizations as VisualizationTypes.VisualizationType[])
+  const { layouts = [], visualizations = [] } = dashboard;
+  const initialLayout = layouts?.length ? layouts
+    : (visualizations as VisualizationTypes.VisualizationType[])
       .map((viz, index) => ({
         i: index.toString(),
         x: 4 * (index % 3),
@@ -80,7 +81,7 @@ const ResizableDashboard = ({ dashboard }: VisualizationData) => {
         isResizable={true}
         draggableHandle=".draggable-corner"
       >
-        {(dashboard.visualizations as VisualizationTypes.VisualizationType[]).map((viz, i) => (
+        {(visualizations as VisualizationTypes.VisualizationType[]).map((viz, i) => (
           <div
             key={i}
             className="border border-gray-200 rounded-lg shadow-sm overflow-hidden"
