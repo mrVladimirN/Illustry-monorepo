@@ -18,16 +18,13 @@ const browseVisualizations = async (filter?: VisualizationTypes.VisualizationFil
     {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
       },
       body: JSON.stringify(newFilter)
     }
   );
-  return makeRequest<VisualizationTypes.ExtendedVisualizationType>(request, ['visualizations'])
-    .catch((error) => {
-      // eslint-disable-next-line no-console
-      console.debug(error.message);
-    });
+  return makeRequest<VisualizationTypes.ExtendedVisualizationType>(request, ['visualizations']);
 };
 
 const deleteVisualization = async (

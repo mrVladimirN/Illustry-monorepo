@@ -19,11 +19,7 @@ const browseDashboards = async (filter?: DashboardTypes.DashboardFilter) => {
     },
     body: JSON.stringify(newFilter)
   });
-  return makeRequest<DashboardTypes.ExtendedDashboardType>(request, ['dashboards'])
-    .catch((error) => {
-      // eslint-disable-next-line no-console
-      console.debug(error.message);
-    });
+  return makeRequest<DashboardTypes.ExtendedDashboardType>(request, ['dashboards']);
 };
 
 const deleteDashboard = async (dashboardName: string) => {
@@ -50,7 +46,7 @@ const updateDashboard = async (dashboard: DashboardTypes.DashboardUpdate) => {
     body: JSON.stringify(dashboard)
   });
 
-  return makeRequest<DashboardTypes.DashboardType>(request, ['dashboard']);
+  return makeRequest<DashboardTypes.DashboardType>(request, ['dashboards']);
 };
 
 const createDashboard = async (dashboard: DashboardTypes.DashboardCreate) => {
@@ -70,7 +66,8 @@ const createDashboard = async (dashboard: DashboardTypes.DashboardCreate) => {
   return makeRequest<DashboardTypes.DashboardType>(request, ['dashboards']);
 };
 
-const findOneDashboard = async (dashboardName: string, fullVisualization: boolean = false) => {
+const findOneDashboard = async (dashboardName: string, fullVisualizations: boolean = false) => {
+  revalidateTag('dashboards');
   const request = new Request(
     `${process.env.NEXT_PUBLIC_BACKEND_PUBLIC_URL as string}/api/dashboard/${dashboardName}`,
     {
@@ -78,7 +75,7 @@ const findOneDashboard = async (dashboardName: string, fullVisualization: boolea
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ name: dashboardName, fullVisualization })
+      body: JSON.stringify({ name: dashboardName, fullVisualizations })
     }
   );
   return makeRequest<DashboardTypes.DashboardType>(request, ['dashboards']);
