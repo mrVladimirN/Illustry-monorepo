@@ -1,8 +1,8 @@
-/* eslint-disable import/no-cycle */
 /* eslint-disable no-unused-vars */
 import { UseFormReturn } from 'react-hook-form';
 import { ExtFile } from '@files-ui/react';
-import { Inputs, fileTypes } from '@/components/form/add-visualization-form';
+import { FileTypes } from '@illustry/types';
+import { Inputs } from '@/components/form/types';
 import {
   FormField,
   FormItem,
@@ -24,27 +24,27 @@ import {
 import CSVFileFormatter from './csvFileFormatFormItem';
 import XMLFileFormatter from './xmlFileFormatFormItem';
 
-interface TypeTabProps {
+type TypeTabProps = {
   form: UseFormReturn<Inputs>;
-  // eslint-disable-next-line no-unused-vars
   handleFileTypeChange: (value: string) => void;
   selectedFileType: string;
   files: ExtFile[];
   updateFiles: (files: ExtFile[]) => void;
   removeFile: (id: string | number | undefined) => void;
 }
-function TypeTab({
+
+const TypeTab = ({
   form,
   handleFileTypeChange,
   selectedFileType,
   files,
   updateFiles,
   removeFile
-}: TypeTabProps) {
+}: TypeTabProps) => {
   const renderFiles = (fileType: string) => {
     if (fileType) {
       switch (fileType) {
-        case fileTypes.JSON:
+        case FileTypes.FileType.JSON:
           return (
             <JsonFileFormatter
               acceptedFiles={files}
@@ -53,7 +53,7 @@ function TypeTab({
               form={form}
             />
           );
-        case fileTypes.EXCEL:
+        case FileTypes.FileType.EXCEL:
           return (
             <ExcelFileFormatter
               acceptedFiles={files}
@@ -62,7 +62,7 @@ function TypeTab({
               form={form}
             />
           );
-        case fileTypes.CSV:
+        case FileTypes.FileType.CSV:
           return (
             <CSVFileFormatter
               acceptedFiles={files}
@@ -71,7 +71,7 @@ function TypeTab({
               form={form}
             />
           );
-        case fileTypes.XML:
+        case FileTypes.FileType.XML:
           return (
             <XMLFileFormatter
               acceptedFiles={files}
@@ -108,7 +108,7 @@ function TypeTab({
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
-                      {[fileTypes.JSON, fileTypes.CSV, fileTypes.EXCEL, fileTypes.XML].map(
+                      {[FileTypes.FileType.JSON, FileTypes.FileType.CSV, FileTypes.FileType.EXCEL, FileTypes.FileType.XML].map(
                         (option) => (
                           <SelectItem key={option} value={option}>
                             {option}
@@ -128,5 +128,6 @@ function TypeTab({
       {renderFiles(selectedFileType)}
     </TabsContent>
   );
-}
+};
+
 export default TypeTab;

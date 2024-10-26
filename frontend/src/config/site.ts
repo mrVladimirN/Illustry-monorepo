@@ -1,7 +1,7 @@
+import { VisualizationTypes } from '@illustry/types';
 import { v4 as randomUUID } from 'uuid';
-import { visualizationTypesEnum } from '@/lib/validation/visualizations';
 
-export const siteConfig = {
+const siteConfig = {
   name: 'Illustry',
   description: 'An open source visualization hub',
   mainNav: [
@@ -9,25 +9,36 @@ export const siteConfig = {
       title: 'Projects',
       href: '/projects',
       description: 'All projects',
-      items: []
+      items: [],
+      clickableNoActiveProject: true
     },
     {
       title: 'Visualizations',
       href: '/visualizations',
       description: 'All visualizations',
-      items: []
+      items: [],
+      clickableNoActiveProject: false
+    },
+    {
+      title: 'Dashboards',
+      href: '/dashboards',
+      description: 'All dashboards',
+      items: [],
+      clickableNoActiveProject: false
     },
     {
       title: 'Theme',
       href: '/theme',
       description: 'Set theme',
-      items: []
+      items: [],
+      clickableNoActiveProject: true
     },
     {
       title: 'Playground',
       href: '/playground',
       description: 'Playground ',
-      items: []
+      items: [],
+      clickableNoActiveProject: true
     }
   ],
   nodeLink: {
@@ -480,59 +491,59 @@ export const siteConfig = {
   },
   visualizations: [
     {
-      name: visualizationTypesEnum.BAR_CHART,
+      name: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
       id: randomUUID()
     },
     {
-      name: visualizationTypesEnum.CALENDAR,
+      name: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
       id: randomUUID()
     },
     {
-      name: visualizationTypesEnum.FORCE_DIRECTED_GRAPH,
+      name: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
       id: randomUUID()
     },
     {
-      name: visualizationTypesEnum.FUNNEL,
+      name: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
       id: randomUUID()
     },
     {
-      name: visualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
+      name: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
       id: randomUUID()
     },
     {
-      name: visualizationTypesEnum.LINE_CHART,
+      name: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
       id: randomUUID()
     },
     {
-      name: visualizationTypesEnum.MATRIX,
+      name: VisualizationTypes.VisualizationTypesEnum.MATRIX,
       id: randomUUID()
     },
     {
-      name: visualizationTypesEnum.PIE_CHART,
+      name: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
       id: randomUUID()
     },
     {
-      name: visualizationTypesEnum.SANKEY,
+      name: VisualizationTypes.VisualizationTypesEnum.SANKEY,
       id: randomUUID()
     },
     {
-      name: visualizationTypesEnum.SCATTER,
+      name: VisualizationTypes.VisualizationTypesEnum.SCATTER,
       id: randomUUID()
     },
     {
-      name: visualizationTypesEnum.SUNBURST,
+      name: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
       id: randomUUID()
     },
     {
-      name: visualizationTypesEnum.TIMELINE,
+      name: VisualizationTypes.VisualizationTypesEnum.TIMELINE,
       id: randomUUID()
     },
     {
-      name: visualizationTypesEnum.TREEMAP,
+      name: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
       id: randomUUID()
     },
     {
-      name: visualizationTypesEnum.WORD_CLOUD,
+      name: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
       id: randomUUID()
     }
   ],
@@ -629,4 +640,7 @@ export const siteConfig = {
     ]
   }
 };
-export type SiteConfig = typeof siteConfig;
+type SiteConfig = typeof siteConfig;
+
+export default siteConfig;
+export type { SiteConfig };

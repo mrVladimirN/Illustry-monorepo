@@ -1,8 +1,7 @@
 import { VisualizationTypes } from '@illustry/types';
-// eslint-disable-next-line import/no-cycle
 import { evaluateCondition } from './generic';
 
-export const timelineWords = ['types', 'dates', 'authors'];
+const timelineWords = ['types', 'dates', 'authors'];
 
 const applyDatesFilter = (
   datesFilter: string,
@@ -47,6 +46,7 @@ const applyDatesFilter = (
     return defaultData;
   }
 };
+
 const applyEventsFilter = (
   filter: string,
   defaultData: VisualizationTypes.TimelineData,
@@ -114,7 +114,8 @@ const applyEventsFilter = (
     return defaultData;
   }
 };
-export const applyTimelineFilter = (expressions:string[], defaultData: VisualizationTypes.TimelineData) => {
+
+const applyTimelineFilter = (expressions: string[], defaultData: VisualizationTypes.TimelineData) => {
   let newData: VisualizationTypes.TimelineData = { ...defaultData };
   let datesFilter: string = '';
   let authorsFilter: string = '';
@@ -156,3 +157,5 @@ export const applyTimelineFilter = (expressions:string[], defaultData: Visualiza
   }
   return newData;
 };
+
+export { timelineWords, applyTimelineFilter };

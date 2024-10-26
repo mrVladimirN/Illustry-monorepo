@@ -1,20 +1,22 @@
 'use client';
 
-import { EChartsOption } from 'echarts';
 import { VisualizationTypes } from '@illustry/types';
 import {
   computeLegendColors,
   computeValues
 } from '@/lib/visualizations/pieFunnel/helper';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
-import { useThemeColors } from '../theme-provider';
+import { useThemeColors } from '../providers/theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface PieProp extends WithLegend, WithOptions {
+type PieProp = {
   data: VisualizationTypes.PieChartData;
-}
-const PieView = ({ data, legend }: PieProp) => {
+} & WithLegend
+  & WithOptions
+  & WithFullScreen
+
+const PieView = ({ data, legend, fullScreen }: PieProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';
@@ -22,7 +24,7 @@ const PieView = ({ data, legend }: PieProp) => {
     ? activeTheme.pieChart.dark.colors
     : activeTheme.pieChart.light.colors;
 
-  const option: EChartsOption = {
+  const option = {
     tooltip: {
       trigger: 'item'
     },
@@ -54,11 +56,18 @@ const PieView = ({ data, legend }: PieProp) => {
       }
     ]
   };
+  const height = fullScreen ? '73.5vh' : '35vh';
   return (
     <div className="relative mt-[4%] flex flex-col items-center">
       {legend && <Legend legendData={computeLegendColors(data, colors)} />}
-      <div className="w-full mt-4 h-[80vh]">
-        <ReactEcharts option={option} className="w-full h-full" />
+      <div className="w-full h-full">
+        <ReactEcharts
+          option={option}
+          className="w-full sm:h-120 lg:h-160"
+          style={{
+            height
+          }}
+        />
       </div>
     </div>
   );

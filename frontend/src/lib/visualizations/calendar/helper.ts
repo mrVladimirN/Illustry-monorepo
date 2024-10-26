@@ -1,29 +1,33 @@
 import { VisualizationTypes } from '@illustry/types';
 
-export const computeCategoriesCalendar = (calendarData: VisualizationTypes.CalendarType[]) => [
+const computeCategoriesCalendar = (calendarData: VisualizationTypes.CalendarType[]) => [
   ...new Set(
     calendarData.map((cal) => cal.category)
   )
 ];
 
-export const computeColors = (categories: string[], colors: string[]) => {
+const computeColors = (categories: string[], colors: string[]) => {
   const color: { [key: string]: string } = {};
   categories.forEach((cat, index) => {
     color[cat] = colors[index] as string;
   });
   return color;
 };
-export const computeLegendColors = (categories: string[], colors: string[]) => {
-  const color: { [key: string]: string } = {};
-  categories.forEach((cat, index) => {
-    color[cat] = colors[index] as string;
-  });
-  return color;
-};
-// eslint-disable-next-line max-len
-export const computeElementsCalendar = (element: VisualizationTypes.CalendarType) => [element.date, element.value ? element.value : 1, element.category];
 
-export const computePropertiesForToolTip = (
+const computeLegendColors = (categories: string[], colors: string[]) => {
+  const color: { [key: string]: string } = {};
+  categories.forEach((cat, index) => {
+    color[cat] = colors[index] as string;
+  });
+  return color;
+};
+
+const computeElementsCalendar = (element: VisualizationTypes.CalendarType) => [
+  element.date,
+  element.value ? element.value : 1,
+  element.category];
+
+const computePropertiesForToolTip = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   properties: any,
   value?: number | string
@@ -48,7 +52,7 @@ export const computePropertiesForToolTip = (
   return prop;
 };
 
-export const computeCalendar = (
+const computeCalendar = (
   calendarData: VisualizationTypes.CalendarType[],
   textColor: string
 ) => {
@@ -116,4 +120,12 @@ export const computeCalendar = (
     })),
     series
   };
+};
+
+export {
+  computeCategoriesCalendar,
+  computeColors,
+  computeLegendColors,
+  computePropertiesForToolTip,
+  computeCalendar
 };

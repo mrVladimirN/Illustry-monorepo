@@ -1,20 +1,28 @@
 import dynamic from 'next/dynamic';
 import { VisualizationTypes } from '@illustry/types';
-import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
+import {
+  WithFilter, WithFullScreen, WithLegend, WithOptions
+} from '@/lib/types/utils';
 import { computeCategories } from '@/lib/visualizations/hierarchy-charts/helper';
 import FilteredTreemapShellView from './filter-treemap-shell';
 
-interface TreeMapShellProp extends WithLegend, WithOptions, WithFilter {
+type TreeMapShellProp = {
   data: VisualizationTypes.HierarchyData;
-}
+} & WithLegend
+  & WithOptions
+  & WithFilter
+  & WithFullScreen
+
 const TreeMapView = dynamic(() => import('@/components/views/treemap-chart'), {
   ssr: false
 });
+
 const TreeMapShellView = ({
   data,
   legend,
   options,
-  filter
+  filter,
+  fullScreen
 }: TreeMapShellProp) => {
   const { nodes } = data;
   const categories = computeCategories(nodes);
@@ -26,6 +34,7 @@ const TreeMapShellView = ({
           nodes={nodes}
           categories={categories}
           legend={legend}
+          fullScreen={fullScreen}
         />
       ) : (
         <>
@@ -34,10 +43,12 @@ const TreeMapShellView = ({
             nodes={nodes}
             categories={categories}
             legend={legend}
+            fullScreen={fullScreen}
           />
         </>
       )}
     </>
   );
 };
+
 export default TreeMapShellView;

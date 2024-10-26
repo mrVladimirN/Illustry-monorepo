@@ -1,35 +1,47 @@
 import { VisualizationTypes } from '@illustry/types';
 
-export interface WithLegend {
+type WithLegend = {
   legend: boolean;
 }
 
-export interface WithOptions {
+type WithOptions = {
   options: boolean;
 }
 
-export interface WithFilter {
+type WithFullScreen = {
+  fullScreen: boolean
+}
+
+type WithFilter = {
   filter: boolean;
 }
 
-export type AllVisualizationsShell =
+type AllVisualizationsShell =
   | VisualizationTypes.AxisChartData
   | {
-      categories: string[];
-      calendar: VisualizationTypes.CalendarType[];
-    }
+    categories: string[];
+    calendar: VisualizationTypes.CalendarType[];
+  }
   | {
-      nodes: VisualizationTypes.Node[];
-      links: VisualizationTypes.Link[];
-    }
+    nodes: VisualizationTypes.Node[];
+    links: VisualizationTypes.Link[];
+  }
   | VisualizationTypes.FunnelData
   | VisualizationTypes.WordType[]
   | {
-      points: (string | number)[][];
-      categories: string[];
-    }
+    points: (string | number)[][];
+    categories: string[];
+  }
   | VisualizationTypes.TimelineData
   | {
     categories: string[]
     nodes: VisualizationTypes.HierarchyNode[]
-    }
+  }
+
+export type {
+  WithLegend,
+  WithOptions,
+  WithFilter,
+  WithFullScreen,
+  AllVisualizationsShell
+};

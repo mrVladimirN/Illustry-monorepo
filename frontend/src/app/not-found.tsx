@@ -1,8 +1,6 @@
-// Import necessary modules
 import Link from 'next/link';
 
-export default function NotFound() {
-  return (
+const NotFound = () => (
     <div className="flex flex-col items-center justify-center h-screen">
       <h2 className="text-4xl font-bold text-gray-800 mb-4">
         Oops! Not Found
@@ -19,5 +17,6 @@ export default function NotFound() {
         </a>
       </Link>
     </div>
-  );
-}
+);
+
+export default NotFound;

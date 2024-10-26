@@ -8,7 +8,7 @@ import {
 import { groupEventsByDate } from '@/lib/visualizations/timeline/helper';
 import TimelineDialog from './timelineDialog';
 
-export interface TimelineAccordionProps {
+type TimelineAccordionProps = {
   data: VisualizationTypes.TimelineData;
   date: string;
 }

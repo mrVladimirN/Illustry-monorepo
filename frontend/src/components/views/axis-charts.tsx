@@ -1,21 +1,25 @@
 'use client';
 
-import { EChartsOption, SeriesOption } from 'echarts';
 import { VisualizationTypes } from '@illustry/types';
 import {
   computeLegendColors,
   constructSeries
 } from '@/lib/visualizations/chart/helper';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
-import { useThemeColors } from '../theme-provider';
+import { useThemeColors } from '../providers/theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface AxisChartProp extends WithLegend, WithOptions {
+type AxisChartProp = {
   data: VisualizationTypes.AxisChartData;
   type: 'line' | 'bar';
-}
-const AxisChartView = ({ data, type, legend }: AxisChartProp) => {
+} & WithLegend
+  & WithOptions
+  & WithFullScreen
+
+const AxisChartView = ({
+  data, type, legend, fullScreen
+}: AxisChartProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';
@@ -33,7 +37,7 @@ const AxisChartView = ({ data, type, legend }: AxisChartProp) => {
   }
 
   const { headers, values } = data;
-  const option: EChartsOption = {
+  const option = {
     tooltip: {
       trigger: 'axis',
       axisPointer: {
@@ -68,16 +72,23 @@ const AxisChartView = ({ data, type, legend }: AxisChartProp) => {
       false,
       type,
       false
-    ) as SeriesOption
+    )
   };
+  const height = fullScreen ? '73.5vh' : '35vh';
   return (
     <>
       <div className="relative mt-[4%] flex flex-col items-center">
         {legend && (
           <Legend legendData={computeLegendColors(data, colors as string[])} />
         )}
-        <div className="w-full mt-4 h-[80vh]">
-          <ReactEcharts option={option} className="w-full h-full" />
+        <div className="w-full h-full">
+          <ReactEcharts
+            option={option}
+            className="w-full sm:h-120 lg:h-160"
+            style={{
+              height
+            }}
+          />
         </div>
       </div>
     </>

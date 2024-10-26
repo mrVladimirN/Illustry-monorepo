@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable import/no-cycle */
 import { UseFormReturn } from 'react-hook-form';
-import { Inputs } from '@/components/form/add-visualization-form';
-import { visualizationTypesEnum } from '@/lib/validation/visualizations';
+import { VisualizationTypes } from '@illustry/types';
+import { Inputs } from '@/components/form/types';
 import {
   FormField,
   FormItem,
@@ -18,18 +17,17 @@ import {
   SelectValue
 } from '../../select';
 
-interface VisualizationTypeProp {
+type VisualizationTypeProp = {
   form: UseFormReturn<Inputs>;
   router: any;
   exclude?: boolean;
 }
 
-function VisualizationType({
+const VisualizationType = ({
   form,
   router,
   exclude
-}: VisualizationTypeProp) {
-  return (
+}: VisualizationTypeProp) => (
     <>
       <div className="col-span-1">
         <FormField
@@ -41,7 +39,7 @@ function VisualizationType({
               <FormControl>
                 <Select
                   value={form.getValues('type')}
-                  onValueChange={(value: visualizationTypesEnum) => {
+                  onValueChange={(value: VisualizationTypes.VisualizationTypesEnum) => {
                     form.setValue('type', value);
                     router.refresh();
                   }}
@@ -50,53 +48,53 @@ function VisualizationType({
                     <SelectValue placeholder="Type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value={visualizationTypesEnum.WORD_CLOUD}>
+                    <SelectItem value={VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD}>
                       WordCloud
                     </SelectItem>
                     <SelectItem
-                      value={visualizationTypesEnum.FORCE_DIRECTED_GRAPH}
+                      value={VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH}
                     >
                       Forced Layout Graph
                     </SelectItem>
-                    <SelectItem value={visualizationTypesEnum.SANKEY}>
+                    <SelectItem value={VisualizationTypes.VisualizationTypesEnum.SANKEY}>
                       Sankey
                     </SelectItem>
-                    <SelectItem value={visualizationTypesEnum.CALENDAR}>
+                    <SelectItem value={VisualizationTypes.VisualizationTypesEnum.CALENDAR}>
                       Calendar
                     </SelectItem>
                     <SelectItem
-                      value={visualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING}
+                      value={VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING}
                     >
                       Hierarchical Edge Bundling
                     </SelectItem>
                     {!exclude && (
-                      <SelectItem value={visualizationTypesEnum.MATRIX}>
+                      <SelectItem value={VisualizationTypes.VisualizationTypesEnum.MATRIX}>
                         Matrix
                       </SelectItem>
                     )}
-                    <SelectItem value={visualizationTypesEnum.LINE_CHART}>
+                    <SelectItem value={VisualizationTypes.VisualizationTypesEnum.LINE_CHART}>
                       Line Chart
                     </SelectItem>
-                    <SelectItem value={visualizationTypesEnum.BAR_CHART}>
+                    <SelectItem value={VisualizationTypes.VisualizationTypesEnum.BAR_CHART}>
                       Bar Chart
                     </SelectItem>
-                    <SelectItem value={visualizationTypesEnum.PIE_CHART}>
+                    <SelectItem value={VisualizationTypes.VisualizationTypesEnum.PIE_CHART}>
                       Pie Chart
                     </SelectItem>
-                    <SelectItem value={visualizationTypesEnum.SCATTER}>
+                    <SelectItem value={VisualizationTypes.VisualizationTypesEnum.SCATTER}>
                       Scatter
                     </SelectItem>
-                    <SelectItem value={visualizationTypesEnum.TREEMAP}>
+                    <SelectItem value={VisualizationTypes.VisualizationTypesEnum.TREEMAP}>
                       Treemap
                     </SelectItem>
-                    <SelectItem value={visualizationTypesEnum.SUNBURST}>
+                    <SelectItem value={VisualizationTypes.VisualizationTypesEnum.SUNBURST}>
                       Sunburst
                     </SelectItem>
-                    <SelectItem value={visualizationTypesEnum.FUNNEL}>
+                    <SelectItem value={VisualizationTypes.VisualizationTypesEnum.FUNNEL}>
                       Funnel
                     </SelectItem>
                     {!exclude && (
-                      <SelectItem value={visualizationTypesEnum.TIMELINE}>
+                      <SelectItem value={VisualizationTypes.VisualizationTypesEnum.TIMELINE}>
                         Timeline
                       </SelectItem>
                     )}
@@ -109,7 +107,6 @@ function VisualizationType({
         />
       </div>
     </>
-  );
-}
+);
 
 export default VisualizationType;

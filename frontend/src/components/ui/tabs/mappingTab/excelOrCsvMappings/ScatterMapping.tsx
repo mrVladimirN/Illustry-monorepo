@@ -1,13 +1,11 @@
-/* eslint-disable import/no-cycle */
 import { UseFormReturn } from 'react-hook-form';
-import { Inputs } from '@/components/form/add-visualization-form';
-import { Input } from '@/components/ui/input';
+import Input from '@/components/ui/input';
+import { Inputs } from '@/components/form/types';
 
-interface ExcelOrCsvScatterMappingProps {
-  form: UseFormReturn<Inputs>; // Include the form context
+type ExcelOrCsvScatterMappingProps = {
+  form: UseFormReturn<Inputs>;
 }
-function ExcelOrCsvScatterMapping({ form }: ExcelOrCsvScatterMappingProps) {
-  return (
+const ExcelOrCsvScatterMapping = ({ form }: ExcelOrCsvScatterMappingProps) => (
     <>
       <div className="flex items-center space-x-4">
         <div className="w-20">Categories:</div>
@@ -53,7 +51,6 @@ function ExcelOrCsvScatterMapping({ form }: ExcelOrCsvScatterMappingProps) {
         </div>
       </div>
     </>
-  );
-}
+);
 
 export default ExcelOrCsvScatterMapping;

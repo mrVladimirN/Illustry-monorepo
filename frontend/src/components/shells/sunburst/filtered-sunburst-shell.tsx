@@ -3,23 +3,27 @@
 import { VisualizationTypes } from '@illustry/types';
 import { Dispatch, SetStateAction, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
-import { visualizationTypesEnum } from '@/lib/validation/visualizations';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
-interface FilteredSunburstShellViewProp extends WithLegend, WithOptions {
+type FilteredSunburstShellViewProp = {
   categories: string[];
   nodes: VisualizationTypes.HierarchyNode[];
-}
+} & WithLegend
+  & WithOptions
+  & WithFullScreen
+
 const SunburstView = dynamic(
   () => import('@/components/views/sunburst-chart'),
   { ssr: false }
 );
+
 const FilteredSunburstShellView = ({
   categories,
   nodes,
   legend,
-  options
+  options,
+  fullScreen
 }: FilteredSunburstShellViewProp) => {
   const [filteredData, setFilteredData] = useState<{
     categories: string[];
@@ -38,14 +42,17 @@ const FilteredSunburstShellView = ({
             }>
           >
         }
-        type={visualizationTypesEnum.SUNBURST}
+        type={VisualizationTypes.VisualizationTypesEnum.SUNBURST}
       />
       <>
         <SunburstView options={options}
           nodes={filteredData.nodes}
-          categories={filteredData.categories} legend={legend} />
+          categories={filteredData.categories}
+          legend={legend}
+          fullScreen={fullScreen} />
       </>
     </>
   );
 };
+
 export default FilteredSunburstShellView;

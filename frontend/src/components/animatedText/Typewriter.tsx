@@ -1,7 +1,7 @@
 'use client';
 
 import { JSX } from 'react';
-import { Cursor, CursorProps } from './Cursor';
+import Cursor, { CursorProps } from './Cursor';
 import { TypewriterProps, useTypewriter } from './hooks/useTypewriting';
 
 type ComponentProps = {

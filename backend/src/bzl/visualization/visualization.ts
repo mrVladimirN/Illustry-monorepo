@@ -1,20 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import {
-  VisualizationTypes, ProjectTypes, FileTypes, UtilTypes, GenericTypes
+  VisualizationTypes, ProjectTypes, FileTypes, UtilTypes, GenericTypes, ValidatorSchemas,
+  DashboardTypes
 } from '@illustry/types';
-
-import { generateErrorMessage } from 'zod-error';
 import {
   excelFilesToVisualizations,
   jsonFilesToVisualizations,
   csvFilesToVisualizations,
   xmlFilesToVisualizations
 } from '../../utils/reader';
-import { visualizationTypeSchema } from '../../validators/allValidators';
 import Factory from '../../factory';
 import DbaccInstance from '../../dbacc/lib';
-import prettifyZodError from '../../validators/prettifyError';
 
 class VisualizationBZL implements GenericTypes.BaseBZL<
   VisualizationTypes.VisualizationCreate,
@@ -174,10 +171,66 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
   }
 
   async delete(filter: VisualizationTypes.VisualizationFilter): Promise<boolean> {
-    const queryFilter: UtilTypes.ExtendedMongoQuery = filter ? this.dbaccInstance.Visualization.createFilter(filter) : {};
+    const projectBZL = Factory.getInstance().getBZL().ProjectBZL;
 
+    const { projects } = await projectBZL.browse({ isActive: true } as ProjectTypes.ProjectFilter);
+
+    if (!projects || projects.length === 0) {
+      throw new Error('No active project');
+    }
+
+    const activeProjectName = projects[0].name;
+
+    const updatedFilter: VisualizationTypes.VisualizationFilter = {
+      ...filter,
+      projectName: activeProjectName
+    };
+    const queryFilter: UtilTypes.ExtendedMongoQuery = updatedFilter
+      ? this.dbaccInstance.Visualization.createFilter(updatedFilter)
+      : {};
+
+    const dashboardUpdateFilter: UtilTypes.ExtendedMongoQuery = this.dbaccInstance.Dashboard.createFilter(
+      {
+        projectName: activeProjectName,
+        visualizationName: filter.name,
+        visualizationType: filter.type as string
+      }
+    );
+
+    const { dashboards } = await this.dbaccInstance.Dashboard.browse(dashboardUpdateFilter, true);
+    if (dashboards) {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const dashboard of dashboards) {
+        if (dashboard.visualizations) {
+          delete (dashboard.visualizations as { [name: string]: string; })[`${filter.name}_${filter.type}` as string];
+          let reindexedLayouts:DashboardTypes.Layout[] = [];
+          if (dashboard.layouts) {
+            const updatedLayouts = dashboard.layouts.filter((layout) => layout.i !== filter.name);
+
+            reindexedLayouts = updatedLayouts.map((layout, index) => ({
+              ...layout,
+              i: String(index)
+            }));
+          }
+          const dashboardFilter: UtilTypes.ExtendedMongoQuery = this.dbaccInstance.Dashboard.createFilter(
+            {
+              name: dashboard.name
+            }
+          );
+          // eslint-disable-next-line no-await-in-loop
+          await this.dbaccInstance.Dashboard.update(
+            dashboardFilter,
+            {
+              $set: {
+                visualizations: dashboard.visualizations,
+                layouts: reindexedLayouts
+              }
+            }
+          );
+        }
+      }
+    }
     await this.dbaccInstance.Visualization.deleteMany(queryFilter);
-
     return true;
   }
 
@@ -199,11 +252,7 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
         });
       }
 
-      const validationResult = visualizationTypeSchema.safeParse(visualizationData);
-      if (!validationResult.success) {
-        const errorMessage = generateErrorMessage(validationResult.error.issues, prettifyZodError());
-        throw new Error(errorMessage);
-      }
+      ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.visualizationTypeSchema, visualizationData);
 
       return this.createOrUpdate(visualizationData);
     };

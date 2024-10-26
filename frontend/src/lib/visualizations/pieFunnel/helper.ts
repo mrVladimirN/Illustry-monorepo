@@ -1,6 +1,6 @@
 import { VisualizationTypes } from '@illustry/types';
 
-export const computeValues = (
+const computeValues = (
   data: VisualizationTypes.PieChartData | VisualizationTypes.FunnelData,
   colors: string[]
 ) => {
@@ -12,7 +12,7 @@ export const computeValues = (
   }));
 };
 
-export const computeLegendColors = (
+const computeLegendColors = (
   data: VisualizationTypes.PieChartData | VisualizationTypes.FunnelData,
   colors: string[]
 ) => {
@@ -24,4 +24,9 @@ export const computeLegendColors = (
   });
 
   return legendColorObject;
+};
+
+export {
+  computeValues,
+  computeLegendColors
 };

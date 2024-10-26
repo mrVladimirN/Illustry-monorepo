@@ -22,10 +22,9 @@ import {
 } from '../alert-dialog';
 import Switch from '../switch';
 
-function PresetActions() {
+const PresetActions = () => {
   const [open, setIsOpen] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-
   return (
     <>
       <DropdownMenu>
@@ -107,6 +106,6 @@ function PresetActions() {
       </AlertDialog>
     </>
   );
-}
+};
 
 export default PresetActions;

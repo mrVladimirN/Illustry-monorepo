@@ -1,21 +1,29 @@
 import dynamic from 'next/dynamic';
 import { VisualizationTypes } from '@illustry/types';
-import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
+import {
+  WithFilter, WithFullScreen, WithLegend, WithOptions
+} from '@/lib/types/utils';
 import { computeCategories } from '@/lib/visualizations/hierarchy-charts/helper';
 import FilteredSunburstShellView from './filtered-sunburst-shell';
 
-interface SunBurstShellProp extends WithLegend, WithOptions, WithFilter {
+type SunBurstShellProp = {
   data: VisualizationTypes.HierarchyData;
-}
+} & WithLegend
+  & WithOptions
+  & WithFilter
+  & WithFullScreen
+
 const SunBurstGraphView = dynamic(
   () => import('@/components/views/sunburst-chart'),
   { ssr: false }
 );
+
 const SunBurstShellView = ({
   data,
   legend,
   options,
-  filter
+  filter,
+  fullScreen
 }: SunBurstShellProp) => {
   const { nodes } = data;
   const categories = computeCategories(nodes);
@@ -27,6 +35,7 @@ const SunBurstShellView = ({
           nodes={nodes}
           categories={categories}
           legend={legend}
+          fullScreen={fullScreen}
         />
       ) : (
         <>
@@ -35,10 +44,12 @@ const SunBurstShellView = ({
             nodes={nodes}
             categories={categories}
             legend={legend}
+            fullScreen={fullScreen}
           />
         </>
       )}
     </>
   );
 };
+
 export default SunBurstShellView;

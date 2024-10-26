@@ -8,17 +8,17 @@ import 'react-vertical-timeline-component/style.min.css';
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
 import { formatDate } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import TimelineAccordion from './timeline/timelineAccordion';
 import TimelineElement from './timeline/timelineElement';
 
-interface TimelineProp extends WithLegend, WithOptions {
+type TimelineProp = {
   data: VisualizationTypes.TimelineData;
-}
+} & WithLegend
+  & WithOptions
+  & WithFullScreen;
 
-const TimelineView = ({
-  data
-}: TimelineProp) => {
+const TimelineView = ({ data, fullScreen }: TimelineProp) => {
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';
   const { ref, inView } = useInView({
@@ -46,52 +46,50 @@ const TimelineView = ({
   };
 
   return (
-    <div className="mt-[10%] mr-[20%]" ref={ref}>
+    <div
+      className={`mt-5 mx-auto p-2 sm:p-4 lg:p-6 ${!fullScreen ? 'h-[50vh] overflow-y-auto' : ''}`}
+      ref={ref}
+    >
       <VerticalTimeline
         layout="1-column-left"
         animate={true}
         lineColor={!isDarkTheme ? 'rgb(245, 245, 245)' : 'rgb(66, 66, 66)'}
       >
         {displayedDates.map((date) => (
-          <TimelineElement
-            date={date}
-            isDarkTheme={isDarkTheme}
-            inView={inView}
-            key={date}
-          >
-            <h3 className="vertical-timeline-element-title text-gray-700 dark:text-gray-400
-               text-center my-2 text-xm md:text-xl">
+          <TimelineElement date={date} isDarkTheme={isDarkTheme} inView={inView} key={date}>
+            <h3 className="vertical-timeline-element-title text-gray-700
+             dark:text-gray-400 text-center my-1 text-sm sm:text-lg md:text-lg">
               {data[date]?.summary?.title}
             </h3>
-            <span className="capitalize font-medium text-gray-700 dark:text-gray-400 xs:text-sm">
+            <span className="capitalize font-medium text-gray-700 dark:text-gray-400 text-xs sm:text-sm">
               {formatDate(date)}
             </span>
-            <TimelineAccordion data={data} date={date}></TimelineAccordion>
+            <TimelineAccordion data={data} date={date} />
           </TimelineElement>
         ))}
       </VerticalTimeline>
-      <div className="flex justify-center mt-[5%] mb-[10%]">
+      <div className="flex justify-center mt-4 mb-6">
         <Button
           suppressHydrationWarning
           aria-label="Go to previous page"
           variant="outline"
           size="icon"
-          className="hidden h-8 w-8 lg:flex"
+          className="hidden h-6 w-6 lg:flex"
           onClick={handlePreviousPage}
           disabled={currentPage === 0}
         >
-          <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+          <ChevronLeftIcon className="h-3 w-3" aria-hidden="true" />
         </Button>
         <Button
           suppressHydrationWarning
           aria-label="Go to next page"
           variant="outline"
           size="icon"
-          className="h-8 w-8"
+          className="h-6 w-6"
           onClick={handleNextPage}
           disabled={endIndex >= sortedKeys.length}
         >
-          <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+          <ChevronRightIcon className="h-3 w-3" aria-hidden="true" />
         </Button>
       </div>
     </div>

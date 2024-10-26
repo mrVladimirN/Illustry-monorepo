@@ -5,10 +5,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import type { z } from 'zod';
-import { ProjectTypes } from '@illustry/types';
+import { ProjectTypes, ValidatorSchemas } from '@illustry/types';
 import { useTransition } from 'react';
 import { catchError } from '@/lib/utils';
-import { projectUpdateSchema } from '@/lib/validation/project';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -18,30 +17,30 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form';
-import { Textarea } from '@/components/ui/textarea';
-import { Icons } from '@/components/icons';
+import Textarea from '@/components/ui/textarea';
+import Icons from '@/components/icons';
 import { updateProject } from '@/app/_actions/project';
 
 import Checkbox from '../ui/checkbox';
 
-type Inputs = z.infer<typeof projectUpdateSchema>;
-interface UpdateProjectFormProps {
+type Inputs = z.infer<typeof ValidatorSchemas.projectUpdateSchema>;
+type UpdateProjectFormProps = {
   project?: ProjectTypes.ProjectUpdate;
 }
-function UpdateProjectForm({ project }: UpdateProjectFormProps) {
+const UpdateProjectForm = ({ project }: UpdateProjectFormProps) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
   // react-hook-form
   const form = useForm<Inputs>({
-    resolver: zodResolver(projectUpdateSchema),
+    resolver: zodResolver(ValidatorSchemas.projectUpdateSchema),
     defaultValues: {
       description: project && project.description ? project.description : '',
       isActive: project && project.isActive ? project.isActive : false
     }
   });
 
-  function onSubmit(data: Inputs) {
+  const onSubmit = (data: Inputs) => {
     startTransition(async () => {
       try {
         if (project && project.name) {
@@ -56,7 +55,7 @@ function UpdateProjectForm({ project }: UpdateProjectFormProps) {
         catchError(err);
       }
     });
-  }
+  };
 
   return (
     <div>
@@ -94,7 +93,6 @@ function UpdateProjectForm({ project }: UpdateProjectFormProps) {
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
-
                 <FormMessage />
                 <FormLabel>Make this project active</FormLabel>
               </FormItem>
@@ -114,6 +112,6 @@ function UpdateProjectForm({ project }: UpdateProjectFormProps) {
       </Form>
     </div>
   );
-}
+};
 
 export default UpdateProjectForm;

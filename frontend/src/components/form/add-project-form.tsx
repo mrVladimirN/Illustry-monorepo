@@ -4,10 +4,9 @@ import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
-import type { z } from 'zod';
 import { useTransition } from 'react';
+import { ProjectTypes, ValidatorSchemas } from '@illustry/types';
 import { catchError } from '@/lib/utils';
-import { projectSchema } from '@/lib/validation/project';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -17,21 +16,18 @@ import {
   FormLabel,
   FormMessage
 } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Icons } from '@/components/icons';
+import Input from '@/components/ui/input';
+import Textarea from '@/components/ui/textarea';
+import Icons from '@/components/icons';
 import { createProject } from '@/app/_actions/project';
 import Checkbox from '../ui/checkbox';
 
-type Inputs = z.infer<typeof projectSchema>;
-
-function AddProjectForm() {
+const AddProjectForm = () => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
 
-  // react-hook-form
-  const form = useForm<Inputs>({
-    resolver: zodResolver(projectSchema),
+  const form = useForm<ProjectTypes.ProjectCreate>({
+    resolver: zodResolver(ValidatorSchemas.projectCreateSchema),
     defaultValues: {
       name: '',
       description: '',
@@ -39,7 +35,7 @@ function AddProjectForm() {
     }
   });
 
-  function onSubmit(data: Inputs) {
+  const onSubmit = (data: ProjectTypes.ProjectCreate) => {
     startTransition(async () => {
       try {
         await createProject({ ...data });
@@ -52,7 +48,7 @@ function AddProjectForm() {
         catchError(err);
       }
     });
-  }
+  };
 
   return (
     <div>
@@ -103,7 +99,6 @@ function AddProjectForm() {
                     onCheckedChange={field.onChange}
                   />
                 </FormControl>
-
                 <FormMessage />
                 <FormLabel>Make this project active</FormLabel>
               </FormItem>
@@ -123,6 +118,6 @@ function AddProjectForm() {
       </Form>
     </div>
   );
-}
+};
 
 export default AddProjectForm;

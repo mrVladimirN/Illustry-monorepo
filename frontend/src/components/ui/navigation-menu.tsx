@@ -1,3 +1,5 @@
+'use client';
+
 import * as NavigationMenuPrimitive from '@radix-ui/react-navigation-menu';
 import { cva } from 'class-variance-authority';
 import { ComponentPropsWithoutRef, ElementRef, forwardRef } from 'react';

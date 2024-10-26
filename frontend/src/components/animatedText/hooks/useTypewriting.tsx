@@ -5,7 +5,7 @@ import {
 } from 'react';
 import { reducer } from '../reducer';
 
-export type TypewriterProps = {
+type TypewriterProps = {
   onLoopDone?: () => void;
   // eslint-disable-next-line no-unused-vars
   onType?: (count: number) => void;
@@ -18,14 +18,14 @@ export type TypewriterProps = {
   delaySpeed?: number;
 };
 
-export type TypewriterHelper = {
+type TypewriterHelper = {
   isType: boolean;
   isDelay: boolean;
   isDelete: boolean;
   isDone: boolean;
 };
 
-export const useTypewriter = ({
+const useTypewriter = ({
   words = ['Hello World!', 'This is', 'a simple Typewriter'],
   loop = 1,
   typeSpeed = 80,
@@ -132,4 +132,13 @@ export const useTypewriter = ({
       isDone: isDone.current
     }
   ];
+};
+
+export {
+  useTypewriter
+};
+
+export type {
+  TypewriterProps,
+  TypewriterHelper
 };

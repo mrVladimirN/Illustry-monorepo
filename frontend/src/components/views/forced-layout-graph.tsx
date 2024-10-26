@@ -1,28 +1,26 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-
 'use client';
 
-import { EChartsOption } from 'echarts';
 import { VisualizationTypes } from '@illustry/types';
 import {
-  computeCategoriesFLG,
-  computeLinksFLG,
+  computeCategoriesFLGOrHEB,
+  computeLinksFLGOrHEB,
   computeNodesFLG
 } from '@/lib/visualizations/node-link/helper';
 import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
-import { useThemeColors } from '../theme-provider';
+import { useThemeColors } from '../providers/theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface ForcedLayoutGraphProp extends WithLegend, WithOptions {
+type ForcedLayoutGraphProp = {
   nodes: VisualizationTypes.Node[];
   links: VisualizationTypes.Link[];
-}
+} & WithLegend
+  & WithOptions
+  & WithFullScreen
+
 const ForcedLayoutGraphView = ({
-  nodes,
-  links,
-  legend
+  nodes, links, legend, fullScreen
 }: ForcedLayoutGraphProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
@@ -34,15 +32,14 @@ const ForcedLayoutGraphView = ({
   const categories: {
     name: string;
     itemStyle: { color: string | undefined };
-  }[] = computeCategoriesFLG(nodes, colors);
-  const edges = computeLinksFLG(links, nodes);
-  const option: EChartsOption = {
+  }[] = computeCategoriesFLGOrHEB(nodes, colors);
+  const edges = computeLinksFLGOrHEB(links, nodes);
+  const option = {
     tooltip: {
       trigger: 'item',
       triggerOn: 'mousemove',
-      // @ts-ignore
-      formatter(params) {
-        // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      formatter(params: any) {
         return params.data.prop;
       }
     },
@@ -75,6 +72,7 @@ const ForcedLayoutGraphView = ({
       }
     ]
   };
+  const height = fullScreen ? '73.5vh' : '35vh';
   return (
     <div className="relative mt-[4%] flex flex-col items-center">
       {legend && (
@@ -85,8 +83,14 @@ const ForcedLayoutGraphView = ({
           )}
         />
       )}
-      <div className="w-full mt-4 h-[80vh]">
-        <ReactEcharts option={option} className="w-full h-full" />
+      <div className="w-full h-full">
+        <ReactEcharts
+          option={option}
+          className="w-full sm:h-120 lg:h-160"
+          style={{
+            height
+          }}
+        />
       </div>
     </div>
   );

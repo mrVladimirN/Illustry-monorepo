@@ -6,12 +6,12 @@ import {
   Suspense, useEffect, useRef, useState
 } from 'react';
 import { VisualizationTypes, UtilTypes } from '@illustry/types';
-import { siteConfig } from '@/config/site';
+import siteConfig from '@/config/site';
 import {
   ThemeColors,
   useThemeColors,
   useThemeColorsDispach
-} from '../theme-provider';
+} from '../providers/theme-provider';
 import {
   AccordionContent,
   Accordion,
@@ -34,7 +34,7 @@ import FunnelShellView from './funnel/funnel-shell';
 import AxisChartsShellView from './axis/axis-shell';
 import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/hierarchical-edge-bundling-shell';
 
-export interface ShowDiagramState {
+type ShowDiagramState = {
   heb: boolean;
   sankey: boolean;
   calendar: boolean;
@@ -50,10 +50,10 @@ export interface ShowDiagramState {
   timeline?: boolean;
   matrix?: boolean;
 }
-function ThemeShell() {
+
+const ThemeShell = () => {
   const colorPalette: { [key: string]: string[] } = siteConfig.colorPallets;
   const activeTheme = useThemeColors();
-
   const themeDispatch = useThemeColorsDispach();
   const [activeColorPickerIndex, setActiveColorPickerIndex] = useState<
     number | null
@@ -448,12 +448,13 @@ function ThemeShell() {
       </ScrollArea>
       {showDiagram.sankey && (
         <div className="flex-grow p-4">
-            <SankeyGraphShellView
-              data={siteConfig.nodeLink}
-              legend={false}
-              options={false}
-              filter={false}
-            />
+          <SankeyGraphShellView
+            fullScreen={true}
+            data={siteConfig.nodeLink}
+            legend={false}
+            options={false}
+            filter={false}
+          />
         </div>
       )}
       {showDiagram.calendar && (
@@ -464,6 +465,7 @@ function ThemeShell() {
               legend={false}
               options={false}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -476,6 +478,7 @@ function ThemeShell() {
               legend={false}
               options={false}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -488,6 +491,7 @@ function ThemeShell() {
               legend={false}
               options={false}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -500,7 +504,7 @@ function ThemeShell() {
               legend={false}
               options={false}
               filter={false}
-              containered={true}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -514,6 +518,7 @@ function ThemeShell() {
               options={false}
               type={'line'}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -527,6 +532,7 @@ function ThemeShell() {
               options={false}
               type={'bar'}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -539,6 +545,7 @@ function ThemeShell() {
               legend={false}
               options={false}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -551,6 +558,7 @@ function ThemeShell() {
               legend={false}
               options={false}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -563,6 +571,7 @@ function ThemeShell() {
               legend={false}
               options={false}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -575,6 +584,7 @@ function ThemeShell() {
               legend={false}
               options={false}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
@@ -587,12 +597,14 @@ function ThemeShell() {
               legend={false}
               options={false}
               filter={false}
+              fullScreen={true}
             />
           </Suspense>
         </div>
       )}
     </div>
   );
-}
+};
 
+export type { ShowDiagramState };
 export default ThemeShell;

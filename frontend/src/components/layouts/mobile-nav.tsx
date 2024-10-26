@@ -3,19 +3,21 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  Dispatch, ReactNode, SetStateAction, useState
+  Dispatch, ReactNode, SetStateAction, useEffect, useState
 } from 'react';
-import { siteConfig } from '@/config/site';
+import siteConfig from '@/config/site';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { Icons } from '@/components/icons';
+import Icons from '@/components/icons';
 import ThemeToggle from './theme-toggle';
+import { useActiveProject } from '../providers/active-project-provider';
 
-interface NavItem {
+type NavItem = {
   title: string;
   href?: string;
+  clickableNoActiveProject?: boolean;
   disabled?: boolean;
   external?: boolean;
   icon?: keyof typeof Icons;
@@ -23,19 +25,19 @@ interface NavItem {
   description?: string;
 }
 
-interface NavItemWithChildren extends NavItem {
+type NavItemWithChildren = {
   items: NavItemWithChildren[];
-}
+} & NavItem
 
-interface NavItemWithOptionalChildren extends NavItem {
+type NavItemWithOptionalChildren = {
   items?: NavItemWithChildren[];
-}
+} & NavItem
 type MainNavItem = NavItemWithOptionalChildren;
-interface MobileNavProps {
+type MobileNavProps = {
   items?: MainNavItem[];
 }
 
-interface MobileLinkProps {
+type MobileLinkProps = {
   children?: ReactNode;
   href: string;
   disabled?: boolean;
@@ -43,31 +45,42 @@ interface MobileLinkProps {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-function MobileLink({
+const MobileLink = ({
   children,
   href,
   disabled,
   pathname,
   setIsOpen
-}: MobileLinkProps) {
-  return (
-    <Link
-      href={href}
-      className={cn(
-        'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors',
-        'hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
-        pathname === href,
-        disabled && 'pointer-events-none opacity-60'
-      )}
-      onClick={() => setIsOpen(false)}
-    >
-      {children}
-    </Link>
-  );
-}
-function MobileNav({ items }: MobileNavProps) {
+}: MobileLinkProps) => (
+  <Link
+    href={href}
+    className={cn(
+      'block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors',
+      'hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground',
+      pathname === href,
+      disabled && 'pointer-events-none opacity-60'
+    )}
+    onClick={() => setIsOpen(false)}
+  >
+    {children}
+  </Link>
+);
+
+const MobileNav = ({ items }: MobileNavProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const [isMounted, setIsMounted] = useState(false);
+  const activeProject = useActiveProject();
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+  if (!isMounted) {
+    return <Icons.spinner
+      className="mr-2 h-4 w-4 animate-spin"
+      aria-hidden="true"
+    />;
+  }
   return (
     <Sheet open={isOpen} onOpenChange={setIsOpen}>
       <SheetTrigger asChild suppressHydrationWarning>
@@ -101,7 +114,7 @@ function MobileNav({ items }: MobileNavProps) {
                 href={item.href ? item.href : '/'}
                 pathname={pathname}
                 setIsOpen={setIsOpen}
-                disabled={item.disabled}
+                disabled={!activeProject && !item.clickableNoActiveProject}
               >
                 {item.title}
               </MobileLink>
@@ -112,6 +125,6 @@ function MobileNav({ items }: MobileNavProps) {
       </SheetContent>
     </Sheet>
   );
-}
+};
 
 export default MobileNav;

@@ -7,7 +7,7 @@ import {
 } from '@illustry/types';
 import makeRequest from '@/lib/request';
 
-export const browseVisualizations = async (filter?: VisualizationTypes.VisualizationFilter) => {
+const browseVisualizations = async (filter?: VisualizationTypes.VisualizationFilter) => {
   let newFilter: VisualizationTypes.VisualizationFilter = {};
   if (filter) {
     newFilter = filter;
@@ -18,19 +18,16 @@ export const browseVisualizations = async (filter?: VisualizationTypes.Visualiza
     {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
       },
       body: JSON.stringify(newFilter)
     }
   );
-  return makeRequest<VisualizationTypes.ExtendedVisualizationType>(request, ['visualizations'])
-    .catch((error) => {
-      // eslint-disable-next-line no-console
-      console.debug(error.message);
-    });
+  return makeRequest<VisualizationTypes.ExtendedVisualizationType>(request, ['visualizations']);
 };
 
-export const deleteVisualization = async (
+const deleteVisualization = async (
   visualizationFilter: VisualizationTypes.VisualizationFilter
 ) => {
   revalidateTag('visualizations');
@@ -47,7 +44,7 @@ export const deleteVisualization = async (
   return makeRequest<boolean>(request, ['visualizations']);
 };
 
-export const createOrUpdateVisualization = async (
+const createOrUpdateVisualization = async (
   form: FormData
 ) => {
   const request = new Request(
@@ -60,7 +57,7 @@ export const createOrUpdateVisualization = async (
   return makeRequest<VisualizationTypes.VisualizationType>(request, ['visualizations']);
 };
 
-export const findOneVisualization = async (
+const findOneVisualization = async (
   visualizationFilter: VisualizationTypes.VisualizationFilter
 ) => {
   revalidateTag('visualizations');
@@ -75,4 +72,11 @@ export const findOneVisualization = async (
     }
   );
   return makeRequest<VisualizationTypes.VisualizationType>(request, ['visualizations']);
+};
+
+export {
+  browseVisualizations,
+  deleteVisualization,
+  createOrUpdateVisualization,
+  findOneVisualization
 };

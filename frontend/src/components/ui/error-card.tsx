@@ -10,17 +10,17 @@ import {
   CardHeader,
   CardTitle
 } from '@/components/ui/card';
-import { Icons } from '@/components/icons';
+import Icons from '@/components/icons';
 
-interface ErrorCardProps extends ComponentPropsWithoutRef<typeof Card> {
+type ErrorCardProps = {
   icon?: keyof typeof Icons
   title: string
   description: string
   retryLink?: string
   retryLinkText?: string
-}
+} & ComponentPropsWithoutRef<typeof Card>;
 
-function ErrorCard({
+const ErrorCard = ({
   icon,
   title,
   description,
@@ -28,7 +28,7 @@ function ErrorCard({
   retryLinkText = 'Go back',
   className,
   ...props
-}: ErrorCardProps) {
+}: ErrorCardProps) => {
   const Icon = Icons[icon ?? 'warning'];
 
   return (
@@ -60,6 +60,6 @@ function ErrorCard({
       ) : null}
     </Card>
   );
-}
+};
 
 export default ErrorCard;

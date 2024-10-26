@@ -8,25 +8,14 @@ import {
   useState
 } from 'react';
 import {
-  VisualizationTypes
+  VisualizationTypes,
+  ValidatorSchemas
 } from '@illustry/types';
-import { generateErrorMessage } from 'zod-error';
-import { siteConfig } from '@/config/site';
+import siteConfig from '@/config/site';
 import { catchError } from '@/lib/utils';
-import {
-  axisChartDataSchema,
-  calendarDataSchema,
-  hierarchySchema,
-  nodeLinkDataSchema,
-  pieChartFunnelDataSchema,
-  scatterDataSchema,
-  timelineDataSchema,
-  wordCloudDataSchema
-} from '@/lib/validation/visualizations';
-import prettifyZodError from '@/lib/validation/prettifyError';
 import { Button } from '../ui/button';
 import PresetSelector from '../ui/playground/preset-selector';
-import { Textarea } from '../ui/textarea';
+import Textarea from '../ui/textarea';
 import Separator from '../ui/separator';
 import Fallback from '../ui/fallback';
 import { ShowDiagramState } from './theme-shell';
@@ -44,7 +33,7 @@ import TimelineShellView from './timeline/timeline-shell';
 import MatrixShellView from './matrix/matrix-shell';
 import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/hierarchical-edge-bundling-shell';
 
-function PlaygroundShell() {
+const PlaygroundShell = () => {
   const [showDiagram, setShowDiagram] = useState<ShowDiagramState>({
     sankey: false,
     heb: false,
@@ -64,10 +53,8 @@ function PlaygroundShell() {
   const [textareaValue, setTextareaValue] = useState<string>();
   const [isSubmitable, setIsSubmitable] = useState<boolean>(false);
   const handleTextareaChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setTextareaValue(event.target.value);
     setIsSubmitable(false);
-    setTimeout(() => {
-      setTextareaValue(event.target.value);
-    }, 100);
   };
   const getActiveDiagramKey = (): keyof ShowDiagramState | null => {
     const activeKeys = Object.keys(showDiagram).filter(
@@ -85,26 +72,34 @@ function PlaygroundShell() {
       case 'flg':
       case 'sankey':
       case 'matrix':
-        return nodeLinkDataSchema.safeParse(data);
+        ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.nodeLinkDataSchema, data);
+        break;
       case 'calendar':
-        return calendarDataSchema.safeParse(data);
+        ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.calendarDataSchema, data);
+        break;
       case 'wordCloud':
-        return wordCloudDataSchema.safeParse(data);
+        ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.wordCloudDataSchema, data);
+        break;
       case 'lineChart':
       case 'barChart':
-        return axisChartDataSchema.safeParse(data);
+        ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.axisChartDataSchema, data);
+        break;
       case 'pieChart':
       case 'funnel':
-        return pieChartFunnelDataSchema.safeParse(data);
+        ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.pieChartFunnelDataSchema, data);
+        break;
       case 'scatter':
-        return scatterDataSchema.safeParse(data);
+        ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.scatterDataSchema, data);
+        break;
       case 'treemap':
       case 'sunburst':
-        return hierarchySchema.safeParse(data);
+        ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.hierarchySchema, data);
+        break;
       case 'timeline':
-        return timelineDataSchema.safeParse(data);
+        ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.timelineDataSchema, data);
+        break;
       default:
-        return null;
+        break;
     }
   };
   const handleSubmit = () => {
@@ -112,14 +107,7 @@ function PlaygroundShell() {
       const data = JSON.parse(textareaValue as string);
       setIsSubmitable(true);
       const activeKey = getActiveDiagramKey();
-      const valid = toShowDiagram(activeKey as string, data);
-      if (valid && !valid.success) {
-        const errorMessage = generateErrorMessage(
-          valid.error.issues,
-          prettifyZodError()
-        );
-        throw new Error(errorMessage);
-      }
+      toShowDiagram(activeKey as string, data);
     } catch (error) {
       setIsSubmitable(false);
       catchError(error);
@@ -133,6 +121,7 @@ function PlaygroundShell() {
             <Suspense fallback={<Fallback />}>
               {key === 'barChart' && isSubmitable && (
                 <AxisChartsShellView
+                  fullScreen={true}
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.AxisChartData}
                   legend={false}
                   options={false}
@@ -142,6 +131,7 @@ function PlaygroundShell() {
               )}
               {key === 'lineChart' && isSubmitable && (
                 <AxisChartsShellView
+                  fullScreen={true}
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.AxisChartData}
                   legend={false}
                   options={false}
@@ -152,6 +142,7 @@ function PlaygroundShell() {
               {key === 'sankey' && isSubmitable && (
                 <SankeyGraphShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.NodeLinkData}
+                  fullScreen={true}
                   legend={false}
                   options={false}
                   filter={false}
@@ -163,7 +154,7 @@ function PlaygroundShell() {
                   legend={false}
                   options={false}
                   filter={false}
-                  containered={true}
+                  fullScreen={true}
                 />
               )}
               {key === 'flg' && isSubmitable && (
@@ -172,12 +163,14 @@ function PlaygroundShell() {
                   legend={false}
                   options={false}
                   filter={false}
+                  fullScreen={true}
                 />
               )}
               {key === 'matrix' && isSubmitable && (
                 <MatrixShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.NodeLinkData}
                   legend={false}
+                  fullScreen={true}
                   options={false}
                   filter={false}
                 />
@@ -185,6 +178,7 @@ function PlaygroundShell() {
               {key === 'wordCloud' && isSubmitable && (
                 <WordCloudShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.WordCloudData}
+                  fullScreen={true}
                   legend={false}
                   options={false}
                   filter={false}
@@ -193,6 +187,7 @@ function PlaygroundShell() {
               {key === 'funnel' && isSubmitable && (
                 <FunnelShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.FunnelData}
+                  fullScreen={true}
                   legend={false}
                   options={false}
                   filter={false}
@@ -201,6 +196,7 @@ function PlaygroundShell() {
               {key === 'pieChart' && isSubmitable && (
                 <PieChartShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.FunnelData}
+                  fullScreen={true}
                   legend={false}
                   options={false}
                   filter={false}
@@ -209,6 +205,7 @@ function PlaygroundShell() {
               {key === 'scatter' && isSubmitable && (
                 <ScatterShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.ScatterData}
+                  fullScreen={true}
                   legend={false}
                   options={false}
                   filter={false}
@@ -218,6 +215,7 @@ function PlaygroundShell() {
                 <SunBurstShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.HierarchyData}
                   legend={false}
+                  fullScreen={true}
                   options={false}
                   filter={false}
                 />
@@ -225,6 +223,7 @@ function PlaygroundShell() {
               {key === 'timeline' && isSubmitable && (
                 <TimelineShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.TimelineData}
+                  fullScreen={true}
                   legend={false}
                   options={false}
                   filter={false}
@@ -235,6 +234,7 @@ function PlaygroundShell() {
                 <TreeMapShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.HierarchyData}
                   legend={false}
+                  fullScreen={true}
                   options={false}
                   filter={false}
                 />
@@ -243,6 +243,7 @@ function PlaygroundShell() {
                 <CalendarGraphShellView
                   data={JSON.parse(textareaValue as string) as VisualizationTypes.CalendarData}
                   legend={false}
+                  fullScreen={true}
                   options={false}
                   filter={false}
                 />
@@ -279,7 +280,7 @@ function PlaygroundShell() {
           <div className="w-[50%] md:w-1/3 p-4">
             <div className="container h-[93%] py-6 bg-gray-50 rounded-3xl dark:bg-gray-800">
               <Textarea
-                defaultValue={textareaValue}
+                value={textareaValue}
                 onChange={handleTextareaChange}
                 className="w-full h-[90%] flex-1 p-4 border-gray-300 bg-gray-50 rounded-3xl
                  dark:border-gray-700 dark:bg-gray-800 md:min-h-[530px] lg:min-h-[530px]"
@@ -298,6 +299,6 @@ function PlaygroundShell() {
       </div>
     </>
   );
-}
+};
 
 export default PlaygroundShell;

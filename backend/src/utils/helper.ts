@@ -13,6 +13,7 @@ type Response = {
   };
   status: (code: number) => Response;
   send: (data: unknown) => void;
+  setHeader: (name: string, value: string) => void;
 };
 
 const returnResponse = (
@@ -25,11 +26,15 @@ const returnResponse = (
     const urlParts = url.parse(res.req.originalUrl || '');
     res.req.probe.stop(`Send response${urlParts.pathname}`);
   }
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '0');
   if (!err) {
     res.status(200);
     res.send(data);
   } else {
-    next(err.message || err);
+    res.send({ error: err.message });
+    next(err.message);
   }
 };
 

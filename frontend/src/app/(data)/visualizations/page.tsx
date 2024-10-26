@@ -3,16 +3,17 @@ import { VisualizationTypes } from '@illustry/types';
 import { browseVisualizations } from '@/app/_actions/visualization';
 import VisualizationsTableShell from '@/components/shells/visualizations-table-shell';
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: 'Visualizations',
   description: 'Manage your Visualizations'
 };
 
-interface VisualizationsProps {
+type VisualizationsProps = {
   searchParams: {
     [key: string]: string | string[] | undefined;
   };
 }
+
 const Visualizations = async ({ searchParams }: VisualizationsProps) => {
   const {
     page, text, per_page: perPage, sort
@@ -41,3 +42,4 @@ const Visualizations = async ({ searchParams }: VisualizationsProps) => {
 };
 
 export default Visualizations;
+export { metadata };

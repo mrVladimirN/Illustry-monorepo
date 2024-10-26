@@ -5,7 +5,6 @@ import {
   ArrowUp,
   BarChart3,
   CalendarDays,
-  Check,
   ChevronDown,
   ChevronLeft,
   ChevronRight,
@@ -14,6 +13,8 @@ import {
   ChevronsUpDown,
   ChevronUp,
   Circle,
+  Check,
+  CheckIcon,
   Copy,
   CreditCard,
   Crop,
@@ -49,6 +50,7 @@ import {
   SlidersHorizontal,
   Star,
   SunMedium,
+  Sparkles,
   Trash,
   Twitter,
   UploadCloud,
@@ -57,13 +59,15 @@ import {
   VolumeX,
   Wallet,
   X,
+  XIcon,
+  XCircle,
   type LucideIcon,
   type LucideProps
 } from 'lucide-react';
 
-export type Icon = LucideIcon;
+type Icon = LucideIcon;
 
-export const Icons = {
+const Icons = {
   sun: SunMedium,
   moon: Moon,
   star: Star,
@@ -86,6 +90,7 @@ export const Icons = {
   horizontalSliders: SlidersHorizontal,
   circle: Circle,
   check: Check,
+  checkIcon: CheckIcon,
   add: Plus,
   addCircle: PlusCircle,
   remove: Minus,
@@ -100,6 +105,7 @@ export const Icons = {
   downlaod: Download,
   warning: AlertTriangle,
   search: Search,
+  sparkles: Sparkles,
   filter: Filter,
   alarm: AlarmClock,
   calendar: CalendarDays,
@@ -122,6 +128,8 @@ export const Icons = {
   clothing: Shirt,
   shoes: Footprints,
   accessories: HardHat,
+  xCircle: XCircle,
+  xIcon: XIcon,
   logo: (props: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -285,3 +293,6 @@ export const Icons = {
     </svg>
   )
 };
+
+export type { Icon };
+export default Icons;

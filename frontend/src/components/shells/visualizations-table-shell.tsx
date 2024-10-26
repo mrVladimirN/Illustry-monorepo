@@ -22,14 +22,15 @@ import {
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
 
-interface VisualizationsTableShellProps {
+type VisualizationsTableShellProps = {
   data?: VisualizationTypes.VisualizationType[];
   pageCount?: number;
 }
-function VisualizationsTableShell({
+
+const VisualizationsTableShell = ({
   data,
   pageCount
-}: VisualizationsTableShellProps) {
+}: VisualizationsTableShellProps) => {
   const [isPending, startTransition] = useTransition();
   const [selectedRowProperties, setSelectedRowProperties] = useState<
     { name: string; type: VisualizationTypes.VisualizationTypesEnum }[]
@@ -49,9 +50,9 @@ function VisualizationsTableShell({
                     ? []
                     : data.map(
                       (row) => ({ name: row.name, type: row.type } as {
-                              name: string;
-                              type: VisualizationTypes.VisualizationTypesEnum;
-                            })
+                        name: string;
+                        type: VisualizationTypes.VisualizationTypesEnum;
+                      })
                     ))
                 );
               }
@@ -69,14 +70,14 @@ function VisualizationsTableShell({
                 (prev: { name: string; type: VisualizationTypes.VisualizationTypesEnum }[]) => (value
                   ? [
                     ...prev,
-                        {
-                          name: row.original.name,
-                          type: row.original.type
-                        } as { name: string; type: VisualizationTypes.VisualizationTypesEnum }
+                    {
+                      name: row.original.name,
+                      type: row.original.type
+                    } as { name: string; type: VisualizationTypes.VisualizationTypesEnum }
                   ]
                   : prev.filter(
                     (id) => id.name !== row.original.name
-                          && id.type !== row.original.type
+                      && id.type !== row.original.type
                   ))
               );
             }}
@@ -207,7 +208,8 @@ function VisualizationsTableShell({
     ],
     [data, isPending]
   );
-  function deleteSelectedRows() {
+
+  const deleteSelectedRows = () => {
     toast.promise(
       Promise.all(
         selectedRowProperties.map(({ name, type }) => deleteVisualization({
@@ -227,7 +229,8 @@ function VisualizationsTableShell({
         }
       }
     );
-  }
+  };
+
   return (
     <DataTable
       columns={columns}
@@ -238,6 +241,6 @@ function VisualizationsTableShell({
       deleteRowsAction={deleteSelectedRows}
     />
   );
-}
+};
 
 export default VisualizationsTableShell;

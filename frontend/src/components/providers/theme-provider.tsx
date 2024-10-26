@@ -10,7 +10,7 @@ import {
 import { UtilTypes } from '@illustry/types';
 import { cloneDeep } from '@/lib/utils';
 
-export interface ThemeColors {
+type ThemeColors = {
   calendar: {
     dark: {
       colors: string[];
@@ -108,15 +108,15 @@ export interface ThemeColors {
     };
   };
 }
-interface OptionAction {
+type OptionAction = {
   type: 'apply';
   modifiedData?: UtilTypes.DeepPartial<ThemeColors>;
 }
-interface AuxProps {
+type AuxProps = {
   children: ReactNode;
 }
 
-export const initialThemeColors: ThemeColors = {
+const initialThemeColors: ThemeColors = {
   calendar: {
     dark: {
       colors: [
@@ -417,12 +417,11 @@ const themeColorsReducer = (
 ): ThemeColors => {
   if (action.type === 'apply' && action.modifiedData) {
     const newData: ThemeColors = cloneDeep(data);
-    // Iterate through properties of action.modifiedData
     Object.entries(action.modifiedData).forEach(([key]) => {
       if (key in newData) {
         newData[key as keyof ThemeColors] = {
           ...newData[key as keyof ThemeColors],
-          ...(action.modifiedData as any)[key] // Using any type assertion here
+          ...(action.modifiedData as any)[key]
         };
       }
     });
@@ -432,7 +431,7 @@ const themeColorsReducer = (
   const newData: ThemeColors = cloneDeep(data);
   return newData;
 };
-export function ThemeColorsProvider({ children }: AuxProps) {
+const ThemeColorsProvider = ({ children }: AuxProps) => {
   let initialTheme = initialThemeColors;
   if (typeof window !== 'undefined' && window.localStorage) {
     const storedTheme = localStorage.getItem('colorTheme');
@@ -442,7 +441,6 @@ export function ThemeColorsProvider({ children }: AuxProps) {
     themeColorsReducer,
     initialTheme
   );
-  // Add a useEffect to update localStorage whenever themeProv changes
   useEffect(() => {
     localStorage.setItem('colorTheme', JSON.stringify(themeProv));
   }, [themeProv]);
@@ -453,14 +451,14 @@ export function ThemeColorsProvider({ children }: AuxProps) {
       </ThemeDispatchContext.Provider>
     </ThemeColorsContext.Provider>
   );
-}
-export function useThemeColors() {
-  return useContext(ThemeColorsContext);
-}
-export function useThemeColorsDispach() {
-  return useContext(ThemeDispatchContext);
-}
+};
+const useThemeColors = () => useContext(ThemeColorsContext);
+const useThemeColorsDispach = () => useContext(ThemeDispatchContext);
 
-export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
-}
+// eslint-disable-next-line max-len
+const ThemeProvider = ({ children, ...props }: ThemeProviderProps) => <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+
+export type { ThemeColors };
+export {
+  ThemeColorsProvider, useThemeColors, useThemeColorsDispach, ThemeProvider
+};

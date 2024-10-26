@@ -1,22 +1,28 @@
 import dynamic from 'next/dynamic';
 import { VisualizationTypes } from '@illustry/types';
-import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
+import {
+  WithFilter, WithFullScreen, WithLegend, WithOptions
+} from '@/lib/types/utils';
 import FilteredHierarchicalEdgeBundlingGraphShellView from './filter-hierarchical-edge-bundling-shell';
 
-interface HierarchicalEdgeBundlingShellProp extends WithLegend, WithOptions, WithFilter {
+type HierarchicalEdgeBundlingShellProp = {
   data: VisualizationTypes.NodeLinkData;
-  containered: boolean
-}
+} & WithLegend
+  & WithOptions
+  & WithFilter
+  & WithFullScreen
+
 const HierarchicalEdgeBundlingGraphView = dynamic(
   () => import('@/components/views/hierarchical-edge-bundling'),
   { ssr: false }
 );
+
 const HierarchicalEdgeBundlingShellView = ({
   data,
   legend,
   options,
   filter,
-  containered
+  fullScreen
 }: HierarchicalEdgeBundlingShellProp) => {
   const { nodes, links } = data;
   return (
@@ -27,6 +33,7 @@ const HierarchicalEdgeBundlingShellView = ({
           nodes={nodes}
           links={links}
           legend={legend}
+          fullScreen={fullScreen}
         />
       ) : (
         <>
@@ -35,11 +42,12 @@ const HierarchicalEdgeBundlingShellView = ({
             nodes={nodes}
             links={links}
             legend={legend}
-            containered={containered}
+            fullScreen={fullScreen}
           />
         </>
       )}
     </>
   );
 };
+
 export default HierarchicalEdgeBundlingShellView;

@@ -1,9 +1,9 @@
 import { VisualizationTypes } from '@illustry/types';
-// eslint-disable-next-line import/no-cycle
 import { evaluateCondition } from './generic';
 
-export const hierarchyWords = ['values', 'categories'];
-export const applyValuesFilterRecursive = (
+const hierarchyWords = ['values', 'categories'];
+
+const applyValuesFilterRecursive = (
   node: VisualizationTypes.HierarchyNode,
   valuesOperations: string[]
 ): VisualizationTypes.HierarchyNode | undefined => {
@@ -30,7 +30,7 @@ export const applyValuesFilterRecursive = (
   }
 };
 
-export const applyValuesFilter = (
+const applyValuesFilter = (
   valuesFilter: string,
   defaultData: {
       categories: string[];
@@ -61,6 +61,7 @@ export const applyValuesFilter = (
     return defaultData;
   }
 };
+
 const applyCategoriesFilter = (categoriesFilter: string, defaultData: {
     categories: string[]
     nodes: VisualizationTypes.HierarchyNode[]
@@ -102,7 +103,7 @@ const applyCategoriesFilter = (categoriesFilter: string, defaultData: {
   return [];
 };
 
-export const applyHierachyFilter = (expressions:string[], defaultData: {
+const applyHierachyFilter = (expressions:string[], defaultData: {
     categories: string[]
     nodes: VisualizationTypes.HierarchyNode[]
     }) => {
@@ -145,3 +146,5 @@ export const applyHierachyFilter = (expressions:string[], defaultData: {
   }
   return newData;
 };
+
+export { hierarchyWords, applyValuesFilterRecursive, applyHierachyFilter };

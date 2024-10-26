@@ -1,20 +1,24 @@
 'use client';
 
-import { EChartsOption } from 'echarts';
 import {
   computeColors
 } from '@/lib/visualizations/scatter/helper';
 import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
-import { useThemeColors } from '../theme-provider';
+import { useThemeColors } from '../providers/theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface ScatterProp extends WithLegend, WithOptions {
+type ScatterProp = {
   points: (string | number)[][];
   categories: string[];
-}
-const ScatterView = ({ points, categories, legend }: ScatterProp) => {
+} & WithLegend
+  & WithOptions
+  & WithFullScreen
+
+const ScatterView = ({
+  points, categories, legend, fullScreen
+}: ScatterProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';
@@ -23,7 +27,7 @@ const ScatterView = ({ points, categories, legend }: ScatterProp) => {
     : activeTheme.scatter.light.colors;
 
   const textColor = isDarkTheme ? '#888' : '#333';
-  const option: EChartsOption = {
+  const option = {
     tooltip: {
       formatter: '<b>({c})</b>',
       axisPointer: {
@@ -82,13 +86,21 @@ const ScatterView = ({ points, categories, legend }: ScatterProp) => {
       }
     ]
   };
+  const height = fullScreen ? '73.5vh' : '35vh';
+
   return (
     <div className="relative mt-[4%] flex flex-col items-center">
       {legend && (
         <Legend legendData={computeLegendColors(categories, colors)} />
       )}
-      <div className="w-full mt-4 h-[80vh]">
-        <ReactEcharts option={option} className="w-full h-full" />
+      <div className="w-full h-full">
+        <ReactEcharts
+          option={option}
+          className="w-full sm:h-120 lg:h-160"
+          style={{
+            height
+          }}
+        />
       </div>
     </div>
   );

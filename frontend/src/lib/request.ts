@@ -13,9 +13,6 @@ const makeRequest = <T>(
         console.debug('Request failed');
       }
       return response.json();
-    })
-    .catch(() => {
-      throw new Error('Something went wrong please try again later');
     });
 
 export default makeRequest;

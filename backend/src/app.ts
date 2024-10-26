@@ -4,6 +4,7 @@ import * as http from 'http';
 import mongoose from 'mongoose';
 import VisualizationRoutes from './routes/visualization/visualization';
 import ProjectRoutes from './routes/project/project';
+import DashboardRoutes from './routes/dashboard/dashboard';
 import logger from './config/logger';
 
 import 'dotenv/config';
@@ -31,6 +32,7 @@ class Illustry {
     this.expressApp.use(express.json());
     this.expressApp.use(ProjectRoutes);
     this.expressApp.use(VisualizationRoutes);
+    this.expressApp.use(DashboardRoutes);
 
     this.httpServer = this.expressApp.listen(+ILLUSTRY_PORT, '0.0.0.0', () => {
       logger.info(`server is listening on ${ILLUSTRY_PORT}`);

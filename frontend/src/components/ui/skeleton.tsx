@@ -1,16 +1,14 @@
 import { HTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 
-function Skeleton({
+const Skeleton = ({
   className,
   ...props
-}: HTMLAttributes<HTMLDivElement>) {
-  return (
+}: HTMLAttributes<HTMLDivElement>) => (
     <div
       className={cn('animate-pulse rounded-md bg-primary/10', className)}
       {...props}
     />
-  );
-}
+);
 
 export default Skeleton;

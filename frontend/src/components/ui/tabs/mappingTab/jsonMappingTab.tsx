@@ -1,21 +1,20 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable import/no-cycle */
 import { UseFormReturn } from 'react-hook-form';
-import { Inputs } from '@/components/form/add-visualization-form';
+import { Inputs } from '@/components/form/types';
 import VisualizationDetails from './visualizationDetails';
 import VisualizationType from './visualizationType';
 
-interface JSONMappingTabProps {
+type JSONMappingTabProps = {
   form: UseFormReturn<Inputs>;
   router: any;
   fileDetails: boolean;
 }
-function JSONMappingTab({
+
+const JSONMappingTab = ({
   fileDetails,
   form,
   router
-}: JSONMappingTabProps) {
-  return (
+}: JSONMappingTabProps) => (
     <>
       {fileDetails ? (
         <p className="text-green-500">
@@ -28,7 +27,6 @@ function JSONMappingTab({
         </>
       )}
     </>
-  );
-}
+);
 
 export default JSONMappingTab;

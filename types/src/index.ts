@@ -3,5 +3,7 @@ import * as GenericTypes from './generic';
 import * as ProjectTypes from './project';
 import * as UtilTypes from './utils';
 import * as VisualizationTypes from './visualization';
+import * as DashboardTypes from './dashboard';
+import * as ValidatorSchemas from './validator';
 
-export { FileTypes, GenericTypes, ProjectTypes, UtilTypes, VisualizationTypes }
+export { FileTypes, GenericTypes, ProjectTypes, UtilTypes, VisualizationTypes, DashboardTypes, ValidatorSchemas }

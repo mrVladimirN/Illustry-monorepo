@@ -1,6 +1,6 @@
 import { ReactNode, memo, JSX } from 'react';
 
-export type CursorProps = {
+type CursorProps = {
   /** Enable cursor blinking animation */
   cursorBlinking?: boolean;
   /** Change cursor style */
@@ -21,5 +21,7 @@ const MemoizedCursor = ({
     {cursorStyle}
   </span>
 );
+const Cursor = memo(MemoizedCursor);
 
-export const Cursor = memo(MemoizedCursor);
+export default Cursor;
+export type { CursorProps };

@@ -2,137 +2,124 @@
 
 'use client';
 
-import { useEffect, useRef } from 'react';
-import {
-  select, cluster, lineRadial, curveBundle
-} from 'd3';
 import { VisualizationTypes } from '@illustry/types';
-import {
-  createHebLinks,
-  createHebNodes,
-  createToolTip,
-  onLinkMouseOver,
-  onMouseMove,
-  onNodeClick,
-  onNodeMouseOver,
-  onNodeOrLinkMouseOut,
-  packageHierarchy
-} from '@/lib/visualizations/node-link/helper';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
-import { useThemeColors } from '../theme-provider';
+import { useEffect, useRef } from 'react';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
+import { computeCategoriesFLGOrHEB, computeNodesHEB } from '@/lib/visualizations/node-link/helper';
+import { useThemeColors } from '../providers/theme-provider';
+import ReactEcharts from './generic/echarts';
 
-interface HierarchicalEdgeBundlingGraphProp extends WithLegend, WithOptions {
-  nodes: VisualizationTypes.Node[],
-  links: VisualizationTypes.Link[],
-  containered?: boolean
-}
+type HierarchicalEdgeBundlingGraphProp = {
+  nodes: VisualizationTypes.Node[];
+  links: VisualizationTypes.Link[];
+} & WithLegend
+  & WithOptions
+  & WithFullScreen
 
-const createHedge = (
-  nodes: VisualizationTypes.Node[],
-  links: VisualizationTypes.Link[],
-  c: string[],
-  width: number,
-  height: number,
-  containered?: boolean
-) => {
-  const colorin = c[0];
-  const colorout = c[1];
-
-  const tooltip = createToolTip();
-
-  const radius = !containered ? window.innerHeight / 2 : height / 2;
-  const innerRadius = radius - 200;
-  const newCluster = cluster().size([360, innerRadius]);
-  const line = lineRadial()
-    .curve(curveBundle.beta(0.85))
-    .radius((d: any) => d.y)
-    .angle((d: any) => (d.x / 180) * Math.PI);
-
-  const svg = select('#viz')
-    .append('svg')
-    .attr('id', 'hedgeBundleSvg')
-    .attr('width', !containered ? window.innerWidth : width)
-    .attr('height', !containered ? window.innerHeight - 10 : height - 10)
-    .attr('class', 'edge-bundle')
-    .append('g')
-    .attr('transform', `translate(${radius},${radius})`);
-
-  const root = packageHierarchy(nodes).sum((d: any) => d.size);
-  newCluster(root);
-
-  let link: any = svg.append('g').selectAll('.link');
-  let node: any = svg.append('g').selectAll('.node');
-  node = createHebNodes(node, root, c[2] as string)
-    .on('mouseover', (event: any) => onNodeMouseOver(
-      event,
-      node,
-      link,
-      tooltip,
-        colorin as string,
-        colorout as string,
-        c[3] as string,
-        c[4] as string
-    ))
-    .on('mouseout', () => {
-      onNodeOrLinkMouseOut(link, node, tooltip, c[2] as string);
-    })
-    .on('mousemove', () => onMouseMove(tooltip))
-    .on('click', () => onNodeClick(tooltip));
-  link = createHebLinks(link, root, links, line, c[2] as string)
-    .on('mouseover', (event: any) => onLinkMouseOver(
-      event,
-      node,
-      link,
-      tooltip,
-        colorin as string,
-        colorout as string,
-        c[2] as string
-    ))
-    .on('mousemove', () => onMouseMove(tooltip))
-    .on('mouseout', () => {
-      onNodeOrLinkMouseOut(link, node, tooltip, c[2] as string);
-    });
-};
-
-const HierarchicalEdgeBundlingGraphView = ({
-  nodes,
-  links,
-  containered
-}: HierarchicalEdgeBundlingGraphProp) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-
+const HierarchicalEdgeBundlingGraphView = ({ nodes, links, fullScreen }: HierarchicalEdgeBundlingGraphProp) => {
   const activeTheme = useThemeColors();
   const theme = typeof window !== 'undefined' ? localStorage.getItem('theme') : 'light';
   const isDarkTheme = theme === 'dark';
-  const colors = isDarkTheme
-    ? activeTheme.heb.dark.colors
-    : activeTheme.heb.light.colors;
-
+  const colors = isDarkTheme ? activeTheme.flg.dark.colors : activeTheme.flg.light.colors;
+  const categories = computeCategoriesFLGOrHEB(nodes, colors);
+  const chartRef = useRef(null);
+  const recomputedNodes = computeNodesHEB(nodes, categories);
+  const inOutColors = colors.slice(categories.length);
+  const option = {
+    tooltip: {
+      formatter: (params: any) => {
+        if (params.dataType === 'edge') {
+          // eslint-disable-next-line max-len
+          return `${params.data.source} → ${params.data.target}<br />Value: ${params.data.value || 0} ${params.data.prop ? `<br/> ${params.data.prop}` : ''}`;
+        }
+        return `${params.data.name} ${params.data.prop ? `<br/> ${params.data.prop}` : ''}`;
+      }
+    },
+    animationDurationUpdate: 1500,
+    animationEasingUpdate: 'quinticInOut',
+    series: [
+      {
+        type: 'graph',
+        layout: 'circular',
+        circular: {
+          rotateLabel: true
+        },
+        data: recomputedNodes,
+        categories,
+        roam: true,
+        label: {
+          position: 'right',
+          formatter: '{b}'
+        },
+        lineStyle: {
+          color: '#ccc',
+          curveness: 0.3
+        },
+        edges: links
+      }
+    ]
+  };
   useEffect(() => {
-    const container = containerRef.current;
-    if (container) {
-      const containerWidth = container.offsetWidth;
-      const containerHeight = container.offsetHeight;
-      select('#hedgeBundleSvg').remove();
-      createHedge(nodes, links, colors, containerWidth, containerHeight, containered);
-    }
-    return () => {
-      select('#hedgeBundleSvg').remove();
-      select('.my-tooltip').remove();
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [nodes, links, JSON.stringify(colors)]);
+    const chartInstance = (chartRef.current as any)?.getEchartsInstance();
+    chartInstance?.on('mouseover', (params: any) => {
+      let newLinks: Record<string, unknown>[] = [...links];
+      if (params.dataType === 'node') {
+        const nodeId = params.data.id;
+        newLinks = links.map((link) => {
+          if (link.source === nodeId) {
+            return { ...link, lineStyle: { color: inOutColors[0], width: 3 } };
+          } if (link.target === nodeId) {
+            return { ...link, lineStyle: { color: inOutColors[1], width: 3 } };
+          }
+          return { ...link };
+        });
+      }
+      if (params.dataType === 'edge') {
+        const mouseOverLink = params.data;
+        // eslint-disable-next-line max-len
+        const foundlinkIndex = links.findIndex((link) => link.target === mouseOverLink.target && link.source === mouseOverLink.source);
+        newLinks[foundlinkIndex] = {
+          ...links[foundlinkIndex],
+          lineStyle: {
+            width: 5
+          }
+        };
+      }
+      chartInstance.setOption({
+        series: [
+          {
+            edges: newLinks
+          }
+        ]
+      });
+    });
 
+    chartInstance?.on('mouseout', (params: any) => {
+      if (params.dataType === 'node' || params.dataType === 'edge') {
+        chartInstance.setOption({
+          series: [
+            {
+              edges: links
+            }
+          ]
+        });
+      }
+    });
+  }, [links, nodes]);
+  const height = fullScreen ? '73.5vh' : '35vh';
   return (
-    <>
-      <div
-        ref={containerRef}
-        id="viz"
-        className="w-full h-90vh flex justify-center items-center"
-        style={{ height: '90vh' }}
-      />
-      <div id="tooltip"></div>
-    </>
+    <div className="relative mt-[4%] flex flex-col items-center">
+      <div className="w-full h-full">
+        <ReactEcharts
+          ref={chartRef}
+          option={option}
+          className="w-full sm:h-120 lg:h-160"
+          style={{
+            height
+          }}
+        />
+      </div>
+    </div>
   );
 };
 

@@ -1,11 +1,16 @@
 import { VisualizationTypes } from '@illustry/types';
 import dynamic from 'next/dynamic';
-import { WithFilter, WithLegend, WithOptions } from '@/lib/types/utils';
+import {
+  WithFilter, WithFullScreen, WithLegend, WithOptions
+} from '@/lib/types/utils';
 
-interface AxisChartsShellProp extends WithLegend, WithOptions, WithFilter {
+type AxisChartsShellProp = {
   data: VisualizationTypes.AxisChartData;
   type: 'line' | 'bar';
-}
+} & WithLegend
+  & WithOptions
+  & WithFilter
+  & WithFullScreen
 
 const AxisChartsView = dynamic(() => import('@/components/views/axis-charts'), {
   ssr: false
@@ -23,7 +28,8 @@ const AxisChartsShellView = ({
   legend,
   options,
   type,
-  filter
+  filter,
+  fullScreen
 }: AxisChartsShellProp) => (
   <>
     {filter ? (
@@ -32,10 +38,17 @@ const AxisChartsShellView = ({
         data={data}
         type={type}
         legend={legend}
+        fullScreen={fullScreen}
       />
     ) : (
       <>
-        <AxisChartsView options={options} data={data} type={type} legend={legend} />
+        <AxisChartsView
+          options={options}
+          data={data}
+          type={type}
+          legend={legend}
+          fullScreen={fullScreen}
+        />
       </>
     )}
   </>

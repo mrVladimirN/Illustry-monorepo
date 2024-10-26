@@ -1,15 +1,14 @@
-/* eslint-disable import/no-cycle */
 import { UseFormReturn } from 'react-hook-form';
-import { Inputs } from '@/components/form/add-visualization-form';
-import { Input } from '@/components/ui/input';
+import Input from '@/components/ui/input';
+import { Inputs } from '@/components/form/types';
 
-interface ExcelOrCsvAxisChartMappingProps {
-  form: UseFormReturn<Inputs>; // Include the form context
+type ExcelOrCsvAxisChartMappingProps = {
+  form: UseFormReturn<Inputs>;
 }
-function ExcelOrCsvAxisChartMapping({
+
+const ExcelOrCsvAxisChartMapping = ({
   form
-}: ExcelOrCsvAxisChartMappingProps) {
-  return (
+}: ExcelOrCsvAxisChartMappingProps) => (
     <>
       <div className="flex items-center space-x-4">
         <div className="w-20">Data:</div>
@@ -40,7 +39,6 @@ function ExcelOrCsvAxisChartMapping({
         </div>
       </div>
     </>
-  );
-}
+);
 
 export default ExcelOrCsvAxisChartMapping;

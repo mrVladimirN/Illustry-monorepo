@@ -1,26 +1,27 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-
 'use client';
 
-import { EChartsOption } from 'echarts';
 import { VisualizationTypes } from '@illustry/types';
 import {
   computeCategoriesSankey,
   computeNodesSankey
 } from '@/lib/visualizations/node-link/helper';
 import { computeLegendColors } from '@/lib/visualizations/calendar/helper';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import Legend from '../ui/legend';
-import { useThemeColors } from '../theme-provider';
+import { useThemeColors } from '../providers/theme-provider';
 import ReactEcharts from './generic/echarts';
 
-interface SankeyGraphProp extends WithLegend, WithOptions {
-links: VisualizationTypes.Link[],
-nodes: VisualizationTypes.Node[],
-}
+type SankeyGraphProp = {
+  links: VisualizationTypes.Link[],
+  nodes: VisualizationTypes.Node[],
+} & WithLegend
+  & WithOptions
+  & WithFullScreen
+
 const SankeyGraphView = ({
   links,
   nodes,
+  fullScreen = true,
   legend
 }: SankeyGraphProp) => {
   const activeTheme = useThemeColors();
@@ -31,13 +32,12 @@ const SankeyGraphView = ({
     : activeTheme.sankey.light.colors;
   const categories: string[] = computeCategoriesSankey(nodes);
 
-  const option: EChartsOption = {
+  const option = {
     tooltip: {
       trigger: 'item',
       triggerOn: 'mousemove',
-      // @ts-ignore
-      formatter(params) {
-        // @ts-ignore
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      formatter(params: any) {
         return params.data.prop;
       }
     },
@@ -65,13 +65,21 @@ const SankeyGraphView = ({
       }
     ]
   };
+  const height = fullScreen ? '73.5vh' : '35vh';
+
   return (
     <div className="relative mt-[4%] flex flex-col items-center">
       {legend && (
         <Legend legendData={computeLegendColors(categories, colors)} />
       )}
-      <div className="w-full mt-4 h-[80vh]">
-        <ReactEcharts option={option} className="w-full h-full" />
+      <div className="w-full h-full">
+        <ReactEcharts
+          option={option}
+          className="w-full sm:h-120 lg:h-160"
+          style={{
+            height
+          }}
+        />
       </div>
     </div>
   );

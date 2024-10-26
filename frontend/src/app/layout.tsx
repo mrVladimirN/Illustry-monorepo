@@ -1,17 +1,17 @@
 import type { Metadata } from 'next';
 import { ReactNode } from 'react';
 import './globals.css';
-
-import { siteConfig } from '@/config/site';
+import siteConfig from '@/config/site';
 import { fontMono, fontSans } from '@/lib/fonts';
 import { cn } from '@/lib/utils';
 import Toaster from '@/components/ui/toaster';
 import {
   ThemeColorsProvider,
   ThemeProvider
-} from '@/components/theme-provider';
+} from '@/components/providers/theme-provider';
+import { ActiveProjectProvider } from '@/components/providers/active-project-provider';
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: {
     default: siteConfig.name,
     template: `%s - ${siteConfig.name}`
@@ -38,26 +38,30 @@ interface RootLayoutProps {
   children: ReactNode;
 }
 
-export default function RootLayout({ children }: RootLayoutProps) {
-  return (
-    <>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body
-          className={cn(
-            'min-h-screen bg-background font-sans antialiased',
-            fontSans.variable,
-            fontMono.variable
-          )}
-        >
-          <ThemeColorsProvider>
+const RootLayout = ({ children }: RootLayoutProps) => (
+  <>
+    <html lang="en" suppressHydrationWarning>
+      <head />
+      <body
+        className={cn(
+          'min-h-screen bg-background font-sans antialiased',
+          fontSans.variable,
+          fontMono.variable
+        )}
+      >
+
+        <ThemeColorsProvider>
+          <ActiveProjectProvider>
             <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
               {children}
             </ThemeProvider>
-          </ThemeColorsProvider>
-          <Toaster />
-        </body>
-      </html>
-    </>
-  );
-}
+          </ActiveProjectProvider>
+        </ThemeColorsProvider>
+        <Toaster />
+      </body>
+    </html>
+  </>
+);
+
+export default RootLayout;
+export { metadata };

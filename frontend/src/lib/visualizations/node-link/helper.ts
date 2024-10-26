@@ -1,27 +1,18 @@
 /* eslint-disable no-return-assign */
 /* eslint-disable no-multi-assign */
 /* eslint-disable no-unused-expressions */
-/* eslint-disable prefer-destructuring */
 /* eslint-disable no-sequences */
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { VisualizationTypes } from '@illustry/types';
 
-// HEB transformers
-
-import {
-  select,
-  HierarchyNode,
-  LineRadial,
-  hierarchy
-} from 'd3';
-
 // Sankey transformers
-export const computeCategoriesSankey = (nodes: VisualizationTypes.Node[]) => [
+const computeCategoriesSankey = (nodes: VisualizationTypes.Node[]) => [
   ...new Set(
     nodes.map((node) => node.category)
   )
 ];
+
 const computePropertiesForToolTip = (
   properties: Record<string, unknown>,
   value?: number | string
@@ -51,7 +42,8 @@ const computePropertiesForToolTip = (
 
   return prop;
 };
-export const computeNodesSankey = (
+
+const computeNodesSankey = (
   nodes: VisualizationTypes.Node[],
   categories: string[],
   colors: string[]
@@ -70,22 +62,45 @@ export const computeNodesSankey = (
   }));
 };
 
-export const computeLinksSankey = (links: VisualizationTypes.Link[]): VisualizationTypes.Link[] => links.map((link) => ({
+const computeLinksSankey = (links: VisualizationTypes.Link[]): VisualizationTypes.Link[] => links.map((link) => ({
   source: link.source,
   target: link.target,
   value: link.value,
   prop: computePropertiesForToolTip((link.properties) as Record<string, unknown>, link.value)
 }));
 
+// HEB transformers
+
+const computeNodesHEB = (
+  nodes: VisualizationTypes.Node[],
+  categories: {
+    name: string;
+    itemStyle: { color: string | undefined };
+  }[]
+) => nodes.map((node) => {
+  const category = categories.find((cate) => cate.name === node.category);
+
+  return {
+    ...node,
+    id: node.name,
+    prop: computePropertiesForToolTip((node.properties) as Record<string, unknown>),
+    label: {
+      show: true,
+      color: category?.itemStyle.color || '#000'
+    },
+    symbolSize: ''
+  };
+});
+
 // FLG transformers
 
-export const computeCategoriesFLG = (nodes: VisualizationTypes.Node[], colors: string[]) => [
+const computeCategoriesFLGOrHEB = (nodes: VisualizationTypes.Node[], colors: string[]) => [
   ...new Set(
     nodes.map((node) => node.category)
   )
 ].map((node, index) => ({ name: node, itemStyle: { color: colors[index] } }));
 
-export const computeNodesFLG = (
+const computeNodesFLG = (
   nodes: VisualizationTypes.Node[],
   categories: {
     name: string;
@@ -97,11 +112,12 @@ export const computeNodesFLG = (
   return {
     id: index.toString(),
     name: node.name,
+    prop: computePropertiesForToolTip((node.properties) as Record<string, unknown>),
     category: categoryIndex
   };
 });
 
-export const computeLinksFLG = (links: VisualizationTypes.Link[], nodes: VisualizationTypes.Node[]) => links.map((link) => {
+const computeLinksFLGOrHEB = (links: VisualizationTypes.Link[], nodes: VisualizationTypes.Node[]) => links.map((link) => {
   const source = nodes.findIndex((node) => node.name === link.source);
   const target = nodes.findIndex((node) => node.name === link.target);
   return {
@@ -112,261 +128,6 @@ export const computeLinksFLG = (links: VisualizationTypes.Link[], nodes: Visuali
   };
 });
 
-export const assignToComponents = (
-  d: { category: string; name: string },
-  map: any
-) => {
-  const component = `#${d.category}`;
-  let componentNode = map[component];
-  if (!componentNode) {
-    componentNode = {
-      name: component,
-      key: component,
-      parent: map['@root'],
-      children: []
-    };
-    if (
-      componentNode
-      && componentNode.parent
-      && componentNode.parent.children
-    ) {
-      componentNode.parent.children.push(componentNode);
-    }
-    map[component] = componentNode;
-  }
-  const n = {
-    name: d.name,
-    parent: componentNode,
-    key: d.name
-  };
-
-  componentNode.children.push(n);
-  return n;
-};
-
-export const packageHierarchy = (nodes: VisualizationTypes.Node[]) => {
-  const map: any = {};
-  map['@root'] = {
-    name: '@root',
-    children: [],
-    parent: null,
-    key: '@root'
-  };
-
-  nodes.forEach((d) => {
-    assignToComponents(d, map);
-  });
-  return hierarchy(map['@root']);
-};
-
-function createLinks(nodes: HierarchyNode<any>[], links: VisualizationTypes.Link[]) {
-  const map: any = {};
-  const imports: any[] = [];
-
-  // Compute a map from name to node.
-  nodes.forEach((d) => {
-    map[d.data.name] = d;
-  });
-  // For each import, construct a link from the source to target node.
-  links.forEach((lnk) => {
-    // eslint-disable-next-line no-underscore-dangle
-    let _import;
-    if (lnk && (lnk.source === null || lnk.source === undefined)) {
-      _import = map[lnk.source].path(map[lnk.target]);
-    } else {
-      const source = lnk && lnk.source && map[lnk.source];
-      const target = lnk && lnk.target && map[lnk.target];
-      _import = source && target && source.path(target);
-    }
-    if (_import) {
-      _import.value = lnk.value;
-      imports.push(_import);
-    }
-  });
-
-  return imports;
-}
-
-export const createHebLinks = (
-  link: any,
-  root: HierarchyNode<any>,
-  links: VisualizationTypes.Link[],
-  line: LineRadial<[number, number]>,
-  color: string
-) => link
-  .data(createLinks(root.leaves(), links))
-  .enter()
-  .append('path')
-  .each((d: any) => {
-    (d.source = d[0]), (d.target = d[d.length - 1]);
-  })
-  .attr('class', 'link')
-  .attr('d', line)
-  .style('stroke', color)
-  .style('stroke-opacity', 0.4)
-  .style('fill', 'none');
-export const createHebNodes = (
-  node: any,
-  root: HierarchyNode<any>,
-  color: string
-) => node
-  .data(root.leaves())
-  .enter()
-  .append('text')
-  .attr('class', 'node')
-  .attr('dy', '0.31em')
-  .attr(
-    'transform',
-    (d: { x: number; y: number }) => `rotate(${d.x - 90
-    })translate(${d.y + 8
-    },0)${d.x < 180 ? '' : 'rotate(180)'}`
-  )
-  .attr('text-anchor', (d: { x: number; y: number }) => (d.x < 180 ? 'start' : 'end'))
-  .style('fill', color)
-  .style('font', ' 300 11px "Helvetica Neue", Helvetica, Arial, sans-serif')
-  .text((d: { data: { key: string } }) => d.data.key);
-
-export const createToolTip = () => select('#tooltip')
-  .append('div')
-  .attr('class', 'my-tooltip')
-  .style('visibility', 'hidden')
-  .style('max-width', `${500}px`)
-  .style('word-wrap', 'break-word')
-  .text('tooltip');
-export const onMouseMove = (tooltip: any) => {
-  tooltip.style('opacity', 1);
-  return tooltip;
-};
-export const onNodeClick = (tooltip: any) => {
-  tooltip.style('visibility', 'hidden');
-};
-
-export const onNodeOrLinkMouseOut = (
-  link: any,
-  node: any,
-  tooltip: any,
-  color: string
-) => {
-  link
-    .style('stroke', color)
-    .style('stroke-opacity', 0.4)
-    .style('stroke-width', '1px');
-
-  node.style('fill', color).style('font-weight', 300);
-
-  tooltip.style('visibility', 'hidden');
-};
-export const onLinkMouseOver = (
-  l: any,
-  node: any,
-  link: any,
-  tooltip: any,
-  colorin: string,
-  colorout: string,
-  color: string
-) => {
-  node.each((n: any) => {
-    n.target = n.source = false;
-  });
-  l.source.source = true;
-  l.target.target = true;
-  link
-    .filter((lnk: any) => l === lnk)
-    .style('stroke-opacity', () => 1)
-    .style('stroke-width', () => '3px')
-    .raise();
-
-  node
-    .classed('node--target', (n: any) => n.target)
-    .classed('node--source', (n: any) => n.source)
-    .style('fill', (n: any) => {
-      if (n.target) {
-        return colorin;
-      } if (n.source) {
-        return colorout;
-      }
-      return color;
-    })
-    .style('font-weight', (n: any) => {
-      if (n.target || n.source) {
-        return 700;
-      }
-      return 0;
-    });
-  tooltip.html(`Selected value: ${l.value}`);
-  return tooltip.style('visibility', 'visible').style('opacity', 1);
-};
-
-export const onNodeMouseOver = (
-  d: any,
-  node: any,
-  link: any,
-  tooltip: any,
-  colorin: string,
-  colorout: string,
-  color1: string,
-  color2: string
-) => {
-  node.each((n: any) => {
-    n.target = n.source = false;
-  });
-  link
-    .classed('link--target', (l: any) => {
-      if (l.target === d) {
-        return (l.source.source = true);
-      }
-      return (l.source.source = false);
-    })
-    .classed('link--source', (l: any) => {
-      if (l.source === d) {
-        return (l.target.target = true);
-      }
-      return (l.target.target = false);
-    })
-    .filter((l: any) => l.target === d || l.source === d)
-    .style('stroke', (l: any) => {
-      if (l.target === d) {
-        return colorout;
-      } if (l.source === d) {
-        return colorin;
-      }
-      return 'steelblue';
-    })
-    .style('stroke-opacity', (l: any) => {
-      if (l.target === d || l.source === d) {
-        return 1;
-      }
-      return 0;
-    })
-    .style('stroke-width', (l: any) => {
-      if (l.target === d || l.source === d) {
-        return '3px';
-      }
-      return '0px';
-    })
-    .raise();
-
-  node
-    .classed('node--target', (n: any) => n.target)
-    .classed('node--source', (n: any) => n.source)
-    .style('fill', (n: any) => {
-      if (n.target) {
-        return colorin;
-      } if (n.source) {
-        return colorout;
-      } if (n === d) {
-        return color1;
-      }
-      return color2;
-    })
-    .style('font-weight', (n: any) => {
-      if (n.target || n.source || d === n) {
-        return 700;
-      }
-      return 0;
-    });
-};
-
 // Matrix
 
 const constructMatrixTooltip = (obj: object) => `<span class="tooltip" style=" width: 10%; 
@@ -376,6 +137,7 @@ border-radius: 6px; padding: 5px 0; position: absolute; z-index: 1;">${obj && Ob
   )
     .map(([k, v]) => `${k}:${v}</br>`)
     .join(' ')}</span>`;
+
 const constructMatrixStyle = (object: object) => `${object && Object.entries(object)
   .map(([k, v]) => `${k}:${v}`)
   .join(';')};width:10%;text-align:center; border: 1px solid #ddd ;`;
@@ -393,7 +155,8 @@ const constructMatrixToolTipAndStyle = (
     : 'width:10%;text-align:center; border: 1px solid #ddd ;'
   }>${tooltip?.length ? tooltip : ''}${name}</${htmlElement}>`;
 };
-export const categoryMap = (
+
+const categoryMap = (
   nodes: VisualizationTypes.Node[]
 ) => nodes.reduce((map: Record<string, VisualizationTypes.Node[]>, node) => {
   const { category } = node;
@@ -405,6 +168,7 @@ export const categoryMap = (
   }
   return map;
 }, {});
+
 const constructPropertiesMatrix = (
   htmlElement: string,
   value: string | number,
@@ -416,7 +180,7 @@ const constructPropertiesMatrix = (
     if (Array.isArray(properties)) {
       let style = '';
       let tooltip = '';
-      properties.forEach((prop) => {
+      properties.filter(Boolean).forEach((prop) => {
         if (typeof prop === 'object') {
           Object.entries(properties).forEach(([key]) => {
             if (key.includes('style')) {
@@ -437,7 +201,7 @@ const constructPropertiesMatrix = (
     } else if (typeof properties === 'object') {
       let style = '';
       let tooltip = '';
-      Object.entries(properties).forEach(([kProp, kValue]) => {
+      Object.entries(properties).filter(Boolean).forEach(([kProp, kValue]) => {
         if (kProp.includes('style')) {
           style += constructMatrixStyle(kValue);
         } else {
@@ -463,6 +227,7 @@ const constructPropertiesMatrix = (
   }
   return finalConstruction;
 };
+
 const createRightHeaderString = (spacesForEmptyTd: number, headers: VisualizationTypes.Node[]) => {
   let firstRow = ' <tr id="header" ><th> </th>';
   for (let i = 0; i < spacesForEmptyTd; i += 1) {
@@ -479,6 +244,7 @@ const createRightHeaderString = (spacesForEmptyTd: number, headers: Visualizatio
   firstRow += '</tr> ';
   return firstRow;
 };
+
 const populateRightPropertiesString = (group2: VisualizationTypes.Node[], label: string) => {
   let finalProduct = '';
   group2.forEach((g2: VisualizationTypes.Node) => {
@@ -503,11 +269,9 @@ const populateRightPropertiesString = (group2: VisualizationTypes.Node[], label:
   return finalProduct;
 };
 
-function getTextContent(td: HTMLElement) {
-  return td.lastChild?.textContent ? td.lastChild?.textContent : '';
-}
+const getTextContent = (td: HTMLElement) => (td.lastChild?.textContent ? td.lastChild?.textContent : '');
 
-function getSwappedIndexes(arr: number[], dir: string) {
+const getSwappedIndexes = (arr: number[], dir: string) => {
   // Create an array of indices and sort it based on the values in 'arr'
   const indices = Array.from(arr.keys());
   indices.sort((a, b) => {
@@ -517,7 +281,7 @@ function getSwappedIndexes(arr: number[], dir: string) {
     return (arr[b] as number) - (arr[a] as number);
   });
   return indices;
-}
+};
 
 const sortUpperTable = (n: number, newDir: string) => {
   const table = document.getElementById('myTable') as HTMLElement;
@@ -567,7 +331,8 @@ const sortUpperTable = (n: number, newDir: string) => {
     }
   }
 };
-export const sortColumns = () => {
+
+const sortColumns = () => {
   const sortable = document.querySelectorAll('.sortableCol');
   sortable.forEach((s: any, sIndex) => {
     s.addEventListener('click', () => {
@@ -622,7 +387,8 @@ const sortLowerTable = (n: number, newDir: string) => {
     tbody?.appendChild(row);
   });
 };
-export const addStyleTooltipWithHover = () => {
+
+const addStyleTooltipWithHover = () => {
   const sortableItems = document.querySelectorAll(
     '.right-sortable-items, .left-sortable-items'
   );
@@ -645,7 +411,8 @@ export const addStyleTooltipWithHover = () => {
     }
   });
 };
-export const sortRows = () => {
+
+const sortRows = () => {
   const sortable = document.querySelectorAll('.sortableRow');
   sortable.forEach((s: any, sIndex) => {
     s.addEventListener('click', () => {
@@ -737,7 +504,7 @@ const createLeftPropertiesString = (
   let finalProduct = '';
   group1.forEach((g1) => {
     const row = '<tr class = "sortus">'
-    + `<td style = "font-weight:bold;width: 10%;text-align:center;border: 1px solid #ddd ; ">${g1.name}</td>`;
+      + `<td style = "font-weight:bold;width: 10%;text-align:center;border: 1px solid #ddd ; ">${g1.name}</td>`;
     finalProduct += row;
     labels.forEach((label) => {
       const foundLabel = g1.labels?.find(
@@ -765,7 +532,7 @@ const createLeftPropertiesString = (
   return finalProduct;
 };
 
-export const createHeadersAndPropertiesString = (
+const createHeadersAndPropertiesString = (
   group1: VisualizationTypes.Node[],
   group2: VisualizationTypes.Node[],
   links: any[]
@@ -804,4 +571,19 @@ export const createHeadersAndPropertiesString = (
     }${leftProperties
     }</tbody>`;
   return tableString;
+};
+
+export {
+  computeCategoriesSankey,
+  computeNodesSankey,
+  computeLinksSankey,
+  sortColumns,
+  sortRows,
+  addStyleTooltipWithHover,
+  createHeadersAndPropertiesString,
+  computeCategoriesFLGOrHEB,
+  computeNodesHEB,
+  computeLinksFLGOrHEB,
+  computeNodesFLG,
+  categoryMap
 };

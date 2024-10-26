@@ -1,15 +1,14 @@
-/* eslint-disable import/no-cycle */
 import { UseFormReturn } from 'react-hook-form';
-import { Inputs } from '@/components/form/add-visualization-form';
-import { Input } from '@/components/ui/input';
+import Input from '@/components/ui/input';
+import { Inputs } from '@/components/form/types';
 
-interface ExcelOrCsvPieChartFunnelMappingProps {
+type ExcelOrCsvPieChartFunnelMappingProps = {
   form: UseFormReturn<Inputs>;
 }
-function ExcelOrCsvPieChartFunnelMapping({
+
+const ExcelOrCsvPieChartFunnelMapping = ({
   form
-}: ExcelOrCsvPieChartFunnelMappingProps) {
-  return (
+}: ExcelOrCsvPieChartFunnelMappingProps) => (
     <>
       <div className="flex items-center space-x-4">
         <div className="w-20">Names:</div>
@@ -40,11 +39,8 @@ function ExcelOrCsvPieChartFunnelMapping({
             }}
           />
         </div>
-
       </div>
-
     </>
-  );
-}
+);
 
 export default ExcelOrCsvPieChartFunnelMapping;

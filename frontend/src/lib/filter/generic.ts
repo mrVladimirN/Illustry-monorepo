@@ -1,20 +1,6 @@
-/* eslint-disable import/no-cycle */
-import { VisualizationTypes } from '@illustry/types';
-import { applyAxisFilter } from './axis';
-import { visualizationTypesEnum } from '../validation/visualizations';
-import { applyCalendarFilter } from './calendar';
-import { AllVisualizationsShell } from '../types/utils';
-import { applyNodeLinkFilter } from './nodeLink';
-import { applyFunnelPieFilter } from './funnelPie';
-import { applyWordCloudFilter } from './wordcloud';
-import { applyScatterFilter } from './scatter';
-import { applyTimelineFilter } from './timeline';
-import { applyHierachyFilter } from './hierarchy';
-
-const acceptedSeparators = ['&&'];
 const acceptedConstructions = ['>', '<', '=', '>=', '<=', '!='];
 
-export function parseCondition(condition: string, isDate = false) {
+const parseCondition = (condition: string, isDate = false) => {
   const regex = !isDate
     ? /([><=!]+)\s*(\d+)/
     : /([><=!]+)\s*(['"]?)(\d{4}-\d{2}-\d{2}|\d+)['"]?/;
@@ -28,13 +14,13 @@ export function parseCondition(condition: string, isDate = false) {
     return [operator, targetValue];
   }
   throw new Error(`Invalid condition: ${condition}`);
-}
+};
 
-export function evaluateCondition(
+const evaluateCondition = (
   value: string | number,
   condition: string,
   isDate = false
-) {
+) => {
   const [operator, targetValue] = parseCondition(condition, isDate);
   switch (operator) {
     case '>':
@@ -51,13 +37,13 @@ export function evaluateCondition(
     default:
       return targetValue && value === targetValue;
   }
-}
-export function getMatchingIndices(
+};
+
+const getMatchingIndices = (
   initialArray: string[],
   filterArray: string[]
-) {
+) => {
   const matchingIndices = [];
-
   for (let i = 0; i < initialArray.length; i += 1) {
     if (filterArray.includes(initialArray[i] as string)) {
       matchingIndices.push(i);
@@ -65,9 +51,9 @@ export function getMatchingIndices(
   }
 
   return matchingIndices;
-}
+};
 
-export const validateExpressions = (
+const validateExpressions = (
   expressions: string[],
   words: string[]
 ): string[] => {
@@ -91,103 +77,7 @@ export const validateExpressions = (
 
   return validatedExpressions;
 };
-export const parseFilter = (
-  expression: string,
-  data: AllVisualizationsShell,
-  words: string[],
-  type: visualizationTypesEnum
-) => {
-  try {
-    const separatorsRegex = new RegExp(
-      acceptedSeparators
-        .map(
-          (sep) => `(${sep
-            .replace(/[-\\/\\^$*+?.()|[\]{}]/g, '\\$&')
-            .replace(/\|\|/g, '|')})`
-        )
-        .join('|'),
-      'g'
-    );
 
-    const separators = [];
-    const expressions = expression.split(separatorsRegex).map((part) => {
-      if (acceptedSeparators.includes(part)) {
-        separators.push(part);
-        return undefined;
-      }
-
-      return part;
-    });
-    validateExpressions(
-      expressions.filter((part) => part !== undefined) as string[],
-      words
-    );
-
-    switch (type) {
-      case visualizationTypesEnum.LINE_CHART:
-      case visualizationTypesEnum.BAR_CHART:
-        return applyAxisFilter(
-          expressions.filter((part) => part !== undefined) as string[],
-          data as VisualizationTypes.AxisChartData
-        );
-      case visualizationTypesEnum.CALENDAR:
-        return applyCalendarFilter(
-          expressions.filter((part) => part !== undefined) as string[],
-          data as {
-            categories: string[];
-            calendar: VisualizationTypes.CalendarType[];
-          }
-        );
-      case visualizationTypesEnum.FORCE_DIRECTED_GRAPH:
-      case visualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
-      case visualizationTypesEnum.MATRIX:
-      case visualizationTypesEnum.SANKEY:
-        return applyNodeLinkFilter(
-          expressions.filter((part) => part !== undefined) as string[],
-          data as {
-            nodes: VisualizationTypes.Node[];
-            links: VisualizationTypes.Link[];
-          }
-        );
-      case visualizationTypesEnum.FUNNEL:
-      case visualizationTypesEnum.PIE_CHART:
-        return applyFunnelPieFilter(
-          expressions.filter((part) => part !== undefined) as string[],
-          data as VisualizationTypes.PieChartData | VisualizationTypes.FunnelData
-        );
-      case visualizationTypesEnum.WORD_CLOUD:
-        return applyWordCloudFilter(
-            expressions.filter((part) => part !== undefined) as string[],
-            data as VisualizationTypes.WordType[]
-        );
-      case visualizationTypesEnum.SCATTER:
-        return applyScatterFilter(
-              expressions.filter((part) => part !== undefined) as string[],
-              data as {
-                points: (string | number)[][];
-                categories: string[];
-              }
-        );
-      case visualizationTypesEnum.TIMELINE:
-        return applyTimelineFilter(
-              expressions.filter((part) => part !== undefined) as string[],
-              data as VisualizationTypes.TimelineData
-        );
-      case visualizationTypesEnum.SUNBURST:
-      case visualizationTypesEnum.TREEMAP:
-        return applyHierachyFilter(
-              expressions.filter((part) => part !== undefined) as string[],
-              data as {
-                categories: string[]
-                nodes: VisualizationTypes.HierarchyNode[]
-                }
-        );
-      default:
-        return data;
-    }
-  } catch (error: unknown) {
-    throw new Error(
-      `The expression could not be parsed. ${(error as Error).message}`
-    );
-  }
+export {
+  parseCondition, validateExpressions, getMatchingIndices, evaluateCondition
 };

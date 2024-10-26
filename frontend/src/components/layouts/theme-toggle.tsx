@@ -3,9 +3,9 @@
 import { useTheme } from 'next-themes';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Icons } from '@/components/icons';
+import Icons from '@/components/icons';
 
-function ThemeToggle() {
+const ThemeToggle = () => {
   const { setTheme, theme } = useTheme();
   const router = useRouter();
 
@@ -30,5 +30,6 @@ function ThemeToggle() {
       <span className="sr-only">Toggle theme</span>
     </Button>
   );
-}
+};
+
 export default ThemeToggle;

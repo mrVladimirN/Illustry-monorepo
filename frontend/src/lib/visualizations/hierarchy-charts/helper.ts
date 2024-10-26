@@ -1,6 +1,6 @@
 import { VisualizationTypes } from '@illustry/types';
 
-interface ProcessedNode {
+type ProcessedNode = {
   name: string;
   value: number,
   itemStyle: {
@@ -26,7 +26,7 @@ const findMaxDepth = (item: VisualizationTypes.HierarchyNode, depth: number, max
   return finalMaxDepth; // Return the updated maxDepth
 };
 
-export const computeMaxDepth = (arr: VisualizationTypes.HierarchyNode[]): number => {
+const computeMaxDepth = (arr: VisualizationTypes.HierarchyNode[]): number => {
   let maxDepth = 0;
 
   arr.forEach((item) => {
@@ -37,7 +37,7 @@ export const computeMaxDepth = (arr: VisualizationTypes.HierarchyNode[]): number
   return maxDepth;
 };
 
-export const computeCategories = (arr: VisualizationTypes.HierarchyNode[]): string[] => {
+const computeCategories = (arr: VisualizationTypes.HierarchyNode[]): string[] => {
   const uniqueCategories = new Set<string>();
 
   function extractCategories(item: VisualizationTypes.HierarchyNode) {
@@ -55,6 +55,7 @@ export const computeCategories = (arr: VisualizationTypes.HierarchyNode[]): stri
 
   return Array.from(uniqueCategories); // Convert Set to an array
 };
+
 const computePropertiesForToolTip = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   properties: any,
@@ -87,7 +88,7 @@ const computePropertiesForToolTip = (
   return prop;
 };
 
-export const computeNodesHierarchy = (
+const computeNodesHierarchy = (
   nodes: VisualizationTypes.HierarchyNode[],
   categories: string[],
   colors: string[]
@@ -118,11 +119,10 @@ export const computeNodesHierarchy = (
   return nodes.map(processNode);
 };
 
-export const createLevels = (nr: number) => {
+const createLevels = (nr: number) => {
   const levels = [];
 
-  // eslint-disable-next-line no-plusplus
-  for (let i = nr; i > 0; i--) {
+  for (let i = nr; i > 0; i -= 1) {
     const borderWidth = 2 * i;
     const gapWidth = 2 * i;
     const style = {
@@ -139,9 +139,10 @@ export const createLevels = (nr: number) => {
 
   return levels;
 };
-export const calculateMeanValue = (numbers: number[]) => {
+
+const calculateMeanValue = (numbers: number[]) => {
   if (numbers.length === 0) {
-    return 0; // Return 0 for an empty array (or you can handle this case differently)
+    return 0;
   }
 
   const sum = numbers.reduce((total, num) => total + num, 0);
@@ -150,7 +151,7 @@ export const calculateMeanValue = (numbers: number[]) => {
   return mean;
 };
 
-export const computeUniqueValues = (arr: VisualizationTypes.HierarchyNode[]): number[] => {
+const computeUniqueValues = (arr: VisualizationTypes.HierarchyNode[]): number[] => {
   const uniqueCategories = new Set<number>();
 
   function extractValues(item: VisualizationTypes.HierarchyNode) {
@@ -167,4 +168,8 @@ export const computeUniqueValues = (arr: VisualizationTypes.HierarchyNode[]): nu
   });
 
   return Array.from(uniqueCategories); // Convert Set to an array
+};
+
+export {
+  computeMaxDepth, computeCategories, computeNodesHierarchy, createLevels, calculateMeanValue, computeUniqueValues
 };

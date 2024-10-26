@@ -1,12 +1,10 @@
 import { Router } from 'express';
+import multer from 'multer';
 import * as VisualizationAPI from '../../api/visualization/visualization';
 
 const router = Router();
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const multer = require('multer');
-
-const storage = multer.diskStorage({ destination: null });
+const storage = multer.diskStorage({ });
 const upload = multer({
   storage,
   limits: { fileSize: 100 * 1024 * 1024 }

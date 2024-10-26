@@ -1,7 +1,6 @@
-/* eslint-disable import/no-cycle */
 import { UseFormReturn } from 'react-hook-form';
-import { visualizationTypesEnum } from '@/lib/validation/visualizations';
-import { Inputs, fileTypes } from '@/components/form/add-visualization-form';
+import { FileTypes, VisualizationTypes } from '@illustry/types';
+import { Inputs } from '@/components/form/types';
 import {
   FormField,
   FormItem,
@@ -9,11 +8,10 @@ import {
   FormControl,
   FormMessage
 } from '../../form';
-import { Input } from '../../input';
+import Input from '../../input';
 import Checkbox from '../../checkbox';
 import ExcelOrCsvWordCloudMapping from './excelOrCsvMappings/WordCloudMapping';
 import VisualizationDetails from './visualizationDetails';
-import ExcelOrCsvVisualizationMapping from './excelOrCsvMappings/visualizationDetailsMapping';
 import ExcelOrCsvNodeLinkMapping from './excelOrCsvMappings/NodeLinkMapping';
 import VisualizationType from './visualizationType';
 import ExcelOrCsvCalendarMapping from './excelOrCsvMappings/CalendarMapping';
@@ -21,24 +19,26 @@ import ExcelOrCsvAxisChartMapping from './excelOrCsvMappings/AxisChartMapping';
 import ExcelOrCsvPieChartFunnelMapping from './excelOrCsvMappings/PieChartFunnelMapping';
 import ExcelOrCsvScatterMapping from './excelOrCsvMappings/ScatterMapping';
 import ExcelOrCsvHierarchyMapping from './excelOrCsvMappings/HierarchyMapping';
+import ExcelOrCsvVisualizationMapping from './excelOrCsvMappings/VisualizationDetailsMapping';
 
-interface ExcelMappingTabProps {
+type ExcelMappingTabProps = {
   form: UseFormReturn<Inputs>;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   router: any;
   fileDetails: boolean;
-  selectedFileType: fileTypes;
+  selectedFileType: FileTypes.FileType;
 }
-function ExcelOrCsvMappingTab({
+
+const ExcelOrCsvMappingTab = ({
   form,
   router,
   fileDetails,
   selectedFileType
-}: ExcelMappingTabProps) {
-  const renderMapping = (type: visualizationTypesEnum) => {
+}: ExcelMappingTabProps) => {
+  const renderMapping = (type: VisualizationTypes.VisualizationTypesEnum) => {
     if (type) {
       switch (type) {
-        case visualizationTypesEnum.WORD_CLOUD:
+        case VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD:
           return (
             <>
               <div className="space-y-4">
@@ -47,9 +47,9 @@ function ExcelOrCsvMappingTab({
               </div>
             </>
           );
-        case visualizationTypesEnum.FORCE_DIRECTED_GRAPH:
-        case visualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
-        case visualizationTypesEnum.SANKEY:
+        case VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH:
+        case VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
+        case VisualizationTypes.VisualizationTypesEnum.SANKEY:
           return (
             <>
               <div className="space-y-4">
@@ -58,7 +58,7 @@ function ExcelOrCsvMappingTab({
               </div>
             </>
           );
-        case visualizationTypesEnum.CALENDAR:
+        case VisualizationTypes.VisualizationTypesEnum.CALENDAR:
           return (
             <>
               <div className="space-y-4">
@@ -67,8 +67,8 @@ function ExcelOrCsvMappingTab({
               </div>
             </>
           );
-        case visualizationTypesEnum.BAR_CHART:
-        case visualizationTypesEnum.LINE_CHART:
+        case VisualizationTypes.VisualizationTypesEnum.BAR_CHART:
+        case VisualizationTypes.VisualizationTypesEnum.LINE_CHART:
           return (
             <>
               <div className="space-y-4">
@@ -77,8 +77,8 @@ function ExcelOrCsvMappingTab({
               </div>
             </>
           );
-        case visualizationTypesEnum.PIE_CHART:
-        case visualizationTypesEnum.FUNNEL:
+        case VisualizationTypes.VisualizationTypesEnum.PIE_CHART:
+        case VisualizationTypes.VisualizationTypesEnum.FUNNEL:
           return (
             <>
               <div className="space-y-4">
@@ -87,7 +87,7 @@ function ExcelOrCsvMappingTab({
               </div>
             </>
           );
-        case visualizationTypesEnum.SCATTER:
+        case VisualizationTypes.VisualizationTypesEnum.SCATTER:
           return (
             <>
               <div className="space-y-4">
@@ -96,8 +96,8 @@ function ExcelOrCsvMappingTab({
               </div>
             </>
           );
-        case visualizationTypesEnum.TREEMAP:
-        case visualizationTypesEnum.SUNBURST:
+        case VisualizationTypes.VisualizationTypesEnum.TREEMAP:
+        case VisualizationTypes.VisualizationTypesEnum.SUNBURST:
           return (
             <>
               <div className="space-y-4">
@@ -122,7 +122,7 @@ function ExcelOrCsvMappingTab({
     <div className="grid grid-cols-2 gap-5">
       {!fileDetails && <VisualizationDetails form={form} />}
       <VisualizationType form={form} router={router} exclude={true} />
-      {selectedFileType === fileTypes.EXCEL ? <div className="col-span-1">
+      {selectedFileType === FileTypes.FileType.EXCEL ? <div className="col-span-1">
         <FormField
           control={form.control}
           name="sheets"
@@ -202,7 +202,7 @@ function ExcelOrCsvMappingTab({
               <FormLabel>Mapping</FormLabel>
               <FormControl>
                 {renderMapping(
-                  form.getValues('type') as visualizationTypesEnum
+                  form.getValues('type') as VisualizationTypes.VisualizationTypesEnum
                 )}
               </FormControl>
               <FormMessage />
@@ -212,6 +212,6 @@ function ExcelOrCsvMappingTab({
       </div>
     </div>
   );
-}
+};
 
 export default ExcelOrCsvMappingTab;

@@ -1,15 +1,14 @@
-/* eslint-disable import/no-cycle */
 import { UseFormReturn } from 'react-hook-form';
-import { Inputs } from '@/components/form/add-visualization-form';
-import { Input } from '@/components/ui/input';
+import Input from '@/components/ui/input';
+import { Inputs } from '@/components/form/types';
 
-interface ExcelOrCsvHierarchyMappingProps {
+type ExcelOrCsvHierarchyMappingProps = {
   form: UseFormReturn<Inputs>;
 }
-function ExcelOrCsvHierarchyMapping({
+
+const ExcelOrCsvHierarchyMapping = ({
   form
-}: ExcelOrCsvHierarchyMappingProps) {
-  return (
+}: ExcelOrCsvHierarchyMappingProps) => (
     <>
       <div className="flex items-center space-x-4">
         <div className="w-20">Names:</div>
@@ -80,7 +79,6 @@ function ExcelOrCsvHierarchyMapping({
       </div>
 
     </>
-  );
-}
+);
 
 export default ExcelOrCsvHierarchyMapping;

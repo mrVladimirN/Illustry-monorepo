@@ -5,9 +5,14 @@ type FileProperties = {
   type: string;
   delimiter?: string;
 }
-
+enum FileType {
+  JSON = "JSON",
+  EXCEL = "EXCEL",
+  CSV = "CSV",
+  XML = "XML"
+}
 type FileDetails = {
-  fileType: "JSON" | "EXCEL" | "CSV" | "XML";
+  fileType: FileType;
   includeHeaders?: boolean;
   separator?: string;
   mapping?: any;
@@ -22,4 +27,4 @@ type UploadedFile = {
 type RequestWithFiles = Request & {
   files: { file: UploadedFile[] }
 }
-export { FileProperties, FileDetails, UploadedFile, RequestWithFiles }
+export { FileProperties, FileDetails, UploadedFile, RequestWithFiles, FileType }

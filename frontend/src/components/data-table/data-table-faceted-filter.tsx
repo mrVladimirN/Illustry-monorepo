@@ -1,6 +1,5 @@
 import { CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons';
 import { type Column } from '@tanstack/react-table';
-
 import { ComponentType } from 'react';
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
@@ -21,29 +20,30 @@ import {
 } from '@/components/ui/popover';
 import Separator from '@/components/ui/separator';
 
-interface Option {
+type Option = {
   label: string;
   value: string;
   icon?: ComponentType<{ className?: string }>;
 }
-interface DataTableFacetedFilterProps<TData, TValue> {
+
+type DataTableFacetedFilterProps<TData, TValue> = {
   column?: Column<TData, TValue>
   title?: string
   options: Option[]
 }
 
-function DataTableFacetedFilter<TData, TValue>({
+const DataTableFacetedFilter = <TData, TValue>({
   column,
   title,
   options
-}: DataTableFacetedFilterProps<TData, TValue>) {
+}: DataTableFacetedFilterProps<TData, TValue>) => {
   const selectedValues = new Set(column?.getFilterValue() as string[]);
 
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
-        suppressHydrationWarning
+          suppressHydrationWarning
           aria-label="Filter rows"
           variant="outline"
           size="sm"
@@ -148,6 +148,6 @@ function DataTableFacetedFilter<TData, TValue>({
       </PopoverContent>
     </Popover>
   );
-}
+};
 
 export default DataTableFacetedFilter;

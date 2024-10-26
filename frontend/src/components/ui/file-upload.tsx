@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { Dropzone, FileMosaic, ExtFile } from '@files-ui/react';
 
-interface FileUploadProps {
+type FileUploadProps = {
   acceptedFiles: ExtFile[];
   updateFiles: (incomingFiles: ExtFile[]) => void;
   removeFile: (id: string | number | undefined) => void;

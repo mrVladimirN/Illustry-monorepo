@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 'use client';
 
-import { useRef, useEffect, JSX } from 'react';
-
+import React, { forwardRef, useImperativeHandle, useRef } from 'react';
+import ReactECharts from 'echarts-for-react';
 import 'echarts-wordcloud';
-// Import the echarts core module, which provides the necessary interfaces for using echarts.
 import * as echarts from 'echarts/core';
 import {
   SankeyChart,
@@ -17,7 +18,6 @@ import {
   SunburstChart,
   FunnelChart
 } from 'echarts/charts';
-// Import the tooltip, title, rectangular coordinate system, dataset and transform components
 import {
   TooltipComponent,
   GridComponent,
@@ -28,89 +28,69 @@ import {
   CalendarComponent,
   ToolboxComponent
 } from 'echarts/components';
-
 import { SVGRenderer } from 'echarts/renderers';
 
-import {
-  EChartsOption,
-  SetOptionOpts,
-  WordCloudSeriesOption
-} from 'echarts';
+// Initialize ECharts modules
+echarts.use([
+  GraphChart,
+  TooltipComponent,
+  GridComponent,
+  DatasetComponent,
+  SVGRenderer,
+  TransformComponent,
+  SankeyChart,
+  LegendComponent,
+  HeatmapChart,
+  VisualMapComponent,
+  CalendarComponent,
+  LineChart,
+  PieChart,
+  BarChart,
+  ToolboxComponent,
+  ScatterChart,
+  TreemapChart,
+  SunburstChart,
+  FunnelChart
+]);
 
-export interface ReactEChartsProps<T> {
+type ReactEChartsProps<T> = {
   option: T;
   className?: string;
-  settings?: SetOptionOpts;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  settings?: any;
   loading?: boolean;
   theme?: 'light' | 'dark';
   style?: object;
-}
-
-const ReactEcharts = <T extends EChartsOption | WordCloudSeriesOption>({
-  option,
-  className,
-  settings,
-  loading,
-  theme,
-  style
-}: ReactEChartsProps<T>): JSX.Element => {
-  echarts.use([
-    GraphChart,
-    TooltipComponent,
-    GridComponent,
-    DatasetComponent,
-    SVGRenderer,
-    TransformComponent,
-    SankeyChart,
-    LegendComponent,
-    HeatmapChart,
-    VisualMapComponent,
-    CalendarComponent,
-    LineChart,
-    PieChart,
-    BarChart,
-    ToolboxComponent,
-    ScatterChart,
-    TreemapChart,
-    SunburstChart,
-    FunnelChart
-  ]);
-
-  const chartRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    // Initialize chart
-    let chart: echarts.ECharts | undefined;
-    if (chartRef.current !== null) {
-      chart = echarts.init(chartRef.current, theme);
-    }
-
-    // Add chart resize listener
-    // ResizeObserver is leading to a bit janky UX
-    function resizeChart() {
-      chart?.resize();
-    }
-    window.addEventListener('resize', resizeChart);
-
-    // Return cleanup function
-    return () => {
-      chart?.dispose();
-      window.removeEventListener('resize', resizeChart);
-    };
-  }, [theme]);
-
-  useEffect(() => {
-    // Update chart
-    let chart: echarts.ECharts | undefined;
-    if (chartRef.current !== null) {
-      chart = echarts.getInstanceByDom(chartRef.current);
-      chart?.setOption(option as EChartsOption, settings);
-      // eslint-disable-next-line no-unused-expressions
-      loading === true ? chart?.showLoading() : chart?.hideLoading();
-    }
-  }, [option, settings, theme, loading]);
-
-  return <div ref={chartRef} className={className} style={style} />;
 };
 
+// Updated ReactEcharts Component with forwardRef
+const ReactEcharts = forwardRef(<T, >(
+  {
+    option, className, loading, theme, style
+  }: ReactEChartsProps<T>,
+  ref: React.Ref<unknown> | undefined
+) => {
+  const chartRef = useRef<any>(null);
+
+  useImperativeHandle(ref, () => ({
+    // eslint-disable-next-line consistent-return
+    getEchartsInstance: () => {
+      if (chartRef.current) {
+        return chartRef.current.getEchartsInstance();
+      }
+    }
+  }));
+
+  return (
+    <ReactECharts
+      ref={chartRef}
+      option={option}
+      className={className}
+      theme={theme}
+      showLoading={loading}
+      style={style}
+    />
+  );
+});
+ReactEcharts.displayName = 'ReactEcharts';
 export default ReactEcharts;

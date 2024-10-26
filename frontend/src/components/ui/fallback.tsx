@@ -1,4 +1,4 @@
-import { Icons } from '../icons';
+import Icons from '../icons';
 
 const Fallback = () => (
     <div className="flex h-screen justify-center items-center">

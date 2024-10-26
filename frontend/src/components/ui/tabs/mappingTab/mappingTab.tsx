@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable import/no-cycle */
 import { UseFormReturn } from 'react-hook-form';
 import { useState } from 'react';
-import { Icons } from '@/components/icons';
-import { Inputs, fileTypes } from '@/components/form/add-visualization-form';
+import { FileTypes } from '@illustry/types';
+import { Inputs } from '@/components/form/types';
+import Icons from '@/components/icons';
 import { Button } from '../../button';
 import { TabsContent } from '../../tabs';
 import ExcelOrCsvMappingTab from './excelOrCsvMappingTab';
@@ -14,18 +14,19 @@ import {
 import Checkbox from '../../checkbox';
 import XMLMappingTab from './xmlMappingTab';
 
-interface MappingTabProps {
+type MappingTabProps = {
   selectedFileType: string;
   isPending: boolean;
-  form: UseFormReturn<Inputs>; // Include the form context
+  form: UseFormReturn<Inputs>;
   router: any;
 }
-function MappingTab({
+
+const MappingTab = ({
   selectedFileType,
   isPending,
   form,
   router
-}: MappingTabProps) {
+}: MappingTabProps) => {
   const [fileDetails, setFileDetails] = useState<boolean>(false);
   const handleFullDetails = (value: boolean) => {
     if (value !== fileDetails) {
@@ -35,7 +36,7 @@ function MappingTab({
   const renderMapping = (fType: string, fDetails: boolean) => {
     if (fType) {
       switch (fType) {
-        case fileTypes.JSON:
+        case FileTypes.FileType.JSON:
           return (
             <>
               <JSONMappingTab
@@ -55,7 +56,7 @@ function MappingTab({
               </Button>
             </>
           );
-        case fileTypes.XML:
+        case FileTypes.FileType.XML:
           return (
             <>
               <XMLMappingTab
@@ -75,8 +76,8 @@ function MappingTab({
               </Button>
             </>
           );
-        case fileTypes.EXCEL:
-        case fileTypes.CSV:
+        case FileTypes.FileType.EXCEL:
+        case FileTypes.FileType.CSV:
           return (
             <>
               <ExcelOrCsvMappingTab
@@ -136,5 +137,6 @@ function MappingTab({
       {renderMapping(selectedFileType, fileDetails)}
     </TabsContent>
   );
-}
+};
+
 export default MappingTab;

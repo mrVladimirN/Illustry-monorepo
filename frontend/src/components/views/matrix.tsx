@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { select } from 'd3';
 import { VisualizationTypes } from '@illustry/types';
 import {
   addStyleTooltipWithHover,
@@ -10,13 +9,14 @@ import {
   sortColumns,
   sortRows
 } from '@/lib/visualizations/node-link/helper';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
-import { useThemeColors } from '@/components/theme-provider';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
+import { useThemeColors } from '@/components/providers/theme-provider';
 
-interface MatrixProp extends WithLegend, WithOptions {
+type MatrixProp = {
   nodes: VisualizationTypes.Node[];
   links: VisualizationTypes.Link[];
-}
+} & WithLegend & WithOptions & WithFullScreen;
+
 const createMatrix = (nodes: VisualizationTypes.Node[], links: VisualizationTypes.Link[]) => {
   const categories = categoryMap(nodes);
   const categoriesKeys: string[] = Object.keys(categories);
@@ -24,14 +24,15 @@ const createMatrix = (nodes: VisualizationTypes.Node[], links: VisualizationType
     throw new Error('categories object must have exactly 2 keys');
   }
 
-  const tableString = '<table id ="myTable" style= "border-spacing: 0;width: 100%;border: 1px solid #ddd ;'
-    + `margin-top:5%">${createHeadersAndPropertiesString(
+  const tableString = `<table id="myTable" style="border-spacing: 0; width: 100%; border: 1px solid #ddd; margin-top: 5%;">${
+    createHeadersAndPropertiesString(
       categories[categoriesKeys[0] as string] as VisualizationTypes.Node[],
       categories[categoriesKeys[1] as string] as VisualizationTypes.Node[],
       links
-    )}`;
+    )}</table>`;
   return tableString;
 };
+
 const MatrixView = ({ nodes, links }: MatrixProp) => {
   const tableRef = useRef<HTMLDivElement>(null);
   const activeTheme = useThemeColors();
@@ -50,7 +51,10 @@ const MatrixView = ({ nodes, links }: MatrixProp) => {
     }
 
     return () => {
-      select('showData').remove();
+      const tooltip = document.getElementById('showData');
+      if (tooltip) {
+        tooltip.remove();
+      }
     };
   }, [nodes, links, JSON.stringify(colors)]);
 

@@ -9,7 +9,7 @@ import {
   DialogTrigger
 } from '@/components/ui/dialog';
 
-export interface TimelineDialogProps {
+type TimelineDialogProps = {
   event: VisualizationTypes.TimelineEvent;
 }
 const TimelineDialog = ({ event }: TimelineDialogProps) => (

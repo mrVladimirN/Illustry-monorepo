@@ -2,22 +2,22 @@
 
 import { Cross2Icon } from '@radix-ui/react-icons';
 import type { Table } from '@tanstack/react-table';
-
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import {
   ComponentType, MouseEventHandler, useCallback, useState, useTransition
 } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import Input from '@/components/ui/input';
 import DataTableFacetedFilter from '@/components/data-table/data-table-faceted-filter';
 import DataTableViewOptions from '@/components/data-table/data-table-view-options';
 import useDebounce from '@/hooks/use-debounce';
 import ActionButton from '../ui/table-action-button';
 
-interface SearchButtonProps {
+type SearchButtonProps = {
   containerStyles: string;
 }
+
 const SearchButton = ({ containerStyles }: SearchButtonProps) => (
   <button type="submit" className={`-ml-3 z-10 ${containerStyles}`}>
     <Image
@@ -29,34 +29,34 @@ const SearchButton = ({ containerStyles }: SearchButtonProps) => (
     />
   </button>
 );
-export interface Option {
+type Option = {
   label: string;
   value: string;
   icon?: ComponentType<{ className?: string }>;
 }
 
-export interface DataTableSearchableColumn<TData> {
+type DataTableSearchableColumn<TData> = {
   id: keyof TData;
   title: string;
 }
 
-export interface DataTableFilterableColumn<TData>
-  extends DataTableSearchableColumn<TData> {
+type DataTableFilterableColumn<TData, > = {
   options: Option[];
-}
-interface DataTableToolbarProps<TData> {
+} & DataTableSearchableColumn<TData>
+
+type DataTableToolbarProps<TData> = {
   table: Table<TData>;
   filterableColumns?: DataTableFilterableColumn<TData>[];
   newRowLink?: string;
   deleteRowsAction?: MouseEventHandler<HTMLButtonElement>;
 }
 
-function DataTableToolbar<TData>({
+const DataTableToolbar = <TData, >({
   table,
   filterableColumns = [],
   newRowLink,
   deleteRowsAction
-}: DataTableToolbarProps<TData>) {
+}: DataTableToolbarProps<TData>) => {
   const isFiltered = table.getState().columnFilters.length > 0;
   const [isPending, startTransition] = useTransition();
   const [text, setText] = useState<string>('');
@@ -113,12 +113,12 @@ function DataTableToolbar<TData>({
         {filterableColumns.length > 0
           && filterableColumns.map(
             (column) => table.getColumn(column.id ? String(column.id) : '') && (
-                <DataTableFacetedFilter
-                  key={String(column.id)}
-                  column={table.getColumn(column.id ? String(column.id) : '')}
-                  title={column.title}
-                  options={column.options}
-                />
+              <DataTableFacetedFilter
+                key={String(column.id)}
+                column={table.getColumn(column.id ? String(column.id) : '')}
+                title={column.title}
+                options={column.options}
+              />
             )
           )}
         {isFiltered && (
@@ -140,12 +140,12 @@ function DataTableToolbar<TData>({
           table={table}
           isPending={isPending}
           newRowLink={newRowLink}
-          startTransition = {startTransition}
+          startTransition={startTransition}
         />
         <DataTableViewOptions table={table} />
       </div>
     </div>
   );
-}
+};
 
 export default DataTableToolbar;

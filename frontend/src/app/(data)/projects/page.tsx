@@ -3,12 +3,12 @@ import { ProjectTypes } from '@illustry/types';
 import { browseProjects } from '@/app/_actions/project';
 import ProjectsTableShell from '@/components/shells/projects-table-shell';
 
-export const metadata: Metadata = {
+const metadata: Metadata = {
   title: 'Projects',
   description: 'Manage your projects'
 };
 
-interface ProjectsProps {
+type ProjectsProps = {
   searchParams: {
     [key: string]: string | string[] | undefined;
   };
@@ -42,3 +42,4 @@ const Projects = async ({ searchParams }: ProjectsProps) => {
 };
 
 export default Projects;
+export { metadata };

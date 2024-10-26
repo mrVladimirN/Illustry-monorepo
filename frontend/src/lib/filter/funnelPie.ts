@@ -1,9 +1,7 @@
 import { VisualizationTypes } from '@illustry/types';
-
-// eslint-disable-next-line import/no-cycle
 import { evaluateCondition } from './generic';
 
-export const funnelPieWords = ['values'];
+const funnelPieWords = ['values'];
 
 const applyValuesFilter = (
   valuesFilter: string,
@@ -37,9 +35,11 @@ const applyValuesFilter = (
   }
 };
 
-// eslint-disable-next-line max-len
-export const applyFunnelPieFilter = (expressions:string[], defaultData: VisualizationTypes.FunnelData | VisualizationTypes.PieChartData) => {
-  const newData: VisualizationTypes.FunnelData| VisualizationTypes.PieChartData = {
+const applyFunnelPieFilter = (
+  expressions: string[],
+  defaultData: VisualizationTypes.FunnelData | VisualizationTypes.PieChartData
+) => {
+  const newData: VisualizationTypes.FunnelData | VisualizationTypes.PieChartData = {
     values: {}
   };
   let valuesFilter: string = '';
@@ -61,3 +61,5 @@ export const applyFunnelPieFilter = (expressions:string[], defaultData: Visualiz
   }
   return newData;
 };
+
+export { funnelPieWords, applyFunnelPieFilter };

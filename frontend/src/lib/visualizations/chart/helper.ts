@@ -1,6 +1,6 @@
 import { VisualizationTypes } from '@illustry/types';
 
-export const constructSeries = (
+const constructSeries = (
   values: { [key: string]: number[] },
   colors: string[],
   stacked: boolean,
@@ -39,7 +39,7 @@ export const constructSeries = (
   return seriesArray;
 };
 
-export const computeLegendColors = (
+const computeLegendColors = (
   data: VisualizationTypes.AxisChartData,
   colors: string[]
 ) => {
@@ -52,3 +52,5 @@ export const computeLegendColors = (
 
   return legendColorObject;
 };
+
+export { constructSeries, computeLegendColors };

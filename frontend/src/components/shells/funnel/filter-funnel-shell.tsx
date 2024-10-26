@@ -3,21 +3,25 @@
 import { VisualizationTypes } from '@illustry/types';
 import { Dispatch, SetStateAction, useState } from 'react';
 import dynamic from 'next/dynamic';
-import { WithLegend, WithOptions } from '@/lib/types/utils';
-import { visualizationTypesEnum } from '@/lib/validation/visualizations';
+import { WithFullScreen, WithLegend, WithOptions } from '@/lib/types/utils';
 import CollapsableSearchBar from '../../ui/collapsable-searchbar';
 
-interface FilteredFunnelShellProp extends WithLegend, WithOptions {
+type FilteredFunnelShellProp = {
   data: VisualizationTypes.FunnelData
-}
+} & WithLegend
+  & WithOptions
+  & WithFullScreen
+
 const FunnelView = dynamic(
   () => import('@/components/views/funnel-chart'),
   { ssr: false }
 );
+
 const FilteredFunnelShellView = ({
   data,
   legend,
-  options
+  options,
+  fullScreen
 }: FilteredFunnelShellProp) => {
   const [filteredData, setFilteredData] = useState<VisualizationTypes.FunnelData>(data);
 
@@ -30,14 +34,16 @@ const FilteredFunnelShellView = ({
             SetStateAction<VisualizationTypes.FunnelData>
           >
         }
-        type={visualizationTypesEnum.FUNNEL}
+        type={VisualizationTypes.VisualizationTypesEnum.FUNNEL}
       />
       <FunnelView
         options={options}
         data={filteredData}
         legend={legend}
+        fullScreen={fullScreen}
       />
     </>
   );
 };
+
 export default FilteredFunnelShellView;
