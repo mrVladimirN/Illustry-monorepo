@@ -18,9 +18,14 @@ const ActiveProjectContext = createContext<ActiveProjectState | undefined>(undef
 const ActiveProjectDispatchContext = createContext<React.Dispatch<Action> | undefined>(undefined);
 
 const loadInitialState = (): ActiveProjectState => {
-  const storedValue = localStorage.getItem('activeProject');
+  if (typeof window !== 'undefined' && window.localStorage) {
+    const storedValue = localStorage.getItem('activeProject');
+    return {
+      activeProject: storedValue ? JSON.parse(storedValue) : false
+    };
+  }
   return {
-    activeProject: storedValue ? JSON.parse(storedValue) : false
+    activeProject: false
   };
 };
 
