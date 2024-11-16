@@ -11,17 +11,17 @@ type ProjectData = {
   createdAt?: Date;
   updatedAt?: Date;
   isActive?: boolean;
-}
+};
 
 type ProjectCreate =
   ProjectData &
   with_optional_id &
-  with_optional_version
+  with_optional_version;
 
 type ProjectType =
   ProjectData &
   with_id &
-  with_optional_version
+  with_optional_version;
 
 type ExtendedProjectType = {
   projects?: ProjectType[];
@@ -29,9 +29,9 @@ type ExtendedProjectType = {
     count: number;
     pageCount: number;
   };
-}
+};
 
-type ProjectUpdate = DeepPartial<ProjectType>
+type ProjectUpdate = DeepPartial<ProjectType>;
 
 type ProjectFilter = {
   name?: string;
@@ -43,6 +43,6 @@ type ProjectFilter = {
     element: string;
     sortOrder: string | number;
   };
-}
+};
 
 export { ProjectFilter, ProjectUpdate, ExtendedProjectType, ProjectType, ProjectCreate }

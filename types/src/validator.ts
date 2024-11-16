@@ -15,7 +15,7 @@ const withIdSchema = z.object({
     _id: stringSchema
 });
 const withOptionalVersionSchema = z.object({
-    __v: stringSchema.optional()
+    __v: numberSchema.optional()
 });
 
 // Word-cloud
@@ -133,10 +133,46 @@ const visualizationDataSchema = z.object({
     projectName: stringSchema.min(1),
     description: stringSchema.optional(),
     name: stringSchema,
+    type: z.union([
+        z.literal(VisualizationTypesEnum.TREEMAP),
+        z.literal(VisualizationTypesEnum.SUNBURST),
+        z.literal(VisualizationTypesEnum.FORCE_DIRECTED_GRAPH),
+        z.literal(VisualizationTypesEnum.SANKEY),
+        z.literal(VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING),
+        z.literal(VisualizationTypesEnum.MATRIX),
+        z.literal(VisualizationTypesEnum.TIMELINE),
+        z.literal(VisualizationTypesEnum.LINE_CHART),
+        z.literal(VisualizationTypesEnum.BAR_CHART),
+        z.literal(VisualizationTypesEnum.SCATTER),
+        z.literal(VisualizationTypesEnum.PIE_CHART),
+        z.literal(VisualizationTypesEnum.FUNNEL),
+        z.literal(VisualizationTypesEnum.CALENDAR),
+        z.literal(VisualizationTypesEnum.WORD_CLOUD),
+        z.array(
+            z.union([
+                z.literal(VisualizationTypesEnum.TREEMAP),
+                z.literal(VisualizationTypesEnum.SUNBURST),
+                z.literal(VisualizationTypesEnum.FORCE_DIRECTED_GRAPH),
+                z.literal(VisualizationTypesEnum.SANKEY),
+                z.literal(VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING),
+                z.literal(VisualizationTypesEnum.MATRIX),
+                z.literal(VisualizationTypesEnum.TIMELINE),
+                z.literal(VisualizationTypesEnum.LINE_CHART),
+                z.literal(VisualizationTypesEnum.BAR_CHART),
+                z.literal(VisualizationTypesEnum.SCATTER),
+                z.literal(VisualizationTypesEnum.PIE_CHART),
+                z.literal(VisualizationTypesEnum.FUNNEL),
+                z.literal(VisualizationTypesEnum.CALENDAR),
+                z.literal(VisualizationTypesEnum.WORD_CLOUD),
+            ])
+        )
+    ]),
     tags: z.union([stringSchema, z.array(stringSchema)]).optional(),
     createdAt: dateSchema.optional(),
     updatedAt: dateSchema.optional()
-});
+})
+    .merge(withOptionalIdSchema)
+    .merge(withOptionalVersionSchema);
 
 const visualizationNodeLinkSchema = visualizationDataSchema.extend({
     type: z.union([
@@ -159,7 +195,6 @@ const visualizationNodeLinkSchema = visualizationDataSchema.extend({
 const visualizationTimelineSchema = visualizationDataSchema.extend({
     type: z.union([
         z.literal(VisualizationTypesEnum.TIMELINE),
-
         z.array(z.literal(VisualizationTypesEnum.TIMELINE))
     ]),
     data: timelineDataSchema

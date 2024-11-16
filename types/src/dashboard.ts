@@ -7,13 +7,13 @@ import {
 } from "./utils";
 
 type Layout = {
-    i: string,
-    x: number,
-    y: number,
-    w: number,
-    h: number,
-    minW: number,
-    minH: number
+    i: string;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    minW: number;
+    minH: number;
 };
 
 type DashboardData = {
@@ -23,20 +23,20 @@ type DashboardData = {
     createdAt?: Date;
     updatedAt?: Date;
     visualizations?: {
-        [name: string]: string
+        [name: string]: string;
     } | VisualizationTypes.VisualizationType[];
-    layouts?: Layout[]
-}
+    layouts?: Layout[];
+};
 
 type DashboardCreate =
     DashboardData &
     with_optional_id &
-    with_optional_version
+    with_optional_version;
 
 type DashboardType =
     DashboardData &
     with_id &
-    with_optional_version
+    with_optional_version;
 
 type ExtendedDashboardType = {
     dashboards?: DashboardType[];
@@ -44,9 +44,9 @@ type ExtendedDashboardType = {
         count: number;
         pageCount: number;
     };
-}
+};
 
-type DashboardUpdate = DeepPartial<DashboardType>
+type DashboardUpdate = DeepPartial<DashboardType>;
 
 type DashboardFilter = {
     name?: string;
@@ -61,6 +61,6 @@ type DashboardFilter = {
         element: string;
         sortOrder: string | number;
     };
-}
+};
 
 export { DashboardFilter, DashboardUpdate, ExtendedDashboardType, DashboardType, DashboardCreate, Layout }

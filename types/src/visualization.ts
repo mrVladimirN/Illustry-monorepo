@@ -4,7 +4,6 @@ import {
   with_optional_id,
   with_optional_version,
   with_optional_properties,
-  with_optional_labels,
 } from "./utils";
 
 // Word-cloud
@@ -52,9 +51,16 @@ type TimelineData = {
 
 // Node-Link (force-directed-graph, sankey, hierarchical-edge-bundling )
 
-type Node = with_optional_properties & with_optional_labels & {
+type Label = {
+  name: string;
+  value: number;
+  properties?: object | Array<object> | string;
+}
+
+type Node = with_optional_properties & {
   name: string;
   category: string;
+  labels?: Label[];
 }
 
 type Link = with_optional_properties & {
@@ -113,14 +119,7 @@ enum VisualizationTypesEnum {
   TIMELINE = "timeline"
 }
 
-type VisualizationData = {
-  projectName: string;
-  type: VisualizationTypesEnum | VisualizationTypesEnum[];
-  description?: string;
-  name: string;
-  tags?: string[];
-  data:
-  | WordCloudData
+type VisualizationDataData = WordCloudData
   | NodeLinkData
   | CalendarData
   | AxisChartData
@@ -129,14 +128,25 @@ type VisualizationData = {
   | HierarchyData
   | FunnelData
   | TimelineData;
+
+type VisualizationData = {
+  projectName: string;
+  type: VisualizationTypesEnum | VisualizationTypesEnum[];
+  description?: string;
+  name: string;
+  tags?: string | string[];
+  data: VisualizationDataData;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 type VisualizationCreate =
-  VisualizationData &
+  Omit<VisualizationData, "data"> &
   with_optional_id &
-  with_optional_version
+  with_optional_version &
+  {
+    data?: VisualizationDataData
+  }
 
 type VisualizationType =
   VisualizationData &
@@ -175,8 +185,10 @@ export {
   TimelineEventTag,
   TimelineEvent,
   TimelineData,
+  Label,
   Node,
   Link,
+  VisualizationDataData,
   NodeLinkData,
   AxisChartData,
   ScatterData,
