@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "depcheck": "depcheck --ignore-bin-package --ignores='postcss,autoprefixer,@typescript-eslint/parser'",
+    "depcheck": "depcheck --ignore-bin-package --ignores='postcss,autoprefixer,@typescript-eslint/parser,zod-error'",
     "clean": "rm -rf ./next",
     "start:dev": "next dev",
     "build:ts": "next build",
