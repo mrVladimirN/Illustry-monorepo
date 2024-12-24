@@ -4,14 +4,13 @@
   "repository": "https://github.com/mrVladimirN/Illustry-monorepo.git",
   "author": "mrVladimirN <vladimir.nitu.business@outlook.com>",
   "license": "MIT",
-  "workspaces": {
-    "packages": [
-      "backend",
-      "frontend",
-      "docs",
-      "types"
-    ]
-  },
+  "workspaces": [
+    "backend",
+    "frontend",
+    "docs",
+    "types"
+  ],
+  "type": "module",
   "scripts": {
     "lint": "lerna run lint --stream",
     "lint:fix": "lerna run lint:fix --stream",
@@ -21,13 +20,13 @@
     "prepare": "husky install",
     "postversion": "lerna publish from-package",
     "build:ts": "lerna run build:ts --stream",
-    "release": "npm run lint:fix && npm run version && git push --follow-tags origin main"
+    "release": "yarn lint:fix && yarn version && git push --follow-tags origin main"
   },
   "devDependencies": {
-    "@commitlint/cli": "19.4.1",
-    "@commitlint/config-conventional": "19.4.1",
-    "@typescript-eslint/eslint-plugin": "6.21.0",
+    "@commitlint/cli": "17.4.4",
+    "@commitlint/config-conventional": "17.4.4",
     "@types/jest": "29.5.12",
+    "@typescript-eslint/eslint-plugin": "6.21.0",
     "depcheck": "1.4.7",
     "eslint": "8.57.0",
     "eslint-config-airbnb-base": "15.0.0",
@@ -76,5 +75,6 @@
       }
     },
     "testEnvironment": "node"
-  }
+  },
+  "packageManager": "yarn@4.5.3"
 }
