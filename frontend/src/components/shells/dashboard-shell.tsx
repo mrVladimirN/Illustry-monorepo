@@ -1,25 +1,24 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 import { DashboardTypes, VisualizationTypes } from '@illustry/types';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import {
   Card, CardContent, CardHeader, CardTitle
 } from '@/components/ui/card';
 import { updateDashboard } from '@/app/_actions/dashboard';
 import HubShell from './hub-shell';
 
-const ResponsiveGridLayout = WidthProvider(Responsive);
+const ResponsiveGridLayout = WidthProvider(Responsive) as unknown as React.FC<Record<string, unknown>>;
 
 type VisualizationData = {
-  dashboard: DashboardTypes.DashboardType;
+  dashboard: DashboardTypes.DashboardType | null;
 };
 
 const ResizableDashboard = ({ dashboard }: VisualizationData) => {
   const router = useRouter();
-  const pathname = usePathname();
-  const { layouts = [], visualizations = [] } = dashboard;
+  const { layouts = [], visualizations = [] } = dashboard as DashboardTypes.DashboardType;
   const initialLayout = layouts?.length ? layouts
     : (visualizations as VisualizationTypes.VisualizationType[])
       .map((viz, index) => ({
@@ -35,10 +34,10 @@ const ResizableDashboard = ({ dashboard }: VisualizationData) => {
   const [layout, setLayout] = useState<DashboardTypes.Layout[]>(initialLayout);
   const [hasLayoutChanged, setHasLayoutChanged] = useState(false);
 
-  const onLayoutChange = (newLayout: DashboardTypes.Layout[]) => {
+  const onLayoutChange = useCallback((newLayout: DashboardTypes.Layout[]) => {
     setLayout(newLayout);
     setHasLayoutChanged(true);
-  };
+  }, []);
 
   const updateDashboardLayout = async () => {
     const updatedDash = { ...dashboard, layouts: layout };
@@ -57,7 +56,7 @@ const ResizableDashboard = ({ dashboard }: VisualizationData) => {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [hasLayoutChanged, layout, pathname]);
+  }, [hasLayoutChanged, layout]);
 
   const handleCardClick = (viz: VisualizationTypes.VisualizationType) => {
     const url = `/visualizationhub?name=${viz.name}&type=${viz.type}`;
@@ -88,10 +87,13 @@ const ResizableDashboard = ({ dashboard }: VisualizationData) => {
           >
             <Card className="h-full">
               <div className="relative h-full">
-                <div className="draggable-corner absolute top-0 left-0 w-[10%] h-[10%] cursor-move bg-transparent"></div>
-                <div className="draggable-corner absolute top-0 right-0 w-[10%] h-[10%] cursor-move bg-transparent"></div>
-                <div className="draggable-corner absolute bottom-0 left-0 w-[10%] h-[10%] cursor-move bg-transparent"></div>
-                <div className="draggable-corner absolute bottom-0 right-0 w-[10%] h-[10%] cursor-move bg-transparent"></div>
+                {/* Draggable corners */}
+                {['top-left', 'top-right', 'bottom-left', 'bottom-right'].map((position) => (
+                  <div
+                    key={position}
+                    className={`draggable-corner absolute ${position} w-[10%] h-[10%] cursor-move bg-transparent`}
+                  ></div>
+                ))}
                 <CardHeader
                   className="cursor-pointer flex justify-center items-center h-[4rem]"
                   onClick={() => handleCardClick(viz)}

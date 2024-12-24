@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 'use server';
 
 import 'dotenv/config';
@@ -19,11 +21,12 @@ const browseProjects = async (filter?: ProjectTypes.ProjectFilter) => {
     },
     body: JSON.stringify(newFilter)
   });
-  return makeRequest<ProjectTypes.ExtendedProjectType>(request, ['projects'])
-    .catch((error) => {
-      // eslint-disable-next-line no-console
-      console.debug(error.message);
-    });
+  try {
+    return makeRequest<ProjectTypes.ExtendedProjectType>(request, ['projects']);
+  } catch (err) {
+    console.debug(err);
+    return null;
+  }
 };
 
 const deleteProject = async (projectName: string) => {
@@ -37,7 +40,12 @@ const deleteProject = async (projectName: string) => {
       name: projectName
     })
   });
-  return makeRequest<boolean>(request, ['projects']);
+  try {
+    return makeRequest<boolean>(request, ['projects']);
+  } catch (err) {
+    console.debug(err);
+    return err;
+  }
 };
 
 const updateProject = async (project: ProjectTypes.ProjectUpdate) => {
@@ -49,8 +57,12 @@ const updateProject = async (project: ProjectTypes.ProjectUpdate) => {
     },
     body: JSON.stringify(project)
   });
-
-  return makeRequest<ProjectTypes.ProjectType>(request, ['projects']);
+  try {
+    return makeRequest<ProjectTypes.ProjectType>(request, ['projects']);
+  } catch (err) {
+    console.debug(err);
+    return err;
+  }
 };
 
 const createProject = async (project: ProjectTypes.ProjectCreate) => {
@@ -66,7 +78,12 @@ const createProject = async (project: ProjectTypes.ProjectCreate) => {
     },
     body: JSON.stringify(newProject)
   });
-  return makeRequest<ProjectTypes.ProjectType>(request, ['projects']);
+  try {
+    return makeRequest<ProjectTypes.ProjectType>(request, ['projects']);
+  } catch (err) {
+    console.debug(err);
+    return err;
+  }
 };
 
 const findOneProject = async (projectName: string) => {
@@ -80,7 +97,11 @@ const findOneProject = async (projectName: string) => {
       body: JSON.stringify({ name: projectName })
     }
   );
-  return makeRequest<ProjectTypes.ProjectType>(request, ['projects']);
+  try {
+    return makeRequest<ProjectTypes.ProjectType>(request, ['projects']);
+  } catch (err) {
+    return null;
+  }
 };
 
 export {

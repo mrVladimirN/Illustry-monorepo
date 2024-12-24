@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { FC, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { VisualizationTypes } from '@illustry/types';
-import { VerticalTimeline } from 'react-vertical-timeline-component';
+import { VerticalTimeline, VerticalTimelineProps } from 'react-vertical-timeline-component';
 import 'react-vertical-timeline-component/style.min.css';
 import { ChevronLeftIcon, ChevronRightIcon } from '@radix-ui/react-icons';
 import { formatDate } from '@/lib/utils';
@@ -32,7 +32,7 @@ const TimelineView = ({ data, fullScreen }: TimelineProp) => {
   const startIndex = currentPage * elementsPerPage;
   const endIndex = startIndex + elementsPerPage;
   const displayedDates = sortedKeys.slice(startIndex, endIndex);
-
+  const VerticalTimelineFC = VerticalTimeline as unknown as FC<VerticalTimelineProps>;
   const handleNextPage = () => {
     if (endIndex < sortedKeys.length) {
       setCurrentPage(currentPage + 1);
@@ -50,7 +50,7 @@ const TimelineView = ({ data, fullScreen }: TimelineProp) => {
       className={`mt-5 mx-auto p-2 sm:p-4 lg:p-6 ${!fullScreen ? 'h-[50vh] overflow-y-auto' : ''}`}
       ref={ref}
     >
-      <VerticalTimeline
+      <VerticalTimelineFC
         layout="1-column-left"
         animate={true}
         lineColor={!isDarkTheme ? 'rgb(245, 245, 245)' : 'rgb(66, 66, 66)'}
@@ -67,7 +67,7 @@ const TimelineView = ({ data, fullScreen }: TimelineProp) => {
             <TimelineAccordion data={data} date={date} />
           </TimelineElement>
         ))}
-      </VerticalTimeline>
+      </VerticalTimelineFC>
       <div className="flex justify-center mt-4 mb-6">
         <Button
           suppressHydrationWarning

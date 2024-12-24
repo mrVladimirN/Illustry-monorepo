@@ -22,7 +22,7 @@ import { updateDashboard } from '@/app/_actions/dashboard';
 import MultiSelect from '../ui/multi-select';
 
 type UpdateDashboardFormProps = {
-  dashboard: DashboardTypes.DashboardUpdate;
+  dashboard: DashboardTypes.DashboardUpdate | null;
   visualizations: Record<string, string>
 }
 
@@ -34,7 +34,7 @@ const UpdateDashboardForm = ({ dashboard, visualizations }: UpdateDashboardFormP
     const value = visualizations[key] as string;
     const transformedKey = key.replace(/[()]/g, '_').replace(/_+$/, '');
 
-    if (dashboard.visualizations && (dashboard.visualizations as Record<string, string>)[transformedKey]) {
+    if (dashboard && dashboard.visualizations && (dashboard.visualizations as Record<string, string>)[transformedKey]) {
       predefinedOptions.push(value);
     }
 
@@ -46,7 +46,7 @@ const UpdateDashboardForm = ({ dashboard, visualizations }: UpdateDashboardFormP
   const form = useForm<DashboardTypes.DashboardUpdate>({
     resolver: zodResolver(ValidatorSchemas.dashboardUpdateSchema),
     defaultValues: {
-      description: dashboard.description || '',
+      description: (dashboard && dashboard.description) || '',
       visualizations: {}
     }
   });
