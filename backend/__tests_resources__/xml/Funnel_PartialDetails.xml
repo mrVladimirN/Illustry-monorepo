@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <root>
+  <data>
     <values>
       <Statistic_1>122</Statistic_1>
       <Statistic_2>222</Statistic_2>
       <Statistic_3>510</Statistic_3>
       <Statistic_4>320</Statistic_4>
     </values>
+    </data>
 </root>

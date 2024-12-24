@@ -4,6 +4,7 @@ import {
   VisualizationTypes, ProjectTypes, FileTypes, UtilTypes, GenericTypes, ValidatorSchemas,
   DashboardTypes
 } from '@illustry/types';
+import { removeNullValues } from '../../utils/helper';
 import {
   excelFilesToVisualizations,
   jsonFilesToVisualizations,
@@ -85,17 +86,16 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
     const { projects } = await projectBZL.browse({ isActive: true } as ProjectTypes.ProjectFilter);
 
     if (!projects || projects.length === 0) {
-      throw new Error('No Active Project');
+      throw new Error('No active project');
     }
 
-    if (!fileDetails) {
+    if (!fileDetails || Object.keys(fileDetails).length === 0) {
       throw new Error('No file details were provided');
     }
 
     const projectName = projects[0].name;
-
     switch (fileDetails.fileType) {
-      case 'EXCEL':
+      case FileTypes.FileType.EXCEL:
         return this.processExcelFiles(
           files,
           includeAllFileDetails,
@@ -103,14 +103,14 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
           fileDetails,
           visualizationUpdate
         );
-      case 'JSON':
+      case FileTypes.FileType.JSON:
         return this.processJsonFiles(
           files,
           includeAllFileDetails,
           projectName,
           visualizationUpdate
         );
-      case 'CSV':
+      case FileTypes.FileType.CSV:
         return this.processCsvFiles(
           files,
           includeAllFileDetails,
@@ -118,7 +118,7 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
           fileDetails,
           visualizationUpdate
         );
-      case 'XML':
+      case FileTypes.FileType.XML:
         return this.processXmlFiles(
           files,
           includeAllFileDetails,
@@ -146,7 +146,8 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
     };
 
     const queryFilter: UtilTypes.ExtendedMongoQuery = this.dbaccInstance.Visualization.createFilter(updatedFilter);
-    return this.dbaccInstance.Visualization.findOne(queryFilter) as unknown as VisualizationTypes.VisualizationType;
+    const result = await this.dbaccInstance.Visualization.findOne(queryFilter);
+    return result as VisualizationTypes.VisualizationType;
   }
 
   async browse(filter: VisualizationTypes.VisualizationFilter): Promise<VisualizationTypes.ExtendedVisualizationType> {
@@ -185,9 +186,8 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
       ...filter,
       projectName: activeProjectName
     };
-    const queryFilter: UtilTypes.ExtendedMongoQuery = updatedFilter
-      ? this.dbaccInstance.Visualization.createFilter(updatedFilter)
-      : {};
+
+    const queryFilter: UtilTypes.ExtendedMongoQuery = this.dbaccInstance.Visualization.createFilter(updatedFilter);
 
     const dashboardUpdateFilter: UtilTypes.ExtendedMongoQuery = this.dbaccInstance.Dashboard.createFilter(
       {
@@ -203,7 +203,7 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
       for (const dashboard of dashboards) {
         if (dashboard.visualizations) {
           delete (dashboard.visualizations as { [name: string]: string; })[`${filter.name}_${filter.type}` as string];
-          let reindexedLayouts:DashboardTypes.Layout[] = [];
+          let reindexedLayouts: DashboardTypes.Layout[] = [];
           if (dashboard.layouts) {
             const updatedLayouts = dashboard.layouts.filter((layout) => layout.i !== filter.name);
 
@@ -222,8 +222,8 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
             dashboardFilter,
             {
               $set: {
-                visualizations: dashboard.visualizations,
-                layouts: reindexedLayouts
+                visualizations: removeNullValues(dashboard.visualizations),
+                layouts: removeNullValues(reindexedLayouts)
               }
             }
           );
@@ -235,12 +235,12 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
   }
 
   private async processVisualizationDetails(
-    illustrations: unknown[],
+    illustrations: VisualizationTypes.VisualizationCreate[],
     includeAllFileDetails: boolean,
     projectName: string,
     visualizationUpdate: VisualizationTypes.VisualizationUpdate
   ): Promise<(VisualizationTypes.VisualizationType | null)[]> {
-    const processVisualization = async (illustration: unknown) => {
+    const processVisualization = async (illustration: VisualizationTypes.VisualizationCreate) => {
       const visualizationData: VisualizationTypes.VisualizationCreate = {
         ...(illustration as VisualizationTypes.VisualizationCreate),
         projectName
@@ -251,8 +251,9 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
           (visualizationData as Record<string, unknown>)[key] = value;
         });
       }
-
-      ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.visualizationTypeSchema, visualizationData);
+      ValidatorSchemas.validateWithSchema<
+        VisualizationTypes.VisualizationCreate
+      >(ValidatorSchemas.visualizationTypeSchema, visualizationData);
 
       return this.createOrUpdate(visualizationData);
     };
@@ -273,7 +274,7 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
     );
 
     return this.processVisualizationDetails(
-      visualizations,
+      visualizations as VisualizationTypes.VisualizationCreate[],
       includeAllFileDetails,
       projectName,
       visualizationUpdate
@@ -293,7 +294,7 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
     );
 
     return this.processVisualizationDetails(
-      visualizations,
+      visualizations as VisualizationTypes.VisualizationCreate[],
       includeAllFileDetails,
       projectName,
       visualizationUpdate
@@ -315,7 +316,7 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
     );
 
     return this.processVisualizationDetails(
-      visualizations,
+      visualizations as VisualizationTypes.VisualizationCreate[],
       includeAllFileDetails,
       projectName,
       visualizationUpdate
@@ -337,7 +338,7 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
     );
 
     return this.processVisualizationDetails(
-      visualizations,
+      visualizations as VisualizationTypes.VisualizationCreate[],
       includeAllFileDetails,
       projectName,
       visualizationUpdate

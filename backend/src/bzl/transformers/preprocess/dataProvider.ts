@@ -1,4 +1,5 @@
 import {
+  TransformerTypes,
   VisualizationTypes
 } from '@illustry/types';
 import { visualizationPropertiesExtractor } from '../../../utils/helper';
@@ -32,9 +33,14 @@ import {
   scatterExtractorXml
 } from './transformers/scatterTransformer';
 
+const isIntersectionEqualToFirstArray = (A: string[], B: string[]): boolean => {
+  const setB = new Set(B);
+  return A.every((element) => setB.has(element));
+};
+
 const exelOrCsvdataProvider = (
   type: VisualizationTypes.VisualizationTypesEnum,
-  computedRows: Record<string, unknown>[],
+  computedRows: TransformerTypes.RowType[],
   allFileDetails: boolean
 ) => {
   let data: VisualizationTypes.VisualizationUpdate = { type };
@@ -50,42 +56,63 @@ const exelOrCsvdataProvider = (
   }
   switch (type) {
     case VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD:
-      data.data = wordCloudExtractorCsvOrExcel(computedRows);
+      data.data = wordCloudExtractorCsvOrExcel(
+        computedRows as TransformerTypes.SimpleWordDetails[] | TransformerTypes.FullWordDetails[]
+      );
       break;
     case VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH:
     case VisualizationTypes.VisualizationTypesEnum.SANKEY:
     case VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING:
-      data.data = nodesLinksExtractorCsvOrExcel(computedRows);
+      data.data = nodesLinksExtractorCsvOrExcel(
+        computedRows as TransformerTypes.SimpleNodeLinkDetails[] | TransformerTypes.FullNodeLinkDetails[]
+      );
       break;
     case VisualizationTypes.VisualizationTypesEnum.CALENDAR:
-      data.data = calendarExtractorCsvOrExcel(computedRows);
+      data.data = calendarExtractorCsvOrExcel(
+        computedRows as TransformerTypes.SimpleCalendarDetails[] | TransformerTypes.FullCalendarDetails[]
+      );
       break;
     case VisualizationTypes.VisualizationTypesEnum.BAR_CHART:
     case VisualizationTypes.VisualizationTypesEnum.LINE_CHART:
-      data.data = axisChartExtractorCsvOrExcel(computedRows);
+      data.data = axisChartExtractorCsvOrExcel(
+        computedRows as TransformerTypes.SimpleAxisChartValuesDetails[] | TransformerTypes.FullAxisChartValuesDetails[]
+      );
       break;
     case VisualizationTypes.VisualizationTypesEnum.FUNNEL:
     case VisualizationTypes.VisualizationTypesEnum.PIE_CHART:
-      data.data = pieChartFunnelExtractorCsvOrExcel(computedRows as Record<string, Record<string, number>>[]);
+      data.data = pieChartFunnelExtractorCsvOrExcel(
+        computedRows as TransformerTypes.SimplePieChartValuesDetails[] | TransformerTypes.FullPieChartValuesDetails[]
+      );
       break;
     case VisualizationTypes.VisualizationTypesEnum.SCATTER:
-      data.data = scatterExtractorCsvOrExcel(computedRows as Record<string, Record<string, number>>[]);
+      data.data = scatterExtractorCsvOrExcel(
+        computedRows as TransformerTypes.SimplePointDetails[] | TransformerTypes.FullPointDetails[]
+      );
       break;
     case VisualizationTypes.VisualizationTypesEnum.TREEMAP:
     case VisualizationTypes.VisualizationTypesEnum.SUNBURST:
-      data.data = hierarchyExtractorCsvOrExcel(computedRows as Record<string, Record<string, number>>[]);
+      data.data = hierarchyExtractorCsvOrExcel(
+        computedRows as TransformerTypes.SimpleNodesDetails[] | TransformerTypes.FullNodesDetails[]
+      );
       break;
     default:
       break;
   }
-  return data && data.type ? data : null;
+  return data && data.data ? data : null;
 };
 
 const jsonDataProvider = (
-  type: VisualizationTypes.VisualizationTypesEnum,
-  computedData: Record<string, unknown>,
+  type: VisualizationTypes.VisualizationTypesEnum | VisualizationTypes.VisualizationTypesEnum[],
+  computedData: VisualizationTypes.VisualizationDataData,
   allFileDetails: boolean
 ) => {
+  const allPossibleTypes = Object.values(VisualizationTypes.VisualizationTypesEnum);
+  if (
+    (Array.isArray(type) && !isIntersectionEqualToFirstArray(type, allPossibleTypes))
+    || (typeof type === 'string' && !allPossibleTypes.includes(type))
+  ) {
+    return null;
+  }
   if (!allFileDetails) {
     const data: VisualizationTypes.VisualizationUpdate = {};
     data.data = computedData;
@@ -97,7 +124,7 @@ const jsonDataProvider = (
 
 const xmlDataProvider = (
   type: VisualizationTypes.VisualizationTypesEnum,
-  computedData: Record<string, unknown>,
+  computedData: TransformerTypes.XMLVisualizationDetails,
   allFileDetails: boolean
 ) => {
   switch (type) {

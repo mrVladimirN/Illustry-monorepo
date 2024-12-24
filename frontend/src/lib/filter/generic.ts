@@ -65,8 +65,8 @@ const validateExpressions = (
     if (match) {
       const construction = match[0];
       const parts = expression.split(construction);
-      const word = (parts[0] as unknown as string).trim();
-      if (words.includes(word)) {
+      const word = parts[0]?.trim();
+      if (word && words.includes(word)) {
         return expression;
       }
       throw new Error(`Invalid expression: Word '${word}' not found.`);

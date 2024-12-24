@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-
 'use client';
 
 import { CalendarOption } from 'echarts/types/dist/shared';
@@ -35,16 +33,13 @@ const CalendarGraphView = ({ categories, calendar, legend }: CalendarGraphProp) 
     tooltip: {
       trigger: 'item',
       triggerOn: 'mousemove',
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      formatter(params: any) {
+      formatter(params: { data: string| Record<string, unknown>[]; }) {
         if (params && params.data && params.data.length) {
-          const element = (calendar as VisualizationTypes.CalendarType[]).find((el) =>
-            // eslint-disable-next-line implicit-arrow-linebreak
-            el.date === params.data[0]);
+          const element = (calendar as VisualizationTypes.CalendarType[]).find((el) => el.date === params.data[0]);
           if (element) {
             if (element.properties) {
               return computePropertiesForToolTip(
-                element.properties,
+                element.properties as string | Record<string, string | number>,
                 element.value
               );
             }

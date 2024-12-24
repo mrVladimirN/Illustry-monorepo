@@ -1,38 +1,45 @@
-import { VisualizationTypes } from '@illustry/types';
-import { visualizationDetailsExtractor, toStringWithDefault } from '../../../../utils/helper';
+import { TransformerTypes, VisualizationTypes } from '@illustry/types';
+import { visualizationDetailsExtractor } from '../../../../utils/helper';
 
 const wordCloudTransformer = (
-  mapping: Record<string, unknown>,
-  values: string[] | number[],
+  mapping: { [key: string]: string },
+  values: (string | number)[],
   allFileDetails: boolean
-) => {
-  const baseValues = {
-    name: values[Number(mapping.names)],
+): TransformerTypes.FullWordDetails | TransformerTypes.SimpleWordDetails => {
+  const {
+    names, values: mValues, properties
+  } = mapping;
+  const word: TransformerTypes.WordType = {
+    name: values[+names] as string,
     value:
-      typeof values[Number(mapping.values)] === 'string'
-        ? +(values[Number(mapping.values)] as string)
-        : values[Number(mapping.values)],
-    properties: values[Number(mapping.properties)]
+      typeof values[+mValues] === 'string'
+        ? +(values[+mValues] as string)
+        : values[+mValues],
+    properties: values[+properties] as string
   };
-  const visualizationDetails = visualizationDetailsExtractor(mapping, values);
-  return allFileDetails
-    ? {
-      ...{ word: baseValues },
-      ...visualizationDetails
-    }
-    : { word: baseValues };
+  if (allFileDetails) {
+    const { visualizationDescription, visualizationName, visualizationTags } = visualizationDetailsExtractor(mapping, values);
+    const fullWordDetails: TransformerTypes.FullWordDetails = {
+      word,
+      visualizationDescription,
+      visualizationName,
+      visualizationTags
+    };
+    return fullWordDetails;
+  }
+  return { word };
 };
 
 const wordCloudExtractorCsvOrExcel = (
-  data: Record<string, unknown>[]
+  data: TransformerTypes.SimpleWordDetails[] | TransformerTypes.FullWordDetails[]
 ): VisualizationTypes.WordCloudData => {
   const transformedData = data.reduce(
     (result, item) => {
       const words = item.word;
-      const { name, value, properties } = words as Record<string, unknown>;
-      let word;
-      word = (result.words as Record<string, unknown>[]).find(
-        (w: Record<string, unknown>) => w.name === name
+      const { name, value, properties } = words;
+      let word = null;
+      word = result.words.find(
+        (w: VisualizationTypes.WordType) => w.name === name
       );
 
       if (!word) {
@@ -45,59 +52,48 @@ const wordCloudExtractorCsvOrExcel = (
     },
     { words: [] }
   );
-  return transformedData as unknown as VisualizationTypes.WordCloudData;
+  return transformedData;
 };
 
 const wordCloudWordExtractorXml = (
-  words: Record<string, unknown>[]
-): VisualizationTypes.WordType[] => words.map((el: Record<string, unknown>) => ({
-  name:
-    typeof (el.name as string[])[0] === 'string'
-      ? (el.name as string[])[0]
-      : toStringWithDefault((el.name as string[])[0]),
-  value:
-    typeof (el.value as string[])[0] === 'string'
-      ? +(el.value as string[])[0]
-      : (el.value as string[])[0],
-  properties:
-    el.properties && (el.properties as Record<string, unknown>[]).length
-      ? (el.properties as string[])[0]
-      : undefined
-})) as unknown as VisualizationTypes.WordType[];
+  words: TransformerTypes.XMLWord[]
+): VisualizationTypes.WordType[] => words.map((el) => {
+  const { name, value, properties } = el;
+  const finalWord: VisualizationTypes.WordType = {
+    name: name[0],
+    value: +value[0]
+  };
+  if (properties) {
+    finalWord.properties = properties;
+  }
+  return finalWord;
+});
 
 const wordCloudExtractorXml = (
-  xmlData: Record<string, unknown>,
+  xmlData: TransformerTypes.XMLVisualizationDetails,
   allFileDetails: boolean
 ) => {
   const {
-    name, description, tags, type, data, words
-  } = xmlData.root as Record<
-    string,
-    unknown
-  >;
-  const finalData = {
+    name, description, tags, type, data: rootData
+  } = xmlData.root;
+  const { words } = rootData[0] as TransformerTypes.XMLWordcloudData;
+  const data = {
     data: {
-      words: allFileDetails
-        ? wordCloudWordExtractorXml(
-          (data as Record<string, unknown>[])[0].words as Record<
-            string,
-            unknown
-          >[]
-        )
-        : wordCloudWordExtractorXml(words as Record<string, unknown>[])
+      words: wordCloudWordExtractorXml(words)
     }
   };
-  return allFileDetails
-    ? {
-      ...finalData,
+  if (allFileDetails) {
+    return {
+      ...data,
       ...{
-        name: (name as string[])[0] as string,
-        description: (description as string[])[0] as string,
-        tags: tags as string[],
-        type: type as string
+        name: name[0],
+        description: description ? description[0] : '',
+        tags,
+        type: type[0]
       }
-    }
-    : finalData;
+    };
+  }
+  return data;
 };
 
 export { wordCloudExtractorXml, wordCloudTransformer, wordCloudExtractorCsvOrExcel };

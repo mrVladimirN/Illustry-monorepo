@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <root>
+  <data>
     <nodes>
       <category>1</category>
       <name>Node1</name>
@@ -11,6 +12,7 @@
     <nodes>
       <category>3</category>
       <name>Node3</name>
+      <properties>big prop</properties>
     </nodes>
     <links>
       <source>Node1</source>
@@ -22,4 +24,5 @@
       <target>Node3</target>
       <value>1</value>
     </links>
+  </data>
 </root>

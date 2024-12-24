@@ -1,80 +1,80 @@
-import { VisualizationTypes } from '@illustry/types';
+import { TransformerTypes, VisualizationTypes } from '@illustry/types';
 
-const matrixLabelExtractorXml = (labels: Record<string, unknown>[]) => labels.map((el: Record<string, unknown>) => ({
-  name: (el.name as string[])[0],
-  value:
-    typeof (el.value as string[])[0] === 'string'
-      ? +(el.value as string[])[0]
-      : (el.value as string[])[0],
-  properties:
-    el.properties && (el.properties as Record<string, unknown>[])
-      ? (el.properties as Record<string, unknown>[])
-      : undefined
-}));
+const labelExtractorXml = (labels: TransformerTypes.XMLLabel[]) => labels.map((el) => {
+  const {
+    name, value, properties
+  } = el;
+  const finalLabel: VisualizationTypes.Label = {
+    name: name[0],
+    value: +value[0]
+  };
+  if (properties) {
+    finalLabel.properties = properties;
+  }
+  return finalLabel;
+});
 
-// eslint-disable-next-line max-len
-const matrixLinkExtractorXml = (links: Record<string, unknown>[]): VisualizationTypes.Link[] => links.map((el: Record<string, unknown>) => ({
-  source: (el.source as string[])[0],
-  target: (el.target as string[])[0],
-  value:
-      typeof (el.value as string[])[0] === 'string'
-        ? +(el.value as string[])[0]
-        : (el.value as string[])[0],
-  properties:
-      el.properties && (el.properties as Record<string, unknown>[])
-        ? (el.properties as Record<string, unknown>[])
-        : undefined
-})) as unknown as VisualizationTypes.Link[];
+const nodeExtractorXml = (
+  nodes: TransformerTypes.XMLMatrixNode[]
+): VisualizationTypes.Node[] => nodes.map((el) => {
+  const {
+    name, category, labels
+  } = el;
+  const finalNode: VisualizationTypes.Node = {
+    name: name[0],
+    category: category[0]
+  };
+  if (labels) {
+    finalNode.labels = labelExtractorXml(labels);
+  }
+  return finalNode;
+});
 
-// eslint-disable-next-line max-len
-const matrixNodeExtractorXml = (nodes: Record<string, unknown>[]): VisualizationTypes.Node[] => nodes.map((el: Record<string, unknown>) => ({
-  name: (el.name as string[])[0],
-  category: (el.category as string[])[0],
-  properties:
-    el.properties && (el.properties as Record<string, unknown>[])
-      ? (el.properties as Record<string, unknown>[])
-      : undefined,
-  labels: matrixLabelExtractorXml(el.labels as Record<string, unknown>[])
-})) as unknown as VisualizationTypes.Node[];
+const linkExtractorXml = (
+  links: TransformerTypes.XMLMatrixLink[]
+): VisualizationTypes.Link[] => links.map((el) => {
+  const {
+    source, target, value, properties
+  } = el;
+  const finalLink: VisualizationTypes.Link = {
+    source: source[0],
+    target: target[0],
+    value: +value[0]
+  };
+  if (properties) {
+    finalLink.properties = properties;
+  }
+  return finalLink;
+});
 
 const matrixExtractorXml = (
-  xmlData: Record<string, unknown>,
+  xmlData: TransformerTypes.XMLVisualizationDetails,
   allFileDetails: boolean
-) => {
+): VisualizationTypes.VisualizationCreate | { data: VisualizationTypes.NodeLinkData } => {
   const {
-    name, description, tags, type, data, nodes, links
-  } = xmlData.root as Record<string, unknown>;
-  const finalData = {
+    name, description, tags, type, data: rootData
+  } = xmlData.root;
+  const {
+    nodes, links
+  } = rootData[0] as TransformerTypes.XMLMatrixData;
+  const data = {
     data: {
-      nodes: allFileDetails
-        ? matrixNodeExtractorXml(
-          (data as Record<string, unknown>[])[0].nodes as Record<
-            string,
-            unknown
-          >[]
-        )
-        : matrixNodeExtractorXml(nodes as Record<string, unknown>[]),
-      links: allFileDetails
-        ? matrixLinkExtractorXml(
-          (data as Record<string, unknown>[])[0].links as Record<
-            string,
-            unknown
-          >[]
-        )
-        : matrixLinkExtractorXml(links as Record<string, unknown>[])
+      nodes: nodeExtractorXml(nodes),
+      links: linkExtractorXml(links)
     }
   };
-  return allFileDetails
-    ? {
-      ...finalData,
+  if (allFileDetails) {
+    return {
+      ...data,
       ...{
-        name: (name as string[])[0] as string,
-        description: (description as string[])[0] as string,
-        tags: tags as string[],
-        type: type as string
+        name: name[0],
+        description: description ? description[0] : '',
+        tags,
+        type: type[0]
       }
-    }
-    : finalData;
+    };
+  }
+  return data;
 };
 
 export default matrixExtractorXml;

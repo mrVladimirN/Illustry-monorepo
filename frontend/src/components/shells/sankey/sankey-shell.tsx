@@ -36,7 +36,7 @@ const SankeyGraphShellView = ({
           fullScreen={fullScreen}
           options={options}
           nodes={nodes}
-          links={newLinks}
+          links={newLinks as VisualizationTypes.Link[]}
           legend={legend}
         />
       ) : (
@@ -45,7 +45,7 @@ const SankeyGraphShellView = ({
             fullScreen={fullScreen}
             options={options}
             nodes={nodes}
-            links={newLinks}
+            links={newLinks as VisualizationTypes.Link[]}
             legend={legend}
           />
         </>

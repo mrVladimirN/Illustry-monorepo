@@ -9,8 +9,8 @@ import { scatterTransformer } from './transformers/scatterTransformer';
 
 const transformerProvider = (
   type: VisualizationTypes.VisualizationTypesEnum,
-  mapping: Record<string, string>,
-  values: string[]| number[],
+  mapping: { [key: string]: string },
+  values: (string | number)[],
   allFileDetails: boolean
 ) => {
   switch (type) {

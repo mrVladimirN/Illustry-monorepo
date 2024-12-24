@@ -1,44 +1,48 @@
-import { VisualizationTypes } from '@illustry/types';
+import { TransformerTypes, VisualizationTypes } from '@illustry/types';
 import { visualizationDetailsExtractor, toStringWithDefault } from '../../../../utils/helper';
 
 const pieChartFunnelTransformer = (
-  mapping: Record<string, unknown>,
-  values: string[] | number[],
+  mapping: { [key: string]: string },
+  values: (string | number)[],
   allFileDetails: boolean
-) => {
-  const baseValues = {
+): TransformerTypes.FullPieChartValuesDetails | TransformerTypes.SimplePieChartValuesDetails => {
+  const { names, values: mValues } = mapping;
+  const computedValues: TransformerTypes.PieFunnelChartValuesType = {
     name:
-      typeof values[Number(mapping.names)] === 'string'
-        ? values[Number(mapping.names)]
-        : toStringWithDefault(values[Number(mapping.names)]),
+      typeof values[+names] === 'string'
+        ? values[+names] as string
+        : toStringWithDefault(values[+names]),
     value:
-      typeof values[Number(mapping.values)] === 'string'
-        ? +(values[Number(mapping.values)] as string)
-        : values[Number(mapping.values)]
+      typeof values[+mValues] === 'string'
+        ? +(values[+mValues] as string)
+        : values[+mValues] as number
   };
-  const visualizationDetails = visualizationDetailsExtractor(mapping, values);
-  return allFileDetails
-    ? {
-      ...{ values: baseValues },
-      ...visualizationDetails
-    }
-    : { values: baseValues };
+  if (allFileDetails) {
+    const { visualizationDescription, visualizationName, visualizationTags } = visualizationDetailsExtractor(mapping, values);
+    const fullComputedValues: TransformerTypes.FullPieChartValuesDetails = {
+      values: computedValues,
+      visualizationDescription,
+      visualizationName,
+      visualizationTags
+    };
+    return fullComputedValues;
+  }
+  return { values: computedValues };
 };
 
 const pieChartFunnelExtractorCsvOrExcel = (
-  data: Record<string, Record<string, number>>[]
+  data: TransformerTypes.FullPieChartValuesDetails[] | TransformerTypes.SimplePieChartValuesDetails[]
 ): VisualizationTypes.PieChartData => {
   const transformedData = data.reduce(
     (result, item) => {
-      let pieChartFunnelData;
-      const { name, value } = item.values as Record<string, unknown>;
-      pieChartFunnelData = (result.values as Record<string, number>)[name as string] === value
-        || null;
+      let pieChartFunnelData = null;
+      const { name, value } = item.values;
+      pieChartFunnelData = (result.values as Record<string, number>)[name] === value;
       if (!pieChartFunnelData) {
         pieChartFunnelData = { name, value };
         if (pieChartFunnelData.name && pieChartFunnelData.value) {
           // eslint-disable-next-line no-param-reassign
-          result.values[`${pieChartFunnelData.name as string}`] = pieChartFunnelData.value as number;
+          (result.values as Record<string, number>)[`${pieChartFunnelData.name as string}`] = pieChartFunnelData.value;
         }
       }
       return result;
@@ -46,17 +50,19 @@ const pieChartFunnelExtractorCsvOrExcel = (
 
     { values: {} }
   );
-  return transformedData as unknown as VisualizationTypes.PieChartData;
+  return transformedData;
 };
 
 const pieChartFunnelValuesExtractorXml = (
-  values: Record<string, unknown>[]
+  values: {
+    [key: string]: string[];
+}[]
 ) => {
   const transformedData = values.map((el) => {
-    const transformedValues: Record<string, number> = {};
+    const transformedValues: { [key: string]: number } = {};
 
     Object.keys(el).forEach((key) => {
-      transformedValues[key] = +(el[key] as string[])[0];
+      transformedValues[key] = +el[key][0];
     });
 
     return {
@@ -68,35 +74,30 @@ const pieChartFunnelValuesExtractorXml = (
 };
 
 const pieChartFunnelExtractorXml = (
-  xmlData: Record<string, unknown>,
+  xmlData: TransformerTypes.XMLVisualizationDetails,
   allFileDetails: boolean
-) => {
+): VisualizationTypes.VisualizationCreate | { data: VisualizationTypes.PieChartData } => {
   const {
-    name, description, tags, type, data, values
-  } = xmlData.root as Record<string, unknown>;
-  const finalData = {
+    name, description, tags, type, data: rootData
+  } = xmlData.root;
+  const { values } = rootData[0] as TransformerTypes.XMLPieChartFunnelData;
+  const data: { data: VisualizationTypes.FunnelData | VisualizationTypes.PieChartData } = {
     data: {
-      values: allFileDetails
-        ? pieChartFunnelValuesExtractorXml(
-          (data as Record<string, unknown>[])[0].values as Record<
-            string,
-            unknown
-          >[]
-        )
-        : pieChartFunnelValuesExtractorXml(values as Record<string, unknown>[])
+      values: pieChartFunnelValuesExtractorXml(values)
     }
   };
-  return allFileDetails
-    ? {
-      ...finalData,
+  if (allFileDetails) {
+    return {
+      ...data,
       ...{
-        name: (name as string[])[0] as string,
-        description: (description as string[])[0] as string,
-        tags: tags as string[],
-        type: type as string
+        name: name[0],
+        description: description ? description[0] : '',
+        tags,
+        type: type[0]
       }
-    }
-    : finalData;
+    };
+  }
+  return data;
 };
 
 export { pieChartFunnelTransformer, pieChartFunnelExtractorCsvOrExcel, pieChartFunnelExtractorXml };

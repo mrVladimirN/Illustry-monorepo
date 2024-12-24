@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <root>
+<data>
   <headers>Mon</headers>
   <headers>Tue</headers>
   <headers>Wed</headers>
@@ -37,4 +38,5 @@
     <Statistic_4>330</Statistic_4>
     <Statistic_4>320</Statistic_4>
   </values>
+  </data>
 </root>

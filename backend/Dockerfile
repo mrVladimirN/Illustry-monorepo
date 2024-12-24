@@ -23,8 +23,6 @@ COPY --from=builder /illustry/build-dist /illustry/
 
 RUN rm -rf /usr/illustry/src
 
-RUN npm install xlsx-stream-reader@1.1.1
-
 ENV ILLUSTRY_PORT=7001
 
 EXPOSE $ILLUSTRY_PORT

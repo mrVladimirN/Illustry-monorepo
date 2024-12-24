@@ -143,13 +143,19 @@ describe("project CRUD", () => {
       .getBZL()
       .ProjectBZL.findOne({ name: "Test_Project2" });
 
-    // Check if project is not null before accessing its properties
     expect(project).not.toBeNull();
     if (project) {
       expect(project.createdAt).toBeDefined();
       expect(project.updatedAt).toBeDefined();
       expect(project.isActive).toBe(false);
       expect(project).toMatchObject(expectedProject);
+    }
+    try {
+      await factory
+        .getBZL()
+        .ProjectBZL.findOne({ name: "Test_Project50000" });
+    } catch (err) {
+      expect((err as Error).message).toBe('No project was found with name Test_Project50000')
     }
   });
 
@@ -215,6 +221,22 @@ describe("project CRUD", () => {
     if (projects5.projects && projects5.projects.length > 0) {
       expect((projects5.projects[0] as ProjectTypes.ProjectType)).toMatchObject(expectedProject1);
     }
+    const projects6: ProjectTypes.ExtendedProjectType = await factory
+      .getBZL()
+      .ProjectBZL.browse({
+        page: 1,
+        per_page:1
+      });
+
+    expect(projects6.projects?.length).toBe(1);
+    const projects7: ProjectTypes.ExtendedProjectType = await factory
+      .getBZL()
+      .ProjectBZL.browse({
+        page: 1,
+      });
+
+    expect(projects7.projects?.length).toBe(3);
+    
   });
 
   it("deletes a project", async () => {

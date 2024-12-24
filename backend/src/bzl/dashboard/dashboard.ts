@@ -24,17 +24,17 @@ class DashboardBZL implements GenericTypes.BaseBZL<
   }
 
   async create(dashboard: DashboardTypes.DashboardCreate): Promise<DashboardTypes.DashboardType> {
+    const projectBZL = Factory.getInstance().getBZL().ProjectBZL;
+
+    const { projects } = await projectBZL.browse({ isActive: true } as ProjectTypes.ProjectFilter);
+
+    if (!projects || projects.length === 0) {
+      throw new Error('No active project');
+    }
+
+    const projectName = projects[0].name;
+
     try {
-      const projectBZL = Factory.getInstance().getBZL().ProjectBZL;
-
-      const { projects } = await projectBZL.browse({ isActive: true } as ProjectTypes.ProjectFilter);
-
-      if (!projects || projects.length === 0) {
-        throw new Error('No active project');
-      }
-
-      const projectName = projects[0].name;
-
       return await this.dbaccInstance.Dashboard.create({ ...dashboard, projectName });
     } catch (err) {
       throw new DuplicatedElementError(

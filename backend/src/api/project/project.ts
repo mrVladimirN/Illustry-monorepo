@@ -16,8 +16,7 @@ const create = async (
       name,
       type,
       description,
-      tags,
-      data
+      tags
     } = request.body;
 
     const project: ProjectTypes.ProjectCreate = {
@@ -31,11 +30,10 @@ const create = async (
       projectName,
       type,
       description,
-      tags,
-      data
+      tags
     };
 
-    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.projectCreateSchema, project);
+    ValidatorSchemas.validateWithSchema<ProjectTypes.ProjectCreate>(ValidatorSchemas.projectCreateSchema, project);
 
     await Factory.getInstance().getBZL().ProjectBZL.create(project);
 
@@ -44,7 +42,9 @@ const create = async (
       && visualization.type
       && visualization.projectName
     ) {
-      ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.visualizationTypeSchema, visualization);
+      ValidatorSchemas.validateWithSchema<
+        VisualizationTypes.VisualizationCreate
+      >(ValidatorSchemas.visualizationDataSchema, visualization);
       await Factory.getInstance().getBZL().VisualizationBZL.createOrUpdate(visualization);
     }
 
@@ -75,8 +75,8 @@ const update = async (
       isActive
     };
 
-    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.projectUpdateSchema, project);
-    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.projectFilterSchema, projectFilter);
+    ValidatorSchemas.validateWithSchema<ProjectTypes.ProjectUpdate>(ValidatorSchemas.projectUpdateSchema, project);
+    ValidatorSchemas.validateWithSchema<ProjectTypes.ProjectFilter>(ValidatorSchemas.projectFilterSchema, projectFilter);
 
     const data = await Factory.getInstance()
       .getBZL()
@@ -101,7 +101,7 @@ const findOne = async (
       name
     };
 
-    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.projectFilterSchema, projectFilter);
+    ValidatorSchemas.validateWithSchema<ProjectTypes.ProjectFilter>(ValidatorSchemas.projectFilterSchema, projectFilter);
 
     const data = await Factory.getInstance()
       .getBZL()
@@ -128,7 +128,7 @@ const _delete = async (
       name
     };
 
-    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.projectFilterSchema, projectFilter);
+    ValidatorSchemas.validateWithSchema<ProjectTypes.ProjectFilter>(ValidatorSchemas.projectFilterSchema, projectFilter);
 
     const data = await Factory.getInstance()
       .getBZL()
@@ -163,7 +163,7 @@ const browse = async (
       per_page: perPage
     };
 
-    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.projectFilterSchema, projectFilter);
+    ValidatorSchemas.validateWithSchema<ProjectTypes.ProjectFilter>(ValidatorSchemas.projectFilterSchema, projectFilter);
 
     const data = await Factory.getInstance()
       .getBZL()

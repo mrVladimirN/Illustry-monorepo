@@ -59,7 +59,7 @@ class Dashboard implements GenericTypes.BaseLib<
     if ((query.$and as Array<object>).length === 0) delete query.$and;
 
     let skip: number = 0;
-    if (filter && filter.page && filter.page > 1) {
+    if (filter && filter.page && filter.page >= 1) {
       if (filter.per_page) {
         skip = (filter.page - 1) * filter.per_page;
       } else {
@@ -132,21 +132,21 @@ class Dashboard implements GenericTypes.BaseLib<
     };
   }
 
-  async updateMany(
-    filter: UtilTypes.ExtendedMongoQuery,
-    data: Record<string, unknown>
-  ): Promise<number> {
-    const finalData = { ...data };
+  // async updateMany(
+  //   filter: UtilTypes.ExtendedMongoQuery,
+  //   data: Record<string, unknown>
+  // ): Promise<number> {
+  //   const finalData = { ...data };
 
-    if (!finalData.updatedAt) {
-      finalData.updatedAt = new Date();
-    }
-    const result = await this.modelInstance.DashboardModel.updateMany(
-      filter.query,
-      data
-    ).exec();
-    return result.modifiedCount;
-  }
+  //   if (!finalData.updatedAt) {
+  //     finalData.updatedAt = new Date();
+  //   }
+  //   const result = await this.modelInstance.DashboardModel.updateMany(
+  //     filter.query,
+  //     data
+  //   ).exec();
+  //   return result.modifiedCount;
+  // }
 
   update(
     filter: UtilTypes.ExtendedMongoQuery,

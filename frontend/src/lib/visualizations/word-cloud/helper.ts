@@ -1,7 +1,7 @@
 import { VisualizationTypes } from '@illustry/types';
 
 const computePropertiesForToolTip = (
-  properties: Record<string, unknown>,
+  properties: string | Record<string, string | number>,
   value?: number | string
 ) => {
   let prop = '';

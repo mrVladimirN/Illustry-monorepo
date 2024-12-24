@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <root>
+  <data>
     <words>
       <name>Word1</name>
       <value>390</value>
@@ -15,6 +16,7 @@
     <words>
       <name>Word4</name>
       <value>1000</value>
+      <properties>big prop</properties>
     </words>
     <words>
       <name>Word5</name>
@@ -28,4 +30,5 @@
       <name>Word7</name>
       <value>712</value>
     </words>
+  </data>
 </root>

@@ -1,4 +1,4 @@
-import { VisualizationTypes } from '@illustry/types';
+import { VisualizationTypes, TransformerTypes } from '@illustry/types';
 import { toStringWithDefault, visualizationDetailsExtractor } from '../../../../utils/helper';
 
 const reformatDate = (date: string): string | null => {
@@ -33,64 +33,75 @@ const excelDateToJSDate = (excelDate: number): string | null => {
   const millisecondsSinceExcelEpoch = daysSinceExcelEpoch * millisecondsPerDay;
   const jsDate = new Date(millisecondsSinceExcelEpoch);
 
-  if (!Number.isNaN(jsDate.getTime())) {
-    // eslint-disable-next-line max-len
-    return `${jsDate.getFullYear()}-${String(jsDate.getMonth() + 1).padStart(2, '0')}-${String(jsDate.getDate()).padStart(2, '0')}`;
-  }
-  return null;
+  // eslint-disable-next-line max-len
+  return `${jsDate.getFullYear()}-${String(jsDate.getMonth() + 1).padStart(2, '0')}-${String(jsDate.getDate()).padStart(2, '0')}`;
 };
 
 const calendarTransformer = (
-  mapping: Record<string, unknown>,
-  values: string[] | number[],
+  mapping: { [key: string]: string },
+  values: (string | number)[],
   allFileDetails: boolean
-) => {
-  const baseValues = {
+): TransformerTypes.FullCalendarDetails | TransformerTypes.SimpleCalendarDetails => {
+  const {
+    dates, values: mValues, categories, properties
+  } = mapping;
+  const calendar: TransformerTypes.CalendarType = {
     date:
-      typeof values[Number(mapping.dates)] === 'string'
-        ? reformatDate(values[Number(mapping.dates)] as string)
-        : excelDateToJSDate(values[Number(mapping.dates)] as number),
+      typeof values[+dates] === 'string'
+        ? reformatDate(values[+dates] as string)
+        : excelDateToJSDate(values[+dates] as number),
     value:
-      typeof values[Number(mapping.values)] === 'string'
-        ? +(values[Number(mapping.values)] as string)
-        : values[Number(mapping.values)],
+      typeof values[+mValues] === 'string'
+        ? +(values[+mValues])
+        : values[+mValues] as number,
     category:
-      typeof values[Number(mapping.categories)] === 'string'
-        ? values[Number(mapping.categories)]
-        : toStringWithDefault(values[Number(mapping.categories)]),
+      typeof values[+categories] === 'string'
+        ? values[+categories] as string
+        : toStringWithDefault(values[+categories]),
     properties:
-      typeof values[Number(mapping.properties)] === 'string'
-        ? values[Number(mapping.properties)]
-        : toStringWithDefault(values[Number(mapping.properties)])
+      typeof values[+properties] === 'string'
+        ? values[+properties] as string
+        : toStringWithDefault(values[+properties])
   };
-  const visualizationDetails = visualizationDetailsExtractor(mapping, values);
-  return allFileDetails
-    ? { ...{ calendar: baseValues }, ...visualizationDetails }
-    : { calendar: baseValues };
+  if (allFileDetails) {
+    const { visualizationDescription, visualizationName, visualizationTags } = visualizationDetailsExtractor(mapping, values);
+    const fullCalendarDetails: TransformerTypes.FullCalendarDetails = {
+      calendar,
+      visualizationDescription,
+      visualizationName,
+      visualizationTags
+    };
+    return fullCalendarDetails;
+  }
+  return { calendar };
 };
 
 const calendarExtractorCsvOrExcel = (
-  data: Record<string, unknown>[]
+  data: TransformerTypes.SimpleCalendarDetails[] | TransformerTypes.FullCalendarDetails[]
 ): VisualizationTypes.CalendarData => {
   const transformedData = data.reduce(
     (result, item) => {
-      const calendarData = item.calendar as Record<string, unknown>;
-      let calendar = (result.calendar as VisualizationTypes.CalendarType[]).find(
-        (n: VisualizationTypes.CalendarType) => n.date === calendarData.date && n.category === calendarData.category
-      );
-
+      const calendarData = item.calendar;
+      const {
+        category, date, value, properties
+      } = calendarData;
+      let calendar = null;
+      if (result.calendar) {
+        calendar = result.calendar.find(
+          (n: VisualizationTypes.CalendarType) => n.date === date && n.category === category
+        );
+      }
       if (!calendar) {
         calendar = {
-          category: calendarData.category,
-          date: calendarData.date,
-          value: calendarData.value,
-          properties: calendarData.properties
+          category,
+          date,
+          value,
+          properties
         } as VisualizationTypes.CalendarType;
-
         if (
-          calendar.category
-          && calendar.date
-          && calendar.value
+          category
+          && date
+          && value
         ) {
           (result.calendar as VisualizationTypes.CalendarType[]).push(calendar);
         }
@@ -100,51 +111,55 @@ const calendarExtractorCsvOrExcel = (
     },
     { calendar: [] }
   );
-  return transformedData as unknown as VisualizationTypes.CalendarData;
+  return transformedData;
 };
 
 const calendarEventExtractorXml = (
-  calendar: Record<string, unknown>[]
-): VisualizationTypes.CalendarType[] => calendar.map((el: Record<string, unknown>) => ({
-  category: typeof (el.value as string[])[0] === 'string'
-    ? (el.category as string[])[0]
-    : (typeof (el.value as string[])[0] === 'string').toString(),
-  date: reformatDate((el.date as string)[0]),
-  value: typeof (el.value as string[])[0] === 'string'
-    ? +(el.value as string[])[0]
-    : (el.value as string[])[0],
-  properties: el.properties && (el.properties as Record<string, unknown>[]).length
-    ? (el.properties as string[])[0]
-    : undefined
-})) as VisualizationTypes.CalendarType[];
+  calendar: TransformerTypes.XMLCalendar[]
+): VisualizationTypes.CalendarType[] => calendar.map((el) => {
+  const {
+    category, date, value, properties
+  } = el;
+  const finalCalendar: VisualizationTypes.CalendarType = {
+    category: category[0],
+    date: reformatDate(date[0]) as string,
+    value: +value[0]
+  };
+  if (properties) {
+    finalCalendar.properties = properties;
+  }
+  return finalCalendar;
+});
 
 const calendarExtractorXml = (
-  xmlData: Record<string, unknown>,
+  xmlData: TransformerTypes.XMLVisualizationDetails,
   allFileDetails: boolean
-) => {
+): VisualizationTypes.VisualizationCreate | { data: VisualizationTypes.CalendarData } => {
   const {
-    name, description, tags, type, data, calendar
-  } = xmlData.root as Record<string, unknown>;
-  const finalData = {
+    name, description, tags, type, data: rootData
+  } = xmlData.root;
+  const {
+    calendar
+  } = rootData[0] as TransformerTypes.XMLCalendarData;
+  const data = {
     data: {
-      calendar: allFileDetails
-        ? calendarEventExtractorXml(
-          ((data as Record<string, unknown>[])[0].calendar) as Record<string, unknown>[]
-        )
-        : calendarEventExtractorXml(calendar as Record<string, unknown>[])
+      calendar: calendarEventExtractorXml(calendar)
     }
   };
-  return allFileDetails
-    ? {
-      ...finalData,
+  if (allFileDetails) {
+    return {
+      ...data,
       ...{
-        name: (name as string[])[0],
-        description: (description as string[])[0],
-        tags: tags as string[],
-        type: type as string
+        name: name[0],
+        description: description ? description[0] : '',
+        tags,
+        type: type[0]
       }
-    }
-    : finalData;
+    };
+  }
+  return data;
 };
 
-export { calendarTransformer, calendarExtractorCsvOrExcel, calendarExtractorXml };
+export {
+  calendarTransformer, calendarExtractorCsvOrExcel, calendarExtractorXml, reformatDate, excelDateToJSDate
+};

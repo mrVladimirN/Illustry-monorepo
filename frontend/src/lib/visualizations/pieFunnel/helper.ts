@@ -4,9 +4,10 @@ const computeValues = (
   data: VisualizationTypes.PieChartData | VisualizationTypes.FunnelData,
   colors: string[]
 ) => {
-  const keys = Object.keys(data.values);
+  const { values } = data;
+  const keys = Object.keys(values);
   return keys.map((key, index) => ({
-    value: data.values[key],
+    value: values[key],
     name: key,
     itemStyle: { color: colors.length >= index ? colors[index] : undefined }
   }));
