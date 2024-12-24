@@ -198,7 +198,6 @@ class VisualizationBZL implements GenericTypes.BaseBZL<
     );
 
     const { dashboards } = await this.dbaccInstance.Dashboard.browse(dashboardUpdateFilter, true);
-    
     if (dashboards) {
       // eslint-disable-next-line no-restricted-syntax
       for (const dashboard of dashboards) {
