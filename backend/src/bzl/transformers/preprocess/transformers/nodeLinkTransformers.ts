@@ -1,45 +1,55 @@
-import { VisualizationTypes } from '@illustry/types';
+import { TransformerTypes, VisualizationTypes } from '@illustry/types';
 import { visualizationDetailsExtractor, toStringWithDefault } from '../../../../utils/helper';
 
 const nodeLinkTransformer = (
-  mapping: Record<string, unknown>,
-  values: string[] | number[],
+  mapping: { [key: string]: string },
+  values: (string | number)[],
   allFileDetails: boolean
-) => {
-  const baseValues = {
+): TransformerTypes.FullNodeLinkDetails | TransformerTypes.SimpleNodeLinkDetails => {
+  const {
+    nodes, categories, properties, sources, targets, values: mValues
+  } = mapping;
+  const nodeLink: TransformerTypes.NodeLinkType = {
     name:
-      typeof values[Number(mapping.nodes)] === 'string'
-        ? values[Number(mapping.nodes)]
-        : toStringWithDefault(values[Number(mapping.nodes)]),
+      typeof values[+nodes] === 'string'
+        ? values[+nodes] as string
+        : toStringWithDefault(values[+nodes]),
     category:
-      typeof values[Number(mapping.categories)] === 'string'
-        ? values[Number(mapping.categories)]
-        : toStringWithDefault(values[Number(mapping.categories)]),
+      typeof values[+categories] === 'string'
+        ? values[+categories] as string
+        : toStringWithDefault(values[+categories]),
     properties:
-      typeof values[Number(mapping.properties)] === 'string'
-        ? values[Number(mapping.properties)]
-        : toStringWithDefault(values[Number(mapping.properties)]),
+      typeof values[+properties] === 'string'
+        ? values[+properties] as string
+        : toStringWithDefault(values[+properties]),
     source:
-      typeof values[Number(mapping.sources)] === 'string'
-        ? values[Number(mapping.sources)]
-        : toStringWithDefault(values[Number(mapping.sources)]),
+      typeof values[+sources] === 'string'
+        ? values[+sources] as string
+        : toStringWithDefault(values[+sources]),
     target:
-      typeof values[Number(mapping.targets)] === 'string'
-        ? values[Number(mapping.targets)]
-        : toStringWithDefault(values[Number(mapping.targets)]),
+      typeof values[+targets] === 'string'
+        ? values[+targets] as string
+        : toStringWithDefault(values[+targets]),
     value:
-      typeof values[Number(mapping.values)] === 'string'
-        ? +(values[Number(mapping.values)] as string)
-        : values[Number(mapping.values)]
+      typeof values[+mValues] === 'string'
+        ? +(values[+mValues] as string)
+        : values[+mValues]
   };
-  const visualizationDetails = visualizationDetailsExtractor(mapping, values);
-  return allFileDetails
-    ? { ...{ nodeLink: baseValues }, ...visualizationDetails }
-    : { nodeLink: baseValues };
+  if (allFileDetails) {
+    const { visualizationDescription, visualizationName, visualizationTags } = visualizationDetailsExtractor(mapping, values);
+    const fullNodeLinkDetails: TransformerTypes.FullNodeLinkDetails = {
+      nodeLink,
+      visualizationDescription,
+      visualizationName,
+      visualizationTags
+    };
+    return fullNodeLinkDetails;
+  }
+  return { nodeLink };
 };
 
 const nodesLinksExtractorCsvOrExcel = (
-  data: Record<string, unknown>[]
+  data: TransformerTypes.FullNodeLinkDetails[] | TransformerTypes.SimpleNodeLinkDetails[]
 ): VisualizationTypes.NodeLinkData => {
   const transformedData = data.reduce(
     (result, item) => {
@@ -48,21 +58,20 @@ const nodesLinksExtractorCsvOrExcel = (
       let link;
       const {
         category, name, properties, source, target, value
-      } = nodeLink as Record<string, unknown>;
-      node = (result.nodes as VisualizationTypes.Node[]).find((n: VisualizationTypes.Node) => n.name === name);
-      link = (result.links as VisualizationTypes.Link[]).find(
+      } = nodeLink;
+      node = result.nodes.find((n: VisualizationTypes.Node) => n.name === name);
+      link = result.links.find(
         (n: VisualizationTypes.Link) => n.source === source && n.target === target
       );
       if (!node) {
         node = { name, category, properties } as VisualizationTypes.Node;
-        if (node.name && node.category) {
+        if (name && category) {
           (result.nodes as VisualizationTypes.Node[]).push(node);
         }
       }
       if (!link) {
         link = { source, target, value } as VisualizationTypes.Link;
-
-        if (link.source && link.target && typeof link.value === 'number') {
+        if (source && target && typeof value === 'number') {
           (result.links as VisualizationTypes.Link[]).push(link);
         }
       }
@@ -70,69 +79,68 @@ const nodesLinksExtractorCsvOrExcel = (
     },
     { nodes: [], links: [] }
   );
-  return transformedData as unknown as VisualizationTypes.NodeLinkData;
+  return transformedData;
 };
 
-const linkExtractorXml = (
-  nodes: Record<string, unknown>[]
-): VisualizationTypes.Node[] => nodes.map((el: Record<string, unknown>) => ({
-  name: (el.name as string[])[0],
-  category: (el.category as string[])[0],
-  properties:
-    el.properties && (el.properties as Record<string, unknown>[]).length
-      ? (el.properties as string[])[0]
-      : undefined
-})) as unknown as VisualizationTypes.Node[];
-
 const nodeExtractorXml = (
-  links: Record<string, unknown>[]
-): VisualizationTypes.Link[] => links.map((el: Record<string, unknown>) => ({
-  source: (el.source as string[])[0],
-  target: (el.target as string[])[0],
-  value:
-    typeof (el.value as string[])[0] === 'string'
-      ? +(el.value as string[])[0]
-      : (el.value as string[])[0]
-})) as unknown as VisualizationTypes.Link[];
+  nodes: TransformerTypes.XMLNode[]
+): VisualizationTypes.Node[] => nodes.map((el) => {
+  const { name, category, properties } = el;
+  const finalNode: VisualizationTypes.Node = {
+    name: name[0],
+    category: category[0]
+  };
+  if (properties) {
+    finalNode.properties = properties;
+  }
+  return finalNode;
+});
+
+const linkExtractorXml = (
+  links: TransformerTypes.XMLLink[]
+): VisualizationTypes.Link[] => links.map((el) => {
+  const {
+    source, target, value, properties
+  } = el;
+  const finalLink: VisualizationTypes.Link = {
+    source: source[0],
+    target: target[0],
+    value: +value[0]
+  };
+  if (properties) {
+    finalLink.properties = properties;
+  }
+  return finalLink;
+});
 
 const nodeLinksExtractorXml = (
-  xmlData: Record<string, unknown>,
+  xmlData: TransformerTypes.XMLVisualizationDetails,
   allFileDetails: boolean
-) => {
+): VisualizationTypes.VisualizationCreate | { data: VisualizationTypes.NodeLinkData } => {
   const {
-    name, description, tags, type, data, nodes, links
-  } = xmlData.root as Record<string, unknown>;
-  const finalData = {
+    name, description, tags, type, data: rootData
+  } = xmlData.root;
+  const {
+    nodes, links
+  } = rootData[0] as TransformerTypes.XMLNodeLinkData;
+  const data = {
     data: {
-      nodes: allFileDetails
-        ? linkExtractorXml(
-          (data as Record<string, unknown>[])[0].nodes as Record<
-            string,
-            unknown
-          >[]
-        )
-        : linkExtractorXml(nodes as Record<string, unknown>[]),
-      links: allFileDetails
-        ? nodeExtractorXml(
-          (data as Record<string, unknown>[])[0].links as Record<
-            string,
-            unknown
-          >[]
-        )
-        : nodeExtractorXml(links as Record<string, unknown>[])
+      nodes: nodeExtractorXml(nodes),
+      links: linkExtractorXml(links)
     }
   };
-  return allFileDetails
-    ? {
-      ...finalData,
+  if (allFileDetails) {
+    return {
+      ...data,
       ...{
-        name: (name as string[])[0] as string,
-        description: (description as string[])[0] as string,
-        tags: tags as string[],
-        type: type as string
+        name: name[0],
+        description: description ? description[0] : '',
+        tags,
+        type: type[0]
       }
-    }
-    : finalData;
+    };
+  }
+  return data;
 };
 
 export { nodeLinkTransformer, nodesLinksExtractorCsvOrExcel, nodeLinksExtractorXml };
