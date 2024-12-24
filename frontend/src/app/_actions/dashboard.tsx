@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 'use server';
 
 import 'dotenv/config';
@@ -19,7 +21,12 @@ const browseDashboards = async (filter?: DashboardTypes.DashboardFilter) => {
     },
     body: JSON.stringify(newFilter)
   });
-  return makeRequest<DashboardTypes.ExtendedDashboardType>(request, ['dashboards']);
+  try {
+    return makeRequest<DashboardTypes.ExtendedDashboardType>(request, ['dashboards']);
+  } catch (err) {
+    console.debug(err);
+    return null;
+  }
 };
 
 const deleteDashboard = async (dashboardName: string) => {
@@ -33,7 +40,12 @@ const deleteDashboard = async (dashboardName: string) => {
       name: dashboardName
     })
   });
-  return makeRequest<boolean>(request, ['dashboards']);
+  try {
+    return makeRequest<boolean>(request, ['dashboards']);
+  } catch (err) {
+    console.debug(err);
+    return err;
+  }
 };
 
 const updateDashboard = async (dashboard: DashboardTypes.DashboardUpdate) => {
@@ -45,8 +57,12 @@ const updateDashboard = async (dashboard: DashboardTypes.DashboardUpdate) => {
     },
     body: JSON.stringify(dashboard)
   });
-
-  return makeRequest<DashboardTypes.DashboardType>(request, ['dashboards']);
+  try {
+    return makeRequest<DashboardTypes.DashboardType>(request, ['dashboards']);
+  } catch (err) {
+    console.debug(err);
+    return err;
+  }
 };
 
 const createDashboard = async (dashboard: DashboardTypes.DashboardCreate) => {
@@ -63,7 +79,12 @@ const createDashboard = async (dashboard: DashboardTypes.DashboardCreate) => {
     },
     body: JSON.stringify(newDashboard)
   });
-  return makeRequest<DashboardTypes.DashboardType>(request, ['dashboards']);
+  try {
+    return makeRequest<DashboardTypes.DashboardType>(request, ['dashboards']);
+  } catch (err) {
+    console.debug(err);
+    return err;
+  }
 };
 
 const findOneDashboard = async (dashboardName: string, fullVisualizations: boolean = false) => {
@@ -78,7 +99,12 @@ const findOneDashboard = async (dashboardName: string, fullVisualizations: boole
       body: JSON.stringify({ name: dashboardName, fullVisualizations })
     }
   );
-  return makeRequest<DashboardTypes.DashboardType>(request, ['dashboards']);
+  try {
+    return makeRequest<DashboardTypes.DashboardType>(request, ['dashboards']);
+  } catch (err) {
+    console.debug(err);
+    return null;
+  }
 };
 
 export {

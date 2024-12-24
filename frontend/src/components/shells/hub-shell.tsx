@@ -17,7 +17,7 @@ import MatrixShellView from './matrix/matrix-shell';
 import HierarchicalEdgeBundlingShellView from './hierarchical-edge-bundling/hierarchical-edge-bundling-shell';
 
 type HubShellProps = {
-  data?: VisualizationTypes.VisualizationType;
+  data?: VisualizationTypes.VisualizationType | null;
 } & WithFullScreen
   & WithLegend
   & WithFilter

@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 'use server';
 
 import 'dotenv/config';
@@ -24,7 +26,12 @@ const browseVisualizations = async (filter?: VisualizationTypes.VisualizationFil
       body: JSON.stringify(newFilter)
     }
   );
-  return makeRequest<VisualizationTypes.ExtendedVisualizationType>(request, ['visualizations']);
+  try {
+    return makeRequest<VisualizationTypes.ExtendedVisualizationType>(request, ['visualizations']);
+  } catch (err) {
+    console.debug(err);
+    return null;
+  }
 };
 
 const deleteVisualization = async (
@@ -41,7 +48,12 @@ const deleteVisualization = async (
       body: JSON.stringify(visualizationFilter)
     }
   );
-  return makeRequest<boolean>(request, ['visualizations']);
+  try {
+    return makeRequest<boolean>(request, ['visualizations']);
+  } catch (err) {
+    console.debug(err);
+    return err;
+  }
 };
 
 const createOrUpdateVisualization = async (
@@ -54,7 +66,12 @@ const createOrUpdateVisualization = async (
       body: form
     }
   );
-  return makeRequest<VisualizationTypes.VisualizationType>(request, ['visualizations']);
+  try {
+    return makeRequest<VisualizationTypes.VisualizationType>(request, ['visualizations']);
+  } catch (err) {
+    console.debug(err);
+    return err;
+  }
 };
 
 const findOneVisualization = async (
@@ -71,7 +88,12 @@ const findOneVisualization = async (
       body: JSON.stringify(visualizationFilter)
     }
   );
-  return makeRequest<VisualizationTypes.VisualizationType>(request, ['visualizations']);
+  try {
+    return makeRequest<VisualizationTypes.VisualizationType>(request, ['visualizations']);
+  } catch (err) {
+    console.debug(err);
+    return null;
+  }
 };
 
 export {

@@ -10,7 +10,7 @@ const upload = multer({
   limits: { fileSize: 100 * 1024 * 1024 }
 });
 const finalupload = upload.fields([{ name: 'file', maxCount: 10 }]);
-router.post('/api/visualization', finalupload, VisualizationAPI.createOrUpdate);
+router.post('/api/visualization', finalupload as any, VisualizationAPI.createOrUpdate);
 router.post('/api/visualizations', VisualizationAPI.browse);
 router.post('/api/visualization/:name', VisualizationAPI.findOne);
 router.delete('/api/visualization', VisualizationAPI._delete);
