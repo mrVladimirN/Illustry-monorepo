@@ -1,4 +1,4 @@
-import { VisualizationTypes } from '@illustry/types';
+import { VisualizationTypes, TransformerTypes } from '@illustry/types';
 
 const computeCategoriesCalendar = (calendarData: VisualizationTypes.CalendarType[]) => [
   ...new Set(
@@ -22,14 +22,17 @@ const computeLegendColors = (categories: string[], colors: string[]) => {
   return color;
 };
 
-const computeElementsCalendar = (element: VisualizationTypes.CalendarType) => [
-  element.date,
-  element.value ? element.value : 1,
-  element.category];
+const computeElementsCalendar = (element: VisualizationTypes.CalendarType) => {
+  const { date, value, category } = element;
+  return {
+    date,
+    value: value || 1,
+    category
+  };
+};
 
 const computePropertiesForToolTip = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  properties: any,
+  properties: string | Record<string, string | number> | null,
   value?: number | string
 ) => {
   let prop = '';
@@ -62,8 +65,7 @@ const computeCalendar = (
     )
   ];
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const groupedByYears = calendarData.reduce((group: any, event) => {
+  const groupedByYears = calendarData.reduce((group: { [key: string]: (TransformerTypes.CalendarType)[] }, event) => {
     const eventDate = new Date(event.date);
     const eventYear = eventDate.getFullYear();
 
@@ -76,6 +78,7 @@ const computeCalendar = (
     }
     return group;
   }, {});
+
   const series = Object.entries(groupedByYears).map(
     ([, events], index) => ({
       type: 'heatmap',

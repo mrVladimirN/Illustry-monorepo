@@ -1,15 +1,5 @@
-import { VisualizationTypes } from '@illustry/types';
+import { TransformerTypes, VisualizationTypes } from '@illustry/types';
 
-type ProcessedNode = {
-  name: string;
-  value: number,
-  itemStyle: {
-    color?: string;
-    borderColor?: string;
-  };
-  prop: object;
-  children: ProcessedNode[];
-}
 // TreeMap/Sunburst
 
 const findMaxDepth = (item: VisualizationTypes.HierarchyNode, depth: number, maxDepth: number): number => {
@@ -41,11 +31,12 @@ const computeCategories = (arr: VisualizationTypes.HierarchyNode[]): string[] =>
   const uniqueCategories = new Set<string>();
 
   function extractCategories(item: VisualizationTypes.HierarchyNode) {
-    uniqueCategories.add(item.category); // Add the category to the Set
+    const { category, children } = item;
+    uniqueCategories.add(category); // Add the category to the Set
 
-    if (item.children) {
+    if (children) {
       // Recursively extract categories from children
-      item.children.forEach((child) => extractCategories(child));
+      children.forEach((child) => extractCategories(child));
     }
   }
 
@@ -57,8 +48,7 @@ const computeCategories = (arr: VisualizationTypes.HierarchyNode[]): string[] =>
 };
 
 const computePropertiesForToolTip = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  properties: any,
+  properties: Record<string, string | number> | string,
   value?: number | string
 ) => {
   let prop = '';
@@ -98,19 +88,23 @@ const computeNodesHierarchy = (
     colorMapSchema.set(cat, colors[index] as string);
   });
   const processNode = (node: VisualizationTypes.HierarchyNode) => {
-    const processedNode: ProcessedNode = {
-      name: node.name,
-      value: node.value,
+    const {
+      name, value, category, properties, children
+    } = node;
+    const processedNode: TransformerTypes.NodeWithStyling = {
+      name,
+      value,
       itemStyle: {
-        color: colorMapSchema.get(node.category),
-        borderColor: colorMapSchema.get(node.category)
+        color: colorMapSchema.get(category),
+        borderColor: colorMapSchema.get(category)
       },
-      prop: computePropertiesForToolTip(node.properties, node.value) as unknown as object,
       children: []
     };
-
-    if (node.children) {
-      processedNode.children = node.children.map(processNode); // Recursively process children
+    if (properties) {
+      processedNode.prop = computePropertiesForToolTip(properties as string | Record<string, string | number>, value);
+    }
+    if (children) {
+      processedNode.children = children.map(processNode); // Recursively process children
     }
 
     return processedNode;
@@ -155,11 +149,12 @@ const computeUniqueValues = (arr: VisualizationTypes.HierarchyNode[]): number[] 
   const uniqueCategories = new Set<number>();
 
   function extractValues(item: VisualizationTypes.HierarchyNode) {
-    uniqueCategories.add(item.value); // Add the category to the Set
+    const { value, children } = item;
+    uniqueCategories.add(value); // Add the category to the Set
 
-    if (item.children) {
+    if (children) {
       // Recursively extract categories from children
-      item.children.forEach((child) => extractValues(child));
+      children.forEach((child) => extractValues(child));
     }
   }
 

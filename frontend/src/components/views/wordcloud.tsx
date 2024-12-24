@@ -27,7 +27,12 @@ const WordCloudView = ({ words, fullScreen }: WordCloudProp) => {
     tooltip: {
       trigger: 'item',
       triggerOn: 'mousemove',
-      formatter(params: { data: { properties: Record<string, unknown>; value: string | number | undefined; }; }) {
+      formatter(params: {
+        data: {
+          properties: string | Record<string, string | number>;
+          value: string | number | undefined;
+        };
+      }) {
         return computePropertiesForToolTip(
           params.data.properties,
           params.data.value

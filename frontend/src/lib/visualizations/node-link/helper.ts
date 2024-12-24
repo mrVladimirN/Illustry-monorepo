@@ -1,10 +1,4 @@
-/* eslint-disable no-return-assign */
-/* eslint-disable no-multi-assign */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable no-sequences */
-/* eslint-disable no-param-reassign */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { VisualizationTypes } from '@illustry/types';
+import { TransformerTypes, VisualizationTypes } from '@illustry/types';
 
 // Sankey transformers
 const computeCategoriesSankey = (nodes: VisualizationTypes.Node[]) => [
@@ -14,7 +8,7 @@ const computeCategoriesSankey = (nodes: VisualizationTypes.Node[]) => [
 ];
 
 const computePropertiesForToolTip = (
-  properties: Record<string, unknown>,
+  properties: string | Record<string, string | number>,
   value?: number | string
 ) => {
   let prop = '';
@@ -52,22 +46,36 @@ const computeNodesSankey = (
   categories.forEach((cat, index) => {
     colorMapSchema.set(cat, colors[index] as string);
   });
-  return nodes.map((node) => ({
-    name: node.name,
-    itemStyle: {
-      color: colorMapSchema.get(node.category),
-      borderColor: colorMapSchema.get(node.category)
-    },
-    prop: computePropertiesForToolTip((node.properties) as Record<string, unknown>)
-  }));
+  return nodes.map((node) => {
+    const { name, category, properties } = node;
+    const finalNode: TransformerTypes.NodeWithStyling = {
+      name,
+      itemStyle: {
+        color: colorMapSchema.get(category),
+        borderColor: colorMapSchema.get(category)
+      }
+    };
+    if (properties) {
+      finalNode.prop = computePropertiesForToolTip((properties as Record<string, string | number> | string));
+    }
+    return finalNode;
+  });
 };
 
-const computeLinksSankey = (links: VisualizationTypes.Link[]): VisualizationTypes.Link[] => links.map((link) => ({
-  source: link.source,
-  target: link.target,
-  value: link.value,
-  prop: computePropertiesForToolTip((link.properties) as Record<string, unknown>, link.value)
-}));
+const computeLinksSankey = (links: VisualizationTypes.Link[]) => links.map((link) => {
+  const {
+    source, target, value, properties
+  } = link;
+  const finalLink: TransformerTypes.LinkWithStyling = {
+    source,
+    target,
+    value
+  };
+  if (properties) {
+    finalLink.prop = computePropertiesForToolTip((properties as Record<string, string | number> | string), value);
+  }
+  return finalLink;
+});
 
 // HEB transformers
 
@@ -78,18 +86,21 @@ const computeNodesHEB = (
     itemStyle: { color: string | undefined };
   }[]
 ) => nodes.map((node) => {
-  const category = categories.find((cate) => cate.name === node.category);
-
-  return {
+  const { name, category: nCategory, properties } = node;
+  const category = categories.find((cate) => cate.name === nCategory);
+  const finalNode: TransformerTypes.NodeWithStyling = {
     ...node,
-    id: node.name,
-    prop: computePropertiesForToolTip((node.properties) as Record<string, unknown>),
+    id: name,
     label: {
       show: true,
       color: category?.itemStyle.color || '#000'
     },
     symbolSize: ''
   };
+  if (properties) {
+    finalNode.prop = computePropertiesForToolTip((properties as Record<string, string | number> | string));
+  }
+  return finalNode;
 });
 
 // FLG transformers
@@ -106,26 +117,36 @@ const computeNodesFLG = (
     name: string;
   }[]
 ) => nodes.map((node, index) => {
+  const { category: nCategory, name, properties } = node;
   const categoryIndex = categories.findIndex(
-    (category) => category.name === node.category
+    (category) => category.name === nCategory
   );
-  return {
+  const finalNode: TransformerTypes.NodeWithStyling = {
     id: index.toString(),
-    name: node.name,
-    prop: computePropertiesForToolTip((node.properties) as Record<string, unknown>),
+    name,
     category: categoryIndex
   };
+  if (properties) {
+    finalNode.prop = computePropertiesForToolTip((properties as Record<string, string | number> | string));
+  }
+  return finalNode;
 });
 
 const computeLinksFLGOrHEB = (links: VisualizationTypes.Link[], nodes: VisualizationTypes.Node[]) => links.map((link) => {
-  const source = nodes.findIndex((node) => node.name === link.source);
-  const target = nodes.findIndex((node) => node.name === link.target);
-  return {
+  const {
+    source: lSource, target: lTarget, value, properties
+  } = link;
+  const source = nodes.findIndex((node) => node.name === lSource);
+  const target = nodes.findIndex((node) => node.name === lTarget);
+  const finalLink: TransformerTypes.LinkWithStyling = {
     source,
     target,
-    value: link.value,
-    prop: computePropertiesForToolTip((link.properties as Record<string, unknown>), link.value)
+    value
   };
+  if (properties) {
+    finalLink.prop = computePropertiesForToolTip((properties as Record<string, string | number> | string), value);
+  }
+  return finalLink;
 });
 
 // Matrix
@@ -161,6 +182,7 @@ const categoryMap = (
 ) => nodes.reduce((map: Record<string, VisualizationTypes.Node[]>, node) => {
   const { category } = node;
   if (!map[category]) {
+    // eslint-disable-next-line no-param-reassign
     map[category] = [];
     map[category]?.push(node);
   } else {
@@ -269,7 +291,7 @@ const populateRightPropertiesString = (group2: VisualizationTypes.Node[], label:
   return finalProduct;
 };
 
-const getTextContent = (td: HTMLElement) => (td.lastChild?.textContent ? td.lastChild?.textContent : '');
+const getTextContent = (td: Element) => (td.lastChild?.textContent ? td.lastChild?.textContent : '');
 
 const getSwappedIndexes = (arr: number[], dir: string) => {
   // Create an array of indices and sort it based on the values in 'arr'
@@ -286,13 +308,16 @@ const getSwappedIndexes = (arr: number[], dir: string) => {
 const sortUpperTable = (n: number, newDir: string) => {
   const table = document.getElementById('myTable') as HTMLElement;
   const rows = table.getElementsByTagName('TR');
-  const rowsElements = rows[n]?.getElementsByClassName('right-sortable-items')
-    ? [
-      ...(rows[n]?.getElementsByClassName(
-        'right-sortable-items'
-      ) as unknown as any[])
-    ]
-    : [];
+  const rowsElements = [];
+  if (rows && rows[n] && rows[n]?.getElementsByClassName('right-sortable-items')
+  ) {
+    const rowsEl: HTMLCollectionOf<Element> = (rows[n]?.getElementsByClassName(
+      'right-sortable-items'
+    )) as HTMLCollectionOf<Element>;
+    rowsElements.push(
+      ...rowsEl
+    );
+  }
   if (rowsElements && rowsElements.length > 0) {
     const rowsValues = rowsElements.map((el) => {
       const element = Number.isNaN(parseInt(getTextContent(el) as string, 10))
@@ -303,29 +328,37 @@ const sortUpperTable = (n: number, newDir: string) => {
     const newIndexMap = getSwappedIndexes(rowsValues, newDir);
 
     for (let i = 0; i < rows.length; i += 1) {
-      const sortableItemsArray = [
-        ...(rows[i]?.getElementsByClassName(
+      const sortableItemsArray: Element[] = [];
+      if (rows && rows[i] && rows[i]?.getElementsByClassName('right-sortable-items')
+      ) {
+        const rowsEl: HTMLCollectionOf<Element> = (rows[n]?.getElementsByClassName(
           'right-sortable-items'
-        ) as unknown as any[])
-      ];
-
-      const sortedItems = newIndexMap.map(
-        (newIndex) => sortableItemsArray[newIndex]
-      );
-      // Replace the "right-sortable-items" elements in the current row with the sorted items
-      const row = rows[i];
-      const existingSortableItems = row?.getElementsByClassName(
-        'right-sortable-items'
-      );
-      if (existingSortableItems) {
-        for (
-          let j = 0;
-          j < (existingSortableItems as HTMLCollectionOf<Element>).length;
-          j += 1
-        ) {
-          (existingSortableItems[j] as any).replaceWith(
-            sortedItems[j].cloneNode(true)
-          );
+        )) as HTMLCollectionOf<Element>;
+        sortableItemsArray.push(
+          ...rowsEl
+        );
+      }
+      if (sortableItemsArray.length) {
+        const sortedItems = newIndexMap.map(
+          (newIndex) => sortableItemsArray[newIndex]
+        );
+        // Replace the "right-sortable-items" elements in the current row with the sorted items
+        const row = rows[i];
+        const existingSortableItems = row?.getElementsByClassName(
+          'right-sortable-items'
+        );
+        if (existingSortableItems) {
+          for (
+            let j = 0;
+            j < (existingSortableItems as HTMLCollectionOf<Element>).length;
+            j += 1
+          ) {
+            if (sortedItems && sortedItems[j]) {
+              (existingSortableItems[j] as Element).replaceWith(
+                (sortedItems[j] as Element).cloneNode(true)
+              );
+            }
+          }
         }
       }
     }
@@ -334,7 +367,7 @@ const sortUpperTable = (n: number, newDir: string) => {
 
 const sortColumns = () => {
   const sortable = document.querySelectorAll('.sortableCol');
-  sortable.forEach((s: any, sIndex) => {
+  sortable.forEach((s, sIndex) => {
     s.addEventListener('click', () => {
       // Get the current sorting direction from the data attribute
       const currentDir = s.getAttribute('right-data-sort-direction');
@@ -414,7 +447,7 @@ const addStyleTooltipWithHover = () => {
 
 const sortRows = () => {
   const sortable = document.querySelectorAll('.sortableRow');
-  sortable.forEach((s: any, sIndex) => {
+  sortable.forEach((s, sIndex) => {
     s.addEventListener('click', () => {
       // Get the current sorting direction from the data attribute
       const currentDir = s.getAttribute('left-data-sort-direction');
@@ -535,7 +568,7 @@ const createLeftPropertiesString = (
 const createHeadersAndPropertiesString = (
   group1: VisualizationTypes.Node[],
   group2: VisualizationTypes.Node[],
-  links: any[]
+  links: VisualizationTypes.Link[]
 ) => {
   const uniqueLabelNamesGroup1 = [
     ...new Set(
