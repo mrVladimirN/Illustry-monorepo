@@ -2,22 +2,11 @@
 import * as url from 'url';
 import * as fs from 'fs';
 import * as path from 'path';
+import { TransformerTypes, FileTypes } from '@illustry/types';
 import logger from '../config/logger';
 
-type Response = {
-  req?: {
-    originalUrl?: string;
-    probe?: {
-      stop: (message: string) => void;
-    };
-  };
-  status: (code: number) => Response;
-  send: (data: unknown) => void;
-  setHeader: (name: string, value: string) => void;
-};
-
 const returnResponse = (
-  res: Response,
+  res: FileTypes.Response,
   err: Error | null,
   data: unknown,
   next: (error: string | Error) => void
@@ -46,50 +35,51 @@ const toStringWithDefault = (value: unknown): string => {
 };
 
 const visualizationDetailsExtractor = (
-  mapping: Record<string, unknown>,
+  mapping: {
+    [key: string]: string;
+  },
   values: (string | number)[]
 ) => {
-  const getValue = (key: string): string | undefined => {
-    const index = Number(mapping[key]);
+  const getValue = (key: string): string | string[] | undefined => {
+    const index = +mapping[key];
     const value = values[index];
     return typeof value === 'string' && value.trim() !== '' ? value : undefined;
   };
 
   return {
-    visualizationName: getValue('visualizationName'),
-    visualizationDescription: getValue('visualizationDescription'),
+    visualizationName: getValue('visualizationName') as string,
+    visualizationDescription: getValue('visualizationDescription') as string,
     visualizationTags: getValue('visualizationTags')
   };
 };
 
 const visualizationPropertiesExtractor = (
-  arr: Record<string, unknown>[]
+  arr: TransformerTypes.RowType[]
 ) => {
-  let name = '';
-  let description = '';
+  let name: string = '';
+  let description: string = '';
   let tags: string[] = [];
-
   const sanitizedArr = arr.map((item) => {
-    const newItem = { ...item };
-
-    if (newItem.visualizationName) {
-      name = newItem.visualizationName as string;
-      delete newItem.visualizationName;
+    const newItem = { ...item } as TransformerTypes.FullCalendarDetails;
+    if (newItem) {
+      if (newItem.visualizationName) {
+        name = newItem.visualizationName as string;
+        delete newItem.visualizationName;
+      }
+      if (newItem.visualizationDescription) {
+        description = newItem.visualizationDescription as string;
+        delete newItem.visualizationDescription;
+      }
+      if (newItem.visualizationTags) {
+        tags = newItem.visualizationTags as string[];
+        delete newItem.visualizationTags;
+      }
+      return newItem;
     }
-    if (newItem.visualizationDescription) {
-      description = newItem.visualizationDescription as string;
-      delete newItem.visualizationDescription;
-    }
-    if (newItem.visualizationTags) {
-      tags = newItem.visualizationTags as string[];
-      delete newItem.visualizationTags;
-    }
-
-    return newItem;
+    return null;
   });
-
   return {
-    data: sanitizedArr,
+    data: sanitizedArr.filter(Boolean),
     name: name || undefined,
     description,
     tags
@@ -138,11 +128,33 @@ const deleteDirectory = async (directoryPath: string): Promise<void> => {
   }
 };
 
+const removeNullValues = (obj: unknown): unknown | undefined => {
+  if (obj === null) {
+    return undefined;
+  }
+
+  if (Array.isArray(obj)) {
+    return obj
+      .map(removeNullValues)
+      .filter((item) => item !== undefined);
+  }
+
+  if (typeof obj === 'object' && obj !== null) {
+    return Object.fromEntries(
+      Object.entries(obj)
+        .map(([key, value]) => [key, removeNullValues(value)])
+        .filter(([, value]) => value !== undefined)
+    );
+  }
+  return undefined;
+};
+
 export {
   returnResponse,
   toStringWithDefault,
   visualizationDetailsExtractor,
   visualizationPropertiesExtractor,
   copyDirectory,
-  deleteDirectory
+  deleteDirectory,
+  removeNullValues
 };

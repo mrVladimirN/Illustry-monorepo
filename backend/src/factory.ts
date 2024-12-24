@@ -10,6 +10,8 @@ class Factory {
 
   private static _bzlInstance: BZLInstance;
 
+  private dbConnection: mongoose.Connection;
+
   constructor() {
     if (Factory._instance) {
       throw new Error('Use Factory getInstance() instead');
@@ -21,7 +23,7 @@ class Factory {
       MONGO_USER,
       MONGO_PASSWORD
     } = process.env;
-    const dbConnection = mongoose.createConnection(
+    this.dbConnection = mongoose.createConnection(
       NODE_ENV === 'test'
         ? MONGO_TEST_URL || ''
         : MONGO_URL || '',
@@ -31,7 +33,7 @@ class Factory {
         pass: MONGO_PASSWORD
       }
     );
-    Factory._dbaccInstance = new DbaccInstance(dbConnection);
+    Factory._dbaccInstance = new DbaccInstance(this.dbConnection);
     Factory._bzlInstance = new BZLInstance(Factory._dbaccInstance);
     Factory._instance = this;
   }
@@ -46,6 +48,10 @@ class Factory {
 
   getBZL(): BZLInstance {
     return Factory._bzlInstance;
+  }
+
+  cleanup(): void {
+    this.dbConnection.close(true);
   }
 }
 
