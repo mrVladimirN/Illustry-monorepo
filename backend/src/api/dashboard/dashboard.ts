@@ -21,7 +21,7 @@ const create = async (
       visualizations
     };
 
-    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.dashboardUpdateSchema, dashboard);
+    ValidatorSchemas.validateWithSchema<DashboardTypes.DashboardUpdate>(ValidatorSchemas.dashboardUpdateSchema, dashboard);
 
     await Factory.getInstance().getBZL().DashboardBZL.create(dashboard as DashboardTypes.DashboardCreate);
 
@@ -54,8 +54,8 @@ const update = async (
       layouts
     };
 
-    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.dashboardUpdateSchema, dashboard);
-    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.dashboardFilterSchema, dashboardFilter);
+    ValidatorSchemas.validateWithSchema<DashboardTypes.DashboardUpdate>(ValidatorSchemas.dashboardUpdateSchema, dashboard);
+    ValidatorSchemas.validateWithSchema<DashboardTypes.DashboardFilter>(ValidatorSchemas.dashboardFilterSchema, dashboardFilter);
     const data = await Factory.getInstance()
       .getBZL()
       .DashboardBZL
@@ -78,7 +78,7 @@ const findOne = async (
     const dashboardFilter: DashboardTypes.DashboardFilter = {
       name
     };
-    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.dashboardFilterSchema, dashboardFilter);
+    ValidatorSchemas.validateWithSchema<DashboardTypes.DashboardFilter>(ValidatorSchemas.dashboardFilterSchema, dashboardFilter);
 
     const data = await Factory.getInstance()
       .getBZL()
@@ -105,7 +105,7 @@ const _delete = async (
       name
     };
 
-    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.dashboardFilterSchema, dashboardFilter);
+    ValidatorSchemas.validateWithSchema<DashboardTypes.DashboardFilter>(ValidatorSchemas.dashboardFilterSchema, dashboardFilter);
 
     const data = await Factory.getInstance()
       .getBZL()
@@ -140,7 +140,7 @@ const browse = async (
       per_page: perPage
     };
 
-    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.dashboardFilterSchema, dashboardFilter);
+    ValidatorSchemas.validateWithSchema<DashboardTypes.DashboardFilter>(ValidatorSchemas.dashboardFilterSchema, dashboardFilter);
 
     const data = await Factory.getInstance()
       .getBZL()

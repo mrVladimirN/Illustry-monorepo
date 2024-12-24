@@ -71,7 +71,9 @@ const findOne = async (
       type
     };
 
-    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.visualizationFilterSchema, visualizationFilter);
+    ValidatorSchemas.validateWithSchema<
+      VisualizationTypes.VisualizationFilter
+    >(ValidatorSchemas.visualizationFilterSchema, visualizationFilter);
 
     const data = await Factory.getInstance()
       .getBZL()
@@ -102,7 +104,9 @@ const browse = async (
       per_page: perPage
     };
 
-    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.visualizationFilterSchema, visualizationFilter);
+    ValidatorSchemas.validateWithSchema<
+    VisualizationTypes.VisualizationFilter
+    >(ValidatorSchemas.visualizationFilterSchema, visualizationFilter);
 
     const data = await Factory.getInstance()
       .getBZL()
@@ -128,7 +132,9 @@ const _delete = async (
       projectName
     };
 
-    ValidatorSchemas.validateWithSchema<Record<string, unknown>>(ValidatorSchemas.visualizationFilterSchema, visualizationFilter);
+    ValidatorSchemas.validateWithSchema<
+    VisualizationTypes.VisualizationFilter
+    >(ValidatorSchemas.visualizationFilterSchema, visualizationFilter);
 
     const data = await Factory.getInstance()
       .getBZL()
