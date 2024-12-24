@@ -24,11 +24,12 @@
     "webpack": "webpack --config webpack.config.js"
   },
   "dependencies": {
-    "@illustry/types": "0.1.13",
+    "@illustry/types": "0.1.14",
     "bunyan": "1.8.15",
     "cors": "2.8.5",
     "dotenv": "16.3.1",
-    "express": "4.21.0",
+    "exceljs": "4.4.0",
+    "express": "4.21.1",
     "mongoose": "8.0.1",
     "multer": "1.4.2",
     "validator": "13.11.0",
@@ -38,6 +39,7 @@
   "devDependencies": {
     "@types/bunyan": "1.8.11",
     "@types/cors": "2.8.17",
+    "@types/exceljs": "0.5.3",
     "@types/express": "4.17.21",
     "@types/jest": "29.5.12",
     "@types/mongoose": "5.11.97",

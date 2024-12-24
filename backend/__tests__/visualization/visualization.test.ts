@@ -1,9 +1,14 @@
-import { ProjectTypes, FileTypes, VisualizationTypes } from "@illustry/types";
+import { ProjectTypes, FileTypes, VisualizationTypes, TransformerTypes } from "@illustry/types";
 import mongoose from "mongoose";
 import path from "path";
 import { copyDirectory } from "../../src/utils/helper";
 import Factory from "../../src/factory";
-
+import { exelOrCsvdataProvider, jsonDataProvider, xmlDataProvider } from "../../src/bzl/transformers/preprocess/dataProvider";
+import transformerProvider from "../../src/bzl/transformers/preprocess/transformersProvider";
+import { computeValues as computeAxisChartValues } from "../../src/bzl/transformers/preprocess/transformers/axisChartTransformer";
+import { computeValues as computeScatterValues } from "../../src/bzl/transformers/preprocess/transformers/scatterTransformer";
+import { reformatDate } from "../../src/bzl/transformers/preprocess/transformers/calendarTransformers";
+import { hierarchyExtractorCsvOrExcel } from "../../src/bzl/transformers/preprocess/transformers/hierarchyTransformers";
 process.env.NODE_ENV = "test";
 process.env.MONGO_TEST_URL = "mongodb://localhost:27017/illustrytest";
 process.env.MONGO_USER = "root"
@@ -57,7 +62,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "HEB_FullDetails",
@@ -118,7 +123,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "FLG_FullDetails",
@@ -179,7 +184,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Sankey_FullDetails",
@@ -234,7 +239,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Wordcloud_FullDetails",
@@ -293,7 +298,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Calendar_FullDetails",
@@ -399,8 +404,8 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
-    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization = {
       projectName: "Test_Project1",
       name: "Matrix_FullDetails",
       description: "Matrix_FullDetails description",
@@ -518,7 +523,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "LineChart_FullDetails",
@@ -554,7 +559,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "BarChart_FullDetails",
@@ -590,7 +595,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "PieChart_FullDetails",
@@ -625,7 +630,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Scatter_FullDetails",
@@ -661,7 +666,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Funnel_FullDetails",
@@ -696,7 +701,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Treemap_FullDetails",
@@ -782,7 +787,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Sunburst_FullDetails",
@@ -868,7 +873,7 @@ describe("visualizations CRUD", () => {
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
     const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Timeline_FullDetails",
@@ -993,7 +998,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "HEB_PartialDetails",
@@ -1058,7 +1063,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "FLG_PartialDetails",
@@ -1123,7 +1128,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.SANKEY],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Sankey_PartialDetails",
@@ -1183,7 +1188,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Wordcloud_PartialDetails",
@@ -1247,7 +1252,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.CALENDAR],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Calendar_PartialDetails",
@@ -1358,8 +1363,8 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.MATRIX],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
-    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization = {
       projectName: "Test_Project1",
       name: "Matrix_PartialDetails",
       description: "Matrix_PartialDetails description",
@@ -1482,7 +1487,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.LINE_CHART],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "LineChart_PartialDetails",
@@ -1523,7 +1528,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.BAR_CHART],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "BarChart_PartialDetails",
@@ -1564,7 +1569,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.PIE_CHART],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "PieChart_PartialDetails",
@@ -1604,7 +1609,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.SCATTER],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Scatter_PartialDetails",
@@ -1645,7 +1650,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.FUNNEL],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Funnel_PartialDetails",
@@ -1685,7 +1690,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.TREEMAP],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Treemap_PartialDetails",
@@ -1776,7 +1781,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.SUNBURST],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Sunburst_PartialDetails",
@@ -1867,7 +1872,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
       type: [VisualizationTypes.VisualizationTypesEnum.TIMELINE],
     };
-    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Timeline_PartialDetails",
@@ -2000,11 +2005,11 @@ describe("visualizations CRUD", () => {
       name: "BarChart_FullDetails",
       description: "BarChart_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypes.VisualizationTypesEnum.BAR_CHART],
+      type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
       projectName: "Test_Project1",
     };
 
-    const visualization: VisualizationTypes.VisualizationType | null = (
+    const visualization = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
@@ -2014,8 +2019,13 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
 
-    expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a calendar Visualization XML with all the details in the XML", async () => {
 
@@ -2108,7 +2118,7 @@ describe("visualizations CRUD", () => {
       name: "Calendar_FullDetails",
       description: "Calendar_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypes.VisualizationTypesEnum.CALENDAR],
+      type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
       projectName: "Test_Project1",
     };
 
@@ -2123,7 +2133,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a forced-directed-graph Visualization XML with all the details in the XML", async () => {
 
@@ -2170,7 +2185,7 @@ describe("visualizations CRUD", () => {
       name: "FLG_FullDetails",
       description: "FLG_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH],
+      type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
       projectName: "Test_Project1",
     };
 
@@ -2185,7 +2200,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a funnel Visualization XML with all the details in the XML", async () => {
 
@@ -2207,7 +2227,7 @@ describe("visualizations CRUD", () => {
       name: "Funnel_FullDetails",
       description: "Funnel_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypes.VisualizationTypesEnum.FUNNEL],
+      type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
       projectName: "Test_Project1",
     };
 
@@ -2222,7 +2242,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a hierarchical-edge-bundling Visualization XML with all the details in the XML", async () => {
 
@@ -2269,7 +2294,7 @@ describe("visualizations CRUD", () => {
       name: "HEB_FullDetails",
       description: "HEB_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING],
+      type: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
       projectName: "Test_Project1",
     };
 
@@ -2284,7 +2309,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a line-chart Visualization XML with all the details in the XML", async () => {
 
@@ -2307,7 +2337,7 @@ describe("visualizations CRUD", () => {
       name: "LineChart_FullDetails",
       description: "LineChart_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypes.VisualizationTypesEnum.LINE_CHART],
+      type: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
       projectName: "Test_Project1",
     };
 
@@ -2322,7 +2352,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a pie-chart Visualization XML with all the details in the XML", async () => {
 
@@ -2344,7 +2379,7 @@ describe("visualizations CRUD", () => {
       name: "PieChart_FullDetails",
       description: "PieChart_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypes.VisualizationTypesEnum.PIE_CHART],
+      type: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
       projectName: "Test_Project1",
     };
 
@@ -2359,7 +2394,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a sankey Visualization XML with all the details in the XML", async () => {
 
@@ -2401,7 +2441,7 @@ describe("visualizations CRUD", () => {
       name: "Sankey_FullDetails",
       description: "Sankey_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypes.VisualizationTypesEnum.SANKEY],
+      type: VisualizationTypes.VisualizationTypesEnum.SANKEY,
       projectName: "Test_Project1",
     };
 
@@ -2416,7 +2456,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a scatter Visualization XML with all the details in the XML", async () => {
 
@@ -2454,7 +2499,7 @@ describe("visualizations CRUD", () => {
       name: "Scatter_FullDetails",
       description: "Scatter_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypes.VisualizationTypesEnum.SCATTER],
+      type: VisualizationTypes.VisualizationTypesEnum.SCATTER,
       projectName: "Test_Project1",
     };
 
@@ -2469,7 +2514,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a sunburst Visualization XML with all the details in the XML", async () => {
 
@@ -2542,7 +2592,7 @@ describe("visualizations CRUD", () => {
       name: "Sunburst_FullDetails",
       description: "Sunburst_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypes.VisualizationTypesEnum.SUNBURST],
+      type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
       projectName: "Test_Project1",
     };
 
@@ -2557,7 +2607,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a treemap Visualization XML with all the details in the XML", async () => {
 
@@ -2630,7 +2685,7 @@ describe("visualizations CRUD", () => {
       name: "Treemap_FullDetails",
       description: "Treemap_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypes.VisualizationTypesEnum.TREEMAP],
+      type: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
       projectName: "Test_Project1",
     };
 
@@ -2645,7 +2700,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a word-cloud Visualization XML with all the details in the XML", async () => {
 
@@ -2691,7 +2751,7 @@ describe("visualizations CRUD", () => {
       name: "Wordcloud_FullDetails",
       description: "Wordcloud_FullDetails description",
       tags: ["full"],
-      type: [VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD],
+      type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
       projectName: "Test_Project1",
     };
 
@@ -2706,7 +2766,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a matrix Visualization XML with all the details in the XML", async () => {
 
@@ -2832,7 +2897,7 @@ describe("visualizations CRUD", () => {
       name: "Matrix_FullDetails",
       description: "Matrix_FullDetails description",
       tags: ["full"],
-      type: ["matrix"],
+      type: "matrix",
       projectName: "Test_Project1",
     };
 
@@ -2847,7 +2912,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a bar-chart Visualization XML with only the data in the XML", async () => {
 
@@ -2889,7 +2959,12 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a calendar Visualization XML with only the data in the XML", async () => {
 
@@ -2914,91 +2989,85 @@ describe("visualizations CRUD", () => {
             category: "1",
             date: "1939-09-02",
             value: 1,
-            properties: null,
           },
           {
             category: "2",
             date: "1939-09-07",
             value: 1,
-            properties: null,
           },
           {
             category: "3",
             date: "1939-09-17",
             value: 1,
-            properties: null,
           },
           {
             category: "1",
             date: "1939-10-06",
             value: 1,
-            properties: null,
           },
           {
             category: "1",
             date: "1939-10-07",
             value: 1,
-            properties: null,
           },
           {
             category: "5",
             date: "1939-10-14",
             value: 1,
-            properties: null,
           },
           {
             category: "1",
             date: "1939-10-17",
             value: 1,
-            properties: null,
+
           },
           {
             category: "6",
             date: "1939-10-22",
             value: 1,
-            properties: null,
+
           },
           {
             category: "1",
             date: "1939-10-28",
             value: 1,
-            properties: null,
+
           },
           {
             category: "7",
             date: "1939-11-04",
             value: 1,
-            properties: null,
+
           },
           {
             category: "3",
             date: "1939-11-28",
             value: 1,
-            properties: null,
+
           },
           {
             category: "3",
             date: "1939-12-05",
             value: 1,
-            properties: null,
+
           },
           {
             category: "2",
             date: "1939-12-11",
             value: 1,
-            properties: null,
+
           },
           {
             category: "2",
             date: "1939-12-16",
             value: 1,
-            properties: null,
+
           },
           {
             category: "1",
             date: "1939-12-23",
             value: 1,
-            properties: null,
+
           },
         ],
       },
@@ -3017,7 +3086,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a forced-directed-graph Visualization XML with only the data in the XML", async () => {
 
@@ -3038,9 +3112,9 @@ describe("visualizations CRUD", () => {
       type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
       data: {
         nodes: [
-          { name: "Node1", category: "1", properties: null },
-          { name: "Node2", category: "2", properties: null },
-          { name: "Node3", category: "3", properties: null },
+          { name: "Node1", category: "1", },
+          { name: "Node2", category: "2", },
+          { name: "Node3", category: "3", },
         ],
         links: [
           { source: "Node1", target: "Node2", value: 1 },
@@ -3063,7 +3137,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a funnel Visualization XML with only the data in the XML", async () => {
 
@@ -3105,7 +3184,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a hierarchical-edge-bundling Visualization XML with only the data in the XML", async () => {
 
@@ -3126,9 +3210,9 @@ describe("visualizations CRUD", () => {
       type: "hierarchical-edge-bundling",
       data: {
         nodes: [
-          { name: "Node1", category: "1", properties: null },
-          { name: "Node2", category: "2", properties: null },
-          { name: "Node3", category: "3", properties: null },
+          { name: "Node1", category: "1", },
+          { name: "Node2", category: "2", },
+          { name: "Node3", category: "3", },
         ],
         links: [
           { source: "Node1", target: "Node2", value: 1 },
@@ -3151,7 +3235,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a line-chart Visualization XML with only the data in the XML", async () => {
 
@@ -3193,7 +3282,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a pie-chart Visualization XML with only the data in the XML", async () => {
 
@@ -3235,7 +3329,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a sankey Visualization XML with only the data in the XML", async () => {
 
@@ -3256,9 +3355,9 @@ describe("visualizations CRUD", () => {
       type: "sankey",
       data: {
         nodes: [
-          { name: "Node1", category: "1", properties: null },
-          { name: "Node2", category: "2", properties: null },
-          { name: "Node3", category: "3", properties: null },
+          { name: "Node1", category: "1", },
+          { name: "Node2", category: "2", },
+          { name: "Node3", category: "3", },
         ],
         links: [
           { source: "Node1", target: "Node2", value: 1 },
@@ -3279,7 +3378,12 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a scatter Visualization XML with only the data in the XML", async () => {
 
@@ -3300,11 +3404,11 @@ describe("visualizations CRUD", () => {
       type: "scatter",
       data: {
         points: [
-          { category: "3", value: [3.275154, 2.957587], properties: null },
-          { category: "2", value: [-3.344465, 2.603513], properties: null },
-          { category: "2", value: [0.355083, -3.376585], properties: null },
-          { category: "1", value: [1.852435, 3.547351], properties: null },
-          { category: "1", value: [-2.078973, 2.552013], properties: null },
+          { category: "3", value: [3.275154, 2.957587], },
+          { category: "2", value: [-3.344465, 2.603513], },
+          { category: "2", value: [0.355083, -3.376585], },
+          { category: "1", value: [1.852435, 3.547351], },
+          { category: "1", value: [-2.078973, 2.552013], },
         ],
       },
       description: "Scatter_PartialDetails description",
@@ -3322,7 +3426,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a sunburst Visualization XML with only the data in the XML", async () => {
 
@@ -3347,27 +3456,27 @@ describe("visualizations CRUD", () => {
             name: "Node Group 1",
             category: "1",
             value: 100,
-            properties: null,
+
             children: [
               {
                 name: "Node 1",
                 category: "2",
                 value: 40,
-                properties: null,
+
                 children: [
                   {
                     name: "Node 1.1",
                     category: "3",
                     value: 20,
-                    properties: null,
-                    children: null,
+
+
                   },
                   {
                     name: "Node 1.2",
                     category: "4",
                     value: 10,
-                    properties: null,
-                    children: null,
+
+
                   },
                 ],
               },
@@ -3375,14 +3484,14 @@ describe("visualizations CRUD", () => {
                 name: "Node 1.1",
                 category: "2",
                 value: 30,
-                properties: null,
+
                 children: [
                   {
                     name: "Node 1.1.1",
                     category: "5",
                     value: 15,
-                    properties: null,
-                    children: null,
+
+
                   },
                 ],
               },
@@ -3392,20 +3501,20 @@ describe("visualizations CRUD", () => {
             name: "Node group 2",
             category: "6",
             value: 50,
-            properties: null,
+
             children: [
               {
                 name: "Node 2",
                 category: "7",
                 value: 25,
-                properties: null,
+
                 children: [
                   {
                     name: "Node 2.2",
                     category: "8",
                     value: 12,
-                    properties: null,
-                    children: null,
+
+
                   },
                 ],
               },
@@ -3428,7 +3537,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a treemap Visualization XML with only the data in the XML", async () => {
 
@@ -3453,27 +3567,27 @@ describe("visualizations CRUD", () => {
             name: "Node Group 1",
             category: "1",
             value: 100,
-            properties: null,
+
             children: [
               {
                 name: "Node 1",
                 category: "2",
                 value: 40,
-                properties: null,
+
                 children: [
                   {
                     name: "Node 1.1",
                     category: "3",
                     value: 20,
-                    properties: null,
-                    children: null,
+
+
                   },
                   {
                     name: "Node 1.2",
                     category: "4",
                     value: 10,
-                    properties: null,
-                    children: null,
+
+
                   },
                 ],
               },
@@ -3481,14 +3595,14 @@ describe("visualizations CRUD", () => {
                 name: "Node 1.1",
                 category: "2",
                 value: 30,
-                properties: null,
+
                 children: [
                   {
                     name: "Node 1.1.1",
                     category: "5",
                     value: 15,
-                    properties: null,
-                    children: null,
+
+
                   },
                 ],
               },
@@ -3498,20 +3612,20 @@ describe("visualizations CRUD", () => {
             name: "Node group 2",
             category: "6",
             value: 50,
-            properties: null,
+
             children: [
               {
                 name: "Node 2",
                 category: "7",
                 value: 25,
-                properties: null,
+
                 children: [
                   {
                     name: "Node 2.2",
                     category: "8",
                     value: 12,
-                    properties: null,
-                    children: null,
+
+
                   },
                 ],
               },
@@ -3534,7 +3648,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a word-cloud Visualization XML with only the data in the XML", async () => {
 
@@ -3555,13 +3674,13 @@ describe("visualizations CRUD", () => {
       type: "word-cloud",
       data: {
         words: [
-          { name: "Word1", value: 390, properties: null },
-          { name: "Word2", value: 275, properties: null },
-          { name: "Word3", value: 100, properties: null },
-          { name: "Word4", value: 1000, properties: null },
-          { name: "Word5", value: 600, properties: null },
-          { name: "Word6", value: 146, properties: null },
-          { name: "Word7", value: 712, properties: null },
+          { name: "Word1", value: 390, },
+          { name: "Word2", value: 275, },
+          { name: "Word3", value: 100, },
+          { name: "Word4", value: 1000, },
+          { name: "Word5", value: 600, },
+          { name: "Word6", value: 146, },
+          { name: "Word7", value: 712, },
         ],
       },
       description: "Wordcloud_PartialDetails description",
@@ -3579,7 +3698,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a matrix Visualization XML with only the data in the XML", async () => {
 
@@ -3603,7 +3727,7 @@ describe("visualizations CRUD", () => {
           {
             name: "Node1",
             category: "1",
-            properties: null,
+
             labels: [
               {
                 name: "Label1",
@@ -3640,7 +3764,7 @@ describe("visualizations CRUD", () => {
           {
             name: "Node2",
             category: "2",
-            properties: null,
+
             labels: [
               {
                 name: "Label3",
@@ -3727,7 +3851,12 @@ describe("visualizations CRUD", () => {
         )
     )[0];
 
-    expect(visualization).toMatchObject(expectedVisualization);
+    expect(visualization?.data).toMatchObject(expectedVisualization?.data as any);
+    expect(visualization?.name).toBe(expectedVisualization.name);
+    expect(visualization?.description).toBe(expectedVisualization.description);
+    expect(visualization?.tags).toEqual(expectedVisualization.tags);
+    expect(visualization?.type).toEqual(expectedVisualization.type);
+    expect(visualization?.projectName).toBe(expectedVisualization.projectName);
   });
   it("It creates a word-cloud Visualization EXCEL with all the details in the EXCEL", async () => {
 
@@ -4333,7 +4462,7 @@ describe("visualizations CRUD", () => {
       sheets: "1",
     };
     const expectedVisualization = {
-      name: "TreemapChart_FullDetails",
+      name: "Treemap_FullDetails_FullDetails",
       projectName: "Test_Project1",
       type: "treemap",
       data: {
@@ -4382,7 +4511,7 @@ describe("visualizations CRUD", () => {
           },
         ],
       },
-      description: "TreemapChart_FullDetails description",
+      description: "Treemap_FullDetails description",
       tags: ["full"],
     };
 
@@ -4396,7 +4525,6 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-
     expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a sunburst Visualization EXCEL with all the details in the EXCEL", async () => {
@@ -4491,7 +4619,6 @@ describe("visualizations CRUD", () => {
           fileDetails
         )
     )[0];
-
     expect(visualization).toMatchObject(expectedVisualization);
   });
   it("It creates a funnel Visualization EXCEL with all the details in the EXCEL", async () => {
@@ -7087,6 +7214,20 @@ describe("visualizations CRUD", () => {
         },
       });
     expect((visualization4.visualizations as VisualizationTypes.VisualizationType[])[0]).toMatchObject(expectedVisualization4);
+    const visualization5: VisualizationTypes.ExtendedVisualizationType = await factory
+      .getBZL()
+      .VisualizationBZL.browse({
+        page: 1,
+        per_page: 1
+      });
+    expect((visualization5.visualizations as VisualizationTypes.VisualizationType[]).length).toBe(1);
+    const visualization6: VisualizationTypes.ExtendedVisualizationType = await factory
+      .getBZL()
+      .VisualizationBZL.browse({
+        page: 1,
+      });
+    expect((visualization6.visualizations as VisualizationTypes.VisualizationType[]).length).toBe(10);
+
   });
   it("It delets one visualization", async () => {
 
@@ -7099,4 +7240,188 @@ describe("visualizations CRUD", () => {
 
     expect(visualization).toBe(true);
   });
+  it("Tries to execute any CRUD Operations on a Project that doesn't exist", async () => {
+    await Factory.getInstance().getDbaccInstance().Project.delete({
+      query: {
+        $and: [
+          { name: "Test_Project1" }
+        ]
+      }
+    });
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      name: "Sunburst_PartialDetails",
+      description: "Sunburst_PartialDetails description",
+      tags: ["full"],
+      type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
+    };
+    try {
+      const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.xml");
+
+      const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
+      const allFileDetails: boolean = false;
+      const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    }
+    catch (err) {
+      expect((err as Error).message).toBe('No active project')
+    }
+    try {
+      await factory
+        .getBZL()
+        .VisualizationBZL.findOne({ name: 'Sunburst_PartialDetails' });
+    }
+    catch (err) {
+      expect((err as Error).message).toBe('No active project')
+    }
+    try {
+      await factory
+        .getBZL()
+        .VisualizationBZL.browse({ name: 'Sunburst_PartialDetails' });
+    }
+    catch (err) {
+      expect((err as Error).message).toBe('No active project')
+    }
+    try {
+      await factory
+        .getBZL()
+        .VisualizationBZL.update({ name: 'Sunburst_PartialDetails' }, {});
+    }
+    catch (err) {
+      expect((err as Error).message).toBe('Method not implemented.')
+    }
+    try {
+      await factory
+        .getBZL()
+        .VisualizationBZL.create(visualizationDetails as VisualizationTypes.VisualizationCreate);
+    }
+    catch (err) {
+      expect((err as Error).message).toBe('Method not implemented.')
+    }
+    try {
+      await factory
+        .getBZL()
+        .VisualizationBZL.delete({ name: 'Sunburst_PartialDetails' });
+    }
+    catch (err) {
+      expect((err as Error).message).toBe('No active project')
+    }
+    const expectedProject: ProjectTypes.ProjectCreate = {
+      name: "Test_Project_Dashboard",
+      description: "Test_ProjectDescription1",
+      isActive: true,
+    };
+    await factory.getBZL().ProjectBZL.create(expectedProject);
+
+    try {
+      const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.xml");
+
+      const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
+      const allFileDetails: boolean = false;
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          {} as FileTypes.FileDetails
+        )
+    }
+    catch (err) {
+      expect((err as Error).message).toBe('No file details were provided')
+    }
+
+    try {
+      const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.xml");
+
+      const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
+      const allFileDetails: boolean = false;
+      const fileDetails: FileTypes.FileDetails = { fileType: 'faje' as FileTypes.FileType };
+      await factory
+        .getBZL()
+        .VisualizationBZL.createOrUpdateFromFiles(
+          files,
+          allFileDetails,
+          visualizationDetails,
+          fileDetails
+        )
+    }
+    catch (err) {
+      expect((err as Error).message).toBe('Invalid file type provided')
+    }
+  })
 });
+
+describe("visualizations Providers", () => {
+
+  it('returns null for all providers for unknown type', () => {
+    const providerExcelCsv = exelOrCsvdataProvider('fake' as VisualizationTypes.VisualizationTypesEnum, [], false);
+    const providerJsonString = jsonDataProvider('fake' as VisualizationTypes.VisualizationTypesEnum, {}, false)
+    const providerJsonArray = jsonDataProvider(['fake' as VisualizationTypes.VisualizationTypesEnum], {}, false)
+    const providerXML = xmlDataProvider('fake' as VisualizationTypes.VisualizationTypesEnum, {
+      root: {
+        type: [],
+        name: [],
+        data: []
+      }
+    }, false)
+
+    expect(providerExcelCsv).toBe(null);
+    expect(providerJsonString).toBe(null);
+    expect(providerJsonArray).toBe(null);
+    expect(providerXML).toBe(null)
+  })
+  it('returns null for all transformer provider for unknown type', () => {
+    const provider = transformerProvider('fake' as VisualizationTypes.VisualizationTypesEnum, {}, [], false)
+    expect(provider).toBe(null);
+  })
+  it('returns undefined for axis transformations', () => {
+    const values = [42, 3.14, "123", 56];
+    const mapping = "0,2,3";
+    expect(computeAxisChartValues(values, mapping)).toBe(undefined)
+  })
+  it('returns null  for calendar transformations', () => {
+    const invalidReformat = reformatDate("Invalid date format")
+    expect(invalidReformat).toBe(null)
+  })
+  it('returns null for hierarchy transformations', () => {
+    const testData1: TransformerTypes.FullNodesDetails[] = [
+      { nodes: { name: "Parent", value: "100", category: "A", properties: "", children: ["Child1", "Child2"] } },
+      { nodes: { name: "Child3", value: "50", category: "B", properties: "", children: [] } }
+    ];
+
+    const testData2: TransformerTypes.FullNodesDetails[] = [
+      { nodes: { name: "Parent", value: "100", category: "A", properties: "", children: [] } },
+      { nodes: { name: "Child3", value: "50", category: "B", properties: "", children: [] } }
+    ];
+
+    const hierarchyExtractorCsvOrExcelTestData1 = hierarchyExtractorCsvOrExcel(testData1)
+    expect(hierarchyExtractorCsvOrExcelTestData1).toMatchObject({
+      nodes: [
+        { name: 'Parent', value: 100, category: 'A', properties: '' },
+        { name: 'Child3', value: 50, category: 'B', properties: '' }
+      ]
+    })
+    const hierarchyExtractorCsvOrExcelTestData2 = hierarchyExtractorCsvOrExcel(testData2)
+    expect(hierarchyExtractorCsvOrExcelTestData2).toMatchObject(
+      {
+        nodes: [
+          { name: 'Parent', value: 100, category: 'A', properties: '' },
+          { name: 'Child3', value: 50, category: 'B', properties: '' }
+        ]
+      }
+    )
+  })
+  it('uses string as value for scatter transformations', () => {
+    const values = [100, 200, 300];
+    const mapping = "0,5";
+    const result = computeScatterValues(values, mapping);
+    expect(result).toMatchObject([100, 0])
+  })
+})

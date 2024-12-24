@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <root>
+  <data>
     <nodes>
       <name>Node Group 1</name>
       <value>100</value>
       <category>1</category>
+      <properties>big prop</properties>
       <children>
         <name>Node 1</name>
         <value>40</value>
@@ -45,4 +47,5 @@
         </children>
       </children>
     </nodes>
+  </data>
 </root>

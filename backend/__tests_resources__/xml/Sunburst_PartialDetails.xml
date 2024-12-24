@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <root>
+  <data>
     <nodes>
       <name>Node Group 1</name>
       <value>100</value>
@@ -45,4 +46,5 @@
         </children>
       </children>
     </nodes>
+  </data>  
 </root>

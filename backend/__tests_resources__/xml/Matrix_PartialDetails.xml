@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <root>
+  <data>
     <nodes>
       <category>1</category>
       <name>Node1</name>
@@ -78,4 +79,5 @@
         <a>b</a>
       </properties>
     </links>
+  </data>
 </root>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <root>
+  <data>
     <points>
       <value>3.275154</value>
       <value>2.957587</value>
@@ -14,6 +15,7 @@
       <value>0.355083</value>
       <value>-3.376585</value>
       <category>2</category>
+      <properties>big prop</properties>
     </points>
     <points>
       <value>1.852435</value>
@@ -25,4 +27,5 @@
       <value>2.552013</value>
       <category>1</category>
     </points>
+  </data>
 </root>
