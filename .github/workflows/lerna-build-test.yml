@@ -21,11 +21,15 @@ jobs:
         with:
           node-version: 20
 
-      - name: Cache Yarn dependencies
+      - name: Cache dependencies
         uses: actions/cache@v3
         with:
-          path: .yarn/cache
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          path: |
+            node_modules
+            .yarn/cache
+            .yarnrc.yml
+            yarn.lock
+          key: ${{ runner.os }}-yarn-${{ hashFiles('.yarnrc.yml', 'yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
 
@@ -34,14 +38,6 @@ jobs:
 
       - name: Build TypeScript
         run: yarn build:ts
-
-      - name: Cache node_modules
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
 
   test:
     name: Run Tests
@@ -63,28 +59,25 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: 20
 
-      - name: Cache Yarn dependencies
+      - name: Restore cache
         uses: actions/cache@v3
         with:
-          path: .yarn/cache
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+          path: |
+            node_modules
+            .yarn/cache
+            .yarnrc.yml
+            yarn.lock
+          key: ${{ runner.os }}-yarn-${{ hashFiles('.yarnrc.yml', 'yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-
-      - name: Restore node_modules cache
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
 
       - name: Run Tests
         run: yarn test

@@ -11411,6 +11411,7 @@ __metadata:
   dependencies:
     "@commitlint/cli": "npm:17.4.4"
     "@commitlint/config-conventional": "npm:17.4.4"
+    "@illustry/types": "npm:0.1.14"
     "@types/jest": "npm:29.5.12"
     "@typescript-eslint/eslint-plugin": "npm:6.21.0"
     depcheck: "npm:1.4.7"
