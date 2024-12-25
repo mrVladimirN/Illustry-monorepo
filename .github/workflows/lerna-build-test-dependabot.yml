@@ -59,7 +59,7 @@ jobs:
         ports:
           - 27017:27017
         options: >-
-          --health-cmd mongo
+          --health-cmd mongo --eval "db.adminCommand('ping')"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -76,11 +76,22 @@ jobs:
           sudo apt-get install -y mongodb-mongosh
           mongosh --version
 
-      - name: Initalize MongoDB
+      - name: Wait for MongoDB to be ready
         run: |
-          mongosh --host localhost:27017 -u admin -p admin --authenticationDatabase admin <<EOF
-            db = db.getSiblingDB('DB');
-            db.createUser({ user: 'User', pwd: 'PASS', roles: [{ role: 'readWrite', db: 'APP-DB' }] })
+          for i in {1..30}; do
+            if curl --silent --fail mongodb://localhost:27017/admin; then
+              echo "MongoDB is up!"
+              break
+            fi
+            echo "Waiting for MongoDB..."
+            sleep 5
+          done
+
+      - name: Initialize MongoDB
+        run: |
+          mongosh --host localhost:27017 -u ${{ secrets.MONGO_INITDB_ROOT_USERNAME }} -p ${{ secrets.MONGO_INITDB_ROOT_PASSWORD }} --authenticationDatabase admin <<EOF
+            db = db.getSiblingDB('illustrytest');
+            db.createUser({ user: test, pwd: 'testPass', roles: [{ role: 'readWrite', db: 'illustrytest' }] });
             db.createCollection('dashboards');
             db.createCollection('visualizations');
             db.createCollection('projects');
