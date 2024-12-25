@@ -35,6 +35,9 @@ jobs:
       - name: Build TypeScript
         run: yarn build:ts
 
+      - name: Check fs
+        run: ls -alh 
+        
       - name: Move build artifacts to separate folder
         run: mv ./build-output/ ./build-artifacts/
 
