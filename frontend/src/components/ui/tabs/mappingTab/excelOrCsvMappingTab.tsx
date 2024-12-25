@@ -19,7 +19,7 @@ import ExcelOrCsvAxisChartMapping from './excelOrCsvMappings/AxisChartMapping';
 import ExcelOrCsvPieChartFunnelMapping from './excelOrCsvMappings/PieChartFunnelMapping';
 import ExcelOrCsvScatterMapping from './excelOrCsvMappings/ScatterMapping';
 import ExcelOrCsvHierarchyMapping from './excelOrCsvMappings/HierarchyMapping';
-import ExcelOrCsvVisualizationMapping from './excelOrCsvMappings/VisualizationDetailsMapping';
+import ExcelOrCsvVisualizationMapping from '@/components/ui/tabs/mappingTab/excelOrCsvMappings/VisualizationDetailsMapping';
 
 type ExcelMappingTabProps = {
   form: UseFormReturn<Inputs>;
