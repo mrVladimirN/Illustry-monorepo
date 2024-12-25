@@ -1,4 +1,4 @@
-name: Lerna Monorepo Build, Test, and Dependabot
+name: Lerna Monorepo Build and Test
 
 on:
   push:
@@ -9,40 +9,9 @@ on:
       - '**'
 
 jobs:
-  build:
-    name: Build Monorepo
+  build_and_test:
+    name: Build and Test Monorepo
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-
-      - name: Cache dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            node_modules
-            .yarn/cache
-            .yarnrc.yml
-            yarn.lock
-          key: ${{ runner.os }}-yarn-${{ hashFiles('.yarnrc.yml', 'yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Build TypeScript
-        run: yarn build:ts
-
-  test:
-    name: Run Tests
-    runs-on: ubuntu-latest
-    needs: build
     services:
       mongodb:
         image: mongo:4.4.6
@@ -67,17 +36,11 @@ jobs:
         with:
           node-version: 20
 
-      - name: Restore cache
-        uses: actions/cache@v3
-        with:
-          path: |
-            node_modules
-            .yarn/cache
-            .yarnrc.yml
-            yarn.lock
-          key: ${{ runner.os }}-yarn-${{ hashFiles('.yarnrc.yml', 'yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Build TypeScript
+        run: yarn build:ts
 
       - name: Run Tests
         run: yarn test
