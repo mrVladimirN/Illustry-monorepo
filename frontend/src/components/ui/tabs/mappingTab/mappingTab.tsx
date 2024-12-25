@@ -6,8 +6,8 @@ import { Inputs } from '@/components/form/types';
 import Icons from '@/components/icons';
 import { Button } from '../../button';
 import { TabsContent } from '../../tabs';
-import ExcelOrCsvMappingTab from './excelOrCsvMappingTab';
 import JSONMappingTab from './jsonMappingTab';
+import ExcelOrCsvMappingTab from './excelOrCsvMappingTab';
 import {
   FormField, FormItem, FormControl, FormMessage
 } from '../../form';

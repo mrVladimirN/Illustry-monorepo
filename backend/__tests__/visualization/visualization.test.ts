@@ -179,7 +179,7 @@ describe("visualizations CRUD", () => {
 
   it("It creates a sankey Visualization JSON with all the details in the JSON", async () => {
 
-    const filePath = path.resolve(__dirname, "./SANKEY_FullDetails.json");
+    const filePath = path.resolve(__dirname, "./Sankey_FullDetails.json");
 
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
@@ -1118,7 +1118,7 @@ describe("visualizations CRUD", () => {
   });
   it("It creates a sankey Visualization JSON with only the data details in the JSON", async () => {
 
-    const filePath = path.resolve(__dirname, "./SANKEY_PartialDetails.json");
+    const filePath = path.resolve(__dirname, "./Sankey_PartialDetails.json");
 
     const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
