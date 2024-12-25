@@ -1,4 +1,10 @@
 import mongoose from "mongoose";
+import {
+    DashboardTypes,
+    FileTypes,
+    ProjectTypes,
+    VisualizationTypes
+} from "@illustry/types";
 import Factory from "../../src/factory";
 import path from "path";
 import * as fs from 'fs';
@@ -11,7 +17,7 @@ const factory = Factory.getInstance();
 
 describe("dashboard CRUD", () => {
     beforeAll(async () => {
-        const expectedProject= {
+        const expectedProject: ProjectTypes.ProjectCreate = {
             name: "Test_Project_Dashboard",
             description: "Test_ProjectDescription1",
             isActive: true,
@@ -21,7 +27,7 @@ describe("dashboard CRUD", () => {
     afterAll(async () => {
         delete process.env.NODE_ENV;
         const allProjects = await factory.getBZL().ProjectBZL.browse({});
-         // @ts-ignore
+
         const deletePromises = (allProjects.projects || []).map(async (project) => {
             await factory.getBZL().ProjectBZL.delete({ name: project.name });
         });
@@ -32,12 +38,12 @@ describe("dashboard CRUD", () => {
 
     it("create a dashboard", async () => {
 
-        const expectedDashboard = {
+        const expectedDashboard: DashboardTypes.DashboardCreate = {
             name: "Test_dashboard55",
             description: "Test_dashboardDescription1",
             projectName: 'Test_Project_Dashboard'
         };
-        const dashboard = await factory
+        const dashboard: DashboardTypes.DashboardType = await factory
             .getBZL()
             .DashboardBZL.create(expectedDashboard);
         expect(dashboard).not.toBeNull();
@@ -50,12 +56,12 @@ describe("dashboard CRUD", () => {
 
     it("creates the same dashboard twice", async () => {
 
-        const expectedDashboard = {
+        const expectedDashboard: DashboardTypes.DashboardCreate = {
             name: "Test_dashboard2",
             description: "Test_dashboardDescription2",
             projectName: 'Test_Project_Dashboard'
         };
-        const dashboard = await factory
+        const dashboard: DashboardTypes.DashboardType = await factory
             .getBZL()
             .DashboardBZL.create(expectedDashboard);
 
@@ -79,12 +85,12 @@ describe("dashboard CRUD", () => {
     });
 
     it("finds a dashboard by name", async () => {
-        const expectedDashboard = {
+        const expectedDashboard: DashboardTypes.DashboardCreate = {
             name: "Test_dashboard2",
             description: "Test_dashboardDescription2",
             projectName: 'Test_Project_Dashboard'
         };
-        const dashboard = await factory
+        const dashboard: DashboardTypes.DashboardType = await factory
             .getBZL()
             .DashboardBZL.findOne({ name: "Test_dashboard2" }, true);
 
@@ -104,35 +110,35 @@ describe("dashboard CRUD", () => {
     });
 
     it("browse dashboards by all filter", async () => {
-        const dashboards1 = await factory
+        const dashboards1: DashboardTypes.ExtendedDashboardType = await factory
             .getBZL()
             .DashboardBZL.browse({ name: "Test_dashboard2" });
 
         expect(dashboards1.dashboards).toBeDefined();
         if (dashboards1.dashboards && dashboards1.dashboards.length > 0) {
-            expect(dashboards1.dashboards[0].name).toBe('Test_dashboard2');
+            expect((dashboards1.dashboards[0] as DashboardTypes.DashboardType).name).toBe('Test_dashboard2');
         }
 
-        const dashboards2 = await factory
+        const dashboards2: DashboardTypes.ExtendedDashboardType = await factory
             .getBZL()
             .DashboardBZL.browse({ text: "2" });
 
         expect(dashboards2.dashboards).toBeDefined();
         if (dashboards2.dashboards && dashboards2.dashboards.length > 0) {
-            expect(dashboards2.dashboards[0].name).toBe('Test_dashboard2');
+            expect((dashboards2.dashboards[0] as DashboardTypes.DashboardType).name).toBe('Test_dashboard2');
 
         }
 
-        const dashboards3 = await factory
+        const dashboards3: DashboardTypes.ExtendedDashboardType = await factory
             .getBZL()
             .DashboardBZL.browse({ text: "3" });
 
         expect(dashboards3.dashboards).toBeDefined();
         if (dashboards3.dashboards && dashboards3.dashboards.length === 0) {
-            expect(dashboards3.dashboards.length).toBe(0);
+            expect((dashboards3.dashboards as DashboardTypes.DashboardType[]).length).toBe(0);
         }
 
-        const dashboards4 = await factory
+        const dashboards4: DashboardTypes.ExtendedDashboardType = await factory
             .getBZL()
             .DashboardBZL.browse({
                 sort: {
@@ -143,10 +149,10 @@ describe("dashboard CRUD", () => {
 
         expect(dashboards4.dashboards).toBeDefined();
         if (dashboards4.dashboards && dashboards4.dashboards.length > 0) {
-            expect(dashboards4.dashboards[0].name).toBe('Test_dashboard55');
+            expect((dashboards4.dashboards[0] as DashboardTypes.DashboardType).name).toBe('Test_dashboard55');
         }
 
-        const dashboards5 = await factory
+        const dashboards5: DashboardTypes.ExtendedDashboardType = await factory
             .getBZL()
             .DashboardBZL.browse({
                 isActive: true,
@@ -154,10 +160,10 @@ describe("dashboard CRUD", () => {
 
         expect(dashboards5.dashboards).toBeDefined();
         if (dashboards5.dashboards && dashboards5.dashboards.length > 0) {
-            expect(dashboards5.dashboards[0].name).toBe('Test_dashboard2');
+            expect((dashboards5.dashboards[0] as DashboardTypes.DashboardType).name).toBe('Test_dashboard2');
         }
 
-        const dashboards6 = await factory
+        const dashboards6: DashboardTypes.ExtendedDashboardType = await factory
             .getBZL()
             .DashboardBZL.browse({
                 page: 1,
@@ -166,7 +172,7 @@ describe("dashboard CRUD", () => {
 
         expect(dashboards6.dashboards?.length).toBe(1);
 
-        const dashboards7 = await factory
+        const dashboards7: DashboardTypes.ExtendedDashboardType = await factory
             .getBZL()
             .DashboardBZL.browse({
                 page: 1,
@@ -182,16 +188,16 @@ describe("dashboard CRUD", () => {
         await fs.promises.copyFile(funelDetails, path.resolve(__dirname, 'Funnel_FullDetails.json'));
         const filePath = path.resolve(__dirname, "./Funnel_FullDetails.json");
 
-        const files = [{ filePath, type: "application/json" }];
+        const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
         const allFileDetails: boolean = true;
-        const visualizationDetails= {};
-        const fileDetails = { fileType: "JSON"};
-        const expectedVisualization = {
+        const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+        const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+        const expectedVisualization: VisualizationTypes.VisualizationCreate = {
             projectName: "Test_Project_Dashboard",
             name: "Funnel_FullDetails",
             description: "Funnel_FullDetails description",
             tags: ["full"],
-            type: ["funnel"],
+            type: [VisualizationTypes.VisualizationTypesEnum.FUNNEL],
             data: {
                 values: {
                     "Statistic 1": 122,
@@ -201,19 +207,18 @@ describe("dashboard CRUD", () => {
                 },
             },
         };
-        const visualization = (
+        const visualization: VisualizationTypes.VisualizationType | null = (
             await factory
                 .getBZL()
                 .VisualizationBZL.createOrUpdateFromFiles(
                     files,
                     allFileDetails,
                     visualizationDetails,
-                     // @ts-ignore
                     fileDetails
                 )
         )[0];
         expect(visualization).toMatchObject(expectedVisualization);
-        await Factory.getInstance().getBZL().DashboardBZL.update({ name: 'Test_dashboard2' }, { visualizations: { 'Funnel_FullDetails': "funnel" } })
+        await Factory.getInstance().getBZL().DashboardBZL.update({ name: 'Test_dashboard2' }, { visualizations: { 'Funnel_FullDetails': VisualizationTypes.VisualizationTypesEnum.FUNNEL } })
 
         const foundDash = await Factory.getInstance().getBZL().DashboardBZL.findOne({ name: 'Test_dashboard2', projectName: 'Test_Project_Dashboard', }, true)
 
@@ -241,7 +246,7 @@ describe("dashboard CRUD", () => {
             }
         });
         try {
-            const expectedDashboard = {
+            const expectedDashboard: DashboardTypes.DashboardCreate = {
                 name: "Test_dashboard100",
                 description: "Test_dashboardDescription1",
                 projectName: 'Test_Project_Dashboard'
@@ -285,7 +290,7 @@ describe("dashboard CRUD", () => {
         catch (err) {
             expect((err as Error).message).toBe('No active project')
         }
-        const expectedProject = {
+        const expectedProject: ProjectTypes.ProjectCreate = {
             name: "Test_Project_Dashboard",
             description: "Test_ProjectDescription1",
             isActive: true,
@@ -295,7 +300,7 @@ describe("dashboard CRUD", () => {
 
     it("Update a dashboard with only layouts", async () => {
 
-        const expectedDashboard = {
+        const expectedDashboard: DashboardTypes.DashboardCreate = {
             name: "Test_dashboard5555",
             description: "Test_dashboardDescription1",
             projectName: 'Test_Project_Dashboard',
@@ -309,7 +314,7 @@ describe("dashboard CRUD", () => {
                 minH: 1
             }]
         };
-        const dashboard = await factory
+        const dashboard: DashboardTypes.DashboardType = await factory
             .getBZL()
             .DashboardBZL.create(expectedDashboard);
         expect(dashboard).not.toBeNull();
@@ -320,9 +325,9 @@ describe("dashboard CRUD", () => {
         }
         expectedDashboard.layouts = [];
         expectedDashboard.description = 'I will not change'
-        const updatedDash = await factory
+        const updatedDash: DashboardTypes.DashboardType = await factory
             .getBZL()
-            .DashboardBZL.update({ name: "Test_dashboard5555" }, expectedDashboard);
+            .DashboardBZL.update({ name: "Test_dashboard5555" }, expectedDashboard) as DashboardTypes.DashboardType;
         if (updatedDash) {
             expect(updatedDash.layouts?.length).toBe(0)
             expect(updatedDash.description).toBe('Test_dashboardDescription1')
