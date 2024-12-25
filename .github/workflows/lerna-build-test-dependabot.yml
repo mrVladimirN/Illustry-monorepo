@@ -35,8 +35,12 @@ jobs:
       - name: Build TypeScript
         run: yarn build:ts
 
+      - name: Move build artifacts to separate folder
+        run: mv ./build-output/ ./build-artifacts/
+
       - name: Compress Build Artifacts
-        run: tar -czf build-artifacts.tar.gz .
+        run: tar -czf build-artifacts.tar.gz build-artifacts/
+
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
@@ -94,19 +98,6 @@ jobs:
       - name: Extract Build Artifacts
         run: tar -xzf build-artifacts.tar.gz
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-
-      - name: Cache Yarn dependencies
-        uses: actions/cache@v3
-        with:
-          path: .yarn/cache
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
-
       - name: Run Tests
         run: yarn test
 
@@ -122,19 +113,6 @@ jobs:
 
       - name: Extract Build Artifacts
         run: tar -xzf build-artifacts.tar.gz
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 20
-
-      - name: Cache Yarn dependencies
-        uses: actions/cache@v3
-        with:
-          path: .yarn/cache
-          key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-yarn-
 
       - name: Run Dependabot Updates
         run: yarn audit || echo "Dependabot passed"
