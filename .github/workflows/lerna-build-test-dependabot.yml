@@ -50,15 +50,42 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     services:
-      mongo:
-        image: mongo:5.0
-        options: --health-cmd="curl --silent --fail mongodb://localhost:27017/admin" --health-timeout=60s --health-retries=5 --health-start-period=30s --health-interval=10s
-        ports:
-          - 27017:27017
+      mongodb:
+        image: mongo:4.4.6
         env:
           MONGO_INITDB_ROOT_USERNAME: ${{ secrets.MONGO_INITDB_ROOT_USERNAME }}
           MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}
+          MONGO_INITDB_DATABASE: illustrytest
+        ports:
+          - 27017:27017
+        options: >-
+          --health-cmd mongo
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
+      - uses: actions/checkout@v3
+
+      - name: Install mongosh
+        run: |
+          sudo apt-get install gnupg
+          wget -qO- https://www.mongodb.org/static/pgp/server-7.0.asc | sudo tee /etc/apt/trusted.gpg.d/server-7.0.asc
+          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+          sudo apt-get update
+          sudo apt-get install -y mongodb-mongosh
+          mongosh --version
+
+      - name: Initalize MongoDB
+        run: |
+          mongosh --host localhost:27017 -u admin -p admin --authenticationDatabase admin <<EOF
+            db = db.getSiblingDB('DB');
+            db.createUser({ user: 'User', pwd: 'PASS', roles: [{ role: 'readWrite', db: 'APP-DB' }] })
+            db.createCollection('dashboards');
+            db.createCollection('visualizations');
+            db.createCollection('projects');
+          EOF
+
       - name: Download Build Artifacts
         uses: actions/download-artifact@v3
         with:
@@ -79,17 +106,6 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-yarn-
-
-      - name: Wait for MongoDB to be ready
-        run: |
-          for i in {1..60}; do
-            if curl --silent --fail mongodb://localhost:27017/admin; then
-              echo "MongoDB is up!"
-              break
-            fi
-            echo "Waiting for MongoDB..."
-            sleep 5
-          done
 
       - name: Run Tests
         run: yarn test
