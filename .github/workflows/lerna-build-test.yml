@@ -16,8 +16,8 @@ jobs:
       mongodb:
         image: mongo:4.4.6
         env:
-          MONGO_INITDB_ROOT_USERNAME: ${{ secrets.MONGO_INITDB_ROOT_USERNAME }}
-          MONGO_INITDB_ROOT_PASSWORD: ${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}
+          MONGO_INITDB_ROOT_USERNAME: "root"
+          MONGO_INITDB_ROOT_PASSWORD: "rootPass"
           MONGO_INITDB_DATABASE: illustrytest
         ports:
           - 27017:27017
@@ -40,9 +40,9 @@ jobs:
 
       - name: Initialize MongoDB
         run: |
-              mongosh --host localhost:27017 -u ${{ secrets.MONGO_INITDB_ROOT_USERNAME }} -p ${{ secrets.MONGO_INITDB_ROOT_PASSWORD }} --authenticationDatabase admin <<EOF
+              mongosh --host localhost:27017 -u "root" -p "rootPass" --authenticationDatabase admin <<EOF
               db = db.getSiblingDB('illustrytest');
-              db.createUser({ user: ${{ secrets.MONGO_INITDB_ROOT_USERNAME }} , pwd: ${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}, roles: [{ role: 'readWrite', db: 'illustrytest' }] });
+              db.createUser({ user: "root" , pwd: "rootPass", roles: [{ role: 'readWrite', db: 'illustrytest' }] });
               db.createCollection('dashboards');
               db.createCollection('visualizations');
               db.createCollection('projects');
