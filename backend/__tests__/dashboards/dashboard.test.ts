@@ -209,7 +209,7 @@ describe("dashboard CRUD", () => {
                     allFileDetails,
                     visualizationDetails,
                      // @ts-ignore
-                    fileDetails as any
+                    fileDetails
                 )
         )[0];
         expect(visualization).toMatchObject(expectedVisualization);

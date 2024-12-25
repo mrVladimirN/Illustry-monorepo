@@ -1,7 +1,4 @@
 import mongoose from "mongoose";
-import {
-  ProjectTypes
-} from "@illustry/types";
 import Factory from "../../src/factory";
 
 process.env.NODE_ENV = "test";
@@ -15,7 +12,7 @@ describe("project CRUD", () => {
   afterAll(async () => {
     delete process.env.NODE_ENV;
     const allProjects = await factory.getBZL().ProjectBZL.browse({});
-
+    // @ts-ignore
     const deletePromises = (allProjects.projects || []).map(async (project) => {
       await factory.getBZL().ProjectBZL.delete({ name: project.name });
     });
@@ -26,11 +23,11 @@ describe("project CRUD", () => {
 
   it("create a project", async () => {
 
-    const expectedProject: ProjectTypes.ProjectCreate = {
+    const expectedProject = {
       name: "Test_Project1",
       description: "Test_ProjectDescription1",
     };
-    const project: ProjectTypes.ProjectType = await factory
+    const project = await factory
       .getBZL()
       .ProjectBZL.create(expectedProject);
 
@@ -45,12 +42,12 @@ describe("project CRUD", () => {
 
   it("creates the same project twice", async () => {
 
-    const expectedProject: ProjectTypes.ProjectCreate = {
+    const expectedProject = {
       name: "Test_Project2",
       description: "Test_ProjectDescription2",
       isActive: true,
     };
-    const project: ProjectTypes.ProjectType = await factory
+    const project = await factory
       .getBZL()
       .ProjectBZL.create(expectedProject);
 
@@ -75,12 +72,12 @@ describe("project CRUD", () => {
 
   it("update a project with is active true", async () => {
 
-    const expectedProject: ProjectTypes.ProjectUpdate = {
+    const expectedProject = {
       name: 'Test_Project1',
       description: "Test_ProjectDescription1_1",
       isActive: true,
     };
-    const project: ProjectTypes.ProjectType | null = await factory
+    const project = await factory
       .getBZL()
       .ProjectBZL.update({ name: "Test_Project1" }, expectedProject);
 
@@ -95,12 +92,12 @@ describe("project CRUD", () => {
   });
 
   it("update a project with is active false", async () => {
-    const expectedProject: ProjectTypes.ProjectUpdate = {
+    const expectedProject = {
       name: "Test_Project2",
       description: "Test_ProjectDescription2",
       isActive: false,
     };
-    const project: ProjectTypes.ProjectType | null = await factory
+    const project = await factory
       .getBZL()
       .ProjectBZL.update({ name: "Test_Project2" }, expectedProject);
 
@@ -116,7 +113,7 @@ describe("project CRUD", () => {
 
   it("update a non existing project", async () => {
 
-    const expectedProject: ProjectTypes.ProjectUpdate = {
+    const expectedProject = {
       description: "Test_ProjectDescription1_1",
       isActive: false,
     };
@@ -135,11 +132,11 @@ describe("project CRUD", () => {
 
   it("finds a project by name", async () => {
 
-    const expectedProject: ProjectTypes.ProjectCreate = {
+    const expectedProject = {
       name: "Test_Project2",
       description: "Test_ProjectDescription2",
     };
-    const project: ProjectTypes.ProjectType = await factory
+    const project = await factory
       .getBZL()
       .ProjectBZL.findOne({ name: "Test_Project2" });
 
@@ -161,43 +158,43 @@ describe("project CRUD", () => {
 
   it("browse projects by all filter", async () => {
 
-    const expectedProject1: ProjectTypes.ProjectCreate = {
+    const expectedProject1 = {
       name: "Test_Project1",
       description: "Test_ProjectDescription1_1",
     };
-    const expectedProject2: ProjectTypes.ProjectCreate = {
+    const expectedProject2 = {
       name: "Test_Project2",
       description: "Test_ProjectDescription2",
     };
 
-    const projects1: ProjectTypes.ExtendedProjectType = await factory
+    const projects1 = await factory
       .getBZL()
       .ProjectBZL.browse({ name: "Test_Project2" });
 
     expect(projects1.projects).toBeDefined();
     if (projects1.projects && projects1.projects.length > 0) {
-      expect((projects1.projects[0] as ProjectTypes.ProjectType)).toMatchObject(expectedProject2);
+      expect(projects1.projects[0]).toMatchObject(expectedProject2);
     }
 
-    const projects2: ProjectTypes.ExtendedProjectType = await factory
+    const projects2 = await factory
       .getBZL()
       .ProjectBZL.browse({ text: "2" });
 
     expect(projects2.projects).toBeDefined();
     if (projects2.projects && projects2.projects.length > 0) {
-      expect((projects2.projects[0] as ProjectTypes.ProjectType)).toMatchObject(expectedProject2);
+      expect(projects2.projects[0]).toMatchObject(expectedProject2);
     }
 
-    const projects3: ProjectTypes.ExtendedProjectType = await factory
+    const projects3 = await factory
       .getBZL()
       .ProjectBZL.browse({ text: "3" });
 
     expect(projects3.projects).toBeDefined();
     if (projects3.projects && projects3.projects.length === 0) {
-      expect((projects3.projects as ProjectTypes.ProjectType[]).length).toBe(0);
+      expect(projects3.projects.length).toBe(0);
     }
 
-    const projects4: ProjectTypes.ExtendedProjectType = await factory
+    const projects4 = await factory
       .getBZL()
       .ProjectBZL.browse({
         sort: {
@@ -208,10 +205,10 @@ describe("project CRUD", () => {
 
     expect(projects4.projects).toBeDefined();
     if (projects4.projects && projects4.projects.length > 0) {
-      expect((projects4.projects[0] as ProjectTypes.ProjectType)).toMatchObject(expectedProject2);
+      expect(projects4.projects[0]).toMatchObject(expectedProject2);
     }
 
-    const projects5: ProjectTypes.ExtendedProjectType = await factory
+    const projects5 = await factory
       .getBZL()
       .ProjectBZL.browse({
         isActive: true,
@@ -219,9 +216,9 @@ describe("project CRUD", () => {
 
     expect(projects5.projects).toBeDefined();
     if (projects5.projects && projects5.projects.length > 0) {
-      expect((projects5.projects[0] as ProjectTypes.ProjectType)).toMatchObject(expectedProject1);
+      expect(projects5.projects[0]).toMatchObject(expectedProject1);
     }
-    const projects6: ProjectTypes.ExtendedProjectType = await factory
+    const projects6 = await factory
       .getBZL()
       .ProjectBZL.browse({
         page: 1,
@@ -229,7 +226,7 @@ describe("project CRUD", () => {
       });
 
     expect(projects6.projects?.length).toBe(1);
-    const projects7: ProjectTypes.ExtendedProjectType = await factory
+    const projects7 = await factory
       .getBZL()
       .ProjectBZL.browse({
         page: 1,
