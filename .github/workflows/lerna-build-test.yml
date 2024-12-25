@@ -42,7 +42,7 @@ jobs:
         run: |
               mongosh --host localhost:27017 -u ${{ secrets.MONGO_INITDB_ROOT_USERNAME }} -p ${{ secrets.MONGO_INITDB_ROOT_PASSWORD }} --authenticationDatabase admin <<EOF
               db = db.getSiblingDB('illustrytest');
-              db.createUser({ user: test, pwd: 'testPass', roles: [{ role: 'readWrite', db: 'illustrytest' }] });
+              db.createUser({ user: ${{ secrets.MONGO_INITDB_ROOT_USERNAME }} , pwd: ${{ secrets.MONGO_INITDB_ROOT_PASSWORD }}, roles: [{ role: 'readWrite', db: 'illustrytest' }] });
               db.createCollection('dashboards');
               db.createCollection('visualizations');
               db.createCollection('projects');
