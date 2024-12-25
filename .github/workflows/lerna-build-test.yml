@@ -28,6 +28,26 @@ jobs:
           --health-retries 5
 
     steps:
+
+      - name: Install mongosh
+        run: |
+          sudo apt-get install gnupg
+          wget -qO- https://www.mongodb.org/static/pgp/server-7.0.asc | sudo tee /etc/apt/trusted.gpg.d/server-7.0.asc
+          echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/7.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-7.0.list
+          sudo apt-get update
+          sudo apt-get install -y mongodb-mongosh
+          mongosh --version
+
+      - name: Initialize MongoDB
+        run: |
+              mongosh --host localhost:27017 -u ${{ secrets.MONGO_INITDB_ROOT_USERNAME }} -p ${{ secrets.MONGO_INITDB_ROOT_PASSWORD }} --authenticationDatabase admin <<EOF
+              db = db.getSiblingDB('illustrytest');
+              db.createUser({ user: test, pwd: 'testPass', roles: [{ role: 'readWrite', db: 'illustrytest' }] });
+              db.createCollection('dashboards');
+              db.createCollection('visualizations');
+              db.createCollection('projects');
+              EOF
+
       - name: Checkout code
         uses: actions/checkout@v3
 
