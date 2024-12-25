@@ -1,3 +1,4 @@
+import { ProjectTypes, FileTypes, VisualizationTypes, TransformerTypes } from "@illustry/types";
 import mongoose from "mongoose";
 import path from "path";
 import { copyDirectory } from "../../src/utils/helper";
@@ -32,7 +33,7 @@ const csvDirectoryPath = path.resolve(
 );
 describe("visualizations CRUD", () => {
   beforeAll(async () => {
-    const expectedProject = {
+    const expectedProject: ProjectTypes.ProjectCreate = {
       name: "Test_Project1",
       description: "Test_ProjectDescription1",
       isActive: true,
@@ -47,7 +48,7 @@ describe("visualizations CRUD", () => {
   afterAll(async () => {
     delete process.env.NODE_ENV;
     const allProjects = await factory.getBZL().ProjectBZL.browse({});
-    // @ts-ignore
+
     const deletePromises = (allProjects.projects || []).map(async (project) => {
       await factory.getBZL().ProjectBZL.delete({ name: project.name });
     });
@@ -58,16 +59,16 @@ describe("visualizations CRUD", () => {
   it("It creates a hierarchical-edge-bundling Visualization JSON with all the details in the JSON", async () => {
     const filePath = path.resolve(__dirname, "./HEB_FullDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "HEB_FullDetails",
       description: "HEB_FullDetails description",
       tags: ["full"],
-      type: ["hierarchical-edge-bundling"],
+      type: [VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING],
       data: {
         nodes: [
           {
@@ -102,16 +103,14 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
-          fileDetails as any
+          fileDetails
         )
     )[0];
 
@@ -121,16 +120,16 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./FLG_FullDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "FLG_FullDetails",
       description: "FLG_FullDetails description",
       tags: ["full"],
-      type: ["force-directed-graph"],
+      type: [VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH],
       data: {
         nodes: [
           {
@@ -165,15 +164,13 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -184,16 +181,16 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./SANKEY_FullDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Sankey_FullDetails",
       description: "Sankey_FullDetails description",
       tags: ["full"],
-      type: ["sankey"],
+      type: [VisualizationTypes.VisualizationTypesEnum.SANKEY],
       data: {
         nodes: [
           {
@@ -223,15 +220,13 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -241,16 +236,16 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Wordcloud_FullDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Wordcloud_FullDetails",
       description: "Wordcloud_FullDetails description",
       tags: ["full"],
-      type: ["word-cloud"],
+      type: [VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD],
       data: {
         words: [
           {
@@ -284,15 +279,13 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -302,16 +295,16 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Calendar_FullDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Calendar_FullDetails",
       description: "Calendar_FullDetails description",
       tags: ["full"],
-      type: ["calendar"],
+      type: [VisualizationTypes.VisualizationTypesEnum.CALENDAR],
       data: {
         calendar: [
           {
@@ -392,15 +385,13 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -410,16 +401,16 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Matrix_FullDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "JSON" };
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization = {
       projectName: "Test_Project1",
       name: "Matrix_FullDetails",
       description: "Matrix_FullDetails description",
       tags: ["full"],
-      type: ["matrix"],
+      type: [VisualizationTypes.VisualizationTypesEnum.MATRIX],
       data: {
         nodes: [
           {
@@ -513,15 +504,13 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -531,16 +520,16 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./LineChart_FullDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "LineChart_FullDetails",
       description: "LineChart_FullDetails description",
       tags: ["full"],
-      type: ["line-chart"],
+      type: [VisualizationTypes.VisualizationTypesEnum.LINE_CHART],
       data: {
         headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         values: {
@@ -551,15 +540,13 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -569,16 +556,16 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./BarChart_FullDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "BarChart_FullDetails",
       description: "BarChart_FullDetails description",
       tags: ["full"],
-      type: ["bar-chart"],
+      type: [VisualizationTypes.VisualizationTypesEnum.BAR_CHART],
       data: {
         headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         values: {
@@ -589,15 +576,13 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -607,16 +592,16 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./PieChart_FullDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "PieChart_FullDetails",
       description: "PieChart_FullDetails description",
       tags: ["full"],
-      type: ["pie-chart"],
+      type: [VisualizationTypes.VisualizationTypesEnum.PIE_CHART],
       data: {
         values: {
           "Statistic 1": 122,
@@ -626,15 +611,13 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -644,16 +627,16 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Scatter_FullDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Scatter_FullDetails",
       description: "Scatter_FullDetails description",
       tags: ["full"],
-      type: ["scatter"],
+      type: [VisualizationTypes.VisualizationTypesEnum.SCATTER],
       data: {
         points: [
           { value: [3.275154, 2.957587], category: "3" },
@@ -664,15 +647,13 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -682,16 +663,16 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Funnel_FullDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Funnel_FullDetails",
       description: "Funnel_FullDetails description",
       tags: ["full"],
-      type: ["funnel"],
+      type: [VisualizationTypes.VisualizationTypesEnum.FUNNEL],
       data: {
         values: {
           "Statistic 1": 122,
@@ -701,15 +682,13 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -719,16 +698,16 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Treemap_FullDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Treemap_FullDetails",
       description: "Treemap_FullDetails description",
       tags: ["full"],
-      type: ["treemap"],
+      type: [VisualizationTypes.VisualizationTypesEnum.TREEMAP],
       data: {
         nodes: [
           {
@@ -789,15 +768,13 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -807,16 +784,16 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Sunburst_FullDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Sunburst_FullDetails",
       description: "Sunburst_FullDetails description",
       tags: ["full"],
-      type: ["sunburst"],
+      type: [VisualizationTypes.VisualizationTypesEnum.SUNBURST],
       data: {
         nodes: [
           {
@@ -877,15 +854,13 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -895,16 +870,16 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Timeline_FullDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Timeline_FullDetails",
       description: "Timeline_FullDetails description",
       tags: ["full"],
-      type: ["timeline"],
+      type: [VisualizationTypes.VisualizationTypesEnum.TIMELINE],
       data: {
         "2023-10-07": {
           summary: {
@@ -998,15 +973,13 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -1017,21 +990,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./HEB_PartialDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "HEB_PartialDetails",
       description: "HEB_PartialDetails description",
       tags: ["full"],
-      type: ["hierarchical-edge-bundling"],
+      type: [VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING],
     };
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "HEB_PartialDetails",
       description: "HEB_PartialDetails description",
       tags: ["full"],
-      type: ["hierarchical-edge-bundling"],
+      type: [VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING],
       data: {
         nodes: [
           {
@@ -1066,15 +1039,13 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -1084,21 +1055,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./FLG_PartialDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "FLG_PartialDetails",
       description: "FLG_PartialDetails description",
       tags: ["full"],
-      type: ["force-directed-graph"],
+      type: [VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH],
     };
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "FLG_PartialDetails",
       description: "FLG_PartialDetails description",
       tags: ["full"],
-      type: ["force-directed-graph"],
+      type: [VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH],
       data: {
         nodes: [
           {
@@ -1133,15 +1104,13 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -1151,21 +1120,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./SANKEY_PartialDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Sankey_PartialDetails",
       description: "Sankey_PartialDetails description",
       tags: ["full"],
-      type: ["sankey"],
+      type: [VisualizationTypes.VisualizationTypesEnum.SANKEY],
     };
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Sankey_PartialDetails",
       description: "Sankey_PartialDetails description",
       tags: ["full"],
-      type: ["sankey"],
+      type: [VisualizationTypes.VisualizationTypesEnum.SANKEY],
       data: {
         nodes: [
           {
@@ -1195,15 +1164,13 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -1213,21 +1180,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Wordcloud_PartialDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Wordcloud_PartialDetails",
       description: "Wordcloud_PartialDetails description",
       tags: ["full"],
-      type: ["word-cloud"],
+      type: [VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD],
     };
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Wordcloud_PartialDetails",
       description: "Wordcloud_PartialDetails description",
       tags: ["full"],
-      type: ["word-cloud"],
+      type: [VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD],
       data: {
         words: [
           {
@@ -1261,15 +1228,13 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -1279,21 +1244,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Calendar_PartialDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Calendar_PartialDetails",
       description: "Calendar_PartialDetails description",
       tags: ["full"],
-      type: ["calendar"],
+      type: [VisualizationTypes.VisualizationTypesEnum.CALENDAR],
     };
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Calendar_PartialDetails",
       description: "Calendar_PartialDetails description",
       tags: ["full"],
-      type: ["calendar"],
+      type: [VisualizationTypes.VisualizationTypesEnum.CALENDAR],
       data: {
         calendar: [
           {
@@ -1374,15 +1339,13 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -1392,21 +1355,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Matrix_PartialDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Matrix_PartialDetails",
       description: "Matrix_PartialDetails description",
       tags: ["full"],
-      type: ["matrix"],
+      type: [VisualizationTypes.VisualizationTypesEnum.MATRIX],
     };
-    const fileDetails = { fileType: "JSON" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
     const expectedVisualization = {
       projectName: "Test_Project1",
       name: "Matrix_PartialDetails",
       description: "Matrix_PartialDetails description",
       tags: ["full"],
-      type: ["matrix"],
+      type: [VisualizationTypes.VisualizationTypesEnum.MATRIX],
       data: {
         nodes: [
           {
@@ -1500,15 +1463,13 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -1518,21 +1479,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./LineChart_PartialDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "LineChart_PartialDetails",
       description: "LineChart_PartialDetails description",
       tags: ["full"],
-      type: ["line-chart"],
+      type: [VisualizationTypes.VisualizationTypesEnum.LINE_CHART],
     };
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "LineChart_PartialDetails",
       description: "LineChart_PartialDetails description",
       tags: ["full"],
-      type: ["line-chart"],
+      type: [VisualizationTypes.VisualizationTypesEnum.LINE_CHART],
       data: {
         headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         values: {
@@ -1543,15 +1504,13 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -1561,21 +1520,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./BarChart_PartialDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "BarChart_PartialDetails",
       description: "BarChart_PartialDetails description",
       tags: ["full"],
-      type: ["bar-chart"],
+      type: [VisualizationTypes.VisualizationTypesEnum.BAR_CHART],
     };
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "BarChart_PartialDetails",
       description: "BarChart_PartialDetails description",
       tags: ["full"],
-      type: ["bar-chart"],
+      type: [VisualizationTypes.VisualizationTypesEnum.BAR_CHART],
       data: {
         headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         values: {
@@ -1586,15 +1545,13 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -1604,21 +1561,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./PieChart_PartialDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "PieChart_PartialDetails",
       description: "PieChart_PartialDetails description",
       tags: ["full"],
-      type: ["pie-chart"],
+      type: [VisualizationTypes.VisualizationTypesEnum.PIE_CHART],
     };
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "PieChart_PartialDetails",
       description: "PieChart_PartialDetails description",
       tags: ["full"],
-      type: ["pie-chart"],
+      type: [VisualizationTypes.VisualizationTypesEnum.PIE_CHART],
       data: {
         values: {
           "Statistic 1": 122,
@@ -1628,15 +1585,13 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -1646,21 +1601,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Scatter_PartialDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Scatter_PartialDetails",
       description: "Scatter_PartialDetails description",
       tags: ["full"],
-      type: ["scatter"],
+      type: [VisualizationTypes.VisualizationTypesEnum.SCATTER],
     };
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Scatter_PartialDetails",
       description: "Scatter_PartialDetails description",
       tags: ["full"],
-      type: ["scatter"],
+      type: [VisualizationTypes.VisualizationTypesEnum.SCATTER],
       data: {
         points: [
           { value: [3.275154, 2.957587], category: "3" },
@@ -1671,15 +1626,13 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -1689,21 +1642,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Funnel_PartialDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Funnel_PartialDetails",
       description: "Funnel_PartialDetails description",
       tags: ["full"],
-      type: ["funnel"],
+      type: [VisualizationTypes.VisualizationTypesEnum.FUNNEL],
     };
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Funnel_PartialDetails",
       description: "Funnel_PartialDetails description",
       tags: ["full"],
-      type: ["funnel"],
+      type: [VisualizationTypes.VisualizationTypesEnum.FUNNEL],
       data: {
         values: {
           "Statistic 1": 122,
@@ -1713,15 +1666,13 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -1731,21 +1682,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Treemap_PartialDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Treemap_PartialDetails",
       description: "Treemap_PartialDetails description",
       tags: ["full"],
-      type: ["treemap"],
+      type: [VisualizationTypes.VisualizationTypesEnum.TREEMAP],
     };
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Treemap_PartialDetails",
       description: "Treemap_PartialDetails description",
       tags: ["full"],
-      type: ["treemap"],
+      type: [VisualizationTypes.VisualizationTypesEnum.TREEMAP],
       data: {
         nodes: [
           {
@@ -1806,15 +1757,13 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -1824,21 +1773,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Sunburst_PartialDetails",
       description: "Sunburst_PartialDetails description",
       tags: ["full"],
-      type: ["sunburst"],
+      type: [VisualizationTypes.VisualizationTypesEnum.SUNBURST],
     };
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Sunburst_PartialDetails",
       description: "Sunburst_PartialDetails description",
       tags: ["full"],
-      type: ["sunburst"],
+      type: [VisualizationTypes.VisualizationTypesEnum.SUNBURST],
       data: {
         nodes: [
           {
@@ -1899,15 +1848,13 @@ describe("visualizations CRUD", () => {
         ],
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -1917,21 +1864,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Timeline_PartialDetails.json");
 
-    const files = [{ filePath, type: "application/json" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "application/json" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Timeline_PartialDetails",
       description: "Timeline_PartialDetails description",
       tags: ["full"],
-      type: ["timeline"],
+      type: [VisualizationTypes.VisualizationTypesEnum.TIMELINE],
     };
-    const fileDetails = { fileType: "JSON" };
-    const expectedVisualization = {
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.JSON };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       projectName: "Test_Project1",
       name: "Timeline_PartialDetails",
       description: "Timeline_PartialDetails description",
       tags: ["full"],
-      type: ["timeline"],
+      type: [VisualizationTypes.VisualizationTypesEnum.TIMELINE],
       data: {
         "2023-10-07": {
           summary: {
@@ -2025,15 +1972,13 @@ describe("visualizations CRUD", () => {
         },
       },
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -2043,11 +1988,11 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./BarChart_FullDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "XML" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         values: {
@@ -2060,7 +2005,7 @@ describe("visualizations CRUD", () => {
       name: "BarChart_FullDetails",
       description: "BarChart_FullDetails description",
       tags: ["full"],
-      type: "bar-chart",
+      type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
       projectName: "Test_Project1",
     };
 
@@ -2070,9 +2015,7 @@ describe("visualizations CRUD", () => {
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -2088,11 +2031,11 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Calendar_FullDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "XML" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         calendar: [
           {
@@ -2175,19 +2118,17 @@ describe("visualizations CRUD", () => {
       name: "Calendar_FullDetails",
       description: "Calendar_FullDetails description",
       tags: ["full"],
-      type: "calendar",
+      type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
       projectName: "Test_Project1",
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -2203,11 +2144,11 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./FLG_FullDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "XML" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         nodes: [
           {
@@ -2244,19 +2185,17 @@ describe("visualizations CRUD", () => {
       name: "FLG_FullDetails",
       description: "FLG_FullDetails description",
       tags: ["full"],
-      type: "force-directed-graph",
+      type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
       projectName: "Test_Project1",
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -2272,11 +2211,11 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Funnel_FullDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "XML" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         values: {
           Statistic_1: 122,
@@ -2288,19 +2227,17 @@ describe("visualizations CRUD", () => {
       name: "Funnel_FullDetails",
       description: "Funnel_FullDetails description",
       tags: ["full"],
-      type: "funnel",
+      type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
       projectName: "Test_Project1",
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -2316,11 +2253,11 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./HEB_FullDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "XML" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         nodes: [
           {
@@ -2357,19 +2294,17 @@ describe("visualizations CRUD", () => {
       name: "HEB_FullDetails",
       description: "HEB_FullDetails description",
       tags: ["full"],
-      type: "hierarchical-edge-bundling",
+      type: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
       projectName: "Test_Project1",
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -2385,11 +2320,11 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./LineChart_FullDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "XML" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         values: {
@@ -2402,19 +2337,17 @@ describe("visualizations CRUD", () => {
       name: "LineChart_FullDetails",
       description: "LineChart_FullDetails description",
       tags: ["full"],
-      type: "line-chart",
+      type: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
       projectName: "Test_Project1",
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -2430,11 +2363,11 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./PieChart_FullDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "XML" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         values: {
           Statistic_1: 122,
@@ -2446,19 +2379,17 @@ describe("visualizations CRUD", () => {
       name: "PieChart_FullDetails",
       description: "PieChart_FullDetails description",
       tags: ["full"],
-      type: "pie-chart",
+      type: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
       projectName: "Test_Project1",
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -2474,11 +2405,11 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Sankey_FullDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "XML" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         nodes: [
           {
@@ -2510,19 +2441,17 @@ describe("visualizations CRUD", () => {
       name: "Sankey_FullDetails",
       description: "Sankey_FullDetails description",
       tags: ["full"],
-      type: "sankey",
+      type: VisualizationTypes.VisualizationTypesEnum.SANKEY,
       projectName: "Test_Project1",
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -2538,11 +2467,11 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Scatter_FullDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "XML" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         points: [
           {
@@ -2570,19 +2499,17 @@ describe("visualizations CRUD", () => {
       name: "Scatter_FullDetails",
       description: "Scatter_FullDetails description",
       tags: ["full"],
-      type: "scatter",
+      type: VisualizationTypes.VisualizationTypesEnum.SCATTER,
       projectName: "Test_Project1",
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -2598,11 +2525,11 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Sunburst_FullDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "XML" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         nodes: [
           {
@@ -2665,19 +2592,17 @@ describe("visualizations CRUD", () => {
       name: "Sunburst_FullDetails",
       description: "Sunburst_FullDetails description",
       tags: ["full"],
-      type: "sunburst",
+      type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
       projectName: "Test_Project1",
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -2693,11 +2618,11 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Treemap_FullDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "XML" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         nodes: [
           {
@@ -2760,19 +2685,17 @@ describe("visualizations CRUD", () => {
       name: "Treemap_FullDetails",
       description: "Treemap_FullDetails description",
       tags: ["full"],
-      type: "treemap",
+      type: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
       projectName: "Test_Project1",
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -2788,11 +2711,11 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Wordcloud_FullDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "XML" };
-    const expectedVisualization = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       data: {
         words: [
           {
@@ -2828,19 +2751,17 @@ describe("visualizations CRUD", () => {
       name: "Wordcloud_FullDetails",
       description: "Wordcloud_FullDetails description",
       tags: ["full"],
-      type: "word-cloud",
+      type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
       projectName: "Test_Project1",
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -2856,10 +2777,10 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Matrix_FullDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {};
-    const fileDetails = { fileType: "XML" };
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {};
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       data: {
         nodes: [
@@ -2980,15 +2901,13 @@ describe("visualizations CRUD", () => {
       projectName: "Test_Project1",
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -3004,19 +2923,19 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./BarChart_PartialDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "BarChart_PartialDetails",
       description: "BarChart_PartialDetails description",
       tags: ["full"],
-      type: "bar-chart",
+      type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
     };
-    const fileDetails = { fileType: "XML" };
-    const expectedVisualization = {
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
+    const expectedVisualization: VisualizationTypes.VisualizationCreate = {
       name: "BarChart_PartialDetails",
       projectName: "Test_Project1",
-      type: "bar-chart",
+      type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
       data: {
         headers: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
         values: {
@@ -3030,15 +2949,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -3053,19 +2970,19 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Calendar_PartialDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Calendar_PartialDetails",
       description: "Calendar_PartialDetails description",
       tags: ["full"],
-      type: "calendar",
+      type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
     };
-    const fileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "Calendar_PartialDetails",
       projectName: "Test_Project1",
-      type: "calendar",
+      type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
       data: {
         calendar: [
           {
@@ -3158,15 +3075,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -3182,19 +3097,19 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./FLG_PartialDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "FLG_PartialDetails",
       description: "FLG_PartialDetails description",
       tags: ["full"],
-      type: "force-directed-graph",
+      type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
     };
-    const fileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "FLG_PartialDetails",
       projectName: "Test_Project1",
-      type: "force-directed-graph",
+      type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
       data: {
         nodes: [
           { name: "Node1", category: "1", },
@@ -3211,15 +3126,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -3235,15 +3148,15 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Funnel_PartialDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Funnel_PartialDetails",
       description: "Funnel_PartialDetails description",
       tags: ["full"],
-      type: "funnel",
+      type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
     };
-    const fileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "Funnel_PartialDetails",
       projectName: "Test_Project1",
@@ -3260,15 +3173,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -3284,15 +3195,15 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./HEB_PartialDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "HEB_PartialDetails",
       description: "HEB_PartialDetails description",
       tags: ["full"],
-      type: "hierarchical-edge-bundling",
+      type: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
     };
-    const fileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "HEB_PartialDetails",
       projectName: "Test_Project1",
@@ -3313,15 +3224,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -3337,15 +3246,15 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./LineChart_PartialDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "LineChart_PartialDetails",
       description: "LineChart_PartialDetails description",
       tags: ["full"],
-      type: "line-chart",
+      type: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
     };
-    const fileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "LineChart_PartialDetails",
       projectName: "Test_Project1",
@@ -3362,15 +3271,13 @@ describe("visualizations CRUD", () => {
       description: "LineChart_PartialDetails description",
       tags: ["full"],
     };
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -3386,15 +3293,15 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./PieChart_PartialDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "PieChart_PartialDetails",
       description: "PieChart_PartialDetails description",
       tags: ["full"],
-      type: "pie-chart",
+      type: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
     };
-    const fileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "PieChart_PartialDetails",
       projectName: "Test_Project1",
@@ -3411,15 +3318,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -3435,15 +3340,15 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Sankey_PartialDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Sankey_PartialDetails",
       description: "Sankey_PartialDetails description",
       tags: ["full"],
-      type: "sankey",
+      type: VisualizationTypes.VisualizationTypesEnum.SANKEY,
     };
-    const fileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "Sankey_PartialDetails",
       projectName: "Test_Project1",
@@ -3463,15 +3368,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -3486,15 +3389,15 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Scatter_PartialDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Scatter_PartialDetails",
       description: "Scatter_PartialDetails description",
       tags: ["full"],
-      type: "scatter",
+      type: VisualizationTypes.VisualizationTypesEnum.SCATTER,
     };
-    const fileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "Scatter_PartialDetails",
       projectName: "Test_Project1",
@@ -3512,15 +3415,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -3536,15 +3437,15 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Sunburst_PartialDetails",
       description: "Sunburst_PartialDetails description",
       tags: ["full"],
-      type: "sunburst",
+      type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
     };
-    const fileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "Sunburst_PartialDetails",
       projectName: "Test_Project1",
@@ -3625,15 +3526,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -3649,15 +3548,15 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Treemap_PartialDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Treemap_PartialDetails",
       description: "Treemap_PartialDetails description",
       tags: ["full"],
-      type: "treemap",
+      type: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
     };
-    const fileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "Treemap_PartialDetails",
       projectName: "Test_Project1",
@@ -3738,15 +3637,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -3762,15 +3659,15 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Wordcloud_PartialDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Wordcloud_PartialDetails",
       description: "Wordcloud_PartialDetails description",
       tags: ["full"],
-      type: "word-cloud",
+      type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
     };
-    const fileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "Wordcloud_PartialDetails",
       projectName: "Test_Project1",
@@ -3790,15 +3687,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -3814,15 +3709,15 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Matrix_PartialDetails.xml");
 
-    const files = [{ filePath, type: "text/xml" }];
+    const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Matrix_PartialDetails",
       description: "Matrix_PartialDetails description",
       tags: ["full"],
-      type: "matrix",
+      type: VisualizationTypes.VisualizationTypesEnum.MATRIX,
     };
-    const fileDetails = { fileType: "XML" };
+    const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
     const expectedVisualization = {
       name: "Matrix_PartialDetails",
       projectName: "Test_Project1",
@@ -3945,15 +3840,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -3969,18 +3862,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Wordcloud_FullDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "word-cloud",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: false,
       mapping: {
         names: "1",
@@ -4006,15 +3899,13 @@ describe("visualizations CRUD", () => {
       projectName: "Test_Project1",
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -4025,18 +3916,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./FLG_FullDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "force-directed-graph",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -4071,15 +3962,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -4089,18 +3978,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Sankey_FullDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "sankey",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.SANKEY,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -4154,15 +4043,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -4173,18 +4060,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./HEB_FullDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "hierarchical-edge-bundling",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -4219,15 +4106,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -4237,18 +4122,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Calendar_FullDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "calendar",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         dates: "1",
@@ -4297,15 +4182,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -4315,18 +4198,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./LineChart_FullDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "line-chart",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         data: "2,3,7,8",
@@ -4354,15 +4237,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -4373,18 +4254,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./BarChart_FullDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "bar-chart",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         data: "2,3,7,8",
@@ -4412,15 +4293,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -4431,18 +4310,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./PieChart_FullDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "pie-chart",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         values: "2",
@@ -4469,15 +4348,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -4488,18 +4365,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Scatter_FullDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "scatter",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.SCATTER,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         values: "2,3",
@@ -4542,15 +4419,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -4562,18 +4437,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Treemap_FullDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "treemap",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         names: "1",
@@ -4640,15 +4515,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -4658,18 +4531,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Sunburst_FullDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "sunburst",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         names: "1",
@@ -4736,15 +4609,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -4754,18 +4625,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Funnel_FullDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "funnel",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         values: "2",
@@ -4792,15 +4663,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -4812,21 +4681,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Wordcloud_PartialDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Wordcloud_PartialDetails",
       description: "Wordcloud_PartialDetails description",
       tags: ["full"],
-      type: "word-cloud",
+      type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: false,
       mapping: {
         names: "1",
@@ -4849,15 +4718,13 @@ describe("visualizations CRUD", () => {
       projectName: "Test_Project1",
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -4868,21 +4735,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./FLG_PartialDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "FLG_PartialDetails",
       description: "FLG_PartialDetails description",
       tags: ["full"],
-      type: "force-directed-graph",
+      type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -4914,15 +4781,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -4932,21 +4797,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Sankey_PartialDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Sankey_PartialDetails",
       description: "Sankey_PartialDetails description",
       tags: ["full"],
-      type: "sankey",
+      type: VisualizationTypes.VisualizationTypesEnum.SANKEY,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -4997,15 +4862,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -5016,21 +4879,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./HEB_PartialDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "HEB_PartialDetails",
       description: "HEB_PartialDetails description",
       tags: ["full"],
-      type: "hierarchical-edge-bundling",
+      type: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -5062,15 +4925,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -5080,21 +4941,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Calendar_PartialDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Calendar_PartialDetails",
       description: "Calendar_PartialDetails description",
       tags: ["full"],
-      type: "calendar",
+      type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         dates: "1",
@@ -5140,15 +5001,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -5158,21 +5017,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./LineChart_PartialDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "LineChart_PartialDetails",
       description: "LineChart_PartialDetails description",
       tags: ["full"],
-      type: "line-chart",
+      type: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         data: "2,3,7,8",
@@ -5197,15 +5056,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -5216,21 +5073,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./BarChart_PartialDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "BarChart_PartialDetails",
       description: "BarChart_PartialDetails description",
       tags: ["full"],
-      type: "bar-chart",
+      type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         data: "2,3,7,8",
@@ -5255,15 +5112,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -5274,21 +5129,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./PieChart_PartialDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "PieChart_PartialDetails",
       description: "PieChart_PartialDetails description",
       tags: ["full"],
-      type: "pie-chart",
+      type: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         values: "2",
@@ -5312,15 +5167,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -5332,21 +5185,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Scatter_PartialDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "ScatterChart_PartialDetails",
       description: "ScatterChart_PartialDetails description",
       tags: ["full"],
-      type: "scatter",
+      type: VisualizationTypes.VisualizationTypesEnum.SCATTER,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         values: "2,3",
@@ -5389,15 +5242,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -5408,21 +5259,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Treemap_PartialDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Treemap_PartialDetails",
       description: "Treemap_PartialDetails description",
       tags: ["full"],
-      type: "treemap",
+      type: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         names: "1",
@@ -5487,15 +5338,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -5506,21 +5355,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Sunburst_PartialDetails",
       description: "Sunburst_PartialDetails description",
       tags: ["full"],
-      type: "sunburst",
+      type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         names: "1",
@@ -5584,15 +5433,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -5603,21 +5450,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Funnel_PartialDetails.xlsx");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Funnel_PartialDetails",
       description: "Funnel_PartialDetails description",
       tags: ["full"],
-      type: "funnel",
+      type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
     };
-    const fileDetails = {
-      fileType: "EXCEL",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.EXCEL,
       includeHeaders: true,
       mapping: {
         values: "2",
@@ -5641,15 +5488,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -5660,18 +5505,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Wordcloud_FullDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "word-cloud",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: false,
       mapping: {
         names: "1",
@@ -5697,15 +5542,13 @@ describe("visualizations CRUD", () => {
       projectName: "Test_Project1",
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -5716,18 +5559,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./FLG_FullDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "force-directed-graph",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -5762,15 +5605,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -5780,18 +5621,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Sankey_FullDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "sankey",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.SANKEY,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -5845,15 +5686,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -5864,18 +5703,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./HEB_FullDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "hierarchical-edge-bundling",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -5910,15 +5749,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -5928,18 +5765,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Calendar_FullDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "calendar",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         dates: "1",
@@ -5982,15 +5819,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -6000,18 +5835,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./LineChart_FullDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "line-chart",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         data: "2,3,7,8",
@@ -6039,15 +5874,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -6058,18 +5891,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./BarChart_FullDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "bar-chart",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         data: "2,3,7,8",
@@ -6097,15 +5930,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -6116,18 +5947,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./PieChart_FullDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "pie-chart",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         values: "2",
@@ -6154,15 +5985,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -6173,18 +6002,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Scatter_FullDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "scatter",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.SCATTER,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         values: "2,3",
@@ -6227,15 +6056,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -6247,18 +6074,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Treemap_FullDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "treemap",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         names: "1",
@@ -6325,15 +6152,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -6344,18 +6169,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Sunburst_FullDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "sunburst",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         names: "1",
@@ -6422,15 +6247,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -6441,18 +6264,18 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Funnel_FullDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = true;
-    const visualizationDetails = {
-      type: "funnel",
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
+      type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         values: "2",
@@ -6479,15 +6302,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -6499,21 +6320,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Wordcloud_PartialDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Wordcloud_PartialDetails",
       description: "Wordcloud_PartialDetails description",
       tags: ["full"],
-      type: "word-cloud",
+      type: VisualizationTypes.VisualizationTypesEnum.WORD_CLOUD,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: false,
       mapping: {
         names: "1",
@@ -6536,15 +6357,13 @@ describe("visualizations CRUD", () => {
       projectName: "Test_Project1",
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -6555,21 +6374,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./FLG_PartialDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "FLG_PartialDetails",
       description: "FLG_PartialDetails description",
       tags: ["full"],
-      type: "force-directed-graph",
+      type: VisualizationTypes.VisualizationTypesEnum.FORCE_DIRECTED_GRAPH,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -6601,15 +6420,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -6619,21 +6436,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Sankey_PartialDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Sankey_PartialDetails",
       description: "Sankey_PartialDetails description",
       tags: ["full"],
-      type: "sankey",
+      type: VisualizationTypes.VisualizationTypesEnum.SANKEY,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -6684,15 +6501,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -6703,21 +6518,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./HEB_PartialDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "HEB_PartialDetails",
       description: "HEB_PartialDetails description",
       tags: ["full"],
-      type: "hierarchical-edge-bundling",
+      type: VisualizationTypes.VisualizationTypesEnum.HIERARCHICAL_EDGE_BUNDLING,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         nodes: "1",
@@ -6749,15 +6564,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -6767,21 +6580,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Calendar_PartialDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Calendar_PartialDetails",
       description: "Calendar_PartialDetails description",
       tags: ["full"],
-      type: "calendar",
+      type: VisualizationTypes.VisualizationTypesEnum.CALENDAR,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       separator: ",",
       includeHeaders: true,
       mapping: {
@@ -6822,15 +6635,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -6840,21 +6651,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./LineChart_PartialDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "LineChart_PartialDetails",
       description: "LineChart_PartialDetails description",
       tags: ["full"],
-      type: "line-chart",
+      type: VisualizationTypes.VisualizationTypesEnum.LINE_CHART,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         data: "2,3,7,8",
@@ -6879,15 +6690,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -6898,21 +6707,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./BarChart_PartialDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "BarChart_PartialDetails",
       description: "BarChart_PartialDetails description",
       tags: ["full"],
-      type: "bar-chart",
+      type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         data: "2,3,7,8",
@@ -6937,15 +6746,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -6956,21 +6763,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./PieChart_PartialDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "PieChart_PartialDetails",
       description: "PieChart_PartialDetails description",
       tags: ["full"],
-      type: "pie-chart",
+      type: VisualizationTypes.VisualizationTypesEnum.PIE_CHART,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         values: "2",
@@ -6994,15 +6801,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -7014,21 +6819,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Scatter_PartialDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "ScatterChart_PartialDetails",
       description: "ScatterChart_PartialDetails description",
       tags: ["full"],
-      type: "scatter",
+      type: VisualizationTypes.VisualizationTypesEnum.SCATTER,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         values: "2,3",
@@ -7071,15 +6876,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -7090,21 +6893,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Treemap_PartialDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Treemap_PartialDetails",
       description: "Treemap_PartialDetails description",
       tags: ["full"],
-      type: "treemap",
+      type: VisualizationTypes.VisualizationTypesEnum.TREEMAP,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         names: "1",
@@ -7169,15 +6972,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -7188,21 +6989,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Sunburst_PartialDetails",
       description: "Sunburst_PartialDetails description",
       tags: ["full"],
-      type: "sunburst",
+      type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         names: "1",
@@ -7266,15 +7067,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -7285,21 +7084,21 @@ describe("visualizations CRUD", () => {
 
     const filePath = path.resolve(__dirname, "./Funnel_PartialDetails.csv");
 
-    const files = [
+    const files: FileTypes.FileProperties[] = [
       {
         filePath,
         type: "text/csv",
       },
     ];
     const allFileDetails: boolean = false;
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Funnel_PartialDetails",
       description: "Funnel_PartialDetails description",
       tags: ["full"],
-      type: "funnel",
+      type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
     };
-    const fileDetails = {
-      fileType: "CSV",
+    const fileDetails: FileTypes.FileDetails = {
+      fileType: FileTypes.FileType.CSV,
       includeHeaders: true,
       mapping: {
         values: "2",
@@ -7323,15 +7122,13 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = (
+    const visualization: VisualizationTypes.VisualizationType | null = (
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     )[0];
@@ -7357,7 +7154,7 @@ describe("visualizations CRUD", () => {
       tags: ["full"],
     };
 
-    const visualization = await factory
+    const visualization: VisualizationTypes.VisualizationType | null = await factory
       .getBZL()
       .VisualizationBZL.findOne({
         name: "Funnel_PartialDetails",
@@ -7369,49 +7166,46 @@ describe("visualizations CRUD", () => {
   it("It browse visualizations with different filters", async () => {
     const expectedVisualization1 = {
       name: "Funnel_PartialDetails",
-      type: "funnel",
+      type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
       description: "Funnel_PartialDetails description",
       tags: ["full"],
     };
 
-    const visualization1 = await factory
+    const visualization1: VisualizationTypes.ExtendedVisualizationType = await factory
       .getBZL()
       .VisualizationBZL.browse({
         name: "Funnel_PartialDetails",
-        type: "funnel",
+        type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
       });
-    //@ts-ignore
-    expect((visualization1.visualizations)[0]).toMatchObject(expectedVisualization1);
+    expect((visualization1.visualizations as VisualizationTypes.VisualizationType[])[0]).toMatchObject(expectedVisualization1);
     const expectedVisualization2 = {
       name: "Funnel_PartialDetails",
-      type: "funnel",
+      type: VisualizationTypes.VisualizationTypesEnum.FUNNEL,
       description: "Funnel_PartialDetails description",
       tags: ["full"],
     };
 
-    const visualization2 = await factory
+    const visualization2: VisualizationTypes.ExtendedVisualizationType = await factory
       .getBZL()
       .VisualizationBZL.browse({
         text: "Funnel_PartialDetails",
       });
-    //@ts-ignore
-    expect((visualization2.visualizations)[0]).toMatchObject(expectedVisualization2);
-    const visualization3 = await factory
+    expect((visualization2.visualizations as VisualizationTypes.VisualizationType[])[0]).toMatchObject(expectedVisualization2);
+    const visualization3: VisualizationTypes.ExtendedVisualizationType = await factory
       .getBZL()
       .VisualizationBZL.browse({
         text: "randooooom",
       });
-    //@ts-ignore
-    expect((visualization3.visualizations).length === 0).toBe(true);
+    expect((visualization3.visualizations as VisualizationTypes.VisualizationType[]).length === 0).toBe(true);
 
     const expectedVisualization4 = {
       name: "BarChart_FullDetails",
-      type: "bar-chart",
+      type: VisualizationTypes.VisualizationTypesEnum.BAR_CHART,
       description: "BarChart_FullDetails description",
       tags: ["full"],
     };
 
-    const visualization4 = await factory
+    const visualization4: VisualizationTypes.ExtendedVisualizationType = await factory
       .getBZL()
       .VisualizationBZL.browse({
         sort: {
@@ -7419,23 +7213,20 @@ describe("visualizations CRUD", () => {
           sortOrder: 1,
         },
       });
-    //@ts-ignore
-    expect(visualization4.visualizations[0]).toMatchObject(expectedVisualization4);
-    const visualization5 = await factory
+    expect((visualization4.visualizations as VisualizationTypes.VisualizationType[])[0]).toMatchObject(expectedVisualization4);
+    const visualization5: VisualizationTypes.ExtendedVisualizationType = await factory
       .getBZL()
       .VisualizationBZL.browse({
         page: 1,
         per_page: 1
       });
-    //@ts-ignore
-    expect((visualization5.visualizations).length).toBe(1);
-    const visualization6 = await factory
+    expect((visualization5.visualizations as VisualizationTypes.VisualizationType[]).length).toBe(1);
+    const visualization6: VisualizationTypes.ExtendedVisualizationType = await factory
       .getBZL()
       .VisualizationBZL.browse({
         page: 1,
       });
-    //@ts-ignore
-    expect((visualization6.visualizations).length).toBe(10);
+    expect((visualization6.visualizations as VisualizationTypes.VisualizationType[]).length).toBe(10);
 
   });
   it("It delets one visualization", async () => {
@@ -7457,26 +7248,24 @@ describe("visualizations CRUD", () => {
         ]
       }
     });
-    const visualizationDetails = {
+    const visualizationDetails: VisualizationTypes.VisualizationUpdate = {
       name: "Sunburst_PartialDetails",
       description: "Sunburst_PartialDetails description",
       tags: ["full"],
-      type: "sunburst",
+      type: VisualizationTypes.VisualizationTypesEnum.SUNBURST,
     };
     try {
       const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.xml");
 
-      const files = [{ filePath, type: "text/xml" }];
+      const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
       const allFileDetails: boolean = false;
-      const fileDetails = { fileType: "XML" };
+      const fileDetails: FileTypes.FileDetails = { fileType: FileTypes.FileType.XML };
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     }
@@ -7510,8 +7299,7 @@ describe("visualizations CRUD", () => {
     try {
       await factory
         .getBZL()
-        //@ts-ignore
-        .VisualizationBZL.create(visualizationDetails);
+        .VisualizationBZL.create(visualizationDetails as VisualizationTypes.VisualizationCreate);
     }
     catch (err) {
       expect((err as Error).message).toBe('Method not implemented.')
@@ -7524,7 +7312,7 @@ describe("visualizations CRUD", () => {
     catch (err) {
       expect((err as Error).message).toBe('No active project')
     }
-    const expectedProject = {
+    const expectedProject: ProjectTypes.ProjectCreate = {
       name: "Test_Project_Dashboard",
       description: "Test_ProjectDescription1",
       isActive: true,
@@ -7534,16 +7322,15 @@ describe("visualizations CRUD", () => {
     try {
       const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.xml");
 
-      const files = [{ filePath, type: "text/xml" }];
+      const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
       const allFileDetails: boolean = false;
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          {}
+          {} as FileTypes.FileDetails
         )
     }
     catch (err) {
@@ -7553,17 +7340,15 @@ describe("visualizations CRUD", () => {
     try {
       const filePath = path.resolve(__dirname, "./Sunburst_PartialDetails.xml");
 
-      const files = [{ filePath, type: "text/xml" }];
+      const files: FileTypes.FileProperties[] = [{ filePath, type: "text/xml" }];
       const allFileDetails: boolean = false;
-      const fileDetails = { fileType: 'faje' };
+      const fileDetails: FileTypes.FileDetails = { fileType: 'faje' as FileTypes.FileType };
       await factory
         .getBZL()
         .VisualizationBZL.createOrUpdateFromFiles(
           files,
           allFileDetails,
-          // @ts-ignore
           visualizationDetails,
-          // @ts-ignore
           fileDetails
         )
     }
@@ -7576,14 +7361,10 @@ describe("visualizations CRUD", () => {
 describe("visualizations Providers", () => {
 
   it('returns null for all providers for unknown type', () => {
-    //@ts-ignore
-    const providerExcelCsv = exelOrCsvdataProvider('fake', [], false);
-    //@ts-ignore
-    const providerJsonString = jsonDataProvider('fake', {}, false)
-    //@ts-ignore
-    const providerJsonArray = jsonDataProvider(['fake'], {}, false)
-    //@ts-ignore
-    const providerXML = xmlDataProvider('fake', {
+    const providerExcelCsv = exelOrCsvdataProvider('fake' as VisualizationTypes.VisualizationTypesEnum, [], false);
+    const providerJsonString = jsonDataProvider('fake' as VisualizationTypes.VisualizationTypesEnum, {}, false)
+    const providerJsonArray = jsonDataProvider(['fake' as VisualizationTypes.VisualizationTypesEnum], {}, false)
+    const providerXML = xmlDataProvider('fake' as VisualizationTypes.VisualizationTypesEnum, {
       root: {
         type: [],
         name: [],
@@ -7597,8 +7378,7 @@ describe("visualizations Providers", () => {
     expect(providerXML).toBe(null)
   })
   it('returns null for all transformer provider for unknown type', () => {
-    //@ts-ignore
-    const provider = transformerProvider('fake', {}, [], false)
+    const provider = transformerProvider('fake' as VisualizationTypes.VisualizationTypesEnum, {}, [], false)
     expect(provider).toBe(null);
   })
   it('returns undefined for axis transformations', () => {
@@ -7611,12 +7391,12 @@ describe("visualizations Providers", () => {
     expect(invalidReformat).toBe(null)
   })
   it('returns null for hierarchy transformations', () => {
-    const testData1 = [
+    const testData1: TransformerTypes.FullNodesDetails[] = [
       { nodes: { name: "Parent", value: "100", category: "A", properties: "", children: ["Child1", "Child2"] } },
       { nodes: { name: "Child3", value: "50", category: "B", properties: "", children: [] } }
     ];
 
-    const testData2 = [
+    const testData2: TransformerTypes.FullNodesDetails[] = [
       { nodes: { name: "Parent", value: "100", category: "A", properties: "", children: [] } },
       { nodes: { name: "Child3", value: "50", category: "B", properties: "", children: [] } }
     ];
