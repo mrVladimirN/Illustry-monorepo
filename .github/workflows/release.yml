@@ -30,6 +30,7 @@ jobs:
         run: yarn install
 
       - name: Run TypeScript build
+        working-directory: types
         run: yarn build:ts
 
       - name: Check commit message for release
@@ -42,10 +43,12 @@ jobs:
           fi
         shell: bash
 
+      - name: Set up npm authentication
+        run: echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
       - name: Publish to npm
         run: |
           npm set registry https://registry.npmjs.org/
-          npm publish --access public
+          npm publish types/dist --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        if: success() 
