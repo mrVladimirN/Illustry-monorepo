@@ -1,0 +1,51 @@
+name: Publish Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Cache Yarn dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.yarn/cache
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Run TypeScript build
+        run: yarn build:ts
+
+      - name: Check commit message for release
+        id: check_commit_message
+        run: |
+          echo "Commit message: $GITHUB_SHA"
+          if [[ ! "$(git log -1 --pretty=%B)" =~ ^(chore\(release\)|chore: release) ]]; then
+            echo "Not a release commit. Skipping publish step."
+            exit 1
+          fi
+        shell: bash
+
+      - name: Publish to npm
+        run: |
+          npm set registry https://registry.npmjs.org/
+          npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        if: success() 
