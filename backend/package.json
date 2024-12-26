@@ -1,13 +1,6 @@
 {
-  "name": "@dxworks/illustry-server",
+  "name": "@impulsivelabs/illustry-server",
   "version": "0.1.0",
-  "description": "A hub for visualizing data about software systems",
-  "keywords": [
-    "dxworks",
-    "illustry",
-    "visualizations",
-    "charts"
-  ],
   "license": "Apache-2.0",
   "author": "Vladimir Nitu",
   "main": "dist/app-cli.js",
@@ -24,7 +17,7 @@
     "webpack": "webpack --config webpack.config.js"
   },
   "dependencies": {
-    "@illustry/types": "0.1.14",
+    "@illustry/types": "1.0.0",
     "bunyan": "1.8.15",
     "cors": "2.8.5",
     "dotenv": "16.3.1",

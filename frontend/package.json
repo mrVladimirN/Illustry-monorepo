@@ -1,5 +1,5 @@
 {
-  "name": "@dxworks/illustry-frontend",
+  "name": "@impulsivelabs/illustry-client",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -59,7 +59,7 @@
     "zod": "3.22.4"
   },
   "devDependencies": {
-    "@illustry/types": "0.1.14",
+    "@illustry/types": "1.0.0",
     "@tailwindcss/typography": "0.5.10",
     "@types/echarts": "4.9.21",
     "@types/node": "20.9.1",
