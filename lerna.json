@@ -3,7 +3,8 @@
         "backend",
         "docs",
         "frontend",
-        "types"
+        "types",
+        "!/*"
     ],
     "version": "independent",
     "command": {
