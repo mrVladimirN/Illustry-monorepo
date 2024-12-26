@@ -13,8 +13,7 @@
         },
         "version": {
             "allowBranch": [
-                "main",
-                "feat/github-actions"
+                "main"
             ],
             "conventionalCommits": true,
             "message": "chore: release",
