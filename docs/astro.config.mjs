@@ -3,13 +3,13 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https://impulsivelabs.github.io/',
-	base: '/Illustry-monorepo/docs',
+	site: 'https://impulsivelabs.github.io',
+	base: '/Illustry-monorepo',
 	integrations: [
 		starlight({
 			title: 'Illustry',
 			logo: {
-				light: '/src/assets/logo-light.svg',
+				light: './src/assets/logo-light.svg',
 				dark: '/src/assets/logo-dark.svg',
 				replacesTitle: true,
 			},
