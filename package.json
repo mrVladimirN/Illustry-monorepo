@@ -4,7 +4,6 @@
   "repository": "https://github.com/mrVladimirN/Illustry-monorepo.git",
   "author": "mrVladimirN <vladimir.nitu.business@outlook.com>",
   "license": "MIT",
-  "private": "true",
   "workspaces": [
     "backend",
     "frontend",
