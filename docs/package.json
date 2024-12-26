@@ -4,7 +4,7 @@
   "version": "0.0.2",
   "scripts": {
     "start:dev": "astro dev",
-    "build:ts": "astro check && astro build",
+    "build:docs": "astro check && astro build",
     "preview": "astro preview"
   },
   "dependencies": {
