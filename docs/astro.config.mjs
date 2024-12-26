@@ -3,8 +3,8 @@ import starlight from '@astrojs/starlight';
 
 // https://astro.build/config
 export default defineConfig({
-	site: 'https:/illustrydocs.github.io',
-	base: '/IllustryDocs',
+	site: 'https://impulsivelabs.github.io/',
+	base: '/Illustry-monorepo/docs',
 	integrations: [
 		starlight({
 			title: 'Illustry',
