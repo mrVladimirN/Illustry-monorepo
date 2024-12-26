@@ -25,7 +25,7 @@ export default defineConfig({
 			  ],
 			favicon: 'icon.ico',
 			social: {
-				github: 'https://github.com/mrVladimirN/IllustryDocs',
+				github: 'https://impulsivelabs.github.io/Illustry-monorepo/',
 				linkedin: 'https://www.linkedin.com/in/vladimir-nitu-antonie-763b45172/'
 			},
 			sidebar: [

@@ -4,13 +4,14 @@
   "version": "0.0.2",
   "scripts": {
     "start:dev": "astro dev",
-    "build:docs": "astro check && astro build",
+    "build:ts": "astro check && astro build",
     "preview": "astro preview"
   },
   "dependencies": {
     "@astrojs/check": "0.3.3",
-    "@astrojs/starlight": "0.30.3",
-    "astro": "5.1.1",
+    "@astrojs/starlight": "0.15.0",
+    "astro": "4.16.18",
+    "execa": "9.5.2",
     "sharp": "0.32.6",
     "typescript": "5.3.3"
   }
