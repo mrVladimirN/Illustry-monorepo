@@ -30,7 +30,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20 # Use the appropriate Node.js version
+          node-version: 18 # Use the appropriate Node.js version
 
       # Install dependencies for the monorepo using Yarn
       - name: Install dependencies
@@ -39,7 +39,7 @@ jobs:
       # Build the Astro docs site in the monorepo's `docs` package
       - name: Build Astro Docs site
         working-directory: docs
-        run: yarn build:ts
+        run: yarn build:docs
 
       # Upload the build artifacts for deployment
       - name: Upload artifact for Pages deployment
