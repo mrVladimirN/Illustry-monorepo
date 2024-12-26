@@ -38,7 +38,7 @@ jobs:
 
       # Build the Astro docs site in the monorepo's `docs` package
       - name: Build Astro Docs site
-        working-directory: packages/docs
+        working-directory: docs
         run: yarn build:ts
 
       # Upload the build artifacts for deployment
