@@ -70,4 +70,4 @@ export interface TimelineData {
 
 ## Timeline Example
 
-![Timeline Example](/IllustryDocs/timeline.gif)
+![Timeline Example](/Illustry-monorepo/timeline.gif)

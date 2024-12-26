@@ -37,4 +37,4 @@ export interface FunnelData {
 
 ## Funnel Example
 
-![Funnel Example](/IllustryDocs/funnel.gif)
+![Funnel Example](/Illustry-monorepo/funnel.gif)

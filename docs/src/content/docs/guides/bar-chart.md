@@ -35,4 +35,4 @@ export interface AxisChartData {
 
 ## Bar Chart Example
 
-![Bar Chart Example](/IllustryDocs/bar-chart.gif)
+![Bar Chart Example](/Illustry-monorepo/bar-chart.gif)

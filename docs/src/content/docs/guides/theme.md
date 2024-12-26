@@ -26,4 +26,4 @@ Illustry supports both dark and light modes, catering to different preferences a
 
 ## Practical example
 
-![Theme](/IllustryDocs/theme.gif)
+![Theme](/Illustry-monorepo/theme.gif)

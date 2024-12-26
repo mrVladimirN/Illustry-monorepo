@@ -43,4 +43,4 @@ export interface CalendarData {
 
 ## Calendar Example
 
-![Calendar Example](/IllustryDocs/calendar.gif)
+![Calendar Example](/Illustry-monorepo/calendar.gif)

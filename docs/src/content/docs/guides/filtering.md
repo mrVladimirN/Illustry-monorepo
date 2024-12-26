@@ -69,4 +69,4 @@ Illustry is providing some common constructions and some specific words in order
 
 ## Example filtering
 
-![Example filtering](/IllustryDocs/filtering.gif)
+![Example filtering](/Illustry-monorepo/filtering.gif)

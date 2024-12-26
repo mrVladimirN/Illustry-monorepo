@@ -48,4 +48,4 @@ export interface HierarchyData {
 
 ## Tree Map Example
 
-![Tree Map Example](/IllustryDocs/tree-map.gif)
+![Tree Map Example](/Illustry-monorepo/tree-map.gif)

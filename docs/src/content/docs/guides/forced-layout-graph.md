@@ -48,4 +48,4 @@ export interface NodeLinkData {
 
 ## Forced Layout Graph Example
 
-![Forced Layout Graph Example](/IllustryDocs/forced-layout-graph.gif)
+![Forced Layout Graph Example](/Illustry-monorepo/forced-layout-graph.gif)
