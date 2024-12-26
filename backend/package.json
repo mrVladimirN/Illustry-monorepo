@@ -1,6 +1,6 @@
 {
   "name": "@impulsivelabs/illustry-server",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "license": "Apache-2.0",
   "author": "Vladimir Nitu",
   "main": "dist/app-cli.js",
@@ -17,7 +17,7 @@
     "webpack": "webpack --config webpack.config.js"
   },
   "dependencies": {
-    "@illustry/types": "1.0.0",
+    "@illustry/types": "1.0.1",
     "bunyan": "1.8.15",
     "cors": "2.8.5",
     "dotenv": "16.3.1",

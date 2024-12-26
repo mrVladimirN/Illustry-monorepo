@@ -1522,14 +1522,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@illustry/types@npm:0.1.0":
-  version: 0.1.0
-  resolution: "@illustry/types@npm:0.1.0"
-  checksum: 10/a83395e13b0317e3a872c782556942fea0ab93821a1c631572b80c3ee109df25fca5a93961b66dd6f253c71192c5a630526e8b196012ed2397678a65f3b0fab9
-  languageName: node
-  linkType: hard
-
-"@illustry/types@workspace:types":
+"@illustry/types@npm:1.0.1, @illustry/types@workspace:types":
   version: 0.0.0-use.local
   resolution: "@illustry/types@workspace:types"
   dependencies:
@@ -1721,7 +1714,7 @@ __metadata:
   dependencies:
     "@files-ui/react": "npm:1.0.8"
     "@hookform/resolvers": "npm:3.1.1"
-    "@illustry/types": "npm:0.1.0"
+    "@illustry/types": "npm:1.0.1"
     "@radix-ui/react-accordion": "npm:1.1.2"
     "@radix-ui/react-alert-dialog": "npm:1.0.5"
     "@radix-ui/react-checkbox": "npm:1.0.4"
@@ -1789,7 +1782,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@impulsivelabs/illustry-server@workspace:backend"
   dependencies:
-    "@illustry/types": "npm:0.1.0"
+    "@illustry/types": "npm:1.0.1"
     "@types/bunyan": "npm:1.8.11"
     "@types/cors": "npm:2.8.17"
     "@types/exceljs": "npm:0.5.3"
