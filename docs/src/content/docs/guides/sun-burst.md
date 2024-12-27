@@ -11,16 +11,9 @@ The **Sun Burst Chart** visualization is a dynamic and engaging representation o
 To represent a Map Data, you can use the following `HierarchyData` interface:
 
 ```typescript
-export interface HierarchyNode extends with_optional_properties {
-  name: string;
-  value: number;
-  category: string;
-  children?: HierarchyNode[];
-}
+{{HierarchyNode}}
 
-export interface HierarchyData {
-  nodes: HierarchyNode[];
-}
+{{HierarchyData}}
 ```
 ### Key Attributes
 

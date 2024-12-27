@@ -12,9 +12,7 @@ The **Funnel** visualization is a powerful tool for tracking the progression and
 To represent a Funnel, you can use the following `FunnelData` interface:
 
 ```typescript
-export interface FunnelData {
-  values: { [key: string]: number };
-}
+{{FunnelData}}
 ```
 ### Key Attributes
 

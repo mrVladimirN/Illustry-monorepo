@@ -12,25 +12,9 @@ When working with visualizations, the system supports a flexible data structure 
 To represent a visualization in your system, you can use the following `VisualizationData` interface:
 
 ```typescript
-interface VisualizationData {
-  projectName: string;
-  type: VisualizationTypesEnum | VisualizationTypesEnum[];
-  description?: string;
-  name: string;
-  tags?: string[];
-  data:
-    | WordCloudData
-    | NodeLinkData
-    | CalendarData
-    | AxisChartData
-    | ScatterData
-    | PieChartData
-    | HierarchyData
-    | FunnelData 
-    | TimelineData;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
+
+{{VisualizationData}}
+
 ```
 
 ### Key Attributes

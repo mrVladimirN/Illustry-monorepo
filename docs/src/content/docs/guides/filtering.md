@@ -46,7 +46,6 @@ Illustry is providing some common constructions and some specific words in order
 - categories
 - targets
 - names
-- values
 
 ## Scatter
 

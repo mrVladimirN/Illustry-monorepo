@@ -10,15 +10,9 @@ The **Calendar** visualization is a unique representation designed to provide in
 To represent a Calendar, you can use the following `CalendarData` interface:
 
 ```typescript
-export interface CalendarType extends with_optional_properties {
-  date: string;
-  value: number;
-  category: string;
-}
+{{CalendarType}}
 
-export interface CalendarData {
-  calendar: CalendarType[];
-}
+{{CalendarData}}
 ```
 ### Key Attributes
 

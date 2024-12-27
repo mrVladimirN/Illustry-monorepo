@@ -10,10 +10,7 @@ The **Line Chart** visualization is a versatile tool for representing trends and
 To represent a Line Chart, you can use the following `AxisChartData` interface:
 
 ```typescript
-export interface AxisChartData {
-  headers: string[];
-  values: { [key: string]: number[] };
-}
+{{AxisChartData}}
 ```
 ### Key Attributes
 

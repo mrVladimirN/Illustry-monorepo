@@ -10,21 +10,11 @@ The **Sankey Diagram** visualization is a powerful tool for visualizing flow and
 To represent a Sankey Diagram, you can use the following `NodeLinkData` interface:
 
 ```typescript
-export interface Node extends with_optional_properties, with_optional_labels {
-  name: string;
-  category: string;
-}
+{{Node}}
 
-export interface Link extends with_optional_properties {
-  source: string;
-  target: string;
-  value: number;
-}
+{{Link}}
 
-export interface NodeLinkData {
-  nodes: Node[];
-  links: Link[];
-}
+{{NodeLinkData}}
 ```
 ### Key Attributes
 

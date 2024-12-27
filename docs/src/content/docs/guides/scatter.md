@@ -11,15 +11,11 @@ The **Scatter Plot** visualization is a powerful tool for visualizing the relati
 To represent a Scatter Plot, you can use the following `ScatterData` interface:
 
 ```typescript
-export interface ScatterPoint extends with_optional_properties {
-  value: [number, number];
-  category: string;
-}
+{{ScatterPoint}}
 
-export interface ScatterData {
-  points: ScatterPoint[];
-}
+{{ScatterData}}
 ```
+
 ### Key Attributes
 
 - **value:** An array of two numerical values [x, y], representing the coordinates of a data point on the X and Y axes.
