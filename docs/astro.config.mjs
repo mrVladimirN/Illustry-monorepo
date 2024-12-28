@@ -40,7 +40,8 @@ export default defineConfig({
 					label: 'Models',
 					items: [
 						{label: 'Projects', link: '/guides/projects/'},
-						{label: 'Visualizations', link: '/guides/visualizations/'}
+						{label: 'Visualizations', link: '/guides/visualizations/'},
+						{label: 'Dashboards', link: '/guides/dashboards/'}
 					]
 				},
 				{

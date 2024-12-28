@@ -36,11 +36,14 @@ jobs:
       - name: Install dependencies
         run: yarn install
 
+      - name: Compute Docs Types
+        run: node scripts/compute-docs.cjs
+
       # Build the Astro docs site in the monorepo's `docs` package
       - name: Build Astro Docs site
         working-directory: docs
         run: yarn build:docs
-
+      
       # Upload the build artifacts for deployment
       - name: Upload artifact for Pages deployment
         uses: actions/upload-pages-artifact@v2
